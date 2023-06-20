@@ -94,10 +94,12 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             description={Object.entries(flighDetails.compare || {}).map(
               (item) => {
                 console.log(
+                  "Item 0",
                   item[0],
-                  flighDetails.cheapestProvider?.providerCode
+                  flighDetails.cheapestProvider?.providerCode,
+                  item[1]
                 );
-                return item[0] !==
+                return title === "depart" && item[0] !==
                   flighDetails.cheapestProvider?.providerCode ? (
                   <>
                     <Button
@@ -374,6 +376,8 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       children: flighSummaryCard(),
     },
   ];
+
+  console.log("Depart Flight : ",departFlight)
 
   const flightDetailsCard = (
     <div
