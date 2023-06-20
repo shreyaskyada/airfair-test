@@ -74,13 +74,13 @@ export interface Flight {
 }
 
 export interface FlightState {
-  flights: object[];
+  flights: any;
   departFlight: Flight;
   returnFlight: Flight;
 }
 
 export const initialState: FlightState = {
-  flights: [],
+  flights: {},
   departFlight: {},
   returnFlight: {},
 };
