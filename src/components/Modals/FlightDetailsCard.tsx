@@ -47,7 +47,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
   useEffect(() => {
     let providers: any = []
 
-    if (departFlight && returnFlight) {
+    if (!_.isEmpty(departFlight) && !_.isEmpty(returnFlight)) {
       const keys = Object.keys(departFlight.compare || {})
       keys &&
         keys.forEach((key: any) => {
@@ -72,7 +72,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
       console.log(providers)
       setProvider(providers)
-    } else if (departFlight && !returnFlight) {
+    } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
       const keys = Object.keys(departFlight.compare || {})
       keys &&
         keys.forEach((key: any) => {
@@ -89,8 +89,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             url: url
           })
         })
+        providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
 
-      providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
+        console.log(providers)
       setProvider(providers)
     }
   }, [departFlight, returnFlight])
