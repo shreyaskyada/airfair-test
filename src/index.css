@@ -1,17 +1,32 @@
 body {
-  height: 100vh;
-  margin: 0;
+    height: 100vh;
+    margin: 0;
 }
 
-#root{
-  height: 100%;
+#root {
+    height: 100%;
 }
 
-.no-padding .ant-modal-content{
-  padding: 0;
+.no-padding .ant-modal-content {
+    padding: 0;
 }
 
-.ant-space-item .ant-card-body{
-  min-height: 150px!important;
-  max-height: 150px!important;
+.ant-space-item .ant-card-body {
+    min-height: 150px !important;
+    max-height: 150px !important;
+}
+
+.time {
+    font-size: 20px;
+}
+.date {
+    font-size: 14px;
+    font-weight: 700;
+}
+.city {
+    font-size: 16px;
+    color: gainsboro;
+}
+.terminal {
+    font-size: 13px;
 }
