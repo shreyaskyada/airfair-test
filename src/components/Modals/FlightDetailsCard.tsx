@@ -51,6 +51,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       const keys = Object.keys(departFlight.compare || {})
       keys &&
         keys.forEach((key: any) => {
+          console.log(key)
           let totalDepartFare =
             departFlight.compare && departFlight.compare[key]
               ? departFlight.compare[key].fare?.totalFareAfterDiscount
@@ -465,12 +466,10 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         >
           <div>
             <Title level={4} style={{ marginBottom: 0 }}>
-              ₹{" "}
-              {(departFlight.cheapestFare || 0) +
-                (returnFlight.cheapestFare || 0)}
+              ₹{provider.length && provider[0].totalFare}
             </Title>
             <Title level={5} style={{ margin: 0 }}>
-              {departFlight.cheapestProvider?.providerCode}
+              {provider.length && provider[0].provider}
             </Title>
 
             <Popover
