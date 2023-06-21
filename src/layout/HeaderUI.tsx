@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { Button, Layout } from "antd";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { toggleModal, updateIsLoggedIn, updateUserDetails } from "../redux/slices/app";
+import {
+  toggleModal,
+  updateIsLoggedIn,
+  updateUserDetails,
+} from "../redux/slices/app";
 import useLocalStorage from "../hooks/LocalStorage";
 import { logoutUser } from "../services/auth";
 import { logoImage } from "../assets/images";
@@ -36,17 +40,37 @@ const HeaderUI = () => {
           email: "",
           userName: "",
           phoneNo: "",
-          bankList:[],
-          walletList:[],
-          roles:[],
+          bankList: [],
+          walletList: [],
+          roles: [],
         });
         notifcationModal &&
           notifcationModal("success", "Logged out successfully!");
       })
       .catch((err) => {
         console.log(err);
-        notifcationModal &&
-          notifcationModal("error", `Logout failed (${err.message})`);
+        // 400 response is used for Invalid request that means token is no longer valid
+        if (err?.response?.status === 400) {
+          setIsLoggedIn(false);
+          setUserId("");
+          setAuthToken("");
+          dispatch(updateIsLoggedIn(false));
+          updateUserDetails({
+            firstName: "",
+            lastName: "",
+            email: "",
+            userName: "",
+            phoneNo: "",
+            bankList: [],
+            walletList: [],
+            roles: [],
+          });
+          notifcationModal &&
+            notifcationModal("success", "Logged out successfully!");
+          // console.log(err);
+          // notifcationModal &&
+          //   notifcationModal("error", `Logout failed (${err.message})`);
+        }
       });
   };
 

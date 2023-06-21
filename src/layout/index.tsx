@@ -32,9 +32,12 @@ const footerStyle: React.CSSProperties = {
   backgroundColor: "#210340",
 };
 
-const getUserInfo = (dispatch:any, userId:any = 'false', authToken:any = 'false') => {
-
-  if(userId === 'false'){
+const getUserInfo = (
+  dispatch: any,
+  userId: any = "false",
+  authToken: any = "false"
+) => {
+  if (userId === "false") {
     dispatch(
       updateUserDetails({
         firstName: "",
@@ -42,37 +45,41 @@ const getUserInfo = (dispatch:any, userId:any = 'false', authToken:any = 'false'
         email: "",
         userName: "",
         phoneNo: "",
-        bankList:[],
-        walletList:[],
+        bankList: [],
+        walletList: [],
       })
     );
     return;
   }
 
-  getProfileDetails(userId, authToken).then((res: any) => {
-    const walletList = res.walletDetails.map((wallet: any) => ({
-      walletName: wallet.walletName.toLowerCase(),
-      walletType: wallet.walletType,
-    }));
-    const bankList = res.bankDetails.map((bank: any) => ({
-      bankCardName: bank.cardName,
-      bankCardType: bank.cardType,
-      bankIssuerName: bank.cardIssuer,
-      bankName: bank.bankName,
-    }));
-    dispatch(
-      updateUserDetails({
-        firstName: res.firstName,
-        lastName: res.lastName,
-        email: res.email,
-        userName: res.username,
-        phoneNo: res.mobileNo,
-        bankList,
-        walletList,
-      })
-    );
-  });
-}
+  getProfileDetails(userId, authToken)
+    .then((res: any) => {
+      const walletList = res.walletDetails.map((wallet: any) => ({
+        walletName: wallet.walletName.toLowerCase(),
+        walletType: wallet.walletType,
+      }));
+      const bankList = res.bankDetails.map((bank: any) => ({
+        bankCardName: bank.cardName,
+        bankCardType: bank.cardType,
+        bankIssuerName: bank.cardIssuer,
+        bankName: bank.bankName,
+      }));
+      dispatch(
+        updateUserDetails({
+          firstName: res.firstName,
+          lastName: res.lastName,
+          email: res.email,
+          userName: res.username,
+          phoneNo: res.mobileNo,
+          bankList,
+          walletList,
+        })
+      );
+    })
+    .catch((error) => {
+      dispatch(updateIsLoggedIn(false));
+    });
+};
 
 const LayoutUI = () => {
   const dispatch = useAppDispatch();
@@ -104,7 +111,7 @@ const LayoutUI = () => {
       dispatch(updateUserDetails(userDetails));
       dispatch(toggleModal({ modal: "signup", status: false }));
       dispatch(toggleModal({ modal: "otp", status: true }));
-      getUserInfo(dispatch,userDetails.username,userDetails.token);
+      getUserInfo(dispatch, userDetails.username, userDetails.token);
     } else {
       const errorMessage = userDetails.data.message || "";
       !notifcationModal &&
@@ -123,7 +130,7 @@ const LayoutUI = () => {
       dispatch(updateUserDetails(userDetails));
       dispatch(toggleModal({ modal: "login", status: false }));
       openNotificationWithIcon("success", "Logged in successfully");
-      getUserInfo(dispatch,userDetails.username,userDetails.token);
+      getUserInfo(dispatch, userDetails.username, userDetails.token);
     } else {
       dispatch(updateIsLoggedIn(false));
       setIsLoggedIn(false);
@@ -139,7 +146,7 @@ const LayoutUI = () => {
 
   useEffect(() => {
     dispatch(updateNotifcationModal(openNotificationWithIcon));
-    if(isLoggedIn){
+    if (isLoggedIn) {
       getUserInfo(dispatch, userId, authToken);
     }
   }, []);
