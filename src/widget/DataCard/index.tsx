@@ -17,6 +17,7 @@ import { airlineMapping } from "../../services/airports";
 const { Text, Title } = Typography;
 
 interface Props {
+  checked?:boolean
   index: number;
   dataKey: number;
   type: string;
@@ -61,6 +62,7 @@ const DataCard = (props: Props) => {
     onLikeClick,
     onViewDealClick,
     onSelectedFlightChange,
+    checked
   } = props;
 
   const cardPopoverData = {
@@ -105,6 +107,7 @@ const DataCard = (props: Props) => {
               verticalAlign: "middle",
             }}
             value={`${type}-${dataKey}`}
+            //defaultChecked={checked}
             onChange={onSelectedFlightChange}
           />
           <>
@@ -192,7 +195,7 @@ const DataCard = (props: Props) => {
                           )
                         );
                       })}
-                      {details &&
+                       {details &&
                         flight.partners.length - 2 &&
                         flight.partners.slice(2).map((partner) => (
                           <Space>

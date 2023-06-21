@@ -5,6 +5,9 @@ import { memo } from "react";
 const OriginFlight = (props:any) => {
 
   const { originFlights } = useAppSelector((state) => state.originFlight);
+  const { departFlight } = useAppSelector(
+    (state) => state.flight
+  );
   console.log("calling originFlights");
 
     const {
@@ -22,6 +25,7 @@ const OriginFlight = (props:any) => {
           onSelectedFlightChange={(data: any) =>
             onSelectedFlightChange(data, type, flight)
           }
+          // checked={departFlight.flightCode === flight.flightCode}
           dataKey={index}
           tags={[]}
           flight={{
@@ -51,4 +55,4 @@ const OriginFlight = (props:any) => {
 
 }
 
-export default memo(OriginFlight);
+export default OriginFlight
