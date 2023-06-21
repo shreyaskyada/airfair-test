@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import _ from "lodash";
-import moment from "moment";
+import { useEffect, useState } from "react"
+import dayjs from "dayjs"
+import _ from "lodash"
+import moment from "moment"
 
 import {
   Form,
@@ -11,46 +11,46 @@ import {
   Typography,
   Space,
   Card,
-  Segmented,
-} from "antd";
+  Segmented
+} from "antd"
 
-import { RangePickerProps } from "antd/es/date-picker";
-import { AutoComplete, Popover, Button } from "antd";
-import { getAirportsWrapper } from "../../services/airports";
-import { getFlightsConfig } from "../../services/api/urlConstants";
-import backendService from "../../services/api";
+import { RangePickerProps } from "antd/es/date-picker"
+import { AutoComplete, Popover, Button } from "antd"
+import { getAirportsWrapper } from "../../services/airports"
+import { getFlightsConfig } from "../../services/api/urlConstants"
+import backendService from "../../services/api"
 import {
   updateDepartFlights,
   updateFlights,
-  updateReturnFlights,
-} from "../../redux/slices/flights";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { useNavigate } from "react-router";
-import { uploadIsLoading } from "../../redux/slices/app";
-import { updateOriginFlights } from "../../redux/slices/originFlight";
-import { updateDestinationFlights } from "../../redux/slices/destinationFlight";
+  updateReturnFlights
+} from "../../redux/slices/flights"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { useNavigate } from "react-router"
+import { uploadIsLoading } from "../../redux/slices/app"
+import { updateOriginFlights } from "../../redux/slices/originFlight"
+import { updateDestinationFlights } from "../../redux/slices/destinationFlight"
 
-const { TextArea } = Input;
-const { Title, Text } = Typography;
+const { TextArea } = Input
+const { Title, Text } = Typography
 
 const options = [
   { value: "Burns Bay Road" },
   { value: "Downing Street" },
-  { value: "Wall Street" },
-];
+  { value: "Wall Street" }
+]
 
 const seatTypes = [
   { label: "Economy/Premium Economy", value: "ECONOMY" },
   { label: "Premium Economy", value: "PREMIUM_ECONOMY" },
   { label: "Business", value: "BUSINESS" },
-  { label: "First Class", value: "FIRST_CLASS" },
-];
+  { label: "First Class", value: "FIRST_CLASS" }
+]
 
 const initialValues = {
   from: {
     code: "DEL",
     city: "New Delhi",
-    name: "Indira Gandhi International Airport",
+    name: "Indira Gandhi International Airport"
   },
   to: { code: "BOM", city: "Mumbai", name: "C S M International Airport" },
   type: "one-way",
@@ -59,169 +59,198 @@ const initialValues = {
   adult: 1,
   child: 0,
   infant: 0,
-  class: "ECONOMY",
-};
+  class: "ECONOMY"
+}
 
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
   // Can not select days before today and today
-  return current && current < dayjs().subtract(1, "day").endOf("day");
-};
+  return current && current < dayjs().subtract(1, "day").endOf("day")
+}
+
+function compareArrays(array1: any, array2: any) {
+  if (array1.length !== array2.length) {
+    return false
+  }
+
+  const sortedArray1 = array1.slice().sort()
+  const sortedArray2 = array2.slice().sort()
+
+  for (let i = 0; i < sortedArray1.length; i++) {
+    if (sortedArray1[i] !== sortedArray2[i]) {
+      return false
+    }
+  }
+
+  return true
+}
 
 const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const { userDetails } = useAppSelector((state) => state.app);
-  const [form] = Form.useForm();
-  const [inputValues, setInputValues] = useState(initialValues);
-  const [fromOptions, setFromOptions] = useState([]);
-  const [toOptions, setToOptions] = useState([]);
+  const { userDetails } = useAppSelector((state) => state.app)
+  const [form] = Form.useForm()
+  const [inputValues, setInputValues] = useState(initialValues)
+  const [fromOptions, setFromOptions] = useState([])
+  const [toOptions, setToOptions] = useState([])
   const [showInput, setShowInput] = useState({
     from: false,
     to: false,
     departure: false,
     return: false,
-    travellers: false,
-  });
+    travellers: false
+  })
   const [formValues, setFormValues] = useState({
     from: "",
-    to: "",
-  });
-  const dispatch = useAppDispatch();
+    to: ""
+  })
+  const dispatch = useAppDispatch()
 
   const segmentAdultValues = Array(9)
     .fill(0)
-    .map((_, i) => ({ label: i + 1, value: i + 1 }));
+    .map((_, i) => ({ label: i + 1, value: i + 1 }))
   const segmentOtherValues = Array(6)
     .fill(0)
-    .map((_, i) => ({ label: i, value: i }));
+    .map((_, i) => ({ label: i, value: i }))
 
   const onFinish = (params: any) => {
-    dispatch(uploadIsLoading(true));
-    const values = inputValues;
-    const isRoundTrip = values.type === "round-trip";
-    let data: any = {};
-    data.from = values.from.code;
-    data.to = values.to.code;
-    data.doj = moment(values.departure.toString()).format("DDMMYYYY");
+    dispatch(uploadIsLoading(true))
+    const values = inputValues
+    const isRoundTrip = values.type === "round-trip"
+    let data: any = {}
+    data.from = values.from.code
+    data.to = values.to.code
+    data.doj = moment(values.departure.toString()).format("DDMMYYYY")
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     isRoundTrip
       ? (data.doa = moment(values.return.toString()).format("DDMMYYYY"))
-      : null;
-    data.adults = values.adult;
-    data.children = values.child;
-    data.infants = values.infant;
-    data.roundtrip = isRoundTrip ? true : false;
-    data.seatingClass = values.class;
-    data.bankList = userDetails.bankList;
-    data.walletList = userDetails.walletList;
+      : null
+    data.adults = values.adult
+    data.children = values.child
+    data.infants = values.infant
+    data.roundtrip = isRoundTrip ? true : false
+    data.seatingClass = values.class
+    data.bankList = userDetails.bankList
+    data.walletList = userDetails.walletList
 
-    const config = getFlightsConfig(data);
+    const config = getFlightsConfig(data)
     backendService
       .request(config)
       .then((res: any) => {
-        dispatch(updateFlights(res));
-        dispatch(updateOriginFlights(res.flightCompareResponse));
-        dispatch(updateDestinationFlights(res.returnJourneyCompareResponse));
-        dispatch(uploadIsLoading(false));
+        dispatch(updateFlights(res))
+        dispatch(updateOriginFlights(res.flightCompareResponse))
 
-        dispatch(updateDepartFlights(res.flightCompareResponse[0]));
+        const departProviders = Object.keys(
+          res.flightCompareResponse[0].compare || {}
+        )
+        const flightsToFilter = res.returnJourneyCompareResponse || []
+
+        let data = flightsToFilter.filter((value: any) => {
+          let providers = Object.keys(value.compare)
+          return compareArrays(departProviders, providers)
+        })
+
+        dispatch(updateDestinationFlights(data))
+        dispatch(uploadIsLoading(false))
+
+        dispatch(updateDepartFlights(res.flightCompareResponse[0]))
+
         isRoundTrip
-          ? dispatch(updateReturnFlights(res.returnJourneyCompareResponse[0]))
-          : dispatch(updateReturnFlights({}));
-        redirectRoute && navigate(redirectRoute);
+          ? dispatch(updateReturnFlights(data[0]))
+          : dispatch(updateReturnFlights({}))
+        redirectRoute && navigate(redirectRoute)
       })
-      .catch((err) => console.error(err));
-  };
+      .catch((err) => console.error(err))
+  }
 
   const fromLocationSearchHandler = (value: string) => {
-    const [airportCode, airportCity, airportName] = value.split("-");
+    const [airportCode, airportCity, airportName] = value.split("-")
     setInputValues((prevState) => ({
       ...prevState,
-      from: { code: airportCode, city: airportCity, name: airportName },
-    }));
+      from: { code: airportCode, city: airportCity, name: airportName }
+    }))
     setFormValues((prevState) => ({
       ...prevState,
-      from: value,
-    }));
-  };
+      from: value
+    }))
+  }
 
   const toLocationSearchHandler = (value: string) => {
-    const [airportCode, airportCity, airportName] = value.split("-");
+    const [airportCode, airportCity, airportName] = value.split("-")
     setInputValues((prevState) => ({
       ...prevState,
-      to: { code: airportCode, city: airportCity, name: airportName },
-    }));
+      to: { code: airportCode, city: airportCity, name: airportName }
+    }))
     setFormValues((prevState) => ({
       ...prevState,
-      to: value,
-    }));
-  };
+      to: value
+    }))
+  }
 
   const textAreaClearHandler = (updatedValues: any) => {
-    setShowInput((prevState) => ({ ...prevState, ...updatedValues }));
-  };
+    setShowInput((prevState) => ({ ...prevState, ...updatedValues }))
+  }
 
   useEffect(() => {
     if (showInput.from) {
       getAirportsWrapper(inputValues.from.code)
         .then((data: any) => {
           const airports = data.airportList?.map((airport: any) => ({
-            value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
-          }));
-          setFromOptions(airports);
+            value: `${airport.airportCd}-${airport.city}-${airport.airportName}`
+          }))
+          setFromOptions(airports)
         })
-        .catch((err) => console.error(err));
+        .catch((err) => console.error(err))
     }
-  }, [inputValues.from]);
+  }, [inputValues.from])
 
   useEffect(() => {
     if (showInput.from) {
       let check = _.includes(
         _.map(fromOptions, (ele) => _.get(ele, "value")),
         formValues.from
-      );
+      )
       if (check) {
-        textAreaClearHandler({ from: false });
+        textAreaClearHandler({ from: false })
       }
     }
-  }, [inputValues.from]);
+  }, [inputValues.from])
 
   useEffect(() => {
     if (showInput.to) {
       getAirportsWrapper(inputValues.to.code)
         .then((data: any) => {
           const airports = data.airportList?.map((airport: any) => ({
-            value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
-          }));
-          setToOptions(airports);
+            value: `${airport.airportCd}-${airport.city}-${airport.airportName}`
+          }))
+          setToOptions(airports)
         })
-        .catch((err) => console.error(err));
+        .catch((err) => console.error(err))
     }
-  }, [inputValues.to]);
+  }, [inputValues.to])
 
   useEffect(() => {
     if (showInput.to) {
       let check = _.includes(
         _.map(toOptions, (ele) => _.get(ele, "value")),
         formValues.to
-      );
+      )
       if (check) {
-        textAreaClearHandler({ to: false });
+        textAreaClearHandler({ to: false })
       }
     }
-  }, [inputValues.to]);
+  }, [inputValues.to])
 
   useEffect(() => {
     if (showInput.departure) {
-      textAreaClearHandler({ departure: false });
+      textAreaClearHandler({ departure: false })
     }
-  }, [inputValues.departure]);
+  }, [inputValues.departure])
 
   useEffect(() => {
     if (showInput.return) {
-      textAreaClearHandler({ return: false });
+      textAreaClearHandler({ return: false })
     }
-  }, [inputValues.return]);
+  }, [inputValues.return])
 
   return (
     <div
@@ -229,7 +258,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
         border: "1px solid black",
         borderRadius: "10px",
         color: "black",
-        background: "#C4DBF6",
+        background: "#C4DBF6"
       }}
     >
       <Form form={form} onFinish={onFinish} initialValues={initialValues}>
@@ -240,7 +269,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
             justifyContent: "center",
             alignItems: "center",
             width: "100%",
-            margin: "0px",
+            margin: "0px"
           }}
         >
           <div style={{ margin: "8px 0px 0px 16px", alignSelf: "flex-start" }}>
@@ -251,7 +280,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                   onClick={() =>
                     setInputValues((prevState) => ({
                       ...prevState,
-                      type: "one-way",
+                      type: "one-way"
                     }))
                   }
                 >
@@ -262,7 +291,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                   onClick={() =>
                     setInputValues((prevState) => ({
                       ...prevState,
-                      type: "round-trip",
+                      type: "round-trip"
                     }))
                   }
                 >
@@ -281,21 +310,21 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               justifyContent: "center",
               alignItems: "stretch",
               border: "1px solid #E7E7E7",
-              borderRadius: "8px",
+              borderRadius: "8px"
             }}
           >
             <Card
               style={{ borderRadius: "0px", background: "#C4DBF6" }}
               bodyStyle={{ padding: 0, width: "250px", height: "100%" }}
               onClick={() => {
-                setShowInput((prevState) => ({ ...prevState, from: true }));
+                setShowInput((prevState) => ({ ...prevState, from: true }))
               }}
             >
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-start",
+                  alignItems: "flex-start"
                 }}
               >
                 <div style={{ padding: "8px" }}>
@@ -314,7 +343,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     position: "absolute",
                     top: "30px",
                     width: "100%",
-                    zIndex: !showInput.from ? -1 : 1,
+                    zIndex: !showInput.from ? -1 : 1
                   }}
                 >
                   {showInput.from && (
@@ -330,7 +359,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     >
                       <TextArea
                         onBlur={() => {
-                          textAreaClearHandler({ from: false });
+                          textAreaClearHandler({ from: false })
                         }}
                         autoSize={{ minRows: 5, maxRows: 8 }}
                       />
@@ -343,14 +372,14 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               style={{ borderRadius: "0px", background: "#C4DBF6" }}
               bodyStyle={{ padding: 0, width: "250px", height: "100%" }}
               onClick={() => {
-                setShowInput((prevState) => ({ ...prevState, to: true }));
+                setShowInput((prevState) => ({ ...prevState, to: true }))
               }}
             >
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-start",
+                  alignItems: "flex-start"
                 }}
               >
                 <div style={{ padding: "8px" }}>
@@ -369,7 +398,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     position: "absolute",
                     top: "30px",
                     width: "100%",
-                    zIndex: !showInput.to ? -1 : 1,
+                    zIndex: !showInput.to ? -1 : 1
                   }}
                 >
                   {showInput.to && (
@@ -385,7 +414,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     >
                       <TextArea
                         onBlur={() => {
-                          textAreaClearHandler({ to: false });
+                          textAreaClearHandler({ to: false })
                         }}
                         autoSize={{ minRows: 5, maxRows: 8 }}
                       />
@@ -400,15 +429,15 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               onClick={() => {
                 setShowInput((prevState) => ({
                   ...prevState,
-                  departure: true,
-                }));
+                  departure: true
+                }))
               }}
             >
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-start",
+                  alignItems: "flex-start"
                 }}
               >
                 <label>Departure</label>
@@ -429,7 +458,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     top: "30px",
                     left: "0px",
                     width: "100%",
-                    zIndex: !showInput.departure ? -1 : 1,
+                    zIndex: !showInput.departure ? -1 : 1
                   }}
                 >
                   {showInput.departure && (
@@ -447,13 +476,13 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                       onChange={(value) =>
                         setInputValues((prevState) => ({
                           ...prevState,
-                          departure: value || dayjs(),
+                          departure: value || dayjs()
                         }))
                       }
                       onBlur={() =>
                         setShowInput((prevState) => ({
                           ...prevState,
-                          departure: false,
+                          departure: false
                         }))
                       }
                     />
@@ -465,23 +494,23 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               style={{
                 overflow: "hidden",
                 borderRadius: "0px",
-                background: "#C4DBF6",
+                background: "#C4DBF6"
               }}
               bodyStyle={{ padding: "8px", width: "150px", maxWidth: "150px" }}
               onClick={() => {
-                form.setFieldValue("type", "round-trip");
+                form.setFieldValue("type", "round-trip")
                 setInputValues((prevState) => ({
                   ...prevState,
-                  type: "round-trip",
-                }));
-                setShowInput((prevState) => ({ ...prevState, return: true }));
+                  type: "round-trip"
+                }))
+                setShowInput((prevState) => ({ ...prevState, return: true }))
               }}
             >
               <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-start",
+                  alignItems: "flex-start"
                 }}
               >
                 <label>Return</label>
@@ -510,7 +539,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     top: "30px",
                     left: "0px",
                     width: "100%",
-                    zIndex: !showInput.return ? -1 : 1,
+                    zIndex: !showInput.return ? -1 : 1
                   }}
                 >
                   {showInput.return && (
@@ -526,13 +555,13 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                       onChange={(value) =>
                         setInputValues((prevState) => ({
                           ...prevState,
-                          return: value || dayjs(),
+                          return: value || dayjs()
                         }))
                       }
                       onBlur={() =>
                         setShowInput((prevState) => ({
                           ...prevState,
-                          return: false,
+                          return: false
                         }))
                       }
                     />
@@ -546,8 +575,8 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               onClick={() => {
                 setShowInput((prevState) => ({
                   ...prevState,
-                  travellers: true,
-                }));
+                  travellers: true
+                }))
               }}
             >
               <Popover
@@ -561,12 +590,12 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                       <Segmented
                         options={[
                           ...segmentAdultValues,
-                          { label: "9+", value: 10 },
+                          { label: "9+", value: 10 }
                         ]}
                         onChange={(value) =>
                           setInputValues((prevState) => ({
                             ...prevState,
-                            adult: Number(value),
+                            adult: Number(value)
                           }))
                         }
                       />
@@ -576,12 +605,12 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                         <Segmented
                           options={[
                             ...segmentOtherValues,
-                            { label: "6+", value: 7 },
+                            { label: "6+", value: 7 }
                           ]}
                           onChange={(value) =>
                             setInputValues((prevState) => ({
                               ...prevState,
-                              child: Number(value),
+                              child: Number(value)
                             }))
                           }
                         />
@@ -590,12 +619,12 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                         <Segmented
                           options={[
                             ...segmentOtherValues,
-                            { label: "6+", value: 7 },
+                            { label: "6+", value: 7 }
                           ]}
                           onChange={(value) =>
                             setInputValues((prevState) => ({
                               ...prevState,
-                              infant: Number(value),
+                              infant: Number(value)
                             }))
                           }
                         />
@@ -607,7 +636,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                         onChange={(value) =>
                           setInputValues((prevState) => ({
                             ...prevState,
-                            class: value.toString(),
+                            class: value.toString()
                           }))
                         }
                       />
@@ -619,7 +648,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "flex-start",
+                    alignItems: "flex-start"
                   }}
                 >
                   <label>Travellers & Class</label>
@@ -645,7 +674,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               display: "flex",
               justifyContent: "space-evenly",
               position: "relative",
-              top: "16px",
+              top: "16px"
             }}
           >
             <Form.Item style={{ margin: "0px" }}>
@@ -655,7 +684,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
         </div>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default SearchFilter;
+export default SearchFilter

@@ -19,6 +19,23 @@ import { updateOriginFlights } from "../redux/slices/originFlight"
 import OriginFlight from "../components/FlightsCard/OriginFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
 
+function compareArrays(array1:any, array2:any) {
+  if (array1.length !== array2.length) {
+    return false;
+  }
+
+  const sortedArray1 = array1.slice().sort();
+  const sortedArray2 = array2.slice().sort();
+
+  for (let i = 0; i < sortedArray1.length; i++) {
+    if (sortedArray1[i] !== sortedArray2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 const FlightsListingPage = () => {
   const dispatch = useAppDispatch()
   const [selectedFlight, setSelectedFlight] = useState({
@@ -26,24 +43,47 @@ const FlightsListingPage = () => {
     return: "return-0"
   })
 
-  const { flights }: { flights: any } = useAppSelector((state) => state.flight)
+  const { flights,departFlight}: { flights: any ,departFlight:any,returnFlight:any} = useAppSelector((state) => state.flight)
 
   useEffect(() => {
     dispatch(toggleModal({ modal: "flightInfo", status: true }))
   }, [])
+
+  useEffect(()=>{
+    const departProviders = Object.keys(departFlight.compare || {})
+    const flightsToFilter = flights.returnJourneyCompareResponse || []
+
+    if(departFlight && flightsToFilter.length){
+      let data = flightsToFilter.filter((value:any)=>{
+      let providers = Object.keys(value.compare)
+      return compareArrays(departProviders,providers)
+      
+    })
+    console.log("data",data)
+      data && data.length && updateDestinationFlights(data)
+    }
+
+    
+  },[flights,departFlight])
 
   const filterFlightList = (selectedFlightProvider: any, type: string) => {
     let flightsListToFilter =
       type === "depart"
         ? flights.returnJourneyCompareResponse || []
         : flights.flightCompareResponse || []
+    console.log("Flights to filter : ",flightsListToFilter,selectedFlightProvider)
+    // let data = flightsListToFilter.filter(
+    //   (x: any) =>
+    //     Object.keys(x.compare).filter((value: any) =>
+    //       selectedFlightProvider.includes(value)
+    //     ).length > 0
+    // )
 
-    let data = flightsListToFilter.filter(
-      (x: any) =>
-        Object.keys(x.compare).filter((value: any) =>
-          selectedFlightProvider.includes(value)
-        ).length > 0
-    )
+    let data = flightsListToFilter.filter((value:any)=>{
+      let providers = Object.keys(value.compare)
+      return compareArrays(selectedFlightProvider,providers)
+    })
+
     let filteredFlights = data
     if (selectedFlightProvider.length === 1) {
       filteredFlights = []
@@ -80,9 +120,11 @@ const FlightsListingPage = () => {
       switch (type) {
         case "depart": {
           dispatch(updateDepartFlights(flight))
+          const data = filterFlightList(compareData, type)
           dispatch(
-            updateDestinationFlights(filterFlightList(compareData, type))
+            updateDestinationFlights(data)
           )
+          dispatch(updateReturnFlights(data[0]))
           dispatch(uploadIsLoading(false))
           break
         }

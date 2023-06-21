@@ -70,6 +70,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         })
 
       providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
+      // if (providers.length > 1 && providers[0].totalFare === 0) {
+      //   providers.shift()
+      // }
       console.log(providers)
       setProvider(providers)
     } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
@@ -89,9 +92,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             url: url
           })
         })
-        providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
+      providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
 
-        console.log(providers)
+      console.log(providers)
       setProvider(providers)
     }
   }, [departFlight, returnFlight])
@@ -172,39 +175,45 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                         {!provider.length && item[0]}
                       </Link>
                     </Button>
-                    <Popover
-                      content={
-                        <>
-                          <div>
-                            <span>Ticket price:</span>{" "}
-                            <span>{provider.length>1 && provider[1].totalFare}</span>
-                          </div>
-                          <div>
-                            <span>Total discount:</span>{" "}
-                            <span>{item[1].fare?.totalDiscount}</span>
-                          </div>
-                          <div>
-                            <span>Promo code:</span>{" "}
-                            <span>
-                              {item[1].offerDescription?.promoCode ||
-                                "No offer applicable"}
-                            </span>
-                          </div>
-                          <div>
-                            <span>Total price after discount:</span>{" "}
-                            <b>{provider.length>1 && provider[1].totalFare}</b>
-                          </div>
-                        </>
-                      }
-                      title={"Price breakdown"}
-                      trigger="hover"
-                    >
-                      <Button
-                        shape="circle"
-                        icon={<InfoOutlined />}
-                        size="small"
-                      />
-                    </Popover>
+                    {provider.length > 1 && (
+                      <Popover
+                        content={
+                          <>
+                            <div>
+                              <span>Ticket price:</span>{" "}
+                              <span>
+                                {provider.length > 1 && provider[1].totalFare}
+                              </span>
+                            </div>
+                            <div>
+                              <span>Total discount:</span>{" "}
+                              <span>{item[1].fare?.totalDiscount}</span>
+                            </div>
+                            <div>
+                              <span>Promo code:</span>{" "}
+                              <span>
+                                {item[1].offerDescription?.promoCode ||
+                                  "No offer applicable"}
+                              </span>
+                            </div>
+                            <div>
+                              <span>Total price after discount:</span>{" "}
+                              <b>
+                                {provider.length > 1 && provider[1].totalFare}
+                              </b>
+                            </div>
+                          </>
+                        }
+                        title={"Price breakdown"}
+                        trigger="hover"
+                      >
+                        <Button
+                          shape="circle"
+                          icon={<InfoOutlined />}
+                          size="small"
+                        />
+                      </Popover>
+                    )}
                   </>
                 ) : null
               }
@@ -478,15 +487,10 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                 <>
                   <div>
                     <span>Ticket price:</span>{" "}
-                    <span>
-                       {provider.length && provider[0].totalFare }
-                    </span>
+                    <span>{provider.length && provider[0].totalFare}</span>
                   </div>
                   <div>
-                    <span>Total discount:</span>{" "}
-                    <span>
-                      { 0 }
-                    </span>
+                    <span>Total discount:</span> <span>{0}</span>
                   </div>
 
                   <div>
@@ -501,9 +505,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                   </div>
                   <div>
                     <span>Total price after discount:</span>{" "}
-                    <b>
-                    { provider.length && provider[0].totalFare }
-                    </b>
+                    <b>{provider.length && provider[0].totalFare}</b>
                   </div>
                 </>
               }
