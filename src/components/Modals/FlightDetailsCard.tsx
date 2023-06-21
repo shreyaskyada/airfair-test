@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react"
 import {
   InfoCircleFilled,
   InfoOutlined,
-  InfoCircleTwoTone,
-} from "@ant-design/icons";
-
+  InfoCircleTwoTone
+} from "@ant-design/icons"
+import { Link } from "react-router-dom"
 import {
   Button,
   Card,
@@ -16,47 +16,106 @@ import {
   Modal,
   Typography,
   Divider,
-  Popover,
-} from "antd";
-import * as _ from "lodash";
-import { Drawer } from "antd";
-import type { TabsProps } from "antd";
+  Popover
+} from "antd"
+import * as _ from "lodash"
+import { Drawer } from "antd"
+import type { TabsProps } from "antd"
 
-import { loginBanner } from "../../assets/images";
-import { getFlightsConfig } from "../../services/api/urlConstants";
-import backendService from "../../services/api";
-import { signupUser } from "../../services/auth";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { toggleModal, updateFlightDetails } from "../../redux/slices/app";
-import { Flight, FlightState } from "../../redux/slices/flights";
-import { airlineMapping } from "../../services/airports";
-import moment from "moment";
+import { loginBanner } from "../../assets/images"
+import { getFlightsConfig } from "../../services/api/urlConstants"
+import backendService from "../../services/api"
+import { signupUser } from "../../services/auth"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { toggleModal, updateFlightDetails } from "../../redux/slices/app"
+import { Flight, FlightState } from "../../redux/slices/flights"
+import { airlineMapping } from "../../services/airports"
+import moment from "moment"
 
-const { Text, Title } = Typography;
-const { Meta } = Card;
+const { Text, Title } = Typography
+const { Meta } = Card
 
 const FlightDetailsCard = ({ onFinishHandler }: any) => {
-  const { modal, flightDetails } = useAppSelector((state) => state.app);
+  const { modal, flightDetails } = useAppSelector((state) => state.app)
+  const [provider, setProvider] = useState<any>([])
+  console.log("flight-Detail : ", flightDetails)
+
   const { departFlight, returnFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
-  );
-  const dispatch = useAppDispatch();
+  )
 
-  const [form] = Form.useForm();
+  useEffect(() => {
+    let providers: any = []
+
+    if (!_.isEmpty(departFlight) && !_.isEmpty(returnFlight)) {
+      const keys = Object.keys(departFlight.compare || {})
+      keys &&
+        keys.forEach((key: any) => {
+          console.log(key)
+          let totalDepartFare =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalFareAfterDiscount
+              : 0
+          let totalreturnFare =
+            returnFlight.compare && returnFlight.compare[key]
+              ? returnFlight.compare[key].fare?.totalFareAfterDiscount
+              : 0
+          let url = departFlight.compare && departFlight.compare[key].redirecUrl
+          const totalFare =
+            totalDepartFare && totalreturnFare
+              ? totalreturnFare + totalDepartFare
+              : 0
+
+          providers.push({ provider: key, totalFare: totalFare, url: url })
+        })
+
+      providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
+      console.log(providers)
+      setProvider(providers)
+    } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
+      const keys = Object.keys(departFlight.compare || {})
+      keys &&
+        keys.forEach((key: any) => {
+          let totalDepartFare =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalFareAfterDiscount
+              : 0
+
+          let url = departFlight.compare && departFlight.compare[key].redirecUrl
+
+          providers.push({
+            provider: key,
+            totalFare: totalDepartFare,
+            url: url
+          })
+        })
+        providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
+
+        console.log(providers)
+      setProvider(providers)
+    }
+  }, [departFlight, returnFlight])
+
+  console.log(departFlight, returnFlight)
+  //console.log("flights",flights)
+
+  const dispatch = useAppDispatch()
+
+  const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    const dataParams = form.getFieldsValue();
-    console.log(dataParams);
+    const dataParams = form.getFieldsValue()
+    //console.log(dataParams);
     signupUser(dataParams)
       .then((res) => {
-        console.log("register done");
-        onFinishHandler(true);
+        console.log("register done")
+        onFinishHandler(true)
       })
       .catch((err) => {
-        console.log("err", err);
-        onFinishHandler(false);
-      });
-  };
+        console.log("err", err)
+        onFinishHandler(false)
+      })
+  }
 
   const detailsCard = (title: string, flighDetails: Flight) =>
     flighDetails && (
@@ -82,7 +141,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  alignItems: "center",
+                  alignItems: "center"
                 }}
               >
                 <span>
@@ -93,16 +152,12 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             }
             description={Object.entries(flighDetails.compare || {}).map(
               (item) => {
-                console.log(
-                  item[0],
-                  flighDetails.cheapestProvider?.providerCode
-                );
-                return item[0] !==
-                  flighDetails.cheapestProvider?.providerCode ? (
+                return title === "depart" &&
+                  item[0] !== flighDetails.cheapestProvider?.providerCode ? (
                   <>
                     <Button
                       style={{
-                        color: "black",
+                        color: "black"
                       }}
                       ghost={true}
                       type="text"
@@ -110,14 +165,19 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                         // dispatch(updateFlightDetails(true));
                       }}
                     >
-                      {item[1].fare?.totalFare} - {item[0]}
+                      <Link to={provider.length > 1 && provider[1].url}>
+                        {provider.length > 1 &&
+                          provider[1].totalFare + "-" + provider[1].provider}
+                        {!provider.length && item[1].fare?.totalFare + "-"}{" "}
+                        {!provider.length && item[0]}
+                      </Link>
                     </Button>
                     <Popover
                       content={
                         <>
                           <div>
                             <span>Ticket price:</span>{" "}
-                            <span>{item[1].fare?.totalFare}</span>
+                            <span>{provider.length>1 && provider[1].totalFare}</span>
                           </div>
                           <div>
                             <span>Total discount:</span>{" "}
@@ -132,7 +192,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                           </div>
                           <div>
                             <span>Total price after discount:</span>{" "}
-                            <b>{item[1].fare?.totalFareAfterDiscount}</b>
+                            <b>{provider.length>1 && provider[1].totalFare}</b>
                           </div>
                         </>
                       }
@@ -146,13 +206,13 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                       />
                     </Popover>
                   </>
-                ) : null;
+                ) : null
               }
             )}
           />
         </Card>
       </>
-    );
+    )
 
   const flighInfoTabCard = ({
     fromTime,
@@ -163,7 +223,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
     duration,
     toAddress,
     flightCode,
-    airLine,
+    airLine
   }: any) => (
     <Card
       style={
@@ -186,7 +246,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
-          columnGap: "15px",
+          columnGap: "15px"
         }}
       >
         <Meta
@@ -257,14 +317,14 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         />
       </div> */}
     </Card>
-  );
+  )
 
   const flighSummaryCard = () => (
     <Card title="Fare breakup">
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "1fr 3fr",
+          gridTemplateColumns: "1fr 3fr"
         }}
       >
         <span>
@@ -279,7 +339,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         <span style={{ color: "rgb(135, 135, 135)" }}>₹ 1,644</span>
       </div>
     </Card>
-  );
+  )
 
   const flightInfoCardCretor = (flight: Flight) => (
     <div>
@@ -293,7 +353,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             toDate: flight.arrDate,
             duration: flight.duration,
             toAddress: flight.to + " " + flight.toCity,
-            flightCode: flight.flightCode,
+            flightCode: flight.flightCode
           })
         : flight.startTimeList?.map((ele, index) => (
             <>
@@ -327,7 +387,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                 toAddress:
                   flight.arrivalTerminalList &&
                   flight.arrivalTerminalList[index],
-                flightCode: flight.flightCode,
+                flightCode: flight.flightCode
               })}
               {flight.stops && index < flight.stops ? (
                 <Divider plain>
@@ -343,14 +403,14 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             </>
           ))}
     </div>
-  );
+  )
 
   const flighInfoTabCardContainer = () => (
     <div
       style={{
         display: "flex",
         width: "100%",
-        justifyContent: "space-evenly",
+        justifyContent: "space-evenly"
       }}
     >
       <div style={{ marginRight: "10px" }}>
@@ -360,20 +420,22 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         {!_.isEmpty(returnFlight) && flightInfoCardCretor(returnFlight)}
       </div>
     </div>
-  );
+  )
 
   const flightInfoTabs: TabsProps["items"] = [
     {
       key: "1",
       label: `Flight details`,
-      children: flighInfoTabCardContainer(),
+      children: flighInfoTabCardContainer()
     },
     {
       key: "2",
       label: `Fare summary`,
-      children: flighSummaryCard(),
-    },
-  ];
+      children: flighSummaryCard()
+    }
+  ]
+
+  console.log("Depart Flight : ", departFlight)
 
   const flightDetailsCard = (
     <div
@@ -383,7 +445,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        background: "#B23850",
+        background: "#B23850"
       }}
     >
       <div
@@ -391,7 +453,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           display: "grid",
           gridTemplateColumns: "2fr 2fr 1fr",
           columnGap: "2em",
-          width: "100%",
+          width: "100%"
         }}
       >
         <div>{detailsCard("depart", departFlight)}</div>
@@ -400,17 +462,15 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         )}
         <div
           style={{
-            justifySelf: "flex-end",
+            justifySelf: "flex-end"
           }}
         >
           <div>
             <Title level={4} style={{ marginBottom: 0 }}>
-              ₹{" "}
-              {(departFlight.cheapestFare || 0) +
-                (returnFlight.cheapestFare || 0)}
+              ₹{provider.length && provider[0].totalFare}
             </Title>
             <Title level={5} style={{ margin: 0 }}>
-              {departFlight.cheapestProvider?.providerCode}
+              {provider.length && provider[0].provider}
             </Title>
 
             <Popover
@@ -419,19 +479,13 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                   <div>
                     <span>Ticket price:</span>{" "}
                     <span>
-                      {departFlight.compare &&
-                        departFlight.compare[
-                          departFlight.cheapestProvider?.providerCode!
-                        ].fare?.totalFare}
+                       {provider.length && provider[0].totalFare }
                     </span>
                   </div>
                   <div>
                     <span>Total discount:</span>{" "}
                     <span>
-                      {departFlight.compare &&
-                        departFlight.compare[
-                          departFlight.cheapestProvider?.providerCode!
-                        ].fare?.totalDiscount}
+                      { 0 }
                     </span>
                   </div>
 
@@ -448,10 +502,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                   <div>
                     <span>Total price after discount:</span>{" "}
                     <b>
-                      {departFlight.compare &&
-                        departFlight.compare[
-                          departFlight.cheapestProvider?.providerCode!
-                        ].fare?.totalFareAfterDiscount}
+                    { provider.length && provider[0].totalFare }
                     </b>
                   </div>
                 </>
@@ -467,7 +518,8 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             <Button
               type="primary"
               onClick={() => {
-                dispatch(updateFlightDetails(true));
+                //dispatch(updateFlightDetails(true))
+                window.location.href = provider.length && provider[0].url
               }}
             >
               Book now
@@ -476,7 +528,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
 
             <Button
               onClick={() => {
-                dispatch(updateFlightDetails(true));
+                dispatch(updateFlightDetails(true))
               }}
             >
               Flight Details
@@ -485,7 +537,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         </div>
       </div>
     </div>
-  );
+  )
 
   return (
     <div>
@@ -516,22 +568,22 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         height={"auto"}
         autoFocus={false}
         bodyStyle={{
-          padding: 0,
+          padding: 0
         }}
         rootStyle={{
           marginLeft: "calc(200px + 10%)",
-          width: "calc(80% - 200px)",
+          width: "calc(80% - 200px)"
         }}
         placement="bottom"
         mask={false}
         headerStyle={{
-          display: "none",
+          display: "none"
         }}
         footer={null}
         onClose={() => {
           dispatch(
             dispatch(toggleModal({ modal: "flightInfo", status: false }))
-          );
+          )
         }}
         open={modal.flightInfo}
       >
@@ -542,17 +594,17 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           closable={true}
           footer={null}
           headerStyle={{
-            display: "none",
+            display: "none"
           }}
           style={{
             marginLeft: "calc(200px + 5%)",
-            width: "calc(90% - 200px)",
+            width: "calc(90% - 200px)"
           }}
           contentWrapperStyle={{
-            boxShadow: "none",
+            boxShadow: "none"
           }}
           onClose={() => {
-            dispatch(updateFlightDetails(false));
+            dispatch(updateFlightDetails(false))
           }}
           open={flightDetails}
         >
@@ -560,7 +612,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         </Drawer>
       </Drawer>
     </div>
-  );
-};
+  )
+}
 
-export default FlightDetailsCard;
+export default FlightDetailsCard
