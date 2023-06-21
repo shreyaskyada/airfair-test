@@ -107,20 +107,14 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         )
 
     const flighInfoTabCard = ({ fromTime, fromDate, fromAddress, toTime, toDate, duration, toAddress, flightCode, airLine, city }: any) => (
-        <Card
-            style={
-                {
-                    // height: "350px",
-                    // overflow: "scroll",
-                }
-            }>
+        <Card>
             <Meta avatar={<Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel' />} title={airlineMapping[airLine?.slice(0, 2) || "AI"]} description={`${airLine}`} />
             <br />
             <br />
             <div
                 style={{
                     display: "grid",
-                    gridTemplateColumns: "1fr 1fr 1fr",
+                    gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
                     columnGap: "15px",
                 }}>
                 <Meta
@@ -139,26 +133,27 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                         </div>
                     }
                 />
+                <hr className='border' />
                 <Meta
+                    className='middle'
+                    style={{ height: "100%" }}
                     title={
-                        <div>
-                            Duration <br />
-                            <b>{duration}</b>
+                        <div className='middle-info'>
+                            <b>{`Duration ${duration}`}</b>
                         </div>
                     }
                 />
+                <hr className='border' />
                 <Meta
                     title={
-                        <div>
+                        <div className='right-info'>
                             <b className='time'>{toTime}</b>
-                            <br />
                             <span className='date'>{toDate}</span>
                         </div>
                     }
                     description={
-                        <div>
+                        <div className='right-info'>
                             <span className='city'>{city?.to}</span>
-                            <br />
                             <span className='terminal'> {`${toAddress ? (toAddress.includes("Terminal") ? "" : "Terminal ") : "Terminal "} ${toAddress || "--"}`}</span>
                         </div>
                     }
@@ -419,6 +414,8 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                     style={{
                         marginLeft: "calc(200px + 5%)",
                         width: "calc(90% - 200px)",
+                        borderRadius: "20px 20px 0 0",
+                        padding: "0",
                     }}
                     contentWrapperStyle={{
                         boxShadow: "none",
