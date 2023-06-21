@@ -34,16 +34,18 @@ const HeaderUI = () => {
         setUserId("");
         setAuthToken("");
         dispatch(updateIsLoggedIn(false));
-        updateUserDetails({
-          firstName: "",
-          lastName: "",
-          email: "",
-          userName: "",
-          phoneNo: "",
-          bankList: [],
-          walletList: [],
-          roles: [],
-        });
+        dispatch(
+          updateUserDetails({
+            firstName: "",
+            lastName: "",
+            email: "",
+            userName: "",
+            phoneNo: "",
+            bankList: [],
+            walletList: [],
+            roles: [],
+          })
+        );
         notifcationModal &&
           notifcationModal("success", "Logged out successfully!");
       })
@@ -55,16 +57,18 @@ const HeaderUI = () => {
           setUserId("");
           setAuthToken("");
           dispatch(updateIsLoggedIn(false));
-          updateUserDetails({
-            firstName: "",
-            lastName: "",
-            email: "",
-            userName: "",
-            phoneNo: "",
-            bankList: [],
-            walletList: [],
-            roles: [],
-          });
+          dispatch(
+            updateUserDetails({
+              firstName: "",
+              lastName: "",
+              email: "",
+              userName: "",
+              phoneNo: "",
+              bankList: [],
+              walletList: [],
+              roles: [],
+            })
+          );
           notifcationModal &&
             notifcationModal("success", "Logged out successfully!");
           // console.log(err);
