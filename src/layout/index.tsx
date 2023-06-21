@@ -141,6 +141,18 @@ const LayoutUI = () => {
         dispatch(updateNotifcationModal(openNotificationWithIcon));
       openNotificationWithIcon("error", errorMessage);
       getUserInfo(dispatch);
+      dispatch(
+        updateUserDetails({
+          firstName: "",
+          lastName: "",
+          email: "",
+          userName: "",
+          phoneNo: "",
+          bankList: [],
+          walletList: [],
+          roles: [],
+        })
+      );
     }
   };
 
