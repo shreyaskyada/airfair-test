@@ -1,26 +1,27 @@
-import { useState } from "react";
+import { useState } from "react"
 
-import SearchFilter from "../components/SearchFilter";
-import { UserDetailsType, updateUserDetails } from "../redux/slices/app";
-import { useAppDispatch } from "../redux/hooks";
+import SearchFilter from "../components/SearchFilter"
+import PopularFlights from "../components/PopularFlights/PopularFlights"
+import { UserDetailsType, updateUserDetails } from "../redux/slices/app"
+import { useAppDispatch } from "../redux/hooks"
 import {
   bannerImage2,
   bannerImage3,
   bannerImage4,
   bannerImage5,
-  bannerImages,
-} from "../assets/images";
-import "./index.css";
-import Slider from "react-slick";
-import { divide } from "lodash";
-import { bannerImage1 } from "../assets/images";
+  bannerImages
+} from "../assets/images"
+import "./index.css"
+import Slider from "react-slick"
+import { divide } from "lodash"
+import { bannerImage1 } from "../assets/images"
 
 const Homepage = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const [otpModal, setOtpModal] = useState(false);
-  const [signupModal, setSignupModal] = useState(true);
-  const [flightDetailsModal, setFlightDetailsModal] = useState(true);
+  const [otpModal, setOtpModal] = useState(false)
+  const [signupModal, setSignupModal] = useState(true)
+  const [flightDetailsModal, setFlightDetailsModal] = useState(true)
 
   const sliderSettings = {
     dots: false,
@@ -29,14 +30,14 @@ const Homepage = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     style: {
-      height: "40%",
-    },
-  };
+      height: "40%"
+    }
+  }
 
   return (
     <div
       style={{
-        position: "relative",
+        position: "relative"
       }}
     >
       <Slider {...sliderSettings}>
@@ -54,20 +55,12 @@ const Homepage = () => {
         </div>
       </Slider>
       {/* <LoginCard /> */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          width: "100%",
-          top: "40%",
-          position: "absolute",
-          zIndex: 2,
-        }}
-      >
+      <div className="searchSection">
         <SearchFilter redirectRoute={"/flights-listing"} />
       </div>
+      <PopularFlights />
     </div>
-  );
-};
+  )
+}
 
-export default Homepage;
+export default Homepage
