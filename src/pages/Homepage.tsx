@@ -36,29 +36,30 @@ const Homepage = () => {
   }
 
   return (
-    <div
-      style={{
+    <div >
+      <div style={{
         position: "relative"
-      }}
-    >
-      <Slider {...sliderSettings}>
-        <div>
-          <img src={bannerImage1} />
+      }}>
+        <Slider {...sliderSettings}>
+          <div>
+            <img src={bannerImage1} />
+          </div>
+          <div>
+            <img src={bannerImage2} />
+          </div>
+          <div>
+            <img src={bannerImage5} />
+          </div>
+          <div>
+            <img src={bannerImage4} />
+          </div>
+        </Slider>
+        <div className="searchSection">
+          <SearchFilter redirectRoute={"/flights-listing"} />
         </div>
-        <div>
-          <img src={bannerImage2} />
-        </div>
-        <div>
-          <img src={bannerImage5} />
-        </div>
-        <div>
-          <img src={bannerImage4} />
-        </div>
-      </Slider>
-      {/* <LoginCard /> */}
-      <div className="searchSection">
-        <SearchFilter redirectRoute={"/flights-listing"} />
       </div>
+
+      {/* <LoginCard /> */}
       <PopularFlights />
       <PopularAirlines />
     </div>

@@ -4,15 +4,12 @@
 }
 
 .searchSection {
-
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 97%;
-  position: relative;
-  top: -30px;
+  position: absolute;
+  top: 110px;
   left: 0;
   right: 0;
   margin: auto;
-
 }

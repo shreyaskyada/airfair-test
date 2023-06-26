@@ -2,14 +2,14 @@
 
 .flightSection {
   padding: 1.2rem;
-  margin: 2rem 0;
+  margin: 4rem 0 2rem 0;
 }
 
 .flightContainer {
   padding: 1.2rem;
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.4);
+  box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.4);
 }
 
 .flightHeading {
@@ -60,4 +60,28 @@
 .destinationFlightTitle:hover {
   cursor: pointer;
   color: #73b0f5;
+}
+
+@media only screen and (max-width: 1200px) {
+  .flightSection {
+    margin-top: 16rem;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .flightSection {
+    margin-top: 20rem;
+  }
+}
+
+@media only screen and (max-width: 560px) {
+  .flightSection {
+    margin-top: 30rem;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .flightSection {
+    margin-top: 36rem;
+  }
 }
