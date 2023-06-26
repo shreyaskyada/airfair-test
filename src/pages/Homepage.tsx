@@ -15,6 +15,7 @@ import "./index.css"
 import Slider from "react-slick"
 import { divide } from "lodash"
 import { bannerImage1 } from "../assets/images"
+import { PopularAirlines } from "../components/popularAirlines"
 
 const Homepage = () => {
   const dispatch = useAppDispatch()
@@ -59,6 +60,7 @@ const Homepage = () => {
         <SearchFilter redirectRoute={"/flights-listing"} />
       </div>
       <PopularFlights />
+      <PopularAirlines />
     </div>
   )
 }
