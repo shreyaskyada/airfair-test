@@ -89,9 +89,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             url: url
           })
         })
-        providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
+      providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
 
-        console.log(providers)
+      console.log(providers)
       setProvider(providers)
     }
   }, [departFlight, returnFlight])
@@ -147,7 +147,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                 <span>
                   {flighDetails.from} → {flighDetails.to}
                 </span>
-                <span>₹ {flighDetails.cheapestFare}</span>
+                {/* <span>₹ {flighDetails.cheapestFare}</span> */}
               </div>
             }
             description={Object.entries(flighDetails.compare || {}).map(
@@ -177,7 +177,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                         <>
                           <div>
                             <span>Ticket price:</span>{" "}
-                            <span>{provider.length>1 && provider[1].totalFare}</span>
+                            <span>
+                              {provider.length > 1 && provider[1].totalFare}
+                            </span>
                           </div>
                           <div>
                             <span>Total discount:</span>{" "}
@@ -192,7 +194,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                           </div>
                           <div>
                             <span>Total price after discount:</span>{" "}
-                            <b>{provider.length>1 && provider[1].totalFare}</b>
+                            <b>
+                              {provider.length > 1 && provider[1].totalFare}
+                            </b>
                           </div>
                         </>
                       }
@@ -214,62 +218,99 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       </>
     )
 
-    const flighInfoTabCard = ({ fromTime, fromDate, fromAddress, toTime, toDate, duration, toAddress, flightCode, airLine, city }: any) => (
-      <Card>
-          <Meta avatar={<Avatar src='https://xsgames.co/randomusers/avatar.php?g=pixel' />} title={airlineMapping[airLine?.slice(0, 2) || "AI"]} description={`${airLine}`} />
-          <br />
-          <br />
-          <div
-              style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
-                  columnGap: "15px",
-              }}>
-              <Meta
-                  title={
-                      <div>
-                          <b className='time'>{fromTime}</b>
-                          <br />
-                          <span className='date'>{fromDate}</span>
-                      </div>
-                  }
-                  description={
-                      <div>
-                          <span className='city'>{city?.from}</span>
-                          <br />
-                          <span className='terminal'> {`${fromAddress ? (fromAddress.includes("Terminal") ? "" : "Terminal ") : "Terminal "} ${fromAddress || "--"}`}</span>
-                      </div>
-                  }
-              />
-              <hr className='border' />
-              <Meta
-                  className='middle'
-                  style={{ height: "100%" }}
-                  title={
-                      <div className='middle-info'>
-                          <b>{`Duration ${duration}`}</b>
-                      </div>
-                  }
-              />
-              <hr className='border' />
-              <Meta
-                  title={
-                      <div className='right-info'>
-                          <b className='time'>{toTime}</b>
-                          <span className='date'>{toDate}</span>
-                      </div>
-                  }
-                  description={
-                      <div className='right-info'>
-                          <span className='city'>{city?.to}</span>
-                          <span className='terminal'> {`${toAddress ? (toAddress.includes("Terminal") ? "" : "Terminal ") : "Terminal "} ${toAddress || "--"}`}</span>
-                      </div>
-                  }
-              />
+  const flighInfoTabCard = ({
+    fromTime,
+    fromDate,
+    fromAddress,
+    toTime,
+    toDate,
+    duration,
+    toAddress,
+    flightCode,
+    airLine,
+    city
+  }: any) => (
+    <Card>
+      <Meta
+        avatar={
+          <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
+        }
+        title={airlineMapping[airLine?.slice(0, 2) || "AI"]}
+        description={`${airLine}`}
+      />
+      <br />
+      <br />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+          columnGap: "15px"
+        }}
+      >
+        <Meta
+          title={
+            <div>
+              <b className="time">{fromTime}</b>
+              <br />
+              <span className="date">{fromDate}</span>
             </div>
-            </Card>
-    )
-            {/* <div
+          }
+          description={
+            <div>
+              <span className="city">{city?.from}</span>
+              <br />
+              <span className="terminal">
+                {" "}
+                {`${
+                  fromAddress
+                    ? fromAddress.includes("Terminal")
+                      ? ""
+                      : "Terminal "
+                    : "Terminal "
+                } ${fromAddress || "--"}`}
+              </span>
+            </div>
+          }
+        />
+        <hr className="border" />
+        <Meta
+          className="middle"
+          style={{ height: "100%" }}
+          title={
+            <div className="middle-info">
+              <b>{`Duration ${duration}`}</b>
+            </div>
+          }
+        />
+        <hr className="border" />
+        <Meta
+          title={
+            <div className="right-info">
+              <b className="time">{toTime}</b>
+              <span className="date">{toDate}</span>
+            </div>
+          }
+          description={
+            <div className="right-info">
+              <span className="city">{city?.to}</span>
+              <span className="terminal">
+                {" "}
+                {`${
+                  toAddress
+                    ? toAddress.includes("Terminal")
+                      ? ""
+                      : "Terminal "
+                    : "Terminal "
+                } ${toAddress || "--"}`}
+              </span>
+            </div>
+          }
+        />
+      </div>
+    </Card>
+  )
+  {
+    /* <div
         style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr 1fr",
@@ -300,8 +341,8 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           }
           description={<span>8 Kgs</span>}
         />
-      </div> */}
-
+      </div> */
+  }
 
   const flighSummaryCard = () => (
     <Card title="Fare breakup">
@@ -326,56 +367,100 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
   )
 
   const flightInfoCardCretor = (flight: Flight) => (
-        <div>
-            {flight.stops && flight.stops === 0
-                ? flighInfoTabCard({
-                      airLine: flight.airline,
-                      fromTime: flight.depTime,
-                      fromDate: flight.depDate,
-                      fromAddress: flight.from + " " + flight.fromCity,
-                      toTime: flight.arrTime,
-                      toDate: flight.arrDate,
-                      duration: flight.duration,
-                      toAddress: flight.to + " " + flight.toCity,
-                      flightCode: flight.flightCode,
-                  })
-                : flight.startTimeList?.map((ele, index) => (
-                      <>
-                          {flighInfoTabCard({
-                              airLine: flight.flightCode?.split("->")[index],
-                              fromTime: moment(flight?.startTimeList ? flight?.startTimeList[index] : new Date()).format("HH:mm"),
-                              fromDate: moment(flight?.startTimeList ? flight?.startTimeList[index] : new Date()).format("DD/MM/YYYY"),
-                              fromAddress: flight.departureTerminalList && flight.departureTerminalList[index],
-                              toTime: moment(flight?.endTimeList ? flight?.endTimeList[index] : new Date()).format("HH:mm"),
-                              toDate: moment(flight?.endTimeList ? flight?.endTimeList[index] : new Date()).format("DD/MM/YYYY"),
-                              duration: flight.durationsList && flight.durationsList[index].substring(2, flight.durationsList[index].length),
-                              toAddress: flight.arrivalTerminalList && flight.arrivalTerminalList[index],
-                              flightCode: flight.flightCode,
-                              city: {
-                                  from: index === 0 ? flight.fromCity : flight?.transitFlight && flight?.transitFlight[index - 1]?.viaCity,
-                                  to: index !== (flight.startTimeList && flight.startTimeList.length - 1) ? flight?.transitFlight && flight?.transitFlight[index]?.viaCity : flight.toCity,
-                              },
-                          })}
-                          {flight.stops && index < flight.stops ? (
-                              <Divider plain>
-                                  Change of planes | {flight.layoverDurationList && flight.layoverDurationList[index].substring(2, flight.layoverDurationList[index].length)} | via {flight.via?.split("-")[index] || (flight?.transitFlight && flight?.transitFlight[index]?.viaAirportCode)}
-                              </Divider>
-                          ) : null}
-                      </>
-                  ))}
-        </div>
-    )
+    <div>
+      {flight.stops && flight.stops === 0
+        ? flighInfoTabCard({
+            airLine: flight.airline,
+            fromTime: flight.depTime,
+            fromDate: flight.depDate,
+            fromAddress: flight.from + " " + flight.fromCity,
+            toTime: flight.arrTime,
+            toDate: flight.arrDate,
+            duration: flight.duration,
+            toAddress: flight.to + " " + flight.toCity,
+            flightCode: flight.flightCode
+          })
+        : flight.startTimeList?.map((ele, index) => (
+            <>
+              {flighInfoTabCard({
+                airLine: flight.flightCode?.split("->")[index],
+                fromTime: moment(
+                  flight?.startTimeList
+                    ? flight?.startTimeList[index]
+                    : new Date()
+                ).format("HH:mm"),
+                fromDate: moment(
+                  flight?.startTimeList
+                    ? flight?.startTimeList[index]
+                    : new Date()
+                ).format("DD/MM/YYYY"),
+                fromAddress:
+                  flight.departureTerminalList &&
+                  flight.departureTerminalList[index],
+                toTime: moment(
+                  flight?.endTimeList ? flight?.endTimeList[index] : new Date()
+                ).format("HH:mm"),
+                toDate: moment(
+                  flight?.endTimeList ? flight?.endTimeList[index] : new Date()
+                ).format("DD/MM/YYYY"),
+                duration:
+                  flight.durationsList &&
+                  flight.durationsList[index].substring(
+                    2,
+                    flight.durationsList[index].length
+                  ),
+                toAddress:
+                  flight.arrivalTerminalList &&
+                  flight.arrivalTerminalList[index],
+                flightCode: flight.flightCode,
+                city: {
+                  from:
+                    index === 0
+                      ? flight.fromCity
+                      : flight?.transitFlight &&
+                        flight?.transitFlight[index - 1]?.viaCity,
+                  to:
+                    index !==
+                    (flight.startTimeList && flight.startTimeList.length - 1)
+                      ? flight?.transitFlight &&
+                        flight?.transitFlight[index]?.viaCity
+                      : flight.toCity
+                }
+              })}
+              {flight.stops && index < flight.stops ? (
+                <Divider plain>
+                  Change of planes |{" "}
+                  {flight.layoverDurationList &&
+                    flight.layoverDurationList[index].substring(
+                      2,
+                      flight.layoverDurationList[index].length
+                    )}{" "}
+                  | via{" "}
+                  {flight.via?.split("-")[index] ||
+                    (flight?.transitFlight &&
+                      flight?.transitFlight[index]?.viaAirportCode)}
+                </Divider>
+              ) : null}
+            </>
+          ))}
+    </div>
+  )
 
   const flighInfoTabCardContainer = () => (
-        <div
-            style={{
-                display: "flex",
-                width: "100%",
-            }}>
-            <div style={{ marginBottom: "10px", flex: "1 1" }}>{flightInfoCardCretor(departFlight)}</div>
-            {!_.isEmpty(returnFlight) && <div style={{ flex: "1 1" }}>{flightInfoCardCretor(returnFlight)}</div>}
-        </div>
-    )
+    <div
+      style={{
+        display: "flex",
+        width: "100%"
+      }}
+    >
+      <div style={{ marginBottom: "10px", flex: "1 1" }}>
+        {flightInfoCardCretor(departFlight)}
+      </div>
+      {!_.isEmpty(returnFlight) && (
+        <div style={{ flex: "1 1" }}>{flightInfoCardCretor(returnFlight)}</div>
+      )}
+    </div>
+  )
 
   const flightInfoTabs: TabsProps["items"] = [
     {
@@ -413,7 +498,17 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       >
         <div>{detailsCard("depart", departFlight)}</div>
         {!_.isEmpty(returnFlight) && (
-          <div>{detailsCard("return", returnFlight)}</div>
+          <div style={{ display: "flex" }}>
+            <Divider
+              type="vertical"
+              style={{
+                background: "#DCC0F7",
+                height: "80%",
+                margin: "auto 1rem auto 0"
+              }}
+            />
+            <div>{detailsCard("return", returnFlight)}</div>
+          </div>
         )}
         <div
           style={{
@@ -433,15 +528,10 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                 <>
                   <div>
                     <span>Ticket price:</span>{" "}
-                    <span>
-                       {provider.length && provider[0].totalFare }
-                    </span>
+                    <span>{provider.length && provider[0].totalFare}</span>
                   </div>
                   <div>
-                    <span>Total discount:</span>{" "}
-                    <span>
-                      { 0 }
-                    </span>
+                    <span>Total discount:</span> <span>{0}</span>
                   </div>
 
                   <div>
@@ -456,9 +546,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                   </div>
                   <div>
                     <span>Total price after discount:</span>{" "}
-                    <b>
-                    { provider.length && provider[0].totalFare }
-                    </b>
+                    <b>{provider.length && provider[0].totalFare}</b>
                   </div>
                 </>
               }
@@ -493,14 +581,10 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       </div>
     </div>
   )
-      
 
-    
-
-
-    return (
-        <div>
-            {/* <Modal
+  return (
+    <div>
+      {/* <Modal
         open={true}
         mask={false}
         footer={null}
@@ -511,7 +595,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       >
         {flightDetailsCard}
       </Modal> */}
-            {/* <Modal
+      {/* <Modal
         open={true}
         mask={false}
         footer={null}
@@ -523,54 +607,57 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         {flightDetailsCard}
       </Modal> */}
 
-
-            <Drawer
-                height={"auto"}
-                autoFocus={false}
-                bodyStyle={{
-                    padding: 0,
-                }}
-                rootStyle={{
-                    marginLeft: "calc(200px + 10%)",
-                    width: "calc(80% - 200px)",
-                }}
-                placement='bottom'
-                mask={false}
-                headerStyle={{
-                    display: "none",
-                }}
-                footer={null}
-                onClose={() => {
-                    dispatch(dispatch(toggleModal({ modal: "flightInfo", status: false })))
-                }}
-                open={modal.flightInfo}>
-                {flightDetailsCard}
-                <Drawer
-                    title='Two-level Drawer'
-                    placement='bottom'
-                    closable={true}
-                    footer={null}
-                    headerStyle={{
-                        display: "none",
-                    }}
-                    style={{
-                        marginLeft: "calc(200px + 5%)",
-                        width: "calc(90% - 200px)",
-                        borderRadius: "20px 20px 0 0",
-                        padding: "0",
-                    }}
-                    contentWrapperStyle={{
-                        boxShadow: "none",
-                    }}
-                    onClose={() => {
-                        dispatch(updateFlightDetails(false))
-                    }}
-                    open={flightDetails}>
-                    <Tabs items={flightInfoTabs} />
-                </Drawer>
-            </Drawer>
-        </div>
-    )
+      <Drawer
+        height={"auto"}
+        autoFocus={false}
+        bodyStyle={{
+          padding: 0
+        }}
+        rootStyle={{
+          marginLeft: "calc(200px + 10%)",
+          width: "calc(80% - 200px)"
+        }}
+        placement="bottom"
+        mask={false}
+        headerStyle={{
+          display: "none"
+        }}
+        footer={null}
+        onClose={() => {
+          dispatch(
+            dispatch(toggleModal({ modal: "flightInfo", status: false }))
+          )
+        }}
+        open={modal.flightInfo}
+      >
+        {flightDetailsCard}
+        <Drawer
+          title="Two-level Drawer"
+          placement="bottom"
+          closable={true}
+          footer={null}
+          headerStyle={{
+            display: "none"
+          }}
+          style={{
+            marginLeft: "calc(200px + 5%)",
+            width: "calc(90% - 200px)",
+            borderRadius: "20px 20px 0 0",
+            padding: "0"
+          }}
+          contentWrapperStyle={{
+            boxShadow: "none"
+          }}
+          onClose={() => {
+            dispatch(updateFlightDetails(false))
+          }}
+          open={flightDetails}
+        >
+          <Tabs items={flightInfoTabs} />
+        </Drawer>
+      </Drawer>
+    </div>
+  )
 }
 
 export default FlightDetailsCard

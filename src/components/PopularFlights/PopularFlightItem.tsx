@@ -47,7 +47,7 @@ const PopularFlightItem: React.FC<PopularFlightItemProps> = ({
     const flightDetail: any = {
       from: departureFlightCode,
       to: destinationAirport?.code,
-      doj: moment(new Date()).format("DDMMYYYY"),
+      doj: moment().add(1, "days").format("DDMMYYYY"),
       seatingClass: "ECONOMY",
       adults: 1,
       children: 0,
