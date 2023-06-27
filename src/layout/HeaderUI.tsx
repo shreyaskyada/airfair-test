@@ -103,7 +103,7 @@ const HeaderUI = () => {
             alignItems: "center",
           }}
         >
-          <img src={logoImage} style={{ height: "20px" }} />
+          <img src={logoImage} style={{ height: "40px" }} />
         </div>
         <div>
           {!isLoggedInState ? (

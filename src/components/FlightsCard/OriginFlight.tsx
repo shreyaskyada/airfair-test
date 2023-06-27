@@ -16,6 +16,8 @@ const OriginFlight = (props:any) => {
         onSelectedFlightChange
     } = props;
 
+    console.log("selectedkey : ",selectedKey)
+
     return <>{
       originFlights?.map((flight: any, index: number) => (
         <DataCard
@@ -25,7 +27,7 @@ const OriginFlight = (props:any) => {
           onSelectedFlightChange={(data: any) =>
             onSelectedFlightChange(data, type, flight)
           }
-          // checked={departFlight.flightCode === flight.flightCode}
+          checked={departFlight.flightCode === flight.flightCode}
           dataKey={index}
           tags={[]}
           flight={{

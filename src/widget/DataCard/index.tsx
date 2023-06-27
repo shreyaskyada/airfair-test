@@ -13,6 +13,7 @@ import { Radio } from "antd";
 
 import "./DataCard.css";
 import { airlineMapping } from "../../services/airports";
+import { arrayBuffer } from "node:stream/consumers";
 
 const { Text, Title } = Typography;
 
@@ -106,8 +107,8 @@ const DataCard = (props: Props) => {
               width: "20px",
               verticalAlign: "middle",
             }}
-            value={`${type}-${dataKey}`}
-            //defaultChecked={checked}
+            //value={`${type}-${dataKey}`}
+            checked={checked}
             onChange={onSelectedFlightChange}
           />
           <>
@@ -187,22 +188,26 @@ const DataCard = (props: Props) => {
                     >
                       {flight.partners.map((partner) => {
                         return (
-                          flight.agent !== partner.name && (
+                          Array.isArray(flight.agent) ? flight.agent[0] !== partner.name && (
                             <Space>
                               <Text strong>₹ {partner.price}</Text>
                               <Text strong>{partner.name}</Text>
                             </Space>
-                          )
-                        );
+                          ): flight.agent !== partner.name && (
+                            <Space>
+                              <Text strong>₹ {partner.price}</Text>
+                              <Text strong>{partner.name}</Text>
+                            </Space>
+                        ))
                       })}
-                       {details &&
+                       {/* {details &&
                         flight.partners.length - 2 &&
                         flight.partners.slice(2).map((partner) => (
                           <Space>
                             <Text strong>₹ {partner.price}</Text>
                             <Text strong>{partner.name}</Text>
                           </Space>
-                        ))}
+                        ))} */}
                     </Space>
                     {flight.partners.length - 2 > 0 && (
                       <Space size={0} style={{ alignSelf: "flex-end" }}>

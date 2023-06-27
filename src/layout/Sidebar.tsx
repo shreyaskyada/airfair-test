@@ -30,8 +30,8 @@ const Sidebar = () => {
           color: "#000",
         }}
         items={[
-          { icon: UserOutlined, path: "/", name: "Home" },
-          { icon: UserOutlined, path: "/flights-listing", name: "Flights" },
+          // { icon: UserOutlined, path: "/", name: "Home" },
+          { icon: UserOutlined, path: "/", name: "Flights" },
         ].map((item, index) => ({
           key: String(index + 1),
           icon: (

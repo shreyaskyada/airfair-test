@@ -266,7 +266,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                     ? fromAddress.includes("Terminal")
                       ? ""
                       : "Terminal "
-                    : "Terminal "
+                    : "Terminal " 
                 } ${fromAddress || "--"}`}
               </span>
             </div>
@@ -498,17 +498,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       >
         <div>{detailsCard("depart", departFlight)}</div>
         {!_.isEmpty(returnFlight) && (
-          <div style={{ display: "flex" }}>
-            <Divider
-              type="vertical"
-              style={{
-                background: "#DCC0F7",
-                height: "80%",
-                margin: "auto 1rem auto 0"
-              }}
-            />
-            <div>{detailsCard("return", returnFlight)}</div>
-          </div>
+          <div>{detailsCard("return", returnFlight)}</div>
         )}
         <div
           style={{

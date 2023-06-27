@@ -19,8 +19,8 @@ const DestinationFlight = (props: any) => {
           selectedKey={selectedKey}
           onSelectedFlightChange={(data: any) =>
             onSelectedFlightChange(data, type, flight)
-          }
-          // checked={returnFlight.flightCode === flight.flightCode}
+          } 
+          checked={returnFlight.flightCode === flight.flightCode}
           dataKey={index}
           tags={[]}
           flight={{
