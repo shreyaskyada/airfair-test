@@ -237,7 +237,7 @@ const DataCard = (props: Props) => {
 
                     <Title level={5} style={{ margin: "2px", padding: "0px" }}>
                       Regular Fare : 
-                      ₹ {flight.price}
+                      <div>₹ {flight.price}</div>
                     </Title>
                   </Space>
                   <Space direction="vertical" size={0} align="start">

@@ -237,12 +237,12 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                   {fields.map((field, index) => (
                     <>
                       <Space.Compact
-                        key={index + "_" + field.name}
+                        key={(Math.random() + 1).toString(36).substring(2)}
                         style={{
                           display: "flex",
                           margin: "1rem 0",
-                          alignItems: "center",
-                          flexWrap: "wrap"
+                          alignItems: "center"
+                          //flexWrap: "wrap"
                         }}
                       >
                         {bankDetails.names.length && (
@@ -266,7 +266,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                               allowClear
                               style={{
                                 marginRight: "10px",
-                                marginTop: "10px",
+                                //marginTop: "10px",
                                 width: "calc(25% - 0px)"
                               }}
                               placeholder="Bank name"
@@ -295,7 +295,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             allowClear
                             style={{
                               marginRight: "10px",
-                              marginTop: "10px",
+                              //marginTop: "10px",
                               width: "calc(25% - 0px)"
                             }}
                             placeholder="Card type"
@@ -322,7 +322,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             allowClear
                             style={{
                               marginRight: "10px",
-                              marginTop: "10px",
+                              //marginTop: "10px",
                               width: "calc(25% - 0px)"
                             }}
                             onClick={() => {
@@ -363,7 +363,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             allowClear
                             style={{
                               marginRight: "10px",
-                              marginTop: "10px",
+                              //marginTop: "10px",
                               width: "calc(25% - 0px)"
                             }}
                             placeholder="Bank issuer name"
@@ -419,7 +419,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                   {fields.map((field, index) => (
                     <>
                       <Space.Compact
-                        key={index + "_" + field.name}
+                        key={(Math.random() + 1).toString(36).substring(2)}
                         style={{
                           display: "flex",
                           marginBottom: 8,
