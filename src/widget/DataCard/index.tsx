@@ -107,7 +107,7 @@ const DataCard = (props: Props) => {
               width: "20px",
               verticalAlign: "middle",
             }}
-            //value={`${type}-${dataKey}`}
+            value={`${type}-${dataKey}`}
             checked={checked}
             onChange={onSelectedFlightChange}
           />
@@ -200,14 +200,14 @@ const DataCard = (props: Props) => {
                             </Space>
                         ))
                       })}
-                       {/* {details &&
+                       {details &&
                         flight.partners.length - 2 &&
                         flight.partners.slice(2).map((partner) => (
                           <Space>
                             <Text strong>₹ {partner.price}</Text>
                             <Text strong>{partner.name}</Text>
                           </Space>
-                        ))} */}
+                        ))}
                     </Space>
                     {flight.partners.length - 2 > 0 && (
                       <Space size={0} style={{ alignSelf: "flex-end" }}>
@@ -234,7 +234,9 @@ const DataCard = (props: Props) => {
                   }}
                 >
                   <Space>
-                    <Title level={3} style={{ margin: "2px", padding: "0px" }}>
+
+                    <Title level={5} style={{ margin: "2px", padding: "0px" }}>
+                      Regular Fare : 
                       ₹ {flight.price}
                     </Title>
                   </Space>

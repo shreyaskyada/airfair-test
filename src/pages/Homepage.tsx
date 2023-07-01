@@ -36,10 +36,12 @@ const Homepage = () => {
   }
 
   return (
-    <div >
-      <div style={{
-        position: "relative"
-      }}>
+    <div>
+      <div
+        style={{
+          position: "relative"
+        }}
+      >
         <Slider {...sliderSettings}>
           <div>
             <img src={bannerImage1} />
@@ -58,7 +60,15 @@ const Homepage = () => {
           <SearchFilter redirectRoute={"/flights-listing"} />
         </div>
       </div>
-
+      <div className="introSection">
+        <h3 className="introDetail">
+          Unlock exclusive flight deals tailored to your credit/debit card or
+          direct offers from top Travel Platforms. Complete your profile today
+          and gain access to the best flight discounts across multiple
+          platforms. Don't miss out on savings, personalize your travel
+          experience now!
+        </h3>
+      </div>
       {/* <LoginCard /> */}
       <PopularFlights />
       <PopularAirlines />

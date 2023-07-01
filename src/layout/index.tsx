@@ -174,9 +174,9 @@ const LayoutUI = () => {
         <Layout>
           <HeaderUI />
           <Content style={{ background: "#3B8BEB", overflow: "scroll" }}>
-            {modal.flightInfo && location.pathname === "/flights-listing" && (
-              <FlightDetailsCard />
-            )}
+            {modal.flightInfo &&
+              location &&
+              location.pathname === "/flights-listing" && <FlightDetailsCard />}
 
             {modal.signup && (
               <SignupCard onFinishHandler={onSignupFinishHandler} />

@@ -266,7 +266,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                     ? fromAddress.includes("Terminal")
                       ? ""
                       : "Terminal "
-                    : "Terminal " 
+                    : "Terminal "
                 } ${fromAddress || "--"}`}
               </span>
             </div>
@@ -491,7 +491,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "2fr 2fr 1fr",
+          gridTemplateColumns: "2fr 2fr 1.5fr",
           columnGap: "2em",
           width: "100%"
         }}
@@ -506,9 +506,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           }}
         >
           <div>
-            <Title level={4} style={{ marginBottom: 0 }}>
-              ₹{provider.length && provider[0].totalFare}
-            </Title>
+            <div style={{display:"flex",alignItems:"center"}}>
+              <Title level={4} style={{ marginBottom: 0 }}>
+              Discounted Fare: ₹{provider.length && provider[0].totalFare}
+              </Title>
+            </div>
             <Title level={5} style={{ margin: 0 }}>
               {provider.length && provider[0].provider}
             </Title>

@@ -19,21 +19,21 @@ import { updateOriginFlights } from "../redux/slices/originFlight"
 import OriginFlight from "../components/FlightsCard/OriginFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
 
-function compareArrays(array1:any, array2:any) {
+function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
-    return false;
+    return false
   }
 
-  const sortedArray1 = array1.slice().sort();
-  const sortedArray2 = array2.slice().sort();
+  const sortedArray1 = array1.slice().sort()
+  const sortedArray2 = array2.slice().sort()
 
   for (let i = 0; i < sortedArray1.length; i++) {
     if (sortedArray1[i] !== sortedArray2[i]) {
-      return false;
+      return false
     }
   }
 
-  return true;
+  return true
 }
 
 const FlightsListingPage = () => {
@@ -43,35 +43,41 @@ const FlightsListingPage = () => {
     return: "return-0"
   })
 
-  const { flights,departFlight}: { flights: any ,departFlight:any,returnFlight:any} = useAppSelector((state) => state.flight)
+  const {
+    flights,
+    departFlight
+  }: { flights: any; departFlight: any; returnFlight: any } = useAppSelector(
+    (state) => state.flight
+  )
 
   useEffect(() => {
     dispatch(toggleModal({ modal: "flightInfo", status: true }))
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     const departProviders = Object.keys(departFlight.compare || {})
     const flightsToFilter = flights.returnJourneyCompareResponse || []
 
-    if(departFlight && flightsToFilter.length){
-      let data = flightsToFilter.filter((value:any)=>{
-      let providers = Object.keys(value.compare)
-      return compareArrays(departProviders,providers)
-      
-    })
-    console.log("data",data)
+    if (departFlight && flightsToFilter.length) {
+      let data = flightsToFilter.filter((value: any) => {
+        let providers = Object.keys(value.compare)
+        return compareArrays(departProviders, providers)
+      })
+      console.log("data", data)
       data && data.length && updateDestinationFlights(data)
     }
-
-    
-  },[flights,departFlight])
+  }, [flights, departFlight])
 
   const filterFlightList = (selectedFlightProvider: any, type: string) => {
     let flightsListToFilter =
       type === "depart"
         ? flights.returnJourneyCompareResponse || []
         : flights.flightCompareResponse || []
-    console.log("Flights to filter : ",flightsListToFilter,selectedFlightProvider)
+    console.log(
+      "Flights to filter : ",
+      flightsListToFilter,
+      selectedFlightProvider
+    )
     // let data = flightsListToFilter.filter(
     //   (x: any) =>
     //     Object.keys(x.compare).filter((value: any) =>
@@ -79,9 +85,9 @@ const FlightsListingPage = () => {
     //     ).length > 0
     // )
 
-    let data = flightsListToFilter.filter((value:any)=>{
+    let data = flightsListToFilter.filter((value: any) => {
       let providers = Object.keys(value.compare)
-      return compareArrays(selectedFlightProvider,providers)
+      return compareArrays(selectedFlightProvider, providers)
     })
 
     let filteredFlights = data
@@ -121,9 +127,7 @@ const FlightsListingPage = () => {
         case "depart": {
           dispatch(updateDepartFlights(flight))
           const data = filterFlightList(compareData, type)
-          dispatch(
-            updateDestinationFlights(data)
-          )
+          dispatch(updateDestinationFlights(data))
           dispatch(updateReturnFlights(data[0]))
           dispatch(uploadIsLoading(false))
           break
