@@ -1,0 +1,12 @@
+/*========================Profile========================*/
+.menuOptions{
+    padding-left:.4rem ;
+}
+.menuOptions:hover{
+    background-color: #EDF7FF;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+
+/*========================Profile========================*/

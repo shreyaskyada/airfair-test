@@ -1,28 +1,13 @@
-import React, { useEffect, useState } from "react"
-import {
-  Button,
-  Card,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Typography,
-  Space,
-  Select
-} from "antd"
-import { loginBanner } from "../../assets/images"
-import { getFlightsConfig } from "../../services/api/urlConstants"
-import backendService from "../../services/api"
-import {
-  getProfileDetails,
-  signupUser,
-  updateProfileDetails
-} from "../../services/auth"
-import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { toggleModal, updateUserDetails } from "../../redux/slices/app"
+import { useEffect, useState, useRef } from "react"
+import { Form, Input, Modal, Space, Select, Button, Typography } from "antd"
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons"
+import { updateProfileDetails } from "../../services/auth"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { toggleModal } from "../../redux/slices/app"
 import { getBankDetails, getBankName } from "../../services/airports"
 import useLocalStorage from "../../hooks/LocalStorage"
+import { loginBanner } from "../../assets/images"
+import "./style.css"
 
 const { Text, Title } = Typography
 
@@ -42,6 +27,46 @@ const walletOptions = {
     { label: "UPI", value: "UPI" },
     { label: "Wallet", value: "Wallet" }
   ]
+}
+
+const CustomDropDown = (props: any) => {
+  const [bankData, setBankData] = useState<any>([])
+
+  useEffect(() => {
+    const getBankNamesFunc = async () => {
+      try {
+        if (props.bankName && props.cardType) {
+          const bankNames = await getBankName(props.bankName, props.cardType)
+          setBankData(bankNames)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getBankNamesFunc()
+  }, [props.bankName, props.cardType])
+
+  return bankData && bankData.length ? (
+    <>
+      {bankData.map((value: any) => (
+        <option
+          className="menuOptions"
+          value={value.cardName}
+          onClick={() => {
+            props.form.setFieldValue(
+              ["bankCards", props.name, "bankCardName"],
+              value.cardName
+            )
+            props.selectRef.current.blur()
+          }}
+        >
+          {value.cardName}
+        </option>
+      ))}
+    </>
+  ) : (
+    <div>No Data</div>
+  )
 }
 
 const ProfileCard = ({ onFinishHandler }: any) => {
@@ -75,6 +100,8 @@ const ProfileCard = ({ onFinishHandler }: any) => {
     ]
   })
 
+  const selectRef = useRef<any>(null)
+
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
@@ -104,20 +131,6 @@ const ProfileCard = ({ onFinishHandler }: any) => {
     dispatch(toggleModal({ modal: "profile", status: false }))
   }
 
-  const fetchCardName = (bankName: string, bankType: string) => {
-    getBankName(bankName, bankType).then((res: any) => {
-      setBankDetails((prevState) => ({
-        ...prevState,
-        cardNames: res
-          ? res.map((item: any) => ({
-              label: item.cardName,
-              value: item.cardName
-            }))
-          : []
-      }))
-    })
-  }
-
   useEffect(() => {
     if (userDetails.phone) {
       setProfileDetails({
@@ -136,6 +149,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
       wallets: userDetails.walletList,
       bankCards: userDetails.bankList
     })
+
     getBankDetails("A").then((res: any) => {
       setBankDetails((prevState) => ({
         ...prevState,
@@ -234,9 +248,10 @@ const ProfileCard = ({ onFinishHandler }: any) => {
             >
               {(fields, { add, remove }, { errors }) => (
                 <>
-                  {fields.map((field, index) => (
-                    <>
-                      <Space.Compact
+                  {fields.map((field, index) => {
+                    console.log("Field : ", field)
+                    return (
+                      <div
                         key={(Math.random() + 1).toString(36).substring(2)}
                         style={{
                           display: "flex",
@@ -247,9 +262,10 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                       >
                         {bankDetails.names.length && (
                           <Form.Item
-                            {...field}
+                            //{...field}
                             validateTrigger={["onChange", "onBlur"]}
                             name={[field.name, "bankName"]}
+                            //key={field.key}
                             rules={[
                               {
                                 required: true,
@@ -276,7 +292,8 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                         )}
 
                         <Form.Item
-                          {...field}
+                          //{...field}
+                          //key={field.key}
                           validateTrigger={["onChange", "onBlur"]}
                           rules={[
                             {
@@ -303,7 +320,8 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                           />
                         </Form.Item>
                         <Form.Item
-                          {...field}
+                          //{...field}
+                          //key={field.key}
                           validateTrigger={["onChange", "onBlur"]}
                           name={[field.name, "bankCardName"]}
                           rules={[
@@ -325,26 +343,31 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                               //marginTop: "10px",
                               width: "calc(25% - 0px)"
                             }}
-                            onClick={() => {
-                              fetchCardName(
-                                form.getFieldValue([
+                            ref={selectRef}
+                            dropdownRender={() => (
+                              <CustomDropDown
+                                bankName={form.getFieldValue([
                                   "bankCards",
                                   field.name,
                                   "bankName"
-                                ]),
-                                form.getFieldValue([
+                                ])}
+                                cardType={form.getFieldValue([
                                   "bankCards",
                                   field.name,
                                   "bankCardType"
-                                ])
-                              )
-                            }}
+                                ])}
+                                name={field.name}
+                                selectRef={selectRef}
+                                form={form}
+                              />
+                            )}
                             placeholder="Bank card name"
                             options={bankDetails.cardNames}
                           />
                         </Form.Item>
                         <Form.Item
-                          {...field}
+                          //{...field}
+                          //key={field.key}
                           validateTrigger={["onChange", "onBlur"]}
                           name={[field.name, "bankIssuerName"]}
                           rules={[
@@ -382,9 +405,9 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             }}
                           />
                         }
-                      </Space.Compact>
-                    </>
-                  ))}
+                      </div>
+                    )
+                  })}
 
                   <Form.Item>
                     <Button

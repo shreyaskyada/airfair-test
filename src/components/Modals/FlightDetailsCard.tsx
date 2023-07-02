@@ -475,16 +475,13 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
     }
   ]
 
-  console.log("Depart Flight : ", departFlight)
-
   const flightDetailsCard = (
     <div
       style={{
         padding: "0 25px",
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         alignItems: "center",
-        flexDirection: "column",
         background: "#B23850"
       }}
     >
@@ -506,9 +503,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           }}
         >
           <div>
-            <div style={{display:"flex",alignItems:"center"}}>
+            <div style={{ display: "flex", alignItems: "center" }}>
               <Title level={4} style={{ marginBottom: 0 }}>
-              Discounted Fare: ₹{provider.length && provider[0].totalFare}
+                Discounted Fare: ₹{provider.length && provider[0].totalFare}
               </Title>
             </div>
             <Title level={5} style={{ margin: 0 }}>
