@@ -616,11 +616,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                   <>
                     <div>
                       <span>Base Fare:</span>
-                      <span>{provider.length > 1 && provider[1].baseFare}</span>
+                      <span>{provider.length && provider[0].baseFare}</span>
                     </div>
                     <div>
                       <span>Totall Tax:</span>
-                      <span>{provider.length > 1 && provider[1].tax}</span>
+                      <span>{provider.length && provider[0].tax}</span>
                     </div>
                     <div>
                       <span>Ticket price:</span>
