@@ -62,6 +62,8 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         const doj = moment(searchFlightData.dateOfDep).valueOf()
         const dob = moment(dayjs().toString()).valueOf()
 
+        console.log("provider : ", provider)
+
         const payload: any = provider.map((_provider: any) => ({
           provider: _provider.provider,
           airline: ["ALL"],
@@ -73,8 +75,8 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           walletList,
           noOfTravellers: searchFlightData.totalTravellers,
           fare: {
-            baseFare: _provider.totalFare,
-            tax: 0,
+            baseFare: _provider.baseFare,
+            tax: _provider.tax,
             totalFare: _provider.totalFare
           }
         }))
@@ -97,6 +99,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       getDiscount()
     }
   }, [provider, authToken, searchFlightData])
+  console.log(departFlight)
 
   useEffect(() => {
     let providers: any = []
@@ -118,8 +121,38 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             totalDepartFare && totalreturnFare
               ? totalreturnFare + totalDepartFare
               : 0
+          let totalDepartTax =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalTax ||
+                departFlight.compare[key].fare?.tax
+              : 0
+          let totalReturnTax =
+            returnFlight.compare && returnFlight.compare[key]
+              ? returnFlight.compare[key].fare?.totalTax ||
+                returnFlight.compare[key].fare?.tax
+              : 0
 
-          providers.push({ provider: key, totalFare: totalFare, url: url })
+          let totalTax = (totalDepartTax || 0) + (totalReturnTax || 0)
+
+          let baseFareDepart =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalBaseFare ||
+                departFlight.compare[key].fare?.baseFare
+              : 0
+          let baseFareReturn =
+            returnFlight.compare && returnFlight.compare[key]
+              ? returnFlight.compare[key].fare?.totalBaseFare ||
+                returnFlight.compare[key].fare?.baseFare
+              : 0
+          let baseFare = (baseFareDepart || 0) + (baseFareReturn || 0)
+
+          providers.push({
+            provider: key,
+            totalFare: totalFare,
+            url: url,
+            baseFare: baseFare,
+            tax: totalTax
+          })
         })
 
       providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
@@ -135,10 +168,24 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
 
           let url = departFlight.compare && departFlight.compare[key].redirecUrl
 
+          let totalTax =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalTax ||
+                departFlight.compare[key].fare?.tax
+              : 0
+
+          let baseFare =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalBaseFare ||
+                departFlight.compare[key].fare?.baseFare
+              : 0
+
           providers.push({
             provider: key,
             totalFare: totalDepartFare,
-            url: url
+            url: url,
+            baseFare: baseFare,
+            tax: totalTax
           })
         })
       providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
@@ -148,7 +195,6 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
   }, [departFlight, returnFlight])
 
   console.log(departFlight, returnFlight)
-  //console.log("flights",flights)
 
   const detailsCard = (title: string, flighDetails: Flight) =>
     flighDetails && (
@@ -210,30 +256,42 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                         bestOffer2 && (
                           <>
                             <div>
-                          <span>Ticket price:</span>
-                          <span>{bestOffer2.fare.totalFare}</span>
-                        </div>
-                        <div>
-                          <span>Total discount:</span>{" "}
-                          <span>{bestOffer2.fare.totalDiscount}</span>
-                        </div>
-    
-                        <div>
-                          <span>Promo code:</span>
-                          <span>
-                            {bestOffer2.promoCode
-                              ? bestOffer2.promoCode
-                              : "No offer applicable"}
-                          </span>
-                        </div>
-                        <div>
-                          <span>Total price after discount: </span>
-                          <b>
-                            {bestOffer2.fare.totalFareAfterDiscount
-                              ? bestOffer2.fare.totalFareAfterDiscount
-                              : bestOffer2.fare.totalFare}
-                          </b>
-                        </div>
+                              <span>Base Fare:</span>
+                              <span>
+                                {provider.length > 1 && provider[1].baseFare}
+                              </span>
+                            </div>
+                            <div>
+                              <span>Totall Tax:</span>
+                              <span>
+                                {provider.length > 1 && provider[1].tax}
+                              </span>
+                            </div>
+                            <div>
+                              <span>Ticket price:</span>
+                              <span>{bestOffer2.fare.totalFare}</span>
+                            </div>
+                            <div>
+                              <span>Total discount:</span>{" "}
+                              <span>{bestOffer2.fare.totalDiscount}</span>
+                            </div>
+
+                            <div>
+                              <span>Promo code:</span>
+                              <span>
+                                {bestOffer2.promoCode
+                                  ? bestOffer2.promoCode
+                                  : "No offer applicable"}
+                              </span>
+                            </div>
+                            <div>
+                              <span>Total price after discount: </span>
+                              <b>
+                                {bestOffer2.fare.totalFareAfterDiscount
+                                  ? bestOffer2.fare.totalFareAfterDiscount
+                                  : bestOffer2.fare.totalFare}
+                              </b>
+                            </div>
                           </>
                         )
                       }
@@ -556,6 +614,14 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
               content={
                 bestOffer && (
                   <>
+                    <div>
+                      <span>Base Fare:</span>
+                      <span>{provider.length > 1 && provider[1].baseFare}</span>
+                    </div>
+                    <div>
+                      <span>Totall Tax:</span>
+                      <span>{provider.length > 1 && provider[1].tax}</span>
+                    </div>
                     <div>
                       <span>Ticket price:</span>
                       <span>{bestOffer.fare.totalFare}</span>
