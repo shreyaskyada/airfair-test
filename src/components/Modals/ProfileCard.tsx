@@ -110,6 +110,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
     updateProfileDetails(
       userId,
       dataParams.phoneNo,
+      dataParams.email,
       dataParams.bankCards,
       dataParams.wallets,
       authToken

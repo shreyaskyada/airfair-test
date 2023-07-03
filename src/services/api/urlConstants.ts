@@ -195,6 +195,7 @@ export const getBankNameConfig = (bankName: string, bankType: string) => {
 export const updateProfileConfig = (
   userName: string,
   phoneNo: number,
+  emailId: string,
   bankDetails: any,
   wallets: any,
   token: string
@@ -206,6 +207,7 @@ export const updateProfileConfig = (
     data: {
       mobileNo: phoneNo,
       username: userName,
+      email: emailId,
       bankDetails: bankDetails,
       walletDetails: wallets,
     },
