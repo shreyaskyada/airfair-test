@@ -468,11 +468,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       label: `Flight details`,
       children: flighInfoTabCardContainer()
     },
-    {
-      key: "2",
-      label: `Fare summary`,
-      children: flighSummaryCard()
-    }
+    // {
+    //   key: "2",
+    //   label: `Fare summary`,
+    //   children: flighSummaryCard()
+    // }
   ]
 
   const flightDetailsCard = (
@@ -489,19 +489,18 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         style={{
           display: "grid",
           gridTemplateColumns: "2fr 2fr 1.5fr",
-          columnGap: "2em",
+          columnGap: "2rem",
+          justifyContent: "space-between",
           width: "100%"
         }}
       >
         <div>{detailsCard("depart", departFlight)}</div>
-        {!_.isEmpty(returnFlight) && (
-          <div>{detailsCard("return", returnFlight)}</div>
-        )}
-        <div
-          style={{
-            justifySelf: "flex-end"
-          }}
-        >
+        <div>
+          {!_.isEmpty(returnFlight) && (
+            <div>{detailsCard("return", returnFlight)}</div>
+          )}
+        </div>
+        <div>
           <div>
             <div style={{ display: "flex", alignItems: "center" }}>
               <Title level={4} style={{ marginBottom: 0 }}>
