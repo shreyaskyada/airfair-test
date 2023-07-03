@@ -20,7 +20,7 @@ interface CompareFlightCompanyDetails {
         otherCharges?: number
     }
     offerApplied?: boolean
-    offerDescription?: {
+    offerDescription?: {    
         offerType?: string
         bankName?: string
         cardName?: string

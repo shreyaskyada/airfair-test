@@ -1,5 +1,7 @@
+import { getProfileDetails } from "../../services/auth";
+import { createSlice, PayloadAction,createAsyncThunk } from "@reduxjs/toolkit";
+import { AxiosResponse } from "axios";
 import { NotificationType } from "./../../layout/index";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserDetailsType {
   firstName?: string;
@@ -59,7 +61,22 @@ export const initialState: AppState = {
   },
 };
 
-export const appSlice = createSlice({
+// const getUserProfile = createAsyncThunk(
+//   "app/userDetail",
+//   async ({ userId, token }: any, thunkApi) => {
+//     try {
+//       const res = await getProfileDetails(userId, token)
+      
+//       return (res as AxiosResponse<any, any>).data
+//     } catch (error: any) {
+//         throw error.response.data
+
+//     }
+//   }
+// )
+
+
+const appSlice = createSlice({
   name: "app",
   initialState,
   reducers: {
@@ -93,7 +110,46 @@ export const appSlice = createSlice({
     ) => {
       state.notifcationModal = action.payload;
     },
+
   },
+  // extraReducers: (builder) => {
+  //   builder
+  //     .addCase(getUserProfile.pending.type, (state, action) => {
+        
+  //     })
+  //     .addCase(
+  //       getUserProfile.fulfilled.type,
+  //       (state, action: PayloadAction<any>) => {
+  //         const res=action.payload
+  //         const walletList = res.walletDetails.map((wallet: any) => ({
+  //           walletName: wallet.walletName.toLowerCase(),
+  //           walletType: wallet.walletType
+  //         }))
+  //         const bankList = res.bankDetails.map((bank: any) => ({
+  //           bankCardName: bank.cardName,
+  //           bankCardType: bank.cardType,
+  //           bankIssuerName: bank.cardIssuer,
+  //           bankName: bank.bankName
+  //         }))
+
+  //         const userDetail = {
+  //           firstName: res.firstName,
+  //           lastName: res.lastName,
+  //           email: res.email,
+  //           userName: res.username,
+  //           phoneNo: res.mobileNo,
+  //           bankList,
+  //           walletList
+  //         }
+
+  //         console.log("User Detail : ",userDetail)
+  //         state.userDetails = userDetail
+  //       }
+  //     )
+  //     .addCase(getUserProfile.rejected.type, (state, action) => {
+        
+  //     })
+  //   }
 });
 
 // Action creators are generated for each case present in reducers object
