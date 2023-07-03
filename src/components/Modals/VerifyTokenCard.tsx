@@ -24,7 +24,6 @@ const VerifyTokenCard = () => {
 
   const onFinish = (values: any) => {
     const dataParams = form.getFieldsValue();
-    console.log(dataParams);
     verifyToken(dataParams.otp, userDetails.userName || "")
       .then((res) => {
         notifcationModal &&

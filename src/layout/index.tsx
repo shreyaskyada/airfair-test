@@ -107,14 +107,15 @@ const LayoutUI = () => {
 
   const onSignupFinishHandler = (success: boolean, userDetails: any) => {
     if (success) {
+      console.log("User Detail 2 :",userDetails)
       dispatch(updateIsLoggedIn(true))
       setIsLoggedIn(true)
-      setUserId(userDetails.username)
+      setUserId(userDetails.userName)
       setAuthToken(userDetails.token)
       dispatch(updateUserDetails(userDetails))
       dispatch(toggleModal({ modal: "signup", status: false }))
       dispatch(toggleModal({ modal: "otp", status: true }))
-      getUserInfo(dispatch, userDetails.username, userDetails.token)
+      getUserInfo(dispatch, userDetails.userName, userDetails.token)
     } else {
       const errorMessage = userDetails.data.message || ""
       !notifcationModal &&
