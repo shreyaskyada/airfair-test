@@ -30,8 +30,9 @@ const { Meta } = Card
 const FlightDetailsCard = ({ onFinishHandler }: any) => {
   const dispatch = useAppDispatch()
   const [authToken] = useLocalStorage("authToken", "")
-  
+
   const [bestOffer, setBestOffer] = useState<any>(null)
+  const [bestOffer2, setBestOffer2] = useState<any>(null)
   const [provider, setProvider] = useState<any>([])
 
   const { modal, flightDetails, userDetails } = useAppSelector(
@@ -61,8 +62,8 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         const doj = moment(searchFlightData.dateOfDep).valueOf()
         const dob = moment(dayjs().toString()).valueOf()
 
-        const payload: any = {
-          provider: provider[0].provider,
+        const payload: any = provider.map((_provider: any) => ({
+          provider: _provider.provider,
           airline: ["ALL"],
           flightType: "DOMESTIC",
           journeyType: searchFlightData.flightType,
@@ -72,15 +73,21 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           walletList,
           noOfTravellers: searchFlightData.totalTravellers,
           fare: {
-            baseFare: provider[0].totalFare,
+            baseFare: _provider.totalFare,
             tax: 0,
-            totalFare: provider[0].totalFare
+            totalFare: _provider.totalFare
           }
+        }))
+
+        const res1: any = await getBestOffer(payload[0], authToken)
+
+        setBestOffer(res1.bestOffer)
+
+        if (payload.length > 1) {
+          const res2: any = await getBestOffer(payload[1], authToken)
+
+          setBestOffer2(res2.bestOffer)
         }
-
-        const res: any = await getBestOffer(payload, authToken)
-
-        setBestOffer(res.bestOffer)
       } catch (error) {
         console.log(error)
       }
@@ -200,31 +207,35 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                     </Button>
                     <Popover
                       content={
-                        <>
-                          <div>
-                            <span>Ticket price:</span>{" "}
-                            <span>
-                              {provider.length > 1 && provider[1].totalFare}
-                            </span>
-                          </div>
-                          <div>
-                            <span>Total discount:</span>{" "}
-                            <span>{item[1].fare?.totalDiscount}</span>
-                          </div>
-                          <div>
-                            <span>Promo code:</span>{" "}
-                            <span>
-                              {item[1].offerDescription?.promoCode ||
-                                "No offer applicable"}
-                            </span>
-                          </div>
-                          <div>
-                            <span>Total price after discount:</span>{" "}
-                            <b>
-                              {provider.length > 1 && provider[1].totalFare}
-                            </b>
-                          </div>
-                        </>
+                        bestOffer2 && (
+                          <>
+                            <div>
+                          <span>Ticket price:</span>
+                          <span>{bestOffer2.fare.totalFare}</span>
+                        </div>
+                        <div>
+                          <span>Total discount:</span>{" "}
+                          <span>{bestOffer2.fare.totalDiscount}</span>
+                        </div>
+    
+                        <div>
+                          <span>Promo code:</span>
+                          <span>
+                            {bestOffer2.promoCode
+                              ? bestOffer2.promoCode
+                              : "No offer applicable"}
+                          </span>
+                        </div>
+                        <div>
+                          <span>Total price after discount: </span>
+                          <b>
+                            {bestOffer2.fare.totalFareAfterDiscount
+                              ? bestOffer2.fare.totalFareAfterDiscount
+                              : bestOffer2.fare.totalFare}
+                          </b>
+                        </div>
+                          </>
+                        )
                       }
                       title={"Price breakdown"}
                       trigger="hover"
@@ -530,7 +541,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           <div>
             <div style={{ display: "flex", alignItems: "center" }}>
               <Title level={4} style={{ marginBottom: 0 }}>
-                Discounted Fare: ₹{provider.length && provider[0].totalFare}
+                Discounted Fare: ₹
+                {bestOffer &&
+                  (bestOffer.fare && bestOffer.fare.totalFareAfterDiscount
+                    ? bestOffer.fare.totalFareAfterDiscount
+                    : provider[0].totalFare)}
               </Title>
             </div>
             <Title level={5} style={{ margin: 0 }}>
