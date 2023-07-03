@@ -29,6 +29,7 @@ import { useNavigate } from "react-router"
 import { uploadIsLoading } from "../../redux/slices/app"
 import { updateOriginFlights } from "../../redux/slices/originFlight"
 import { updateDestinationFlights } from "../../redux/slices/destinationFlight"
+import { ISearchFlights, updateSaarchFlights } from "../../redux/slices/searchFlights"
 
 const { TextArea } = Input
 const { Title, Text } = Typography
@@ -132,6 +133,12 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
     data.bankList = userDetails.bankList
     data.walletList = userDetails.walletList
 
+    const searchFlightData:ISearchFlights = {
+      totalTravellers: values.adult + values.child + values.infant,
+      dateOfDep: values.departure.toString(),
+      flightType: isRoundTrip ? "ROUND_TRIP" : "ONE_WAY"
+    }
+
     const config = getFlightsConfig(data)
     backendService
       .request(config)
@@ -157,6 +164,9 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
         isRoundTrip
           ? dispatch(updateReturnFlights(data[0]))
           : dispatch(updateReturnFlights({}))
+
+        dispatch(updateSaarchFlights(searchFlightData))
+
         redirectRoute && navigate(redirectRoute)
       })
       .catch((err) => console.error(err))

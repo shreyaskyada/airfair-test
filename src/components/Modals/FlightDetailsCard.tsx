@@ -1,48 +1,95 @@
 import React, { useEffect, useState } from "react"
-import {
-  InfoCircleFilled,
-  InfoOutlined,
-  InfoCircleTwoTone
-} from "@ant-design/icons"
+import { InfoOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom"
 import {
   Button,
   Card,
   Form,
-  Input,
   Avatar,
   Tabs,
-  InputNumber,
-  Modal,
   Typography,
   Divider,
   Popover
 } from "antd"
 import * as _ from "lodash"
+import dayjs from "dayjs"
+import useLocalStorage from "../../hooks/LocalStorage"
 import { Drawer } from "antd"
 import type { TabsProps } from "antd"
-
-import { loginBanner } from "../../assets/images"
-import { getFlightsConfig } from "../../services/api/urlConstants"
-import backendService from "../../services/api"
-import { signupUser } from "../../services/auth"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { toggleModal, updateFlightDetails } from "../../redux/slices/app"
 import { Flight, FlightState } from "../../redux/slices/flights"
 import { airlineMapping } from "../../services/airports"
+import { getBestOffer } from "../../services/airports"
 import moment from "moment"
+import { ISearchFlights } from "../../redux/slices/searchFlights"
 
 const { Text, Title } = Typography
 const { Meta } = Card
 
 const FlightDetailsCard = ({ onFinishHandler }: any) => {
-  const { modal, flightDetails } = useAppSelector((state) => state.app)
+  const dispatch = useAppDispatch()
+  const [authToken] = useLocalStorage("authToken", "")
+  
+  const [bestOffer, setBestOffer] = useState<any>(null)
   const [provider, setProvider] = useState<any>([])
-  console.log("flight-Detail : ", flightDetails)
 
+  const { modal, flightDetails, userDetails } = useAppSelector(
+    (state) => state.app
+  )
   const { departFlight, returnFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
   )
+  const searchFlightData = useAppSelector(
+    (state: { searchFlights: ISearchFlights }) => state.searchFlights
+  )
+
+  useEffect(() => {
+    const getDiscount = async () => {
+      try {
+        const walletList = userDetails.walletList.map(
+          (wallet: any) => wallet.walletName
+        )
+
+        const bankList = userDetails.bankList.map((bank: any) => ({
+          bankName: bank.bankName.toUpperCase(),
+          bankCards: [
+            (bank.bankCardType + "-" + bank.bankCardName).toUpperCase()
+          ]
+        }))
+
+        const doj = moment(searchFlightData.dateOfDep).valueOf()
+        const dob = moment(dayjs().toString()).valueOf()
+
+        const payload: any = {
+          provider: provider[0].provider,
+          airline: ["ALL"],
+          flightType: "DOMESTIC",
+          journeyType: searchFlightData.flightType,
+          dateOfJourney: doj / 1000,
+          dateOfBooking: dob / 1000,
+          bankList: bankList,
+          walletList,
+          noOfTravellers: searchFlightData.totalTravellers,
+          fare: {
+            baseFare: provider[0].totalFare,
+            tax: 0,
+            totalFare: provider[0].totalFare
+          }
+        }
+
+        const res: any = await getBestOffer(payload, authToken)
+
+        setBestOffer(res.bestOffer)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    if (provider.length && authToken && searchFlightData) {
+      getDiscount()
+    }
+  }, [provider, authToken, searchFlightData])
 
   useEffect(() => {
     let providers: any = []
@@ -51,7 +98,6 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       const keys = Object.keys(departFlight.compare || {})
       keys &&
         keys.forEach((key: any) => {
-          console.log(key)
           let totalDepartFare =
             departFlight.compare && departFlight.compare[key]
               ? departFlight.compare[key].fare?.totalFareAfterDiscount
@@ -70,7 +116,6 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         })
 
       providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
-      console.log(providers)
       setProvider(providers)
     } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
       const keys = Object.keys(departFlight.compare || {})
@@ -91,31 +136,12 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         })
       providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
 
-      console.log(providers)
       setProvider(providers)
     }
   }, [departFlight, returnFlight])
 
   console.log(departFlight, returnFlight)
   //console.log("flights",flights)
-
-  const dispatch = useAppDispatch()
-
-  const [form] = Form.useForm()
-
-  const onFinish = (values: any) => {
-    const dataParams = form.getFieldsValue()
-    //console.log(dataParams);
-    signupUser(dataParams)
-      .then((res) => {
-        console.log("register done")
-        onFinishHandler(true)
-      })
-      .catch((err) => {
-        console.log("err", err)
-        onFinishHandler(false)
-      })
-  }
 
   const detailsCard = (title: string, flighDetails: Flight) =>
     flighDetails && (
@@ -344,27 +370,27 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       </div> */
   }
 
-  const flighSummaryCard = () => (
-    <Card title="Fare breakup">
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 3fr"
-        }}
-      >
-        <span>
-          <b>TOTAL</b>
-        </span>
-        <span>
-          <b>₹ 11,240</b>
-        </span>
-        <span style={{ color: "rgb(135, 135, 135)" }}>Base Fare</span>
-        <span style={{ color: "rgb(135, 135, 135)" }}>₹ 9,596</span>
-        <span style={{ color: "rgb(135, 135, 135)" }}>Surcharges</span>
-        <span style={{ color: "rgb(135, 135, 135)" }}>₹ 1,644</span>
-      </div>
-    </Card>
-  )
+  // const flighSummaryCard = () => (
+  //   <Card title="Fare breakup">
+  //     <div
+  //       style={{
+  //         display: "grid",
+  //         gridTemplateColumns: "1fr 3fr"
+  //       }}
+  //     >
+  //       <span>
+  //         <b>TOTAL</b>
+  //       </span>
+  //       <span>
+  //         <b>₹ 11,240</b>
+  //       </span>
+  //       <span style={{ color: "rgb(135, 135, 135)" }}>Base Fare</span>
+  //       <span style={{ color: "rgb(135, 135, 135)" }}>₹ 9,596</span>
+  //       <span style={{ color: "rgb(135, 135, 135)" }}>Surcharges</span>
+  //       <span style={{ color: "rgb(135, 135, 135)" }}>₹ 1,644</span>
+  //     </div>
+  //   </Card>
+  // )
 
   const flightInfoCardCretor = (flight: Flight) => (
     <div>
@@ -467,7 +493,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       key: "1",
       label: `Flight details`,
       children: flighInfoTabCardContainer()
-    },
+    }
     // {
     //   key: "2",
     //   label: `Fare summary`,
@@ -513,30 +539,35 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
 
             <Popover
               content={
-                <>
-                  <div>
-                    <span>Ticket price:</span>{" "}
-                    <span>{provider.length && provider[0].totalFare}</span>
-                  </div>
-                  <div>
-                    <span>Total discount:</span> <span>{0}</span>
-                  </div>
+                bestOffer && (
+                  <>
+                    <div>
+                      <span>Ticket price:</span>
+                      <span>{bestOffer.fare.totalFare}</span>
+                    </div>
+                    <div>
+                      <span>Total discount:</span>{" "}
+                      <span>{bestOffer.fare.totalDiscount}</span>
+                    </div>
 
-                  <div>
-                    <span>Promo code:</span>{" "}
-                    <span>
-                      {(departFlight.compare &&
-                        departFlight.compare[
-                          departFlight.cheapestProvider?.providerCode!
-                        ].offerDescription?.promoCode) ||
-                        "No offer applicable"}
-                    </span>
-                  </div>
-                  <div>
-                    <span>Total price after discount:</span>{" "}
-                    <b>{provider.length && provider[0].totalFare}</b>
-                  </div>
-                </>
+                    <div>
+                      <span>Promo code:</span>
+                      <span>
+                        {bestOffer.promoCode
+                          ? bestOffer.promoCode
+                          : "No offer applicable"}
+                      </span>
+                    </div>
+                    <div>
+                      <span>Total price after discount: </span>
+                      <b>
+                        {bestOffer.fare.totalFareAfterDiscount
+                          ? bestOffer.fare.totalFareAfterDiscount
+                          : bestOffer.fare.totalFare}
+                      </b>
+                    </div>
+                  </>
+                )
               }
               title={"Price breakdown"}
               trigger="hover"

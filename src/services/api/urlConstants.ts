@@ -1,22 +1,22 @@
-import { AxiosRequestConfig } from "axios";
+import { AxiosRequestConfig } from "axios"
 
 export const getAirports = (query: string): AxiosRequestConfig => {
   return {
     url: `api/airports/search/${query}`,
     method: "GET",
-    baseURL: "http://gateway.mytripsaver.in",
-  };
-};
+    baseURL: "http://gateway.mytripsaver.in"
+  }
+}
 
 export const singupUserConfig = (data: {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  userName: string;
-  phoneNo: string;
-  roles: string[];
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  confirmPassword: string
+  userName: string
+  phoneNo: string
+  roles: string[]
 }) => {
   return {
     url: `auth/register`,
@@ -24,14 +24,14 @@ export const singupUserConfig = (data: {
     baseURL: "http://gateway.mytripsaver.in",
     data: {
       ...data,
-      roles: ["USER"],
-    },
-  };
-};
+      roles: ["USER"]
+    }
+  }
+}
 
 export const logoutUserConfig = (data: {
-  userId: string;
-  authToken: string;
+  userId: string
+  authToken: string
 }) => {
   return {
     url: `auth/logoff`,
@@ -39,46 +39,46 @@ export const logoutUserConfig = (data: {
     baseURL: "http://gateway.mytripsaver.in",
     data: {
       token: data.authToken,
-      username: data.userId,
-    },
-  };
-};
+      username: data.userId
+    }
+  }
+}
 
 export const loginUserConfig = (data: {
-  username: string;
-  password: string;
+  username: string
+  password: string
 }) => {
   return {
     url: `auth/login`,
     method: "POST",
     baseURL: "http://gateway.mytripsaver.in",
-    data,
-  };
-};
+    data
+  }
+}
 
 export const verifyTokenConfig = (token: string, userName: string) => {
   return {
     url: `auth/verifyotp`,
     method: "POST",
     baseURL: "http://gateway.mytripsaver.in",
-    data: { otp: token, username: userName },
-  };
-};
+    data: { otp: token, username: userName }
+  }
+}
 
 export const getFlightsConfig = (data: {
-  from?: string;
-  to?: string;
-  doj?: string;
-  doa?: string;
-  adults?: number;
-  children?: number;
-  infants?: number;
-  roundtrip?: boolean;
-  seatingClass?: string;
-  typeOfJourney?: string;
-  offerDetails?: any;
-  walletList: any;
-  bankList: any;
+  from?: string
+  to?: string
+  doj?: string
+  doa?: string
+  adults?: number
+  children?: number
+  infants?: number
+  roundtrip?: boolean
+  seatingClass?: string
+  typeOfJourney?: string
+  offerDetails?: any
+  walletList: any
+  bankList: any
 }): AxiosRequestConfig => {
   const {
     from,
@@ -92,8 +92,8 @@ export const getFlightsConfig = (data: {
     doa,
     typeOfJourney,
     bankList,
-    walletList,
-  } = data;
+    walletList
+  } = data
   return {
     url: "api/flight/compare",
     method: "POST",
@@ -112,22 +112,22 @@ export const getFlightsConfig = (data: {
       offerDetails: {
         bankList: bankList.map((bank: any) => ({
           bankName: bank.bankName,
-          bankCards: [bank.bankCardName],
+          bankCards: [bank.bankCardName]
         })),
-        walletList: walletList.map((wallet: any) => wallet.walletName),
-      },
-    },
-  };
-};
+        walletList: walletList.map((wallet: any) => wallet.walletName)
+      }
+    }
+  }
+}
 
 export const getProfileDetailsConfig = (userName: string, token: string) => {
   return {
     url: `profile/get-profile/${userName}`,
     method: "GET",
     baseURL: "http://gateway.mytripsaver.in",
-    headers: { token },
-  };
-};
+    headers: { token }
+  }
+}
 
 export const getBankDetailsConfig = (status: string) => {
   return {
@@ -135,10 +135,10 @@ export const getBankDetailsConfig = (status: string) => {
     method: "GET",
     baseURL: "http://gateway.mytripsaver.in",
     params: {
-      status,
-    },
-  };
-};
+      status
+    }
+  }
+}
 
 export const getBankNameConfig = (bankName: string, bankType: string) => {
   return {
@@ -147,10 +147,10 @@ export const getBankNameConfig = (bankName: string, bankType: string) => {
     baseURL: "http://gateway.mytripsaver.in",
     params: {
       bankName,
-      cardType: bankType,
-    },
-  };
-};
+      cardType: bankType
+    }
+  }
+}
 
 // curl --location 'http://localhost:8765/profile/add-profile' \
 // --header 'Content-Type: application/json' \
@@ -209,8 +209,18 @@ export const updateProfileConfig = (
       username: userName,
       email: emailId,
       bankDetails: bankDetails,
-      walletDetails: wallets,
+      walletDetails: wallets
     },
-    headers: { token },
-  };
-};
+    headers: { token }
+  }
+}
+
+export const getBestOfferConfig = (data: object, token: string) => {
+  return {
+    url: `offers/offer/getBestOffer`,
+    method: "POST",
+    baseURL: "http://gateway.mytripsaver.in",
+    data: data,
+    headers: { token }
+  }
+}
