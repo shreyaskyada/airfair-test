@@ -160,7 +160,7 @@ const FlightsListingPage = () => {
       <h3>Flights listing</h3>
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
         <div
-          style={{
+          style={{  
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             columnGap: "25px"
