@@ -27,6 +27,7 @@ const Homepage = () => {
   const sliderSettings = {
     dots: false,
     speed: 500,
+    arrows:false,
     autoplay: true,
     slidesToShow: 1,
     slidesToScroll: 1,

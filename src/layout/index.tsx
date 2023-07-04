@@ -1,9 +1,6 @@
 import React, { useEffect, useRef } from "react"
-import { useLocation} from "react-router-dom"
-import {
-  Layout,
-  notification,
-} from "antd"
+import { useLocation } from "react-router-dom"
+import { Layout, notification } from "antd"
 import Sidebar from "./Sidebar"
 import HeaderUI from "./HeaderUI"
 import { Outlet } from "react-router"
@@ -100,10 +97,6 @@ const LayoutUI = () => {
     })
   }
 
-  useEffect(() => {
-    ref.current.scrollTop = 0
-  }, [location.pathname])
-
   const onSignupFinishHandler = (success: boolean, userDetails: any) => {
     if (success) {
       console.log("User Detail 2 :", userDetails)
@@ -168,34 +161,42 @@ const LayoutUI = () => {
 
   return (
     <>
-      {contextHolder}
-      <Layout style={{ height: "100%" }}>
+      <Layout hasSider>
         <Sidebar />
-        <Layout>
+        <Layout
+          className="site-layout"
+          style={{ marginLeft: 200, background: "white" }}
+        >
           <HeaderUI />
           <Content
-            style={{ background: "#3B8BEB", overflow: "scroll" }}
-            ref={ref}
+            style={{
+              overflow: "initial",
+              background: "#E7E7E8"
+            }}
           >
-            {modal.flightInfo &&
-              location &&
-              location.pathname === "/flights-listing" && <FlightDetailsCard />}
+            <div>
+              {modal.flightInfo &&
+                location &&
+                location.pathname === "/flights-listing" && (
+                  <FlightDetailsCard />
+                )}
 
-            {modal.signup && (
-              <SignupCard onFinishHandler={onSignupFinishHandler} />
-            )}
-            {modal.otp && <VerifyTokenCard />}
-            {modal.login && (
-              <LoginCard onFinishHandler={onLoginFinishHandler} />
-            )}
-            {modal.profile && (
-              <ProfileCard onFinishHandler={onLoginFinishHandler} />
-            )}
-            <Outlet />
+              {modal.signup && (
+                <SignupCard onFinishHandler={onSignupFinishHandler} />
+              )}
+              {modal.otp && <VerifyTokenCard />}
+              {modal.login && (
+                <LoginCard onFinishHandler={onLoginFinishHandler} />
+              )}
+              {modal.profile && (
+                <ProfileCard onFinishHandler={onLoginFinishHandler} />
+              )}
+              <Outlet />
+            </div>
           </Content>
+          <Footer />
         </Layout>
       </Layout>
-        <Footer/>
       <Loader />
     </>
   )

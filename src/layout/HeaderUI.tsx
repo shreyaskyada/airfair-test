@@ -27,7 +27,6 @@ const HeaderUI = () => {
   const [isLoggedIn, setIsLoggedIn] = useLocalStorage("isLoggedIn", "");
 
   const logoutUserHandler = () => {
-    console.log("tokens", userId, authToken);
     logoutUser()
       .then((res) => {
         setIsLoggedIn(false);
@@ -79,7 +78,7 @@ const HeaderUI = () => {
   };
 
   return (
-    <Header style={{ background: "#fff", borderBottom: "1px solid #000" }}>
+    <Header style={{ background: "#fff",borderBottom: "2px solid #E2E8F0"}}>
       <div
         style={{
           display: "flex",

@@ -1,51 +1,34 @@
-import React from "react";
-import { Layout, Menu, theme } from "antd";
-import { UserOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import React from "react"
+import { Layout, Menu } from "antd"
+import type { MenuProps } from "antd"
+import { UserOutlined } from "@ant-design/icons"
+import { useNavigate } from "react-router-dom"
 
-const { Sider } = Layout;
+const { Sider } = Layout
 
 const Sidebar = () => {
+  const navigate = useNavigate()
+
+  const items: MenuProps["items"] = [UserOutlined].map((icon, index) => ({
+    key: "flights",
+    icon: React.createElement(icon),
+    label: `Flights`,
+    onClick: () => navigate("/")
+  }))
   return (
     <Sider
-      breakpoint="lg"
-      collapsedWidth="0"
-      onBreakpoint={(broken) => {
-        console.log(broken);
-      }}
-      onCollapse={(collapsed, type) => {
-        console.log(collapsed, type);
-      }}
       style={{
-        borderRight: "1px solid #000",
-        background: "#3B8BEB",
+        overflow: "auto",
+        height: "100vh",
+        position: "fixed",
+        left: 0,
+        top: 0,
+        bottom: 0
       }}
     >
-      <div className="logo" />
-      <Menu
-        theme="dark"
-        mode="inline"
-        style={{
-          background: "#3B8BEB",
-          color: "#000",
-        }}
-        items={[
-          // { icon: UserOutlined, path: "/", name: "Home" },
-          { icon: UserOutlined, path: "/", name: "Flights" },
-        ].map((item, index) => ({
-          key: String(index + 1),
-          icon: (
-            <UserOutlined>
-              <Link to={item.path} style={{ textDecoration: "none" }}>
-                {item.name}
-              </Link>
-            </UserOutlined>
-          ),
-          label: item.name,
-        }))}
-      />
+      <Menu theme="dark" mode="inline" items={items} activeKey="flights"/>
     </Sider>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar

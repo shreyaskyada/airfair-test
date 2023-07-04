@@ -42,6 +42,7 @@
 }
 
 .flightTitle {
+  text-align: left;
   font-size: 1.062rem;
   margin-bottom: .4rem;
 }

@@ -1,56 +1,56 @@
 //TODO make it dynamic and move styling to css file
-import React, { useState } from "react";
-import { Avatar, Button, Card, Space, Tag, Typography, Popover } from "antd";
+import React, { useState } from "react"
+import { Avatar, Button, Card, Space, Tag, Typography, Popover } from "antd"
 import {
   HeartOutlined,
   UserOutlined,
   DownOutlined,
-  UpOutlined,
-} from "@ant-design/icons";
-import * as _ from "lodash";
+  UpOutlined
+} from "@ant-design/icons"
+import * as _ from "lodash"
 
-import { Radio } from "antd";
+import { Radio } from "antd"
 
-import "./DataCard.css";
-import { airlineMapping } from "../../services/airports";
-import { arrayBuffer } from "node:stream/consumers";
+import "./DataCard.css"
+import { airlineMapping } from "../../services/airports"
+import { arrayBuffer } from "node:stream/consumers"
 
-const { Text, Title } = Typography;
+const { Text, Title } = Typography
 
 interface Props {
-  checked?:boolean
-  index: number;
-  dataKey: number;
-  type: string;
-  selectedKey: string;
-  onSelectedFlightChange: any;
+  checked?: boolean
+  index: number
+  dataKey: number
+  type: string
+  selectedKey: string
+  onSelectedFlightChange: any
   tags: {
-    color: string;
-    name: string;
-  }[];
+    color: string
+    name: string
+  }[]
   flight: {
-    connectivity: string;
-    agent: string;
-    type: string;
-    company: string;
-    companyImg: string;
-    price: string;
-    totalTime: string;
+    connectivity: string
+    agent: string
+    type: string
+    company: string
+    companyImg: string
+    price: string
+    totalTime: string
     schedule: {
-      departure: string;
-      arrival: string;
-    };
+      departure: string
+      arrival: string
+    }
     route: {
-      from: string;
-      to: string;
-    };
+      from: string
+      to: string
+    }
     partners: {
-      price: string;
-      name: string;
-    }[];
-  };
-  onLikeClick?: () => void;
-  onViewDealClick?: () => void;
+      price: string
+      name: string
+    }[]
+  }
+  onLikeClick?: () => void
+  onViewDealClick?: () => void
 }
 
 const DataCard = (props: Props) => {
@@ -64,7 +64,7 @@ const DataCard = (props: Props) => {
     onViewDealClick,
     onSelectedFlightChange,
     checked
-  } = props;
+  } = props
 
   const cardPopoverData = {
     content: (
@@ -83,18 +83,24 @@ const DataCard = (props: Props) => {
     ),
     title: "Price breakdown",
     trigger: "hover",
-    placement: "topLeft",
-  };
+    placement: "topLeft"
+  }
 
-  const [details, setDetails] = useState(false);
+  const [details, setDetails] = useState(false)
   return (
     <Space style={{ width: "100%", marginBottom: "20px" }} direction="vertical">
-      <Card style={{ width: "100%" }}>
+      <Card
+        style={{
+          width: "100%",
+          boxShadow: "0px 5px 5px 0px rgba(0, 0, 0, 0.2)",
+          cursor: "pointer"
+        }}
+      >
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "center"
           }}
         >
           <input
@@ -105,7 +111,7 @@ const DataCard = (props: Props) => {
               marginRight: "10px",
               height: "20px",
               width: "20px",
-              verticalAlign: "middle",
+              verticalAlign: "middle"
             }}
             value={`${type}-${dataKey}`}
             checked={checked}
@@ -120,14 +126,14 @@ const DataCard = (props: Props) => {
                     borderRight: "1px solid rgba(167, 98, 234, 0.4)",
                     display: "flex",
                     flexDirection: "column",
-                    padding: "0px",
+                    padding: "0px"
                   }}
                 >
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "space-between",
+                      justifyContent: "space-between"
                     }}
                   >
                     <div>
@@ -144,7 +150,7 @@ const DataCard = (props: Props) => {
                   <div
                     style={{
                       display: "flex",
-                      justifyContent: "space-between",
+                      justifyContent: "space-between"
                     }}
                   >
                     <Avatar size={40} src={flight.companyImg} />
@@ -183,24 +189,25 @@ const DataCard = (props: Props) => {
                       style={{
                         width: "100%",
                         display: "flex",
-                        justifyContent: "space-between",
+                        justifyContent: "space-between"
                       }}
                     >
                       {flight.partners.map((partner) => {
-                        return (
-                          Array.isArray(flight.agent) ? flight.agent[0] !== partner.name && (
-                            <Space>
-                              <Text strong>₹ {partner.price}</Text>
-                              <Text strong>{partner.name}</Text>
-                            </Space>
-                          ): flight.agent !== partner.name && (
-                            <Space>
-                              <Text strong>₹ {partner.price}</Text>
-                              <Text strong>{partner.name}</Text>
-                            </Space>
-                        ))
+                        return Array.isArray(flight.agent)
+                          ? flight.agent[0] !== partner.name && (
+                              <Space>
+                                <Text strong>₹ {partner.price}</Text>
+                                <Text strong>{partner.name}</Text>
+                              </Space>
+                            )
+                          : flight.agent !== partner.name && (
+                              <Space>
+                                <Text strong>₹ {partner.price}</Text>
+                                <Text strong>{partner.name}</Text>
+                              </Space>
+                            )
                       })}
-                       {details &&
+                      {details &&
                         flight.partners.length - 2 &&
                         flight.partners.slice(2).map((partner) => (
                           <Space>
@@ -230,14 +237,12 @@ const DataCard = (props: Props) => {
                     width: "25%",
                     display: "flex",
                     flexDirection: "column",
-                    padding: "0px 8px",
+                    padding: "0px 8px"
                   }}
                 >
                   <Space>
-
                     <Title level={5} style={{ margin: "2px", padding: "0px" }}>
-                      Regular Fare : 
-                      <div>₹ {flight.price}</div>
+                      Regular Fare :<div>₹ {flight.price}</div>
                     </Title>
                   </Space>
                   <Space direction="vertical" size={0} align="start">
@@ -258,7 +263,7 @@ const DataCard = (props: Props) => {
         </div>
       </Card>
     </Space>
-  );
-};
+  )
+}
 
-export default DataCard;
+export default DataCard
