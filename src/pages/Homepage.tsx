@@ -62,11 +62,8 @@ const Homepage = () => {
       </div>
       <div className="introSection">
         <h3 className="introDetail">
-          Unlock exclusive flight deals tailored to your credit/debit card or
-          direct offers from top Travel Platforms. Complete your profile today
-          and gain access to the best flight discounts across multiple
-          platforms. Don't miss out on savings, personalize your travel
-          experience now!
+          Unlock Exclusive Flight Deals. Complete Your Profile for Personalized
+          Travel Savings. Don't Miss Out, Sign Up Now!
         </h3>
       </div>
       {/* <LoginCard /> */}

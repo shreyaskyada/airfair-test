@@ -3,7 +3,7 @@ import { Form, Input, Modal, Space, Select, Button, Typography } from "antd"
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons"
 import { updateProfileDetails, getProfileDetails } from "../../services/auth"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { toggleModal } from "../../redux/slices/app"
+import { toggleModal, updateUserDetails } from "../../redux/slices/app"
 import { getBankDetails, getBankName } from "../../services/airports"
 import useLocalStorage from "../../hooks/LocalStorage"
 import { loginBanner } from "../../assets/images"
@@ -69,10 +69,12 @@ const CustomDropDown = (props: any) => {
   )
 }
 
-const ProfileCard = ({onFinishHandler}:any) => {
+const ProfileCard = ({ onFinishHandler }: any) => {
   const dispatch = useAppDispatch()
   const [authToken] = useLocalStorage("authToken", "")
   const [userId] = useLocalStorage("userId", "")
+  const selectRef = useRef<any>(null)
+  const [form] = Form.useForm()
 
   const { notifcationModal } = useAppSelector((state: any) => state.app)
 
@@ -91,62 +93,18 @@ const ProfileCard = ({onFinishHandler}:any) => {
     ]
   })
 
-  const selectRef = useRef<any>(null)
-
-  const [form] = Form.useForm()
-
-  const onFinish = () => {
-    const dataParams = form.getFieldsValue()
-    console.log("Data Params",dataParams)
-    updateProfileDetails(
-      userId,
-      dataParams.phoneNo,
-      dataParams.email,
-      dataParams.bankCards,
-      dataParams.wallets,
-      authToken
-    )
-      .then((res) => {
-        // onFinishHandler(true, dataParams);
-        notifcationModal &&
-          notifcationModal("success", "User profile updated successfully")
-        dispatch(toggleModal({ modal: "profile", status: false }))
-      })
-      .catch((err) => {
-        const errorMessage = err.data.message || ""
-        notifcationModal && notifcationModal("error", errorMessage)
-        // onFinishHandler(false, err);
-      })
-  }
-
-  const onCancelHandler = () => {
-    dispatch(toggleModal({ modal: "profile", status: false }))
-  }
-
   useEffect(() => {
-    const getUserData = async () => {
+    const setUserProfileDetail = async () => {
       try {
-        const res: any = await getProfileDetails(userId, authToken)
-
-        const walletList = res.walletDetails.map((wallet: any) => ({
-          walletName: wallet.walletName.toLowerCase(),
-          walletType: wallet.walletType
-        }))
-
-        const bankList = res.bankDetails.map((bank: any) => ({
-          bankCardName: bank.cardName,
-          bankCardType: bank.cardType,
-          bankIssuerName: bank.cardIssuer,
-          bankName: bank.bankName
-        }))
+        const res = await getUserProfileDetails()
 
         form.setFieldsValue({
           firstName: res.firstName || "",
           lastName: res.lastName || "",
           email: res.email || "",
           phoneNo: res.mobileNo || "",
-          wallets: walletList,
-          bankCards: bankList
+          wallets: res.walletList,
+          bankCards: res.bankList
         })
 
         getBankDetails("A").then((res: any) => {
@@ -163,8 +121,62 @@ const ProfileCard = ({onFinishHandler}:any) => {
       }
     }
 
-    getUserData()
+    setUserProfileDetail()
   }, [userId, authToken])
+
+  const getUserProfileDetails = async () => {
+    try {
+      let res: any = await getProfileDetails(userId, authToken)
+
+      const walletList = res.walletDetails.map((wallet: any) => ({
+        walletName: wallet.walletName.toLowerCase(),
+        walletType: wallet.walletType
+      }))
+
+      const bankList = res.bankDetails.map((bank: any) => ({
+        bankCardName: bank.cardName,
+        bankCardType: bank.cardType,
+        bankIssuerName: bank.cardIssuer,
+        bankName: bank.bankName
+      }))
+
+      res = { ...res, walletList, bankList }
+      return res
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const onFinish = () => {
+    const dataParams = form.getFieldsValue()
+
+    updateProfileDetails(
+      userId,
+      dataParams.phoneNo,
+      dataParams.email,
+      dataParams.bankCards,
+      dataParams.wallets,
+      authToken
+    )
+      .then(async (res) => {
+        // onFinishHandler(true, dataParams);
+        const userDetail = await getUserProfileDetails()
+        dispatch(updateUserDetails(userDetail))
+
+        notifcationModal &&
+          notifcationModal("success", "User profile updated successfully")
+        dispatch(toggleModal({ modal: "profile", status: false }))
+      })
+      .catch((err) => {
+        const errorMessage = err.data.message || ""
+        notifcationModal && notifcationModal("error", errorMessage)
+        // onFinishHandler(false, err);
+      })
+  }
+
+  const onCancelHandler = () => {
+    dispatch(toggleModal({ modal: "profile", status: false }))
+  }
 
   return (
     <div>
@@ -236,8 +248,8 @@ const ProfileCard = ({onFinishHandler}:any) => {
               <Input placeholder="Phone number" />
             </Form.Item>
             <Title level={5}>
-              To know about best flight deals on your credit/debit card, please
-              select your card information below
+              Discover the Best Flight Deals for Your Card. Select Your Card
+              Information Below and Save Big!
             </Title>
             <Form.List
               name="bankCards"

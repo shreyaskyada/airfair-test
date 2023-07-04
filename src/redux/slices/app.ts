@@ -93,7 +93,6 @@ const appSlice = createSlice({
       state.isLoggedIn = action.payload;
     },
     updateUserDetails: (state, action: PayloadAction<UserDetailsType>) => {
-      console.log("Pyload : ",action.payload)
       state.userDetails = { ...state.userDetails, ...action.payload };
     },
     toggleModal: (
