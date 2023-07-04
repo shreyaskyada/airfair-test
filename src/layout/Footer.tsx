@@ -98,7 +98,7 @@ const Footer = () => {
       <Divider style={{ background: "gray" }} />
       <div className="socialLinksSection">
         <div className="socialLinkContainer">
-          <a href="https://www.instagram.com/mytripsaver/" className="linkUrl">
+          <a href="https://www.instagram.com/mytripsaver/" className="linkUrl" target="_blank">
             <InstagramOutlined style={{ fontSize: 25, color: "white" }} />
             <span className="linkText">Follow us on Istagram</span>
           </a>
@@ -107,6 +107,7 @@ const Footer = () => {
           <a
             href="https://www.linkedin.com/company/mytripsaver/"
             className="linkUrl"
+            target="_blank"
           >
             <LinkedinOutlined style={{ fontSize: 25, color: "white" }} />
             <span className="linkText">Follow us on Istagram</span>
