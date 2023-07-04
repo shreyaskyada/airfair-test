@@ -7,7 +7,7 @@ import { Suspense, lazy } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { useAppSelector } from "../redux/hooks"
 import LayoutUI from "../layout"
-import { Space, Spin } from 'antd'
+import Loader from "../components/Modals/Loader"
 
 const HomeScreen = lazy(() => import("../pages/Homepage"))
 const FlightsListingPage = lazy(() => import("../pages/FlightsListingPage"))
@@ -40,7 +40,7 @@ const routes = [
 ]
 
 const RoutesWrapper = () => (
-  <Suspense>
+  <Suspense fallback={<Loader/>}>
     <Routes>
       {routes.map((route, parentIndex) =>
         route.childRoutes?.length ? (

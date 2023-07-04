@@ -1,0 +1,26 @@
+.flightLinks {
+    color: white;
+    text-align: left;
+    font-size: .92rem;
+    cursor: pointer
+}
+.flightLinks:hover {
+    color: rgb(194, 194, 194);
+}
+
+.socialLinksSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem
+}
+
+.linkUrl {
+    display: flex;
+    align-items: center;
+    gap: .6rem
+}
+
+.linkText {
+    font-size: .9rem;
+    color: white
+}

@@ -1,31 +1,29 @@
-import React, { useEffect } from "react";
-import { Layout } from "antd";
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { updateAppName, updateIsLoggedIn } from "./redux/slices/app";
-import RoutesWrapper from "./routes";
-import { BrowserRouter } from "react-router-dom";
-import useLocalStorage from "./hooks/LocalStorage";
-
-const { Header, Footer, Sider, Content } = Layout;
+import React, { useEffect } from "react"
+import { BrowserRouter } from "react-router-dom"
+import { useAppDispatch } from "./redux/hooks"
+import { updateAppName, updateIsLoggedIn } from "./redux/slices/app"
+import useLocalStorage from "./hooks/LocalStorage"
+import RoutesWrapper from "./routes"
+import ScrollToTop from "./components/shared/ScrollToTop"
 
 const App = () => {
-  const { appName } = useAppSelector((state) => state.app);
-  const [isLoggedIn, setIsLoggedIn] = useLocalStorage("isLoggedIn", "");
-  const dispatch = useAppDispatch();
+  const [isLoggedIn] = useLocalStorage("isLoggedIn", "")
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(updateIsLoggedIn(isLoggedIn));
+    dispatch(updateIsLoggedIn(isLoggedIn))
 
     setTimeout(() => {
-      dispatch(updateAppName("New name"));
-    });
-  }, []);
+      dispatch(updateAppName("New name"))
+    })
+  }, [])
 
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <RoutesWrapper />
     </BrowserRouter>
-  );
-};
+  )
+}
 
-export default App;
+export default App
