@@ -15,6 +15,7 @@ const Sidebar = () => {
     label: `Flights`,
     onClick: () => navigate("/")
   }))
+
   return (
     <Sider
       style={{
@@ -26,7 +27,7 @@ const Sidebar = () => {
         bottom: 0
       }}
     >
-      <Menu theme="dark" mode="inline" items={items} activeKey="flights"/>
+      <Menu theme="dark" mode="inline" items={items} activeKey="flights" />
     </Sider>
   )
 }

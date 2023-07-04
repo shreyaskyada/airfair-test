@@ -26,10 +26,22 @@ import {
 } from "../../redux/slices/flights"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { useNavigate } from "react-router"
-import { uploadIsLoading } from "../../redux/slices/app"
+import { UserDetailsType, uploadIsLoading } from "../../redux/slices/app"
 import { updateOriginFlights } from "../../redux/slices/originFlight"
 import { updateDestinationFlights } from "../../redux/slices/destinationFlight"
-import { ISearchFlights, updateSaarchFlights } from "../../redux/slices/searchFlights"
+import {
+  ISearchFlights,
+  updateAdults,
+  updateChild,
+  updateClass,
+  updateDepartureDate,
+  updateFlightType,
+  updateFromSearchValues,
+  updateInfant,
+  updateReturnDate,
+  updateSaarchFlights,
+  updateToSearchValues
+} from "../../redux/slices/searchFlights"
 
 const { TextArea } = Input
 const { Title, Text } = Typography
@@ -47,21 +59,21 @@ const seatTypes = [
   { label: "First Class", value: "FIRST_CLASS" }
 ]
 
-const initialValues = {
-  from: {
-    code: "DEL",
-    city: "New Delhi",
-    name: "Indira Gandhi International Airport"
-  },
-  to: { code: "BOM", city: "Mumbai", name: "C S M International Airport" },
-  type: "one-way",
-  departure: dayjs(),
-  return: dayjs(),
-  adult: 1,
-  child: 0,
-  infant: 0,
-  class: "ECONOMY"
-}
+// const initialValues = {
+//   from: {
+//     code: "DEL",
+//     city: "New Delhi",
+//     name: "Indira Gandhi International Airport"
+//   },
+//   to: { code: "BOM", city: "Mumbai", name: "C S M International Airport" },
+//   type: "one-way",
+//   departure: dayjs(),
+//   return: dayjs(),
+//   adult: 1,
+//   child: 0,
+//   infant: 0,
+//   class: "ECONOMY"
+// }
 
 const disabledDate: RangePickerProps["disabledDate"] = (current) => {
   // Can not select days before today and today
@@ -89,8 +101,11 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
   const navigate = useNavigate()
 
   const { userDetails } = useAppSelector((state) => state.app)
+  const { initialValues: _initialValues } = useAppSelector(
+    (state: { searchFlights: ISearchFlights }) => state.searchFlights
+  )
   const [form] = Form.useForm()
-  const [inputValues, setInputValues] = useState(initialValues)
+  const [inputValues, setInputValues] = useState<any>(_initialValues)
   const [fromOptions, setFromOptions] = useState([])
   const [toOptions, setToOptions] = useState([])
   const [showInput, setShowInput] = useState({
@@ -105,6 +120,9 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
     to: ""
   })
   const dispatch = useAppDispatch()
+  useEffect(() => {
+    setInputValues(_initialValues)
+  }, [_initialValues])
 
   const segmentAdultValues = Array(9)
     .fill(0)
@@ -115,66 +133,75 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
 
   const onFinish = (params: any) => {
     dispatch(uploadIsLoading(true))
-    const values = inputValues
-    const isRoundTrip = values.type === "round-trip"
-    let data: any = {}
-    data.from = values.from.code
-    data.to = values.to.code
-    data.doj = moment(values.departure.toString()).format("DDMMYYYY")
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    isRoundTrip
-      ? (data.doa = moment(values.return.toString()).format("DDMMYYYY"))
-      : null
-    data.adults = values.adult
-    data.children = values.child
-    data.infants = values.infant
-    data.roundtrip = isRoundTrip ? true : false
-    data.seatingClass = values.class
-    data.bankList = userDetails.bankList
-    data.walletList = userDetails.walletList
+    const values: any = inputValues
+    if (values) {
+      const isRoundTrip = values.type === "round-trip"
+      let data: any = {}
+      data.from = values.from.code
+      data.to = values.to.code
+      data.doj = moment(values.departure.toString()).format("DDMMYYYY")
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      isRoundTrip
+        ? (data.doa = moment(values.return.toString()).format("DDMMYYYY"))
+        : null
+      data.adults = values.adult
+      data.children = values.child
+      data.infants = values.infant
+      data.roundtrip = isRoundTrip ? true : false
+      data.seatingClass = values.class
+      data.bankList = userDetails.bankList
+      data.walletList = userDetails.walletList
 
-    const searchFlightData:ISearchFlights = {
-      totalTravellers: values.adult + values.child + values.infant,
-      dateOfDep: values.departure.toString(),
-      flightType: isRoundTrip ? "ROUND_TRIP" : "ONE_WAY"
-    }
+      const searchFlightData: ISearchFlights = {
+        totalTravellers: values.adult + values.child + values.infant,
+        dateOfDep: values.departure.toString(),
+        flightType: isRoundTrip ? "ROUND_TRIP" : "ONE_WAY"
+      }
 
-    const config = getFlightsConfig(data)
-    backendService
-      .request(config)
-      .then((res: any) => {
-        dispatch(updateFlights(res))
-        dispatch(updateOriginFlights(res.flightCompareResponse))
+      const config = getFlightsConfig(data)
+      backendService
+        .request(config)
+        .then((res: any) => {
+          dispatch(updateFlights(res))
+          dispatch(updateOriginFlights(res.flightCompareResponse))
 
-        const departProviders = Object.keys(
-          res.flightCompareResponse[0].compare || {}
-        )
-        const flightsToFilter = res.returnJourneyCompareResponse || []
+          const departProviders = Object.keys(
+            res.flightCompareResponse[0].compare || {}
+          )
+          const flightsToFilter = res.returnJourneyCompareResponse || []
 
-        let data = flightsToFilter.filter((value: any) => {
-          let providers = Object.keys(value.compare)
-          return compareArrays(departProviders, providers)
+          let data = flightsToFilter.filter((value: any) => {
+            let providers = Object.keys(value.compare)
+            return compareArrays(departProviders, providers)
+          })
+
+          dispatch(updateDestinationFlights(data))
+          dispatch(uploadIsLoading(false))
+
+          dispatch(updateDepartFlights(res.flightCompareResponse[0]))
+
+          isRoundTrip
+            ? dispatch(updateReturnFlights(data[0]))
+            : dispatch(updateReturnFlights({}))
+
+          dispatch(updateSaarchFlights(searchFlightData))
+
+          redirectRoute && navigate(redirectRoute)
         })
-
-        dispatch(updateDestinationFlights(data))
-        dispatch(uploadIsLoading(false))
-
-        dispatch(updateDepartFlights(res.flightCompareResponse[0]))
-
-        isRoundTrip
-          ? dispatch(updateReturnFlights(data[0]))
-          : dispatch(updateReturnFlights({}))
-
-        dispatch(updateSaarchFlights(searchFlightData))
-
-        redirectRoute && navigate(redirectRoute)
-      })
-      .catch((err) => console.error(err))
+        .catch((err) => console.error(err))
+    }
   }
 
   const fromLocationSearchHandler = (value: string) => {
     const [airportCode, airportCity, airportName] = value.split("-")
-    setInputValues((prevState) => ({
+    dispatch(
+      updateFromSearchValues({
+        code: airportCode,
+        city: airportCity,
+        name: airportName
+      })
+    )
+    setInputValues((prevState: any) => ({
       ...prevState,
       from: { code: airportCode, city: airportCity, name: airportName }
     }))
@@ -186,7 +213,14 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
 
   const toLocationSearchHandler = (value: string) => {
     const [airportCode, airportCity, airportName] = value.split("-")
-    setInputValues((prevState) => ({
+    dispatch(
+      updateToSearchValues({
+        code: airportCode,
+        city: airportCity,
+        name: airportName
+      })
+    )
+    setInputValues((prevState: any) => ({
       ...prevState,
       to: { code: airportCode, city: airportCity, name: airportName }
     }))
@@ -211,7 +245,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
         })
         .catch((err) => console.error(err))
     }
-  }, [inputValues.from])
+  }, [inputValues])
 
   useEffect(() => {
     if (showInput.from) {
@@ -223,7 +257,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
         textAreaClearHandler({ from: false })
       }
     }
-  }, [inputValues.from])
+  }, [inputValues])
 
   useEffect(() => {
     if (showInput.to) {
@@ -236,7 +270,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
         })
         .catch((err) => console.error(err))
     }
-  }, [inputValues.to])
+  }, [inputValues])
 
   useEffect(() => {
     if (showInput.to) {
@@ -248,19 +282,19 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
         textAreaClearHandler({ to: false })
       }
     }
-  }, [inputValues.to])
+  }, [inputValues])
 
   useEffect(() => {
     if (showInput.departure) {
       textAreaClearHandler({ departure: false })
     }
-  }, [inputValues.departure])
+  }, [inputValues])
 
   useEffect(() => {
     if (showInput.return) {
       textAreaClearHandler({ return: false })
     }
-  }, [inputValues.return])
+  }, [inputValues && inputValues.return])
 
   return (
     <div
@@ -271,7 +305,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
         background: "#C4DBF6"
       }}
     >
-      <Form form={form} onFinish={onFinish} initialValues={initialValues}>
+      <Form form={form} onFinish={onFinish} initialValues={_initialValues}>
         <div
           style={{
             display: "flex",
@@ -287,23 +321,25 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               <Radio.Group>
                 <Radio
                   value="one-way"
-                  onClick={() =>
-                    setInputValues((prevState) => ({
+                  onClick={() => {
+                    setInputValues((prevState: any) => ({
                       ...prevState,
                       type: "one-way"
                     }))
-                  }
+                    dispatch(updateFlightType("one-way"))
+                  }}
                 >
                   One way
                 </Radio>
                 <Radio
                   value="round-trip"
-                  onClick={() =>
-                    setInputValues((prevState) => ({
+                  onClick={() => {
+                    setInputValues((prevState: any) => ({
                       ...prevState,
                       type: "round-trip"
                     }))
-                  }
+                    dispatch(updateFlightType("one-way"))
+                  }}
                 >
                   Round trip
                 </Radio>
@@ -452,14 +488,26 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               >
                 <label>Departure</label>
                 <Title style={{ padding: "0px", margin: "0px" }}>
-                  {inputValues.departure.format("DD")}{" "}
+                  {inputValues &&
+                    inputValues?.departure &&
+                    inputValues.departure.format("DD")}{" "}
                   {
-                    <Text>{`${inputValues.departure.format(
-                      "MMM"
-                    )}'${inputValues.departure.format("YY")}`}</Text>
+                    <Text>{`${
+                      inputValues &&
+                      inputValues?.departure &&
+                      inputValues.departure.format("MMM")
+                    }'${
+                      inputValues &&
+                      inputValues?.departure &&
+                      inputValues.departure.format("YY")
+                    }`}</Text>
                   }
                 </Title>
-                <Text>{inputValues.departure.format("dddd")}</Text>
+                <Text>
+                  {inputValues &&
+                    inputValues?.departure &&
+                    inputValues.departure.format("dddd")}
+                </Text>
                 <Form.Item
                   name="departure"
                   style={{
@@ -483,12 +531,13 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                       size="large"
                       style={{ height: "78px", width: "100%" }}
                       disabledDate={disabledDate}
-                      onChange={(value) =>
-                        setInputValues((prevState) => ({
+                      onChange={(value) => {
+                        setInputValues((prevState: any) => ({
                           ...prevState,
                           departure: value || dayjs()
                         }))
-                      }
+                        dispatch(updateDepartureDate(value || dayjs()))
+                      }}
                       onBlur={() =>
                         setShowInput((prevState) => ({
                           ...prevState,
@@ -509,11 +558,12 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               bodyStyle={{ padding: "8px", width: "150px", maxWidth: "150px" }}
               onClick={() => {
                 form.setFieldValue("type", "round-trip")
-                setInputValues((prevState) => ({
+                setInputValues((prevState: any) => ({
                   ...prevState,
                   type: "round-trip"
                 }))
                 setShowInput((prevState) => ({ ...prevState, return: true }))
+                dispatch(updateFlightType("round-trip"))
               }}
             >
               <div
@@ -531,14 +581,26 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                 ) : (
                   <>
                     <Title style={{ padding: "0px", margin: "0px" }}>
-                      {inputValues.return.format("DD")}{" "}
+                      {inputValues &&
+                        inputValues?.return &&
+                        inputValues.return.format("DD")}{" "}
                       {
-                        <Text>{`${inputValues.return.format(
-                          "MMM"
-                        )}'${inputValues.return.format("YY")}`}</Text>
+                        <Text>{`${
+                          inputValues &&
+                          inputValues?.return &&
+                          inputValues.return.format("MMM")
+                        }'${
+                          inputValues &&
+                          inputValues?.return &&
+                          inputValues.return.format("YY")
+                        }`}</Text>
                       }
                     </Title>
-                    <Text>{inputValues.return.format("dddd")}</Text>
+                    <Text>
+                      {inputValues &&
+                        inputValues?.return &&
+                        inputValues.return.format("dddd")}
+                    </Text>
                   </>
                 )}
                 <Form.Item
@@ -562,14 +624,17 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                       size="large"
                       style={{ height: "78px", width: "100%" }}
                       disabledDate={disabledDate}
-                      onChange={(value) =>
-                        setInputValues((prevState) => ({
-                          ...prevState,
-                          return: value || dayjs()
-                        }))
-                      }
+                      onChange={
+                        (value) =>
+                        {
+                          setInputValues((prevState: any) => ({
+                            ...prevState,
+                            return: value
+                          }))
+                        dispatch(updateReturnDate(value || dayjs()))
+                      }}
                       onBlur={() =>
-                        setShowInput((prevState) => ({
+                        setShowInput((prevState: any) => ({
                           ...prevState,
                           return: false
                         }))
@@ -583,7 +648,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               style={{ borderRadius: "0px", background: "#C4DBF6" }}
               bodyStyle={{ padding: "8px", maxWidth: "150px" }}
               onClick={() => {
-                setShowInput((prevState) => ({
+                setShowInput((prevState: any) => ({
                   ...prevState,
                   travellers: true
                 }))
@@ -602,12 +667,13 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                           ...segmentAdultValues,
                           { label: "9+", value: 10 }
                         ]}
-                        onChange={(value) =>
-                          setInputValues((prevState) => ({
+                        onChange={(value) => {
+                          setInputValues((prevState: any) => ({
                             ...prevState,
                             adult: Number(value)
                           }))
-                        }
+                          dispatch(updateAdults(Number(value)))
+                        }}
                       />
                     </Form.Item>
                     <Space>
@@ -617,12 +683,13 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                             ...segmentOtherValues,
                             { label: "6+", value: 7 }
                           ]}
-                          onChange={(value) =>
-                            setInputValues((prevState) => ({
+                          onChange={(value) => {
+                            setInputValues((prevState: any) => ({
                               ...prevState,
                               child: Number(value)
                             }))
-                          }
+                            dispatch(updateChild(Number(value)))
+                          }}
                         />
                       </Form.Item>
                       <Form.Item label="Infant" name="infant">
@@ -631,24 +698,26 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                             ...segmentOtherValues,
                             { label: "6+", value: 7 }
                           ]}
-                          onChange={(value) =>
-                            setInputValues((prevState) => ({
+                          onChange={(value) => {
+                            setInputValues((prevState: any) => ({
                               ...prevState,
                               infant: Number(value)
                             }))
-                          }
+                            dispatch(updateInfant(Number(value)))
+                          }}
                         />
                       </Form.Item>
                     </Space>
                     <Form.Item label="Choose Travel Class" name="class">
                       <Segmented
                         options={seatTypes}
-                        onChange={(value) =>
-                          setInputValues((prevState) => ({
+                        onChange={(value) => {
+                          setInputValues((prevState: any) => ({
                             ...prevState,
                             class: value.toString()
                           }))
-                        }
+                          dispatch(updateClass(value.toString()))
+                        }}
                       />
                     </Form.Item>
                   </Space>

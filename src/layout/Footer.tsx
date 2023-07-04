@@ -4,6 +4,7 @@ import { Layout, Row, Col, Typography, Divider } from "antd"
 import { InstagramOutlined, LinkedinOutlined } from "@ant-design/icons"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import moment from "moment"
+import dayjs from "dayjs"
 import { popularFlightsData } from "../data/popularFlights"
 import { getFlightsConfig } from "../services/api/urlConstants"
 import backendService from "../services/api"
@@ -17,6 +18,7 @@ import { updateOriginFlights } from "../redux/slices/originFlight"
 import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import { AIRPORT_DATA } from "../data/popularFlights"
 import "./layoutStyles.css"
+import { updateInitialValues } from "../redux/slices/searchFlights"
 
 const { Title, Text } = Typography
 const { Footer: FooterLayout } = Layout
@@ -41,6 +43,31 @@ const Footer = () => {
     const destinationAirport = AIRPORT_DATA.find(
       (airport) => airport.code.toLowerCase() === destination.toLowerCase()
     )
+    const departureAirport = AIRPORT_DATA.find(
+      (airport) =>
+        airport.code.toLowerCase().toLowerCase() ===
+        departureFlightCode.toLowerCase()
+    )
+
+    const searchedData = {
+      from: {
+        code: departureAirport?.code,
+        city: departureAirport?.city,
+        name: departureAirport?.name
+      },
+      to: {
+        code: destinationAirport?.code,
+        city: destinationAirport?.city,
+        name: destinationAirport?.name
+      },
+      type: "one-way",
+      departure: dayjs().add(1, "days"),
+      return: dayjs(),
+      adult: 1,
+      child: 0,
+      infant: 0,
+      class: "ECONOMY"
+    }
 
     const flightDetail: any = {
       from: departureFlightCode,
@@ -64,7 +91,7 @@ const Footer = () => {
         dispatch(updateDestinationFlights(res.returnJourneyCompareResponse))
         dispatch(updateDepartFlights(res.flightCompareResponse[0]))
         dispatch(updateReturnFlights({}))
-
+        dispatch(updateInitialValues(searchedData))
         dispatch(uploadIsLoading(false))
         navigate("/flights-listing")
       })

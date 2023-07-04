@@ -1,5 +1,6 @@
 import React from "react"
 import moment from "moment"
+import dayjs from "dayjs"
 import { useNavigate } from "react-router"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { uploadIsLoading } from "../../redux/slices/app"
@@ -13,6 +14,7 @@ import {
 } from "../../redux/slices/flights"
 import backendService from "../../services/api"
 import { AIRPORT_DATA } from "../../data/popularFlights"
+import { updateInitialValues } from "../../redux/slices/searchFlights"
 
 interface DestinationFlight {
   flightTitle: string
@@ -44,6 +46,33 @@ const PopularFlightItem: React.FC<PopularFlightItemProps> = ({
       (airport) => airport.code.toLowerCase() === destination.toLowerCase()
     )
 
+    const departureAirport = AIRPORT_DATA.find(
+      (airport) =>
+        airport.code.toLowerCase().toLowerCase() ===
+        departureFlightCode.toLowerCase()
+    )
+
+    const searchedData = {
+      from: {
+        code: departureAirport?.code,
+        city: departureAirport?.city,
+        name: departureAirport?.name
+      },
+      to: {
+        code: destinationAirport?.code,
+        city: destinationAirport?.city,
+        name: destinationAirport?.name
+      },
+      type: "one-way",
+      departure: dayjs().add(1, "days"),
+      return: dayjs(),
+      adult: 1,
+      child: 0,
+      infant: 0,
+      class: "ECONOMY"
+    }
+
+
     const flightDetail: any = {
       from: departureFlightCode,
       to: destinationAirport?.code,
@@ -66,7 +95,7 @@ const PopularFlightItem: React.FC<PopularFlightItemProps> = ({
         dispatch(updateDestinationFlights(res.returnJourneyCompareResponse))
         dispatch(updateDepartFlights(res.flightCompareResponse[0]))
         dispatch(updateReturnFlights({}))
-
+        dispatch(updateInitialValues(searchedData))
         dispatch(uploadIsLoading(false))
         navigate("/flights-listing")
       })
