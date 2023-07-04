@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { Suspense, useState } from "react"
 
 import SearchFilter from "../components/SearchFilter"
 import PopularFlights from "../components/PopularFlights/PopularFlights"
@@ -56,9 +56,9 @@ const Homepage = () => {
             <img src={bannerImage4} />
           </div>
         </Slider>
-        <div className="searchSection">
-          <SearchFilter redirectRoute={"/flights-listing"} />
-        </div>
+          <div className="searchSection">
+            <SearchFilter redirectRoute={"/flights-listing"} />
+          </div>
       </div>
       <div className="introSection">
         <h3 className="introDetail">

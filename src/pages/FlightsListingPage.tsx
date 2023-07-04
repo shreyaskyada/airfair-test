@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { Suspense, useEffect, useState } from "react"
 import SearchFilter from "../components/SearchFilter"
 import { getFlightsConfig } from "../services/api/urlConstants"
 import backendService from "../services/api"
