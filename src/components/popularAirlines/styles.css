@@ -16,7 +16,7 @@
     margin: 1.2rem 0 2rem 0;
     font-size: 2rem;
     font-weight: bold;
-    color: #3B8BEB;
+    color: var(--primary-color);
     text-align: center;
 }
 
@@ -25,6 +25,10 @@
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
+}
+
+.airlineTitle{
+    color: (--dark-color);
 }
 
 /*------------------------POPULAR AIRLINE ITEM SECTION---------------------------------------*/

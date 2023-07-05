@@ -1,9 +1,33 @@
+.headerButtons {
+    background: var(--primary-color);
+    color: var(--contrast-color);
+    border: transparent;
+
+}
+
+.contentLayout{
+    border-top-left-radius: 10px;
+    background: var(--bg-light-color);
+}
+
+.sideBarContainer{
+    background-color: white;
+}
+
+/*============================FOOTER==================================*/
+
+.footerSection {
+    color: var(--contrast-color);
+    background: var(--dark-color);
+}
+
 .flightLinks {
-    color: white;
+    color: var(--contrast-color);
     text-align: left;
     font-size: .92rem;
     cursor: pointer
 }
+
 .flightLinks:hover {
     color: rgb(194, 194, 194);
 }
@@ -22,5 +46,7 @@
 
 .linkText {
     font-size: .9rem;
-    color: white
+    color: var(--contrast-color)
 }
+
+/*============================FOOTER==================================*/

@@ -16,7 +16,7 @@
   margin: 1.2rem 0;
   font-size: 2rem;
   font-weight: bold;
-  color: #3B8BEB;
+  color: var(--primary-color);
   text-align: center;
 }
 
@@ -55,10 +55,10 @@
 }
 
 .destinationFlightTitle {
-  color: #85b9f5;
+  color: var(--secondary-color);
 }
 
 .destinationFlightTitle:hover {
   cursor: pointer;
-  color: #73b0f5;
+  color: var(--light-color);
 }

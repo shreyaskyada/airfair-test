@@ -20,7 +20,7 @@
 }
 
 .introDetail{
-  color:#3B8BEB;
+  color:var(--dark-color);
   font-size: 1.5rem;
   line-height: 2.5rem;
   border-radius: 5px;

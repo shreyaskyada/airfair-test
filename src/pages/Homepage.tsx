@@ -32,7 +32,8 @@ const Homepage = () => {
     slidesToShow: 1,
     slidesToScroll: 1,
     style: {
-      height: "40%"
+      height: "40%",
+      border:"none"
     }
   }
 
@@ -40,21 +41,21 @@ const Homepage = () => {
     <div>
       <div
         style={{
-          position: "relative"
+          position: "relative",
         }}
       >
         <Slider {...sliderSettings}>
           <div>
-            <img src={bannerImage1} />
+            <img src={bannerImage1} style={{borderTopLeftRadius:"10px"}}/>
           </div>
           <div>
-            <img src={bannerImage2} />
+            <img src={bannerImage2} style={{borderTopLeftRadius:"10px"}}/>
           </div>
           <div>
-            <img src={bannerImage5} />
+            <img src={bannerImage5} style={{borderTopLeftRadius:"10px"}}/>
           </div>
           <div>
-            <img src={bannerImage4} />
+            <img src={bannerImage4} style={{borderTopLeftRadius:"10px"}}/>
           </div>
         </Slider>
           <div className="searchSection">

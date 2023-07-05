@@ -42,6 +42,7 @@ import {
   updateSaarchFlights,
   updateToSearchValues
 } from "../../redux/slices/searchFlights"
+import "./searchFilterStyles.css"
 
 const { TextArea } = Input
 const { Title, Text } = Typography
@@ -298,11 +299,12 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
 
   return (
     <div
+    className="searchBarContainer"
       style={{
-        border: "1px solid black",
+        //border: "1px solid black",
         borderRadius: "10px",
         color: "black",
-        background: "#C4DBF6"
+        //background: "#C4DBF6"
       }}
     >
       <Form form={form} onFinish={onFinish} initialValues={_initialValues}>
@@ -355,12 +357,13 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               flexWrap: "wrap",
               justifyContent: "center",
               alignItems: "stretch",
-              border: "1px solid #E7E7E7",
-              borderRadius: "8px"
+              border: "1px solid #E7E7E7"
             }}
+            className="departCityForm"
           >
             <Card
-              style={{ borderRadius: "0px", background: "#C4DBF6" }}
+           
+              style={{ borderRadius: "0px" ,background:"transparent"}}
               bodyStyle={{ padding: 0, width: "250px", height: "100%" }}
               onClick={() => {
                 setShowInput((prevState) => ({ ...prevState, from: true }))
@@ -415,7 +418,8 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               </div>
             </Card>
             <Card
-              style={{ borderRadius: "0px", background: "#C4DBF6" }}
+            className="returnCity"
+              style={{ borderRadius: "0px" }}
               bodyStyle={{ padding: 0, width: "250px", height: "100%" }}
               onClick={() => {
                 setShowInput((prevState) => ({ ...prevState, to: true }))
@@ -470,7 +474,8 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               </div>
             </Card>
             <Card
-              style={{ borderRadius: "0px", background: "#C4DBF6" }}
+            className="departDate"
+              style={{ borderRadius: "0px" }}
               bodyStyle={{ padding: "8px", width: "150px", maxWidth: "150px" }}
               onClick={() => {
                 setShowInput((prevState) => ({
@@ -550,10 +555,10 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               </div>
             </Card>
             <Card
+            className="returnDate"
               style={{
                 overflow: "hidden",
                 borderRadius: "0px",
-                background: "#C4DBF6"
               }}
               bodyStyle={{ padding: "8px", width: "150px", maxWidth: "150px" }}
               onClick={() => {
@@ -645,7 +650,8 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
               </div>
             </Card>
             <Card
-              style={{ borderRadius: "0px", background: "#C4DBF6" }}
+            className="traveller"
+              style={{ borderRadius: "0px" }}
               bodyStyle={{ padding: "8px", maxWidth: "150px" }}
               onClick={() => {
                 setShowInput((prevState: any) => ({

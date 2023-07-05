@@ -163,15 +163,15 @@ const LayoutUI = () => {
     <>
       <Layout hasSider>
         <Sidebar />
+        <HeaderUI />
         <Layout
           className="site-layout"
-          style={{ marginLeft: 200, background: "white" }}
+          style={{ background: "white", marginLeft: 200, marginTop: "72px" }}
         >
-          <HeaderUI />
           <Content
+            className="contentLayout"
             style={{
-              overflow: "initial",
-              background: "#E7E7E8"
+              overflow: "initial"
             }}
           >
             <div>

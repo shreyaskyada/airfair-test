@@ -18,16 +18,23 @@ const Sidebar = () => {
 
   return (
     <Sider
+      className="sideBarContainer"
       style={{
         overflow: "auto",
         height: "100vh",
         position: "fixed",
         left: 0,
         top: 0,
-        bottom: 0
+        bottom: 0,
+        background: "white"
       }}
     >
-      <Menu theme="dark" mode="inline" items={items} activeKey="flights" />
+      <Menu
+        mode="inline"
+        items={items}
+        activeKey="flights"
+        style={{ border: "none", marginTop: "72px" }}
+      />
     </Sider>
   )
 }

@@ -23,10 +23,6 @@ import { updateInitialValues } from "../redux/slices/searchFlights"
 const { Title, Text } = Typography
 const { Footer: FooterLayout } = Layout
 
-const footerStyle: React.CSSProperties = {
-  color: "#fff",
-  backgroundColor: "#210340"
-}
 
 const Footer = () => {
   const navigate = useNavigate()
@@ -101,7 +97,7 @@ const Footer = () => {
       })
   }
   return (
-    <FooterLayout style={footerStyle}>
+    <FooterLayout className="footerSection">
       <Title level={3} style={{ color: "white" }}>
         Top Flights
       </Title>

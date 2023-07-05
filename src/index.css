@@ -1,6 +1,20 @@
 * {
     font-family: "Lato", sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
+
+:root {
+    --primary-color: #38e4f7;
+    --secondary-color: #59e7f7;
+    --light-color:#9de7f7;
+    --dark-color: #3C424D;
+    --contrast-color: #ffff;
+    --bg-light-color:#e2e7f7;
+}
+
+
 body {
     height: 100vh;
     margin: 0;
@@ -23,14 +37,17 @@ body {
 .time {
     font-size: 20px;
 }
+
 .date {
     font-size: 14px;
     font-weight: 700;
 }
+
 .city {
     font-size: 16px;
     color: rgb(189, 189, 189);
 }
+
 .terminal {
     font-size: 13px;
 }
@@ -41,6 +58,7 @@ body {
     align-items: center;
     height: 100%;
 }
+
 .right-info {
     text-align: center;
     display: flex;
