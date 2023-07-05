@@ -104,7 +104,8 @@ const LayoutUI = () => {
       setIsLoggedIn(true)
       setUserId(userDetails.userName)
       setAuthToken(userDetails.token)
-      dispatch(updateUserDetails(userDetails))
+      const {token,...filteredUser} = userDetails
+      dispatch(updateUserDetails(filteredUser))
       dispatch(toggleModal({ modal: "signup", status: false }))
       dispatch(toggleModal({ modal: "otp", status: true }))
       getUserInfo(dispatch, userDetails.userName, userDetails.token)
@@ -123,7 +124,8 @@ const LayoutUI = () => {
       setIsLoggedIn(true)
       setUserId(userDetails.username)
       setAuthToken(userDetails.token)
-      dispatch(updateUserDetails(userDetails))
+      const {token,...filteredUser} = userDetails
+      dispatch(updateUserDetails(filteredUser))
       dispatch(toggleModal({ modal: "login", status: false }))
       openNotificationWithIcon("success", "Logged in successfully")
       getUserInfo(dispatch, userDetails.username, userDetails.token)

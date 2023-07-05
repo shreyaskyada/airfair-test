@@ -43,7 +43,7 @@ const HeaderUI = () => {
             phoneNo: "",
             bankList: [],
             walletList: [],
-            roles: []
+            roles: [],
           })
         )
         notifcationModal &&

@@ -8,24 +8,6 @@ export interface ISearchFlights {
   initialValues?: {}
 }
 
-// export interface InitialValues {
-//   initialValues :{
-//     from: {
-//       code: string,
-//       city: string,
-//       name: string
-//     },
-//     to: { code: string, city: string, name: string },
-//     type: string,
-//     departure: string,
-//     return: string,
-//     adult: number,
-//     child: number,
-//     infant: number,
-//     class: string
-//   }
-// }
-
 const searchFlights: ISearchFlights = {
   flightType: "ONE_WAY",
   totalTravellers: 1,

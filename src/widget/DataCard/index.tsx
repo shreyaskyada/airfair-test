@@ -1,19 +1,13 @@
 //TODO make it dynamic and move styling to css file
 import React, { useState } from "react"
-import { Avatar, Button, Card, Space, Tag, Typography, Popover } from "antd"
+import { Avatar, Button, Card, Space, Tag, Typography} from "antd"
 import {
-  HeartOutlined,
-  UserOutlined,
   DownOutlined,
   UpOutlined
 } from "@ant-design/icons"
 import * as _ from "lodash"
-
-import { Radio } from "antd"
-
-import "./DataCard.css"
 import { airlineMapping } from "../../services/airports"
-import { arrayBuffer } from "node:stream/consumers"
+import "./DataCard.css"
 
 const { Text, Title } = Typography
 
@@ -59,32 +53,10 @@ const DataCard = (props: Props) => {
     flight,
     type,
     dataKey,
-    selectedKey,
-    onLikeClick,
-    onViewDealClick,
     onSelectedFlightChange,
     checked
   } = props
 
-  const cardPopoverData = {
-    content: (
-      <>
-        <div>
-          <span>Ticket price:</span> <span>1000</span>
-        </div>
-        <div>
-          <span>Payment fee:</span> <span>100</span>
-        </div>
-        <br />
-        <div>
-          <span>Total price:</span> <span>1100</span>
-        </div>
-      </>
-    ),
-    title: "Price breakdown",
-    trigger: "hover",
-    placement: "topLeft"
-  }
 
   const [details, setDetails] = useState(false)
   return (

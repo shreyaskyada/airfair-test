@@ -146,7 +146,6 @@ const FlightsListingPage = () => {
     }, 500)
   }
 
-  console.log("rendering the app")
   return (
     <div
       style={{

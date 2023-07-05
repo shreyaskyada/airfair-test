@@ -46,8 +46,18 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
   )
 
   useEffect(() => {
-    const getDiscount = async () => {
+    const getDiscount = async (token: any) => {
+      setBestOffer(null)
+      setBestOffer2(null)
       try {
+        if (
+          !provider.length ||
+          !searchFlightData ||
+          token === '""' ||
+          token === ""
+        ) {
+          throw new Error("invalid inputs")
+        }
         const walletList = userDetails.walletList.map(
           (wallet: any) => wallet.walletName
         )
@@ -61,8 +71,6 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
 
         const doj = moment(searchFlightData.dateOfDep).valueOf()
         const dob = moment(dayjs().toString()).valueOf()
-
-        console.log("provider : ", provider)
 
         const payload: any = provider.map((_provider: any) => ({
           provider: _provider.provider,
@@ -81,13 +89,12 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           }
         }))
 
-        const res1: any = await getBestOffer(payload[0], authToken)
+        const res1: any = await getBestOffer(payload[0], token)
 
         setBestOffer(res1.bestOffer)
 
         if (payload.length > 1) {
-          const res2: any = await getBestOffer(payload[1], authToken)
-
+          const res2: any = await getBestOffer(payload[1], token)
           setBestOffer2(res2.bestOffer)
         }
       } catch (error) {
@@ -95,11 +102,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       }
     }
 
-    if (provider.length && authToken && searchFlightData) {
-      getDiscount()
-    }
-  }, [provider, authToken, searchFlightData])
-  console.log(departFlight)
+    const token = localStorage.getItem("authToken")
+    getDiscount(token)
+  }, [provider, searchFlightData, userDetails])
 
   useEffect(() => {
     let providers: any = []
@@ -194,8 +199,6 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
     }
   }, [departFlight, returnFlight])
 
-  console.log(departFlight, returnFlight)
-
   const detailsCard = (title: string, flighDetails: Flight) =>
     flighDetails && (
       <>
@@ -244,7 +247,10 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                         // dispatch(updateFlightDetails(true));
                       }}
                     >
-                      <Link to={provider.length > 1 && provider[1].url} target="_blank">
+                      <Link
+                        to={provider.length > 1 && provider[1].url}
+                        target="_blank"
+                      >
                         {provider.length > 1 &&
                           provider[1].totalFare + "-" + provider[1].provider}
                         {!provider.length && item[1].fare?.totalFare + "-"}{" "}
@@ -253,7 +259,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                     </Button>
                     <Popover
                       content={
-                        bestOffer2 && (
+                        bestOffer2 ? (
                           <>
                             <div>
                               <span>Base Fare:</span>
@@ -293,9 +299,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                               </b>
                             </div>
                           </>
+                        ) : (
+                          <div>LogIn to get discount offeres</div>
                         )
                       }
-                      title={"Price breakdown"}
+                      title={bestOffer2 && "Price breakdown"}
                       trigger="hover"
                     >
                       <Button
@@ -367,7 +375,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             </div>
           }
         />
-        <hr className="border" />
+        <hr style={{ opacity: 0 }} />
         <Meta
           className="middle"
           style={{ height: "100%" }}
@@ -377,7 +385,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             </div>
           }
         />
-        <hr className="border" />
+        <hr style={{ opacity: 0 }} />
         <Meta
           title={
             <div className="right-info">
@@ -601,9 +609,10 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
               <Title level={4} style={{ marginBottom: 0 }}>
                 Discounted Fare: ₹
                 {bestOffer &&
-                  (bestOffer.fare && bestOffer.fare.totalFareAfterDiscount
-                    ? bestOffer.fare.totalFareAfterDiscount
-                    : provider[0].totalFare)}
+                bestOffer.fare &&
+                bestOffer.fare.totalFareAfterDiscount
+                  ? bestOffer.fare.totalFareAfterDiscount
+                  : provider.length && provider[0].totalFare}
               </Title>
             </div>
             <Title level={5} style={{ margin: 0 }}>
@@ -612,7 +621,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
 
             <Popover
               content={
-                bestOffer && (
+                bestOffer ? (
                   <>
                     <div>
                       <span>Base Fare:</span>
@@ -648,9 +657,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                       </b>
                     </div>
                   </>
+                ) : (
+                  <div>LogIn to get get discount offers</div>
                 )
               }
-              title={"Price breakdown"}
+              title={bestOffer && "Price breakdown"}
               trigger="hover"
             >
               <Button shape="circle" icon={<InfoOutlined />} size="small" />
@@ -663,7 +674,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
               onClick={() => {
                 //dispatch(updateFlightDetails(true))
                 const link = provider.length && provider[0].url
-                window.open(link, '_blank');
+                window.open(link, "_blank")
               }}
             >
               Book now
