@@ -244,7 +244,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                         // dispatch(updateFlightDetails(true));
                       }}
                     >
-                      <Link to={provider.length > 1 && provider[1].url}>
+                      <Link to={provider.length > 1 && provider[1].url} target="_blank">
                         {provider.length > 1 &&
                           provider[1].totalFare + "-" + provider[1].provider}
                         {!provider.length && item[1].fare?.totalFare + "-"}{" "}
@@ -662,7 +662,8 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
               type="primary"
               onClick={() => {
                 //dispatch(updateFlightDetails(true))
-                window.location.href = provider.length && provider[0].url
+                const link = provider.length && provider[0].url
+                window.open(link, '_blank');
               }}
             >
               Book now
