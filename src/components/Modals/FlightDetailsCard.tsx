@@ -203,7 +203,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
     flighDetails && (
       <>
         <Title level={5}>
-          {title === "depart" ? "Dep" : "Ret"} |{" "}
+          {title === "depart" ? "Departure" : "Return"} |{" "}
           {_.uniq(
             flighDetails?.flightCode
               ?.split("->")
@@ -471,7 +471,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
 
   const flightInfoCardCretor = (flight: Flight) => (
     <div>
-      {flight.stops && flight.stops === 0
+      {flight.stops === 0
         ? flighInfoTabCard({
             airLine: flight.airline,
             fromTime: flight.depTime,
@@ -484,7 +484,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             flightCode: flight.flightCode
           })
         : flight.startTimeList?.map((ele, index) => (
-            <>
+            <React.Fragment key={index}>
               {flighInfoTabCard({
                 airLine: flight.flightCode?.split("->")[index],
                 fromTime: moment(
@@ -544,7 +544,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                       flight?.transitFlight[index]?.viaAirportCode)}
                 </Divider>
               ) : null}
-            </>
+            </React.Fragment>
           ))}
     </div>
   )
@@ -556,7 +556,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         width: "100%"
       }}
     >
-      <div style={{ marginBottom: "10px", flex: "1 1" }}>
+      <div style={{ flex: "1 1" }}>
         {flightInfoCardCretor(departFlight)}
       </div>
       {!_.isEmpty(returnFlight) && (
@@ -581,11 +581,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
   const flightDetailsCard = (
     <div
       style={{
-        padding: "0 25px",
+        padding: "25px 25px 10px 25px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        background: "#B23850"
+        background: "#B23850",
       }}
     >
       <div

@@ -156,7 +156,6 @@ const FlightsListingPage = () => {
       <br />
       <br />
       <br />
-      <h3>Flights listing</h3>
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
         <div
           style={{  
@@ -166,7 +165,6 @@ const FlightsListingPage = () => {
           }}
         >
           <div>
-            <h4>Departure</h4>
             <div>
               <OriginFlight
                 type="depart"
@@ -176,7 +174,6 @@ const FlightsListingPage = () => {
             </div>
           </div>
           <div>
-            <h4>Return</h4>
             <div>
               <DestinationFlight
                 type="return"
@@ -188,7 +185,6 @@ const FlightsListingPage = () => {
         </div>
       ) : (
         <div>
-          <h4>Departure</h4>
           <OriginFlight
             type="depart"
             selectedKey={selectedFlight["depart"]}

@@ -88,7 +88,7 @@ const HeaderUI = () => {
         height: "70px",
         display: "flex",
         alignItems: "center",
-        padding: "0 2rem",
+        padding: "0 2rem 0 0",
         width: "100%"
       }}
     >
@@ -104,10 +104,11 @@ const HeaderUI = () => {
           style={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center"
+            alignItems: "center",
+            height:"100%"
           }}
         >
-          <img src={logoImage} style={{ height: "40px" }} />
+          <img src={logoImage} style={{ height: "70px",width:200 }} />
         </div>
         <div>
           {!isLoggedInState ? (
