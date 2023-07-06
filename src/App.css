@@ -1,5 +1,5 @@
 @import '~antd/dist/antd.css';
 
-.no-padding .ant-modal-content{
+.no-padding .ant-modal-content {
     padding: 0;
- }
+}

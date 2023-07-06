@@ -1,6 +1,5 @@
 import DataCard from "../../widget/DataCard";
 import { useAppSelector } from "../../redux/hooks";
-import { memo } from "react";
 
 const OriginFlight = (props:any) => {
 
@@ -8,7 +7,6 @@ const OriginFlight = (props:any) => {
   const { departFlight } = useAppSelector(
     (state) => state.flight
   );
-  console.log("calling originFlights");
 
     const {
         type,
@@ -19,13 +17,14 @@ const OriginFlight = (props:any) => {
     return <>{
       originFlights?.map((flight: any, index: number) => (
         <DataCard
+        key={index}
           index={index}
           type={type}
           selectedKey={selectedKey}
           onSelectedFlightChange={(data: any) =>
             onSelectedFlightChange(data, type, flight)
           }
-          // checked={departFlight.flightCode === flight.flightCode}
+          checked={departFlight.flightCode === flight.flightCode}
           dataKey={index}
           tags={[]}
           flight={{

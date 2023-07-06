@@ -8,12 +8,14 @@ import appReducer from "./slices/app";
 import flightsSlice from "./slices/flights";
 import originFlightSlice from "./slices/originFlight";
 import destinationFlightsSlice from "./slices/destinationFlight";
+import searchFlightsSlice  from "./slices/searchFlights";
 
 const rootReducer = combineReducers({
   app: appReducer,
   flight: flightsSlice,
   originFlight: originFlightSlice,
   destinationFlight: destinationFlightsSlice,
+  searchFlights:searchFlightsSlice
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

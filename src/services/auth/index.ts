@@ -83,6 +83,7 @@ export const getProfileDetails = (username: string, token: string) => {
 export const updateProfileDetails = (
   userName: string,
   phoneNo: number,
+  email: string,
   bankDetails: any,
   wallets: any,
   token: string
@@ -102,6 +103,7 @@ export const updateProfileDetails = (
   const config = updateProfileConfig(
     userName,
     phoneNo,
+    email,
     bankDetailsParams,
     walletDetailsParams,
     token

@@ -1,30 +1,15 @@
-import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Typography,
-  Space,
-  Select,
-} from "antd";
-import { loginBanner } from "../../assets/images";
-import { getFlightsConfig } from "../../services/api/urlConstants";
-import backendService from "../../services/api";
-import {
-  getProfileDetails,
-  signupUser,
-  updateProfileDetails,
-} from "../../services/auth";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { toggleModal, updateUserDetails } from "../../redux/slices/app";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { getBankDetails, getBankName } from "../../services/airports";
-import useLocalStorage from "../../hooks/LocalStorage";
+import { useEffect, useState, useRef } from "react"
+import { Form, Input, Modal, Space, Select, Button, Typography } from "antd"
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons"
+import { updateProfileDetails, getProfileDetails } from "../../services/auth"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { toggleModal, updateUserDetails } from "../../redux/slices/app"
+import { getBankDetails, getBankName } from "../../services/airports"
+import useLocalStorage from "../../hooks/LocalStorage"
+import { loginBanner } from "../../assets/images"
+import "./style.css"
 
-const { Text, Title } = Typography;
+const { Text, Title } = Typography
 
 const walletOptions = {
   names: [
@@ -36,115 +21,162 @@ const walletOptions = {
     { label: "Google Pay", value: "google pay" },
     { label: "Mobikwik", value: "mobikwik" },
     { label: "Payzapp", value: "payzapp" },
-    { label: "Phonepe", value: "phonepe" },
+    { label: "Phonepe", value: "phonepe" }
   ],
   types: [
     { label: "UPI", value: "UPI" },
-    { label: "Wallet", value: "Wallet" },
-  ],
-};
+    { label: "Wallet", value: "Wallet" }
+  ]
+}
+
+const CustomDropDown = (props: any) => {
+  const [bankData, setBankData] = useState<any>([])
+
+  useEffect(() => {
+    const getBankNamesFunc = async () => {
+      try {
+        if (props.bankName && props.cardType) {
+          const bankNames = await getBankName(props.bankName, props.cardType)
+          setBankData(bankNames)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getBankNamesFunc()
+  }, [props.bankName, props.cardType])
+
+  return bankData && bankData.length ? (
+    <>
+      {bankData.map((value: any) => (
+        <option
+          className="menuOptions"
+          value={value.cardName}
+          onClick={() => {
+            props.form.setFieldValue(
+              ["bankCards", props.name, "bankCardName"],
+              value.cardName
+            )
+            props.selectRef.current.blur()
+          }}
+        >
+          {value.cardName}
+        </option>
+      ))}
+    </>
+  ) : (
+    <div>No Data</div>
+  )
+}
 
 const ProfileCard = ({ onFinishHandler }: any) => {
-  const dispatch = useAppDispatch();
-  const [authToken, setAuthToken] = useLocalStorage("authToken", "");
-  const [userId, setUserId] = useLocalStorage("userId", "");
+  const dispatch = useAppDispatch()
+  const [authToken] = useLocalStorage("authToken", "")
+  const [userId] = useLocalStorage("userId", "")
+  const selectRef = useRef<any>(null)
+  const [form] = Form.useForm()
 
-  const { notifcationModal, userDetails } = useAppSelector((state:any) => state.app);
-
-  const [profileDetails, setProfileDetails] = useState({
-    firstName: "",
-    lastName: "",
-    mobileNo: "",
-    email: "",
-  });
+  const { notifcationModal } = useAppSelector((state: any) => state.app)
 
   const [bankDetails, setBankDetails] = useState({
     names: [],
     types: [
       { value: "credit", label: "credit" },
-      { value: "debit", label: "debit" },
+      { value: "debit", label: "debit" }
     ],
     cardNames: [],
     issuers: [
       { value: "MASTER", label: "MASTER" },
       { value: "VISA", label: "VISA" },
       { value: "RUPAY", label: "RUPAY" },
-      { value: "AMEX", label: "AMEX" },
-    ],
-  });
+      { value: "AMEX", label: "AMEX" }
+    ]
+  })
 
-  const [form] = Form.useForm();
+  useEffect(() => {
+    const setUserProfileDetail = async () => {
+      try {
+        const res = await getUserProfileDetails()
 
-  const onFinish = (values: any) => {
-    const dataParams = form.getFieldsValue();
-    console.log(dataParams);
+        form.setFieldsValue({
+          firstName: res.firstName || "",
+          lastName: res.lastName || "",
+          email: res.email || "",
+          phoneNo: res.mobileNo || "",
+          wallets: res.walletList,
+          bankCards: res.bankList
+        })
+
+        getBankDetails("A").then((res: any) => {
+          setBankDetails((prevState) => ({
+            ...prevState,
+            names: res.map((item: any) => ({
+              label: item.bankName,
+              value: item.bankName
+            }))
+          }))
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    setUserProfileDetail()
+  }, [userId, authToken])
+
+  const getUserProfileDetails = async () => {
+    try {
+      let res: any = await getProfileDetails(userId, authToken)
+
+      const walletList = res.walletDetails.map((wallet: any) => ({
+        walletName: wallet.walletName.toLowerCase(),
+        walletType: wallet.walletType
+      }))
+
+      const bankList = res.bankDetails.map((bank: any) => ({
+        bankCardName: bank.cardName,
+        bankCardType: bank.cardType,
+        bankIssuerName: bank.cardIssuer,
+        bankName: bank.bankName
+      }))
+
+      res = { ...res, walletList, bankList }
+      return res
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const onFinish = () => {
+    const dataParams = form.getFieldsValue()
+
     updateProfileDetails(
       userId,
       dataParams.phoneNo,
+      dataParams.email,
       dataParams.bankCards,
       dataParams.wallets,
       authToken
     )
-      .then((res) => {
+      .then(async (res) => {
         // onFinishHandler(true, dataParams);
+        const userDetail = await getUserProfileDetails()
+        dispatch(updateUserDetails(userDetail))
+
         notifcationModal &&
-          notifcationModal("success", "User profile updated successfully");
-        dispatch(toggleModal({ modal: "profile", status: false }));
+          notifcationModal("success", "User profile updated successfully")
+        dispatch(toggleModal({ modal: "profile", status: false }))
       })
       .catch((err) => {
-        const errorMessage = err.data.message || "";
-        notifcationModal && notifcationModal("error", errorMessage);
+        const errorMessage = err.data.message || ""
+        notifcationModal && notifcationModal("error", errorMessage)
         // onFinishHandler(false, err);
-      });
-  };
+      })
+  }
 
   const onCancelHandler = () => {
-    dispatch(toggleModal({ modal: "profile", status: false }));
-  };
-
-  const fetchCardName = (bankName: string, bankType: string) => {
-    getBankName(bankName, bankType).then((res: any) => {
-      setBankDetails((prevState) => ({
-        ...prevState,
-        cardNames: res
-          ? res.map((item: any) => ({
-              label: item.cardName,
-              value: item.cardName,
-            }))
-          : [],
-      }));
-    });
-  };
-
-  useEffect(() => {
-
-    if(userDetails.phone){
-      setProfileDetails({
-        firstName: userDetails.firstName,
-        lastName: userDetails.lastName,
-        mobileNo: userDetails.phoneNo,
-        email: userDetails.email,
-      });
-    }
-    
-      form.setFieldsValue({
-        firstName: userDetails.firstName || "",
-        lastName: userDetails.lastName || "",
-        email: userDetails.email || "",
-        phoneNo: userDetails.phoneNo || "",
-        wallets: userDetails.walletList,
-        bankCards: userDetails.bankList,
-      });
-    getBankDetails("A").then((res: any) => {
-      setBankDetails((prevState) => ({
-        ...prevState,
-        names: res.map((item: any) => ({
-          label: item.bankName,
-          value: item.bankName,
-        })),
-      }));
-    });
-  }, []);
+    dispatch(toggleModal({ modal: "profile", status: false }))
+  }
 
   return (
     <div>
@@ -162,7 +194,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            flexDirection: "column",
+            flexDirection: "column"
           }}
         >
           <img src={loginBanner} alt="Login banner" />
@@ -174,7 +206,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
             name="basic"
             initialValues={{ remember: true }}
             style={{
-              width: "100%",
+              width: "100%"
             }}
             onFinish={onFinish}
             autoComplete="off"
@@ -183,7 +215,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
               style={{ marginBottom: "10px" }}
               name="firstName"
               rules={[
-                { required: true, message: "Please input your firstname!" },
+                { required: true, message: "Please input your firstname!" }
               ]}
             >
               <Input disabled={true} placeholder="First name" />
@@ -192,7 +224,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
               style={{ marginBottom: "10px" }}
               name="lastName"
               rules={[
-                { required: true, message: "Please input your lastname!" },
+                { required: true, message: "Please input your lastname!" }
               ]}
             >
               <Input disabled={true} placeholder="Last name" />
@@ -202,7 +234,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
               name="email"
               rules={[
                 { required: true, message: "Please input your email!" },
-                { type: "email" },
+                { type: "email" }
               ]}
             >
               <Input disabled={true} placeholder="Email" />
@@ -210,12 +242,15 @@ const ProfileCard = ({ onFinishHandler }: any) => {
             <Form.Item
               name="phoneNo"
               rules={[
-                { required: true, message: "Please input your phone number!" },
+                { required: true, message: "Please input your phone number!" }
               ]}
             >
               <Input placeholder="Phone number" />
             </Form.Item>
-            <Title level={5}>Bank cards</Title>
+            <Title level={5}>
+              Discover the Best Flight Deals for Your Card. Select Your Card
+              Information Below and Save Big!
+            </Title>
             <Form.List
               name="bankCards"
               //   rules={[
@@ -230,30 +265,29 @@ const ProfileCard = ({ onFinishHandler }: any) => {
             >
               {(fields, { add, remove }, { errors }) => (
                 <>
-                  {fields.map((field, index) => (
-                    <>
-                      <Space.Compact
-                        key={index + "_" + field.name}
+                  {fields.map((field, index) => {
+                    return (
+                      <div
+                        key={(Math.random() + 1).toString(36).substring(2)}
                         style={{
                           display: "flex",
-                          marginBottom: 8,
-                          alignItems: "center",
+                          margin: "1rem 0",
+                          alignItems: "center"
                         }}
                       >
                         {bankDetails.names.length && (
                           <Form.Item
-                            {...field}
                             validateTrigger={["onChange", "onBlur"]}
                             name={[field.name, "bankName"]}
                             rules={[
                               {
                                 required: true,
                                 whitespace: true,
-                                message: "Please input bank name",
-                              },
+                                message: "Please input bank name"
+                              }
                             ]}
                             style={{
-                              display: "inline-block",
+                              display: "inline-block"
                             }}
                             noStyle
                           >
@@ -261,7 +295,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                               allowClear
                               style={{
                                 marginRight: "10px",
-                                width: "calc(25% - 0px)",
+                                width: "calc(25% - 0px)"
                               }}
                               placeholder="Bank name"
                               options={bankDetails.names}
@@ -270,18 +304,17 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                         )}
 
                         <Form.Item
-                          {...field}
                           validateTrigger={["onChange", "onBlur"]}
                           rules={[
                             {
                               required: true,
                               whitespace: true,
-                              message: "Please input card type",
-                            },
+                              message: "Please input card type"
+                            }
                           ]}
                           name={[field.name, "bankCardType"]}
                           style={{
-                            display: "inline-block",
+                            display: "inline-block"
                           }}
                           noStyle
                         >
@@ -289,25 +322,24 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             allowClear
                             style={{
                               marginRight: "10px",
-                              width: "calc(25% - 0px)",
+                              width: "calc(25% - 0px)"
                             }}
                             placeholder="Card type"
                             options={bankDetails.types}
                           />
                         </Form.Item>
                         <Form.Item
-                          {...field}
                           validateTrigger={["onChange", "onBlur"]}
                           name={[field.name, "bankCardName"]}
                           rules={[
                             {
                               required: true,
                               whitespace: true,
-                              message: "bank's card name",
-                            },
+                              message: "bank's card name"
+                            }
                           ]}
                           style={{
-                            display: "inline-block",
+                            display: "inline-block"
                           }}
                           noStyle
                         >
@@ -315,39 +347,42 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             allowClear
                             style={{
                               marginRight: "10px",
-                              width: "calc(25% - 0px)",
+                              width: "calc(25% - 0px)"
                             }}
-                            onClick={() => {
-                              fetchCardName(
-                                form.getFieldValue([
+                            ref={selectRef}
+                            dropdownRender={() => (
+                              <CustomDropDown
+                                bankName={form.getFieldValue([
                                   "bankCards",
                                   field.name,
-                                  "bankName",
-                                ]),
-                                form.getFieldValue([
+                                  "bankName"
+                                ])}
+                                cardType={form.getFieldValue([
                                   "bankCards",
                                   field.name,
-                                  "bankCardType",
-                                ])
-                              );
-                            }}
+                                  "bankCardType"
+                                ])}
+                                name={field.name}
+                                selectRef={selectRef}
+                                form={form}
+                              />
+                            )}
                             placeholder="Bank card name"
                             options={bankDetails.cardNames}
                           />
                         </Form.Item>
                         <Form.Item
-                          {...field}
                           validateTrigger={["onChange", "onBlur"]}
                           name={[field.name, "bankIssuerName"]}
                           rules={[
                             {
                               required: true,
                               whitespace: true,
-                              message: "bank issuer name",
-                            },
+                              message: "bank issuer name"
+                            }
                           ]}
                           style={{
-                            display: "inline-block",
+                            display: "inline-block"
                           }}
                           noStyle
                         >
@@ -355,7 +390,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             allowClear
                             style={{
                               marginRight: "10px",
-                              width: "calc(25% - 0px)",
+                              width: "calc(25% - 0px)"
                             }}
                             placeholder="Bank issuer name"
                             options={bankDetails.issuers}
@@ -365,17 +400,17 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                           <MinusCircleOutlined
                             className="dynamic-delete-button"
                             onClick={() => {
-                              remove(index);
+                              remove(index)
                               setBankDetails((prevState) => ({
                                 ...prevState,
-                                cardNames: [],
-                              }));
+                                cardNames: []
+                              }))
                             }}
                           />
                         }
-                      </Space.Compact>
-                    </>
-                  ))}
+                      </div>
+                    )
+                  })}
 
                   <Form.Item>
                     <Button
@@ -410,11 +445,11 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                   {fields.map((field, index) => (
                     <>
                       <Space.Compact
-                        key={index + "_" + field.name}
+                        key={(Math.random() + 1).toString(36).substring(2)}
                         style={{
                           display: "flex",
                           marginBottom: 8,
-                          alignItems: "center",
+                          alignItems: "center"
                         }}
                       >
                         <Form.Item
@@ -424,12 +459,12 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             {
                               required: true,
                               whitespace: true,
-                              message: "Please input wallet name",
-                            },
+                              message: "Please input wallet name"
+                            }
                           ]}
                           name={[field.name, "walletName"]}
                           style={{
-                            display: "inline-block",
+                            display: "inline-block"
                           }}
                           noStyle
                         >
@@ -437,7 +472,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             allowClear
                             style={{
                               marginRight: "10px",
-                              width: "calc(50% - 0px)",
+                              width: "calc(50% - 0px)"
                             }}
                             placeholder="Wallet name"
                             options={walletOptions.names}
@@ -451,11 +486,11 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             {
                               required: true,
                               whitespace: true,
-                              message: "Please input wallet type",
-                            },
+                              message: "Please input wallet type"
+                            }
                           ]}
                           style={{
-                            display: "inline-block",
+                            display: "inline-block"
                           }}
                           noStyle
                         >
@@ -463,7 +498,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             allowClear
                             style={{
                               marginRight: "10px",
-                              width: "calc(50% - 0px)",
+                              width: "calc(50% - 0px)"
                             }}
                             placeholder="Wallet type"
                             options={walletOptions.types}
@@ -522,7 +557,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
         </div>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default ProfileCard;
+export default ProfileCard

@@ -18,7 +18,7 @@ const ContentUI = () => {
       <div
         style={{
           margin: "40px 200px",
-          border: "1px solid black",
+          //border: "1px solid black",
           borderRadius: "10px",
           color: "black",
           background: "#fff",

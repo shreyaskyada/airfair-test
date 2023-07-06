@@ -1,36 +1,28 @@
-import React, { useEffect } from "react";
-import { Descriptions, Layout, notification } from "antd";
-import Sidebar from "./Sidebar";
-import HeaderUI from "./HeaderUI";
-import ContentUI from "./ContentUI";
-import { Outlet } from "react-router";
-import { Content } from "antd/es/layout/layout";
-import Loader from "../components/Modals/Loader";
-import FlightDetailsCard from "../components/Modals/FlightDetailsCard";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import SignupCard from "../components/Modals/SignupCard";
-import VerifyTokenCard from "../components/Modals/VerifyTokenCard";
-import LoginCard from "../components/Modals/LoginCard";
+import React, { useEffect, useRef } from "react"
+import { useLocation } from "react-router-dom"
+import { Layout, notification } from "antd"
+import Sidebar from "./Sidebar"
+import HeaderUI from "./HeaderUI"
+import { Outlet } from "react-router"
+import { Content } from "antd/es/layout/layout"
+import Loader from "../components/Modals/Loader"
+import FlightDetailsCard from "../components/Modals/FlightDetailsCard"
+import { useAppDispatch, useAppSelector } from "../redux/hooks"
+import SignupCard from "../components/Modals/SignupCard"
+import VerifyTokenCard from "../components/Modals/VerifyTokenCard"
+import LoginCard from "../components/Modals/LoginCard"
 import {
-  UserDetailsType,
   toggleModal,
   updateIsLoggedIn,
   updateNotifcationModal,
-  updateUserDetails,
-} from "../redux/slices/app";
-import useLocalStorage from "../hooks/LocalStorage";
-import ProfileCard from "../components/Modals/ProfileCard";
-import { getProfileDetails } from "../services/auth";
+  updateUserDetails
+} from "../redux/slices/app"
+import useLocalStorage from "../hooks/LocalStorage"
+import ProfileCard from "../components/Modals/ProfileCard"
+import { getProfileDetails } from "../services/auth"
+import Footer from "./Footer"
 
-export type NotificationType = "success" | "info" | "warning" | "error";
-
-const { Footer } = Layout;
-
-const footerStyle: React.CSSProperties = {
-  textAlign: "center",
-  color: "#fff",
-  backgroundColor: "#210340",
-};
+export type NotificationType = "success" | "info" | "warning" | "error"
 
 const getUserInfo = (
   dispatch: any,
@@ -46,24 +38,24 @@ const getUserInfo = (
         userName: "",
         phoneNo: "",
         bankList: [],
-        walletList: [],
+        walletList: []
       })
-    );
-    return;
+    )
+    return
   }
 
   getProfileDetails(userId, authToken)
     .then((res: any) => {
       const walletList = res.walletDetails.map((wallet: any) => ({
         walletName: wallet.walletName.toLowerCase(),
-        walletType: wallet.walletType,
-      }));
+        walletType: wallet.walletType
+      }))
       const bankList = res.bankDetails.map((bank: any) => ({
         bankCardName: bank.cardName,
         bankCardType: bank.cardType,
         bankIssuerName: bank.cardIssuer,
-        bankName: bank.bankName,
-      }));
+        bankName: bank.bankName
+      }))
       dispatch(
         updateUserDetails({
           firstName: res.firstName,
@@ -72,24 +64,27 @@ const getUserInfo = (
           userName: res.username,
           phoneNo: res.mobileNo,
           bankList,
-          walletList,
+          walletList
         })
-      );
+      )
     })
     .catch((error) => {
-      dispatch(updateIsLoggedIn(false));
-    });
-};
+      dispatch(updateIsLoggedIn(false))
+    })
+}
 
 const LayoutUI = () => {
-  const dispatch = useAppDispatch();
-  const { modal, notifcationModal } = useAppSelector((state) => state.app);
+  const dispatch = useAppDispatch()
+  const location = useLocation()
 
-  const [userId, setUserId] = useLocalStorage("userId", "");
-  const [isLoggedIn, setIsLoggedIn] = useLocalStorage("isLoggedIn", "");
-  const [authToken, setAuthToken] = useLocalStorage("authToken", "");
+  const { modal, notifcationModal } = useAppSelector((state) => state.app)
 
-  const [api, contextHolder] = notification.useNotification();
+  const [userId, setUserId] = useLocalStorage("userId", "")
+  const [isLoggedIn, setIsLoggedIn] = useLocalStorage("isLoggedIn", "")
+  const [authToken, setAuthToken] = useLocalStorage("authToken", "")
+
+  const [api, contextHolder] = notification.useNotification()
+  const ref = useRef<any>()
 
   const openNotificationWithIcon = (
     type: NotificationType,
@@ -98,49 +93,52 @@ const LayoutUI = () => {
   ) => {
     api[type]({
       message: message || "",
-      description: description || "",
-    });
-  };
+      description: description || ""
+    })
+  }
 
   const onSignupFinishHandler = (success: boolean, userDetails: any) => {
     if (success) {
-      dispatch(updateIsLoggedIn(true));
-      setIsLoggedIn(true);
-      setUserId(userDetails.username);
-      setAuthToken(userDetails.token);
-      dispatch(updateUserDetails(userDetails));
-      dispatch(toggleModal({ modal: "signup", status: false }));
-      dispatch(toggleModal({ modal: "otp", status: true }));
-      getUserInfo(dispatch, userDetails.username, userDetails.token);
+      console.log("User Detail 2 :", userDetails)
+      dispatch(updateIsLoggedIn(true))
+      setIsLoggedIn(true)
+      setUserId(userDetails.userName)
+      setAuthToken(userDetails.token)
+      const {token,...filteredUser} = userDetails
+      dispatch(updateUserDetails(filteredUser))
+      dispatch(toggleModal({ modal: "signup", status: false }))
+      dispatch(toggleModal({ modal: "otp", status: true }))
+      getUserInfo(dispatch, userDetails.userName, userDetails.token)
     } else {
-      const errorMessage = userDetails.data.message || "";
+      const errorMessage = userDetails.data.message || ""
       !notifcationModal &&
-        dispatch(updateNotifcationModal(openNotificationWithIcon));
-      openNotificationWithIcon("error", errorMessage);
-      getUserInfo(dispatch);
+        dispatch(updateNotifcationModal(openNotificationWithIcon))
+      openNotificationWithIcon("error", errorMessage)
+      getUserInfo(dispatch)
     }
-  };
+  }
 
   const onLoginFinishHandler = (success: boolean, userDetails: any) => {
     if (success) {
-      dispatch(updateIsLoggedIn(true));
-      setIsLoggedIn(true);
-      setUserId(userDetails.username);
-      setAuthToken(userDetails.token);
-      dispatch(updateUserDetails(userDetails));
-      dispatch(toggleModal({ modal: "login", status: false }));
-      openNotificationWithIcon("success", "Logged in successfully");
-      getUserInfo(dispatch, userDetails.username, userDetails.token);
+      dispatch(updateIsLoggedIn(true))
+      setIsLoggedIn(true)
+      setUserId(userDetails.username)
+      setAuthToken(userDetails.token)
+      const {token,...filteredUser} = userDetails
+      dispatch(updateUserDetails(filteredUser))
+      dispatch(toggleModal({ modal: "login", status: false }))
+      openNotificationWithIcon("success", "Logged in successfully")
+      getUserInfo(dispatch, userDetails.username, userDetails.token)
     } else {
-      dispatch(updateIsLoggedIn(false));
-      setIsLoggedIn(false);
-      setUserId("");
-      setAuthToken("");
-      const errorMessage = userDetails.data.message || "";
+      dispatch(updateIsLoggedIn(false))
+      setIsLoggedIn(false)
+      setUserId("")
+      setAuthToken("")
+      const errorMessage = userDetails.data.message || ""
       !notifcationModal &&
-        dispatch(updateNotifcationModal(openNotificationWithIcon));
-      openNotificationWithIcon("error", errorMessage);
-      getUserInfo(dispatch);
+        dispatch(updateNotifcationModal(openNotificationWithIcon))
+      openNotificationWithIcon("error", errorMessage)
+      getUserInfo(dispatch)
       dispatch(
         updateUserDetails({
           firstName: "",
@@ -150,47 +148,60 @@ const LayoutUI = () => {
           phoneNo: "",
           bankList: [],
           walletList: [],
-          roles: [],
+          roles: []
         })
-      );
+      )
     }
-  };
+  }
 
   useEffect(() => {
-    dispatch(updateNotifcationModal(openNotificationWithIcon));
+    dispatch(updateNotifcationModal(openNotificationWithIcon))
     if (isLoggedIn) {
-      getUserInfo(dispatch, userId, authToken);
+      getUserInfo(dispatch, userId, authToken)
     }
-  }, []);
+  }, [])
 
   return (
     <>
-      {contextHolder}
-      <Layout style={{ height: "100%" }}>
+      <Layout hasSider>
         <Sidebar />
-        <Layout>
-          <HeaderUI />
-          <Content style={{ background: "#3B8BEB", overflow: "scroll" }}>
-            {modal.flightInfo && <FlightDetailsCard />}
+        <HeaderUI />
+        <Layout
+          className="site-layout"
+          style={{ background: "white", marginLeft: 200, marginTop: "72px" }}
+        >
+          <Content
+            className="contentLayout"
+            style={{
+              overflow: "initial"
+            }}
+          >
+            <div>
+              {modal.flightInfo &&
+                location &&
+                location.pathname === "/flights-listing" && (
+                  <FlightDetailsCard />
+                )}
 
-            {modal.signup && (
-              <SignupCard onFinishHandler={onSignupFinishHandler} />
-            )}
-            {modal.otp && <VerifyTokenCard />}
-            {modal.login && (
-              <LoginCard onFinishHandler={onLoginFinishHandler} />
-            )}
-            {modal.profile && (
-              <ProfileCard onFinishHandler={onLoginFinishHandler} />
-            )}
-            <Outlet />
+              {modal.signup && (
+                <SignupCard onFinishHandler={onSignupFinishHandler} />
+              )}
+              {modal.otp && <VerifyTokenCard />}
+              {modal.login && (
+                <LoginCard onFinishHandler={onLoginFinishHandler} />
+              )}
+              {modal.profile && (
+                <ProfileCard onFinishHandler={onLoginFinishHandler} />
+              )}
+              <Outlet />
+            </div>
           </Content>
+          <Footer />
         </Layout>
       </Layout>
-      <Footer style={footerStyle}>Footer</Footer>
       <Loader />
     </>
-  );
-};
+  )
+}
 
-export default LayoutUI;
+export default LayoutUI

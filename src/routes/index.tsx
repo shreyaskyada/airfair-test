@@ -3,23 +3,24 @@
  * @returns RoutesWrapper | Routes wrapper consisting of all routes with their child routes used for screen management
  */
 
-import { lazy } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
-import { useAppSelector } from "../redux/hooks";
-import LayoutUI from "../layout";
+import { Suspense, lazy } from "react"
+import { Navigate, Route, Routes } from "react-router-dom"
+import { useAppSelector } from "../redux/hooks"
+import LayoutUI from "../layout"
+import Loader from "../components/Modals/Loader"
 
-const HomeScreen = lazy(() => import("../pages/Homepage"));
-const FlightsListingPage = lazy(() => import("../pages/FlightsListingPage"));
+const HomeScreen = lazy(() => import("../pages/Homepage"))
+const FlightsListingPage = lazy(() => import("../pages/FlightsListingPage"))
 export interface RouteType {
-  path?: string;
-  component: JSX.Element;
-  index?: boolean;
-  childRoutes?: RouteType[];
+  path?: string
+  component: JSX.Element
+  index?: boolean
+  childRoutes?: RouteType[]
 }
 
 interface ProtectedRoutesType {
-  allowedPermissions: any[];
-  children: JSX.Element;
+  allowedPermissions: any[]
+  children: JSX.Element
 }
 
 const routes = [
@@ -31,37 +32,39 @@ const routes = [
       {
         path: "flights-listing",
         component: <FlightsListingPage />,
-        index: false,
+        index: false
       },
-      { component: <HomeScreen />, index: true },
-    ],
-  },
-];
+      { component: <HomeScreen />, index: true }
+    ]
+  }
+]
 
 const RoutesWrapper = () => (
-  <Routes>
-    {routes.map((route, parentIndex) =>
-      route.childRoutes?.length ? (
-        <Route key={parentIndex} path={route.path} element={route.component}>
-          {route.childRoutes.map((route, childIndex) => (
-            <Route
-              key={childIndex}
-              path={route.path}
-              element={route.component}
-              index={route.index}
-            />
-          ))}
-        </Route>
-      ) : (
-        <Route
-          key={parentIndex}
-          path={route.path}
-          element={route.component}
-          index={route.index}
-        />
-      )
-    )}
-  </Routes>
-);
+  <Suspense fallback={<Loader/>}>
+    <Routes>
+      {routes.map((route, parentIndex) =>
+        route.childRoutes?.length ? (
+          <Route key={parentIndex} path={route.path} element={route.component}>
+            {route.childRoutes.map((route, childIndex) => (
+              <Route
+                key={childIndex}
+                path={route.path}
+                element={route.component}
+                index={route.index}
+              />
+            ))}
+          </Route>
+        ) : (
+          <Route
+            key={parentIndex}
+            path={route.path}
+            element={route.component}
+            index={route.index}
+          />
+        )
+      )}
+    </Routes>
+  </Suspense>
+)
 
-export default RoutesWrapper;
+export default RoutesWrapper

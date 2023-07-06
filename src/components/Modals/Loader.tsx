@@ -8,9 +8,8 @@ const antIcon = <LoadingOutlined spin />;
 
 const Loader = () => {
   const { isLoading } = useAppSelector((state) => state.app);
-  console.log("Called Loader", isLoading);
+  
   return (
-    <div>
       <Modal
         open={isLoading}
         centered
@@ -19,11 +18,9 @@ const Loader = () => {
         zIndex={1001}
         width={"auto"}
         maskClosable={false}
-        maskStyle={{ position: "absolute" }}
       >
         <Spin size="large" indicator={antIcon} />
       </Modal>
-    </div>
   );
 };
 

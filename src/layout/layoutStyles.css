@@ -1,0 +1,52 @@
+.headerButtons {
+    background: var(--primary-color);
+    color: var(--contrast-color);
+    border: transparent;
+
+}
+
+.contentLayout{
+    border-top-left-radius: 10px;
+    background: var(--bg-light-color);
+}
+
+.sideBarContainer{
+    background-color: white;
+}
+
+/*============================FOOTER==================================*/
+
+.footerSection {
+    color: var(--contrast-color);
+    background: var(--dark-color);
+}
+
+.flightLinks {
+    color: var(--contrast-color);
+    text-align: left;
+    font-size: .92rem;
+    cursor: pointer
+}
+
+.flightLinks:hover {
+    color: rgb(194, 194, 194);
+}
+
+.socialLinksSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem
+}
+
+.linkUrl {
+    display: flex;
+    align-items: center;
+    gap: .6rem
+}
+
+.linkText {
+    font-size: .9rem;
+    color: var(--contrast-color)
+}
+
+/*============================FOOTER==================================*/
