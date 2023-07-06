@@ -5,6 +5,6 @@ export const bannerImage3 = require("./home-carousel/image-3.jpg");
 export const bannerImage4 = require("./home-carousel/image-4.jpg");
 export const bannerImage5 = require("./home-carousel/image-5.jpg");
 
-export const logoImage = require("./logo.jpeg");
+export const logoImage = require("./logo.png");
 
 export const bannerImages = [bannerImage1, bannerImage2];

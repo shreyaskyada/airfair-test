@@ -43,7 +43,7 @@ const HeaderUI = () => {
             phoneNo: "",
             bankList: [],
             walletList: [],
-            roles: [],
+            roles: []
           })
         )
         notifcationModal &&
@@ -85,7 +85,7 @@ const HeaderUI = () => {
         position: "fixed",
         top: 0,
         zIndex: 1000,
-        height: "70px",
+        height: "80px",
         display: "flex",
         alignItems: "center",
         padding: "0 2rem 0 0",
@@ -105,44 +105,44 @@ const HeaderUI = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height:"100%"
+            height: "100%"
           }}
         >
-          <img src={logoImage} style={{ height: "70px",width:200 }} />
+          <img
+            src={logoImage}
+            style={{ height: "90px", marginLeft: "1.3rem", marginTop: "1rem" }}
+          />
         </div>
-        <div>
+        <div className="buttonContainer">
           {!isLoggedInState ? (
             <>
-              <Button
-                style={{ marginRight: "5px" }}
+              <button
                 onClick={() => openModal("login")}
-                className="headerButtons"
+                className="headerButtons outlined"
               >
                 Login
-              </Button>
-              <Button
+              </button>
+              <button
                 onClick={() => openModal("signup")}
                 className="headerButtons"
               >
                 Signup
-              </Button>
+              </button>
             </>
           ) : (
             <>
-              <Button
+              <button
                 onClick={() => openModal("profile")}
-                className="headerButtons"
-                style={{ marginRight: "5px" }}
+                className="headerButtons outlined"
               >
                 Profile
-              </Button>
-              <Button
-                type="primary"
-                className="headerButtons"
+              </button>
+              <button
+                className="headerButtons filled"
                 onClick={() => logoutUserHandler()}
               >
                 Logout
-              </Button>
+              </button>
             </>
           )}
         </div>

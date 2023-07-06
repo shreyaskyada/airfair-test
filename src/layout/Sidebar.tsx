@@ -33,7 +33,7 @@ const Sidebar = () => {
         mode="inline"
         items={items}
         activeKey="flights"
-        style={{ border: "none", marginTop: "72px" }}
+        style={{ border: "none", marginTop: "110px" }}
       />
     </Sider>
   )

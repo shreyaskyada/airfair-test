@@ -1,16 +1,37 @@
-.headerButtons {
-    background: var(--primary-color);
-    color: var(--contrast-color);
-    border: transparent;
+/*============================HEADER==================================*/
 
+.buttonContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.contentLayout{
+.headerButtons {
+    border: 1px solid var(--secondary-color);
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--primary-color);
+}
+
+.headerButtons.outlined {
+    background-color: transparent;
+}
+
+.headerButtons.filled {
+    background-color: var(--secondary-color);
+}
+
+/*============================HEADER==================================*/
+
+
+.contentLayout {
     border-top-left-radius: 10px;
     background: var(--bg-light-color);
 }
 
-.sideBarContainer{
+.sideBarContainer {
     background-color: white;
 }
 
