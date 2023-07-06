@@ -124,7 +124,7 @@ const HeaderUI = () => {
               </button>
               <button
                 onClick={() => openModal("signup")}
-                className="headerButtons"
+                className="headerButtons filled"
               >
                 Signup
               </button>

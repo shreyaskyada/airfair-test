@@ -298,13 +298,15 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
   }, [inputValues && inputValues.return])
 
   return (
+    <div className="searchSection">
+
     <div
     className="searchBarContainer"
       style={{
-        //border: "1px solid black",
         borderRadius: "10px",
-        color: "black",
-        //background: "#C4DBF6"
+        margin:"4rem",
+        maxWidth:"1100px",
+        width:"100%"
       }}
     >
       <Form form={form} onFinish={onFinish} initialValues={_initialValues}>
@@ -315,10 +317,9 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
             justifyContent: "center",
             alignItems: "center",
             width: "100%",
-            margin: "0px"
           }}
         >
-          <div style={{ margin: "8px 0px 0px 16px", alignSelf: "flex-start" }}>
+          <div style={{alignSelf:"flex-start",margin:"1rem 0 0 2rem"}}>
             <Form.Item name="type">
               <Radio.Group>
                 <Radio
@@ -330,6 +331,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     }))
                     dispatch(updateFlightType("one-way"))
                   }}
+                  style={{color:"#013042"}}
                 >
                   One way
                 </Radio>
@@ -342,6 +344,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     }))
                     dispatch(updateFlightType("one-way"))
                   }}
+                  style={{color:"#013042"}}
                 >
                   Round trip
                 </Radio>
@@ -351,13 +354,13 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
           </div>
           <div
             style={{
-              width: "auto",
+              width: "100%",
               display: "flex",
               flexDirection: "row",
               flexWrap: "wrap",
               justifyContent: "center",
               alignItems: "stretch",
-              border: "1px solid #E7E7E7"
+              //border: "1px solid #E7E7E7"
             }}
             className="departCityForm"
           >
@@ -377,11 +380,11 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                 }}
               >
                 <div style={{ padding: "8px" }}>
-                  <label style={{ height: "50px" }}>From</label>
-                  <Title style={{ padding: "0px", margin: "0px" }} ellipsis>
+                  <label style={{ height: "50px",color:"#013042" }} className="formLable">From</label>
+                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }} ellipsis className="formTitle">
                     {inputValues.from.city}
                   </Title>
-                  <Text>
+                  <Text style={{color:"#4E6F7B"}}>
                     {inputValues.from.code}, {inputValues.from.name}
                   </Text>
                 </div>
@@ -433,11 +436,11 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                 }}
               >
                 <div style={{ padding: "8px" }}>
-                  <label style={{ height: "50px" }}>To</label>
-                  <Title style={{ padding: "0px", margin: "0px" }} ellipsis>
+                  <label style={{ height: "50px" ,color:"#013042"}}>To</label>
+                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }} ellipsis>
                     {inputValues.to.city}
                   </Title>
-                  <Text>
+                  <Text style={{color:"#4E6F7B"}}>
                     {inputValues.to.code}, {inputValues.to.name}
                   </Text>
                 </div>
@@ -491,13 +494,13 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                   alignItems: "flex-start"
                 }}
               >
-                <label>Departure</label>
-                <Title style={{ padding: "0px", margin: "0px" }}>
+                <label style={{color:"#013042"}}>Departure</label>
+                <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
                   {inputValues &&
                     inputValues?.departure &&
                     inputValues.departure.format("DD")}{" "}
                   {
-                    <Text>{`${
+                    <Text style={{color:"#4E6F7B"}}>{`${
                       inputValues &&
                       inputValues?.departure &&
                       inputValues.departure.format("MMM")
@@ -508,7 +511,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     }`}</Text>
                   }
                 </Title>
-                <Text>
+                <Text style={{color:"#4E6F7B"}}>
                   {inputValues &&
                     inputValues?.departure &&
                     inputValues.departure.format("dddd")}
@@ -578,19 +581,19 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                   alignItems: "flex-start"
                 }}
               >
-                <label>Return</label>
+                <label style={{color:"#013042"}}>Return</label>
                 {inputValues.type === "one-way" ? (
                   <Text type="secondary">
                     Tap to add a return date for bigger discounts
                   </Text>
                 ) : (
                   <>
-                    <Title style={{ padding: "0px", margin: "0px" }}>
+                    <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
                       {inputValues &&
                         inputValues?.return &&
                         inputValues.return.format("DD")}{" "}
                       {
-                        <Text>{`${
+                        <Text style={{color:"#4E6F7B"}}>{`${
                           inputValues &&
                           inputValues?.return &&
                           inputValues.return.format("MMM")
@@ -601,7 +604,7 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                         }`}</Text>
                       }
                     </Title>
-                    <Text>
+                    <Text style={{color:"#4E6F7B"}}>
                       {inputValues &&
                         inputValues?.return &&
                         inputValues.return.format("dddd")}
@@ -736,15 +739,15 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
                     alignItems: "flex-start"
                   }}
                 >
-                  <label>Travellers & Class</label>
-                  <Title style={{ padding: "0px", margin: "0px" }}>
+                  <label style={{color:"#013042"}}>Travellers & Class</label>
+                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
                     {inputValues.adult +
                       inputValues.child +
                       inputValues.infant +
                       " "}
-                    <Text>Traveller</Text>
+                    <Text style={{color:"#013042"}}>Traveller</Text>
                   </Title>
-                  <Text>
+                  <Text style={{color:"#4E6F7B"}}>
                     {
                       seatTypes.find((type) => type.value === inputValues.class)
                         ?.label
@@ -763,12 +766,14 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
             }}
           >
             <Form.Item style={{ margin: "0px" }}>
-              <Button htmlType="submit">SEARCH</Button>
+              <button type="submit" className="searchButton">SEARCH</button>
             </Form.Item>
           </div>
         </div>
       </Form>
     </div>
+    </div>
+
   )
 }
 

@@ -1,76 +1,43 @@
-import { Suspense, useState } from "react"
+import { Typography } from "antd"
 
 import SearchFilter from "../components/SearchFilter"
 import PopularFlights from "../components/PopularFlights/PopularFlights"
-import { UserDetailsType, updateUserDetails } from "../redux/slices/app"
-import { useAppDispatch } from "../redux/hooks"
-import {
-  bannerImage2,
-  bannerImage3,
-  bannerImage4,
-  bannerImage5,
-  bannerImages
-} from "../assets/images"
-import "./index.css"
-import Slider from "react-slick"
-import { divide } from "lodash"
-import { bannerImage1 } from "../assets/images"
 import { PopularAirlines } from "../components/popularAirlines"
 
+const { Title, Text } = Typography
+
 const Homepage = () => {
-  const dispatch = useAppDispatch()
-
-  const [otpModal, setOtpModal] = useState(false)
-  const [signupModal, setSignupModal] = useState(true)
-  const [flightDetailsModal, setFlightDetailsModal] = useState(true)
-
-  const sliderSettings = {
-    dots: false,
-    speed: 500,
-    arrows:false,
-    autoplay: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    style: {
-      height: "40%",
-      border:"none"
-    }
-  }
-
   return (
     <div>
-      <div
-        style={{
-          position: "relative",
-        }}
-      >
-        <Slider {...sliderSettings}>
-          <div>
-            <img src={bannerImage1} style={{borderTopLeftRadius:"10px"}}/>
-          </div>
-          <div>
-            <img src={bannerImage2} style={{borderTopLeftRadius:"10px"}}/>
-          </div>
-          <div>
-            <img src={bannerImage5} style={{borderTopLeftRadius:"10px"}}/>
-          </div>
-          <div>
-            <img src={bannerImage4} style={{borderTopLeftRadius:"10px"}}/>
-          </div>
-        </Slider>
-          <div className="searchSection">
-            <SearchFilter redirectRoute={"/flights-listing"} />
-          </div>
+      <SearchFilter redirectRoute={"/flights-listing"} />
+
+      <div className="homepageContent">
+        <div className="introSection">
+          <Title
+            level={2}
+            style={{
+              textAlign: "center",
+              margin: "3rem .6rem 0 .6rem",
+              color: "#013042"
+            }}
+          >
+            Unlock Exclusive Flight Deals. Complete Your Profile for
+            Personalized Travel Savings. Don't Miss Out,{" "}
+            <Text
+              style={{
+                textDecoration: "underline",
+                fontSize: "1.8rem",
+                color: "#DBAE1E",
+                cursor: "pointer"
+              }}
+            >
+              Sign Up Now!
+            </Text>
+          </Title>
+        </div>
+        <PopularFlights />
+        <PopularAirlines />
       </div>
-      <div className="introSection">
-        <h3 className="introDetail">
-          Unlock Exclusive Flight Deals. Complete Your Profile for Personalized
-          Travel Savings. Don't Miss Out, Sign Up Now!
-        </h3>
-      </div>
-      {/* <LoginCard /> */}
-      <PopularFlights />
-      <PopularAirlines />
     </div>
   )
 }

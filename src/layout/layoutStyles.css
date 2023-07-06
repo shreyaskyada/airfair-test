@@ -36,10 +36,15 @@
 }
 
 /*============================FOOTER==================================*/
+.footerContainer{
+    background-color: var(--bg-light-color);
+}
 
 .footerSection {
     color: var(--contrast-color);
-    background: var(--dark-color);
+    background: var(--primary-color);
+    padding: 1.5rem;
+    margin: 0 1.5rem;
 }
 
 .flightLinks {

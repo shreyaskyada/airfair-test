@@ -23,7 +23,6 @@ import { updateInitialValues } from "../redux/slices/searchFlights"
 const { Title, Text } = Typography
 const { Footer: FooterLayout } = Layout
 
-
 const Footer = () => {
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -97,47 +96,56 @@ const Footer = () => {
       })
   }
   return (
-    <FooterLayout className="footerSection">
-      <Title level={3} style={{ color: "white" }}>
-        Top Flights
-      </Title>
-      <Divider style={{ background: "gray" }} />
-      <Row gutter={[0, 6]}>
-        {popularFlightsData.map((flights) =>
-          flights.destinationFlights.map((flight) => (
-            <Col
-              xs={6}
-              onClick={() =>
-                getflightDetail(flights.departureFlightCode, flight.fligthCode)
-              }
+    <div className="footerContainer">
+      <div className="footerSection">
+        <Title level={3} style={{ color: "white" }}>
+          Top Flights
+        </Title>
+        <Divider style={{ background: "white" }} />
+        <Row gutter={[0, 6]}>
+          {popularFlightsData.map((flights) =>
+            flights.destinationFlights.map((flight) => (
+              <Col
+                xs={6}
+                onClick={() =>
+                  getflightDetail(
+                    flights.departureFlightCode,
+                    flight.fligthCode
+                  )
+                }
+              >
+                <Text className="flightLinks">
+                  {flights.departureFlightTitle} To {flight.flightTitle}
+                </Text>
+              </Col>
+            ))
+          )}
+        </Row>
+        <Divider style={{ background: "white" }} />
+        <div className="socialLinksSection">
+          <div className="socialLinkContainer">
+            <a
+              href="https://www.instagram.com/mytripsaver/"
+              className="linkUrl"
+              target="_blank"
             >
-              <Text className="flightLinks">
-                {flights.departureFlightTitle} To {flight.flightTitle}
-              </Text>
-            </Col>
-          ))
-        )}
-      </Row>
-      <Divider style={{ background: "gray" }} />
-      <div className="socialLinksSection">
-        <div className="socialLinkContainer">
-          <a href="https://www.instagram.com/mytripsaver/" className="linkUrl" target="_blank">
-            <InstagramOutlined style={{ fontSize: 25, color: "white" }} />
-            <span className="linkText">Follow us on Istagram</span>
-          </a>
-        </div>
-        <div className="socialLinkContainer">
-          <a
-            href="https://www.linkedin.com/company/mytripsaver/"
-            className="linkUrl"
-            target="_blank"
-          >
-            <LinkedinOutlined style={{ fontSize: 25, color: "white" }} />
-            <span className="linkText">Follow us on Istagram</span>
-          </a>
+              <InstagramOutlined style={{ fontSize: 25, color: "white" }} />
+              <span className="linkText">Follow us on Istagram</span>
+            </a>
+          </div>
+          <div className="socialLinkContainer">
+            <a
+              href="https://www.linkedin.com/company/mytripsaver/"
+              className="linkUrl"
+              target="_blank"
+            >
+              <LinkedinOutlined style={{ fontSize: 25, color: "white" }} />
+              <span className="linkText">Follow us on Istagram</span>
+            </a>
+          </div>
         </div>
       </div>
-    </FooterLayout>
+      </div>
   )
 }
 
