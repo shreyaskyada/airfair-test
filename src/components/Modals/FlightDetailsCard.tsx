@@ -332,8 +332,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
     flightCode,
     airLine,
     city
-  }: any) => (
-    <Card>
+  }: any) => {
+    console.log("from address : ",fromAddress)
+    return <Card>
       <Meta
         avatar={
           <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
@@ -411,7 +412,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         />
       </div>
     </Card>
-  )
+  }
   {
     /* <div
         style={{
@@ -469,19 +470,26 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
   //   </Card>
   // )
 
-  const flightInfoCardCretor = (flight: Flight) => (
-    <div>
+  const flightInfoCardCretor = (flight: Flight) => {
+    {console.log("Flight-",flight)}
+     return <div>
       {flight.stops === 0
         ? flighInfoTabCard({
             airLine: flight.airline,
             fromTime: flight.depTime,
             fromDate: flight.depDate,
-            fromAddress: flight.from + " " + flight.fromCity,
+            fromAddress: flight.departureTerminalList && flight.departureTerminalList[0],
             toTime: flight.arrTime,
             toDate: flight.arrDate,
             duration: flight.duration,
-            toAddress: flight.to + " " + flight.toCity,
-            flightCode: flight.flightCode
+            toAddress: flight.arrivalTerminalList && flight.arrivalTerminalList[0],
+            flightCode: flight.flightCode,
+            city: {
+              from:
+                  flight.fromCity,
+              to:
+                flight.toCity
+            }
           })
         : flight.startTimeList?.map((ele, index) => (
             <React.Fragment key={index}>
@@ -547,7 +555,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             </React.Fragment>
           ))}
     </div>
-  )
+  }
 
   const flighInfoTabCardContainer = () => (
     <div
@@ -580,12 +588,12 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
 
   const flightDetailsCard = (
     <div
+    className="flightBottomDetailCard"
       style={{
         padding: "25px 25px 10px 25px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        background: "#B23850",
       }}
     >
       <div

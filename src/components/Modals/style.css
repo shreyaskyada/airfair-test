@@ -10,3 +10,7 @@
 
 
 /*========================Profile========================*/
+
+.flightBottomDetailCard{
+    background: var(--secondary-color);
+}
