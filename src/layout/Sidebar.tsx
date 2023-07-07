@@ -42,7 +42,7 @@ const menuItems = [
       >
         <div style={{display:"flex",flexDirection:"column"}}>
         <span>Hotels</span>
-        <span style={{fontSize:".8rem"}}>Coming Soon</span>
+        <span style={{fontSize:".8rem"}}>Coming Soon!</span>
         </div>
         <RightOutlined style={{ fontSize: 18 }} />
       </Text>
