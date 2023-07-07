@@ -4,7 +4,8 @@ import { Layout, Row, Col, Typography, Divider } from "antd"
 import {
   InstagramOutlined,
   LinkedinOutlined,
-  TwitterOutlined
+  TwitterOutlined,
+  YoutubeOutlined
 } from "@ant-design/icons"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import moment from "moment"
@@ -152,6 +153,15 @@ const Footer = () => {
               target="_blank"
             >
               <TwitterOutlined style={{ fontSize: 25, color: "white" }} />
+            </a>
+          </div>
+          <div className="socialLinkContainer">
+            <a
+              href="https://youtube.com/@mytripsaver"
+              className="linkUrl"
+              target="_blank"
+            >
+              <YoutubeOutlined style={{ fontSize: 25, color: "white" }} />
             </a>
           </div>
         </div>

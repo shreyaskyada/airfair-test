@@ -313,7 +313,7 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
             width: "100%",
           }}
         >
-          <div style={{alignSelf:"flex-start",margin:"1rem 0 0 2rem"}}>
+          <div style={{alignSelf:"flex-start",margin:"1rem 0 0 0"}}>
             <Form.Item name="type">
               <Radio.Group>
                 <Radio
