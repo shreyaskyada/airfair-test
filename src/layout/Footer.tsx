@@ -1,7 +1,11 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
 import { Layout, Row, Col, Typography, Divider } from "antd"
-import { InstagramOutlined, LinkedinOutlined } from "@ant-design/icons"
+import {
+  InstagramOutlined,
+  LinkedinOutlined,
+  TwitterOutlined
+} from "@ant-design/icons"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import moment from "moment"
 import dayjs from "dayjs"
@@ -130,7 +134,6 @@ const Footer = () => {
               target="_blank"
             >
               <InstagramOutlined style={{ fontSize: 25, color: "white" }} />
-              <span className="linkText">Follow us on Istagram</span>
             </a>
           </div>
           <div className="socialLinkContainer">
@@ -140,12 +143,20 @@ const Footer = () => {
               target="_blank"
             >
               <LinkedinOutlined style={{ fontSize: 25, color: "white" }} />
-              <span className="linkText">Follow us on Istagram</span>
+            </a>
+          </div>
+          <div className="socialLinkContainer">
+            <a
+              href="https://twitter.com/mytripsaver?t=iR40aB6zc6DO-25z31dkdQ&s=09"
+              className="linkUrl"
+              target="_blank"
+            >
+              <TwitterOutlined style={{ fontSize: 25, color: "white" }} />
             </a>
           </div>
         </div>
       </div>
-      </div>
+    </div>
   )
 }
 

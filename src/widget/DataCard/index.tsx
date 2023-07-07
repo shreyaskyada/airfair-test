@@ -64,8 +64,9 @@ const DataCard = (props: Props) => {
       <Card
         style={{
           width: "100%",
-          boxShadow: "0px 5px 5px 0px rgba(0, 0, 0, 0.2)",
-          cursor: "pointer"
+          boxShadow: "0px 5px 5px 0px rgba(17, 17, 17, 0.2)",
+          cursor: "pointer",
+          borderRadius:"5px"
         }}
       >
         <div
@@ -128,7 +129,7 @@ const DataCard = (props: Props) => {
                     <Avatar size={40} src={flight.companyImg} />
                     <Space align="start" direction="vertical" size={0}>
                       <Text
-                        style={{ fontWeight: 700, fontSize: "15px" }}
+                        style={{ fontWeight: 700, fontSize: "15px" ,color: "#013042" }}
                         strong
                       >
                         {_.uniq(
@@ -140,20 +141,20 @@ const DataCard = (props: Props) => {
                           .join(", ")}
                       </Text>
                       <Text
-                        style={{ fontWeight: 700, fontSize: "15px" }}
+                        style={{ fontWeight: 700, fontSize: "15px",color: "#013042" }}
                         strong
                       >
                         {flight.schedule.departure} - {flight.schedule.arrival}
                       </Text>
-                      <Text ellipsis={true} type="secondary">
+                      <Text ellipsis={true} type="secondary" style={{ color: "#4E6F7B" }}>
                         {flight.route.from} - {flight.route.to}
                       </Text>
                     </Space>
-                    <Text strong>{flight.connectivity}</Text>
-                    <Text strong>{flight.totalTime}</Text>
+                    <Text strong style={{ color: "#013042" }}>{flight.connectivity}</Text>
+                    <Text strong style={{ color: "#013042" }}>{flight.totalTime}</Text>
                   </div>
                   <Space>
-                    <Text type="secondary">{flight.company}</Text>
+                    <Text type="secondary" style={{ color: "#4E6F7B" }}>{flight.company}</Text>
                   </Space>
                   <Space style={{ justifyContent: "space-between" }}>
                     <Space
@@ -168,14 +169,14 @@ const DataCard = (props: Props) => {
                         return Array.isArray(flight.agent)
                           ? flight.agent[0] !== partner.name && (
                               <Space>
-                                <Text strong>₹ {partner.price}</Text>
-                                <Text strong>{partner.name}</Text>
+                                <Text strong style={{ color: "#013042" }}>₹ {partner.price}</Text>
+                                <Text strong style={{ color: "#013042" }}>{partner.name}</Text>
                               </Space>
                             )
                           : flight.agent !== partner.name && (
                               <Space>
-                                <Text strong>₹ {partner.price}</Text>
-                                <Text strong>{partner.name}</Text>
+                                <Text strong style={{ color: "#013042" }}>₹ {partner.price}</Text>
+                                <Text strong style={{ color: "#013042" }}>{partner.name}</Text>
                               </Space>
                             )
                       })}

@@ -12,5 +12,14 @@
 /*========================Profile========================*/
 
 .flightBottomDetailCard{
-    background: var(--secondary-color);
+    background: #CAE4DB;
+    padding: 25px 25px 10px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius:5px
+}
+
+.ant-tabs .ant-tabs-ink-bar{
+    background-color: var(--primary-color);
 }

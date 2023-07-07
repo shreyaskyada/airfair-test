@@ -149,13 +149,10 @@ const FlightsListingPage = () => {
   return (
     <div
       style={{
-        margin: "40px 100px"
+        margin: "0 2rem"
       }}
     >
       <SearchFilter redirectRoute="" />
-      <br />
-      <br />
-      <br />
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
         <div
           style={{  

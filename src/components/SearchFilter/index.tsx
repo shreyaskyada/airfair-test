@@ -98,7 +98,7 @@ function compareArrays(array1: any, array2: any) {
   return true
 }
 
-const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
+const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,origin?:string }) => {
   const navigate = useNavigate()
 
   const { userDetails } = useAppSelector((state) => state.app)
@@ -298,16 +298,10 @@ const SearchFilter = ({ redirectRoute = "" }: { redirectRoute: string }) => {
   }, [inputValues && inputValues.return])
 
   return (
-    <div className="searchSection">
+    <div className={origin === "home" ?"searchSection" : "searchSectionFlightPage"}>
 
     <div
-    className="searchBarContainer"
-      style={{
-        borderRadius: "10px",
-        margin:"4rem",
-        maxWidth:"1100px",
-        width:"100%"
-      }}
+    className={origin === "home" ? "searchBarContainer" : "searchBarContainerFlightPage" }
     >
       <Form form={form} onFinish={onFinish} initialValues={_initialValues}>
         <div
