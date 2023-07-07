@@ -1,10 +1,7 @@
 //TODO make it dynamic and move styling to css file
 import React, { useState } from "react"
-import { Avatar, Button, Card, Space, Tag, Typography} from "antd"
-import {
-  DownOutlined,
-  UpOutlined
-} from "@ant-design/icons"
+import { Avatar, Button, Card, Space, Tag, Typography } from "antd"
+import { DownOutlined, UpOutlined } from "@ant-design/icons"
 import * as _ from "lodash"
 import { airlineMapping } from "../../services/airports"
 import "./DataCard.css"
@@ -48,15 +45,7 @@ interface Props {
 }
 
 const DataCard = (props: Props) => {
-  const {
-    tags,
-    flight,
-    type,
-    dataKey,
-    onSelectedFlightChange,
-    checked
-  } = props
-
+  const { tags, flight, type, dataKey, onSelectedFlightChange, checked } = props
 
   const [details, setDetails] = useState(false)
   return (
@@ -64,9 +53,9 @@ const DataCard = (props: Props) => {
       <Card
         style={{
           width: "100%",
-          boxShadow: "0px 5px 5px 0px rgba(17, 17, 17, 0.2)",
+          boxShadow: "0px 4px 4px 0px rgba(17, 17, 17, 0.1)",
           cursor: "pointer",
-          borderRadius:"5px"
+          borderRadius: "5px"
         }}
       >
         <div
@@ -75,6 +64,7 @@ const DataCard = (props: Props) => {
             justifyContent: "center",
             alignItems: "center"
           }}
+          className="radioInputs"
         >
           <input
             type="radio"
@@ -95,8 +85,8 @@ const DataCard = (props: Props) => {
               <div style={{ display: "flex", alignItems: "center" }}>
                 <div
                   style={{
-                    width: "75%",
-                    borderRight: "1px solid rgba(167, 98, 234, 0.4)",
+                    width: "70%",
+                    borderRight: "1px solid #F0F0F0",
                     display: "flex",
                     flexDirection: "column",
                     padding: "0px"
@@ -114,11 +104,6 @@ const DataCard = (props: Props) => {
                         <Tag color={tag.color}>{tag.name}</Tag>
                       ))}
                     </div>
-                    {/* <Button
-                      onClick={onLikeClick}
-                      type="link"
-                      icon={<HeartOutlined />}
-                    /> */}
                   </div>
                   <div
                     style={{
@@ -129,7 +114,11 @@ const DataCard = (props: Props) => {
                     <Avatar size={40} src={flight.companyImg} />
                     <Space align="start" direction="vertical" size={0}>
                       <Text
-                        style={{ fontWeight: 700, fontSize: "15px" ,color: "#013042" }}
+                        style={{
+                          fontWeight: 700,
+                          fontSize: "15px",
+                          color: "#013042"
+                        }}
                         strong
                       >
                         {_.uniq(
@@ -141,20 +130,37 @@ const DataCard = (props: Props) => {
                           .join(", ")}
                       </Text>
                       <Text
-                        style={{ fontWeight: 700, fontSize: "15px",color: "#013042" }}
+                        style={{
+                          fontWeight: 700,
+                          fontSize: "15px",
+                          color: "#013042"
+                        }}
                         strong
                       >
                         {flight.schedule.departure} - {flight.schedule.arrival}
                       </Text>
-                      <Text ellipsis={true} type="secondary" style={{ color: "#4E6F7B" }}>
+                      <Text
+                        ellipsis={true}
+                        type="secondary"
+                        style={{ color: "#4E6F7B" }}
+                      >
                         {flight.route.from} - {flight.route.to}
                       </Text>
                     </Space>
-                    <Text strong style={{ color: "#013042" }}>{flight.connectivity}</Text>
-                    <Text strong style={{ color: "#013042" }}>{flight.totalTime}</Text>
+                    <Text strong style={{ color: "#013042" }}>
+                      {flight.connectivity}
+                    </Text>
+                    <Text
+                      strong
+                      style={{ color: "#013042", marginRight: ".8rem" }}
+                    >
+                      {flight.totalTime}
+                    </Text>
                   </div>
                   <Space>
-                    <Text type="secondary" style={{ color: "#4E6F7B" }}>{flight.company}</Text>
+                    <Text type="secondary" style={{ color: "#4E6F7B" }}>
+                      {flight.company}
+                    </Text>
                   </Space>
                   <Space style={{ justifyContent: "space-between" }}>
                     <Space
@@ -169,14 +175,22 @@ const DataCard = (props: Props) => {
                         return Array.isArray(flight.agent)
                           ? flight.agent[0] !== partner.name && (
                               <Space>
-                                <Text strong style={{ color: "#013042" }}>₹ {partner.price}</Text>
-                                <Text strong style={{ color: "#013042" }}>{partner.name}</Text>
+                                <Text strong style={{ color: "#013042" }}>
+                                  ₹ {partner.price}
+                                </Text>
+                                <Text strong style={{ color: "#013042" }}>
+                                  {partner.name}
+                                </Text>
                               </Space>
                             )
                           : flight.agent !== partner.name && (
                               <Space>
-                                <Text strong style={{ color: "#013042" }}>₹ {partner.price}</Text>
-                                <Text strong style={{ color: "#013042" }}>{partner.name}</Text>
+                                <Text strong style={{ color: "#013042" }}>
+                                  ₹ {partner.price}
+                                </Text>
+                                <Text strong style={{ color: "#013042" }}>
+                                  {partner.name}
+                                </Text>
                               </Space>
                             )
                       })}
@@ -207,28 +221,29 @@ const DataCard = (props: Props) => {
                 </div>
                 <div
                   style={{
-                    width: "25%",
+                    width: "30%",
                     display: "flex",
                     flexDirection: "column",
                     padding: "0px 8px"
                   }}
                 >
                   <Space>
-                    <Title level={5} style={{ margin: "2px", padding: "0px" }}>
-                      Regular Fare :<div>₹ {flight.price}</div>
+                    <Title
+                      level={5}
+                      style={{
+                        margin: "2px",
+                        padding: "0px",
+                        color: "#013042"
+                      }}
+                    >
+                      Regular Fare: ₹ {flight.price}
                     </Title>
                   </Space>
                   <Space direction="vertical" size={0} align="start">
-                    {/* <Text style={{ fontSize: "12px" }}>{flight.type}</Text> */}
-                    <Text style={{ fontSize: "12px" }}>{flight.agent}</Text>
+                    <Text style={{ fontSize: "12px", color: "#4E6F7B" }}>
+                      {flight.agent}
+                    </Text>
                   </Space>
-                  {/* <Button
-                    onClick={onViewDealClick}
-                    style={{ backgroundColor: "#15986D", color: "#fff" }}
-                    size="large"
-                  >
-                    View Deal
-                  </Button> */}
                 </div>
               </div>
             </div>

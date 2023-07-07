@@ -18,7 +18,7 @@ const Homepage = () => {
 
   return (
     <div>
-      <SearchFilter redirectRoute={"/flights-listing"} />
+      <SearchFilter redirectRoute={"/flights-listing"} origin="home"/>
 
       <div className="homepageContent">
         <div className="introSection">
@@ -31,7 +31,7 @@ const Homepage = () => {
             }}
           >
             Unlock Exclusive Flight Deals. Complete Your Profile for
-            Personalized Travel Savings. Don't Miss Out,{" "}
+            Personalized Travel Savings. Don't Miss Out{isLoggedIn ?  "!" : ","}{" "}
             {!isLoggedIn && <Text
               style={{
                 textDecoration: "underline",

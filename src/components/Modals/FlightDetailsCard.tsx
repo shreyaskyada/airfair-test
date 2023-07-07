@@ -780,18 +780,18 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
               }
               trigger="hover"
             >
-              <div style={{ display: "flex", gap: ".5rem" }}>
+             
                 <Button
                   shape="circle"
                   icon={<InfoOutlined style={{ color: "white" }} />}
                   size="small"
                   style={{ background: "#4E6F7B" }}
                 />
-                <Text type="secondary" style={{ color: "#4E6F7B" }}>
+            
+            </Popover>
+                <Text type="secondary" style={{ color: "#4E6F7B",marginLeft:".4rem" }}>
                   Fare Details
                 </Text>
-              </div>
-            </Popover>
           </div>
           <div style={{ display: "flex", gap: ".5rem" }}>
             <button
