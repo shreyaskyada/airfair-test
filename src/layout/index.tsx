@@ -21,6 +21,7 @@ import useLocalStorage from "../hooks/LocalStorage"
 import ProfileCard from "../components/Modals/ProfileCard"
 import { getProfileDetails } from "../services/auth"
 import Footer from "./Footer"
+import { relative } from "path"
 
 export type NotificationType = "success" | "info" | "warning" | "error"
 
@@ -173,15 +174,17 @@ const LayoutUI = () => {
           <Content
             className="contentLayout"
             style={{
-              overflow: "initial"
+              overflow: "initial",
             }}
           >
-            <div>
-              {modal.flightInfo &&
+            <div style={{minHeight:"100vh",
+              position:"relative"
+            }}>
+              {/* {modal.flightInfo &&
                 location &&
                 location.pathname === "/flights-listing" && (
                   <FlightDetailsCard />
-                )}
+                )} */}
 
               {modal.signup && (
                 <SignupCard onFinishHandler={onSignupFinishHandler} />

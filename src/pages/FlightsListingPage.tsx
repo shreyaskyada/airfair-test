@@ -10,6 +10,7 @@ import SearchFilter from "../components/SearchFilter"
 import OriginFlight from "../components/FlightsCard/OriginFlight"
 import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
+import FlightDetailsCard from "../components/Modals/FlightDetailsCard"
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -141,7 +142,8 @@ const FlightsListingPage = () => {
   return (
     <div
       style={{
-        margin: "0 2rem"
+        margin: "0 2rem",
+        position:"relative"
       }}
     >
       <SearchFilter redirectRoute="" />
@@ -181,6 +183,9 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
+      <div style={{position:"sticky",bottom:0,background:"white",maxWidth:"900px",margin:"0 auto"}}>
+        {<FlightDetailsCard/>}
+      </div>
     </div>
   )
 }

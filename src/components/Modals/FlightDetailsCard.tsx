@@ -23,6 +23,7 @@ import { airlineMapping } from "../../services/airports"
 import { getBestOffer } from "../../services/airports"
 import moment from "moment"
 import { ISearchFlights } from "../../redux/slices/searchFlights"
+import { Airlines_Images } from "../../data/popularAirlines"
 
 const { Text, Title } = Typography
 const { Meta } = Card
@@ -199,183 +200,228 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
     }
   }, [departFlight, returnFlight])
 
-  const detailsCard = (title: string, flighDetails: Flight) =>
-    flighDetails && (
-      <>
-        <Title level={5} style={{ color: "#013042" }}>
-          {title === "depart" ? "Departure" : "Return"} |{" "}
-          {_.uniq(
-            flighDetails?.flightCode
-              ?.split("->")
-              .map((item) => item.substring(0, 2))
-          )
-          .map((name,index) => {
-            const comma = index !== _.uniq(
+
+  const detailsCard = (title: string, flighDetails: Flight) => {
+    const _names = _.uniq(
+      flighDetails?.flightCode?.split("->").map((item) => item.substring(0, 2))
+    )
+
+    let image
+
+    if (_names.length > 1) {
+      image = Airlines_Images["Multiple Airlines"]
+    } else {
+      image = Airlines_Images[airlineMapping[_names[0]]]
+    }
+
+    return (
+      flighDetails && (
+        <>
+          <Title level={5} style={{ color: "#013042" }}>
+            {title === "depart" ? "Departure" : "Return"} |{" "}
+            {_.uniq(
               flighDetails?.flightCode
                 ?.split("->")
                 .map((item) => item.substring(0, 2))
-            ).length-1 ? "," : ""
-            
-            return `${airlineMapping[name || "AI"]}${comma}`})}
-        </Title>
-        <Card
-          style={{ background: "transparent", border: 0, borderRadius: "5px" }}
-          bodyStyle={{ paddingLeft: "0" }}
-        >
-          <Meta
-            avatar={
-              <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel" />
-            }
-            title={
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <span style={{ color: "#013042" }}>
-                  {flighDetails.from} → {flighDetails.to}
-                </span>
-                {/* <span>₹ {flighDetails.cheapestFare}</span> */}
-              </div>
-            }
-            description={Object.entries(flighDetails.compare || {}).map(
-              (item) => {
-                return title === "depart" &&
-                  item[0] !== flighDetails.cheapestProvider?.providerCode ? (
-                  <>
-                    <Button
-                      style={{
-                        color: "#4E6F7B"
-                      }}
-                      ghost={true}
-                      type="text"
-                      onClick={() => {
-                        // dispatch(updateFlightDetails(true));
-                      }}
-                    >
-                      <Link
-                        to={provider.length > 1 && provider[1].url}
-                        target="_blank"
+            ).map((name, index) => {
+              const comma =
+                index !==
+                _.uniq(
+                  flighDetails?.flightCode
+                    ?.split("->")
+                    .map((item) => item.substring(0, 2))
+                ).length -
+                  1
+                  ? ","
+                  : ""
+
+              return `${airlineMapping[name || "AI"]}${comma}`
+            })}
+          </Title>
+          <Card
+            style={{
+              background: "transparent",
+              border: 0,
+              borderRadius: "5px"
+            }}
+            bodyStyle={{ paddingLeft: "0" }}
+          >
+            <Meta
+              avatar={
+                <Avatar src={<img src={image && image} alt="flight" />} />
+              }
+              title={
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center"
+                  }}
+                >
+                  <span style={{ color: "#013042" }}>
+                    {flighDetails.from} → {flighDetails.to}
+                  </span>
+                  {/* <span>₹ {flighDetails.cheapestFare}</span> */}
+                </div>
+              }
+              description={Object.entries(flighDetails.compare || {}).map(
+                (item) => {
+                  return title === "depart" &&
+                    item[0] !== flighDetails.cheapestProvider?.providerCode ? (
+                    <>
+                      <Button
+                        style={{
+                          color: "#4E6F7B"
+                        }}
+                        ghost={true}
+                        type="text"
+                        onClick={() => {
+                          // dispatch(updateFlightDetails(true));
+                        }}
                       >
-                        {provider.length > 1 &&
+                        <Link
+                          to={provider.length > 1 && provider[1].url}
+                          target="_blank"
+                        >
+                          {provider.length > 1 &&
                           bestOffer2 &&
                           bestOffer2.fare &&
                           bestOffer2.fare.totalFareAfterDiscount
                             ? bestOffer2.fare.totalFareAfterDiscount
-                            : provider.length > 1 && provider[1].totalFare + "-" + provider[1].provider}
-                        {!provider.length && item[1].fare?.totalFare + "-"}{" "}
-                        {!provider.length && item[0]}
-                      </Link>
-                    </Button>
-                    <Popover
-                      content={
-                        bestOffer2 ? (
-                          <>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Base Fare:
-                              </span>
-                              <span
-                                style={{ fontWeight: "bold", color: "#013042" }}
-                              >
-                                {provider.length > 1 && provider[1].baseFare}
-                              </span>
-                            </div>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Totall Tax:
-                              </span>
-                              <span
-                                style={{ fontWeight: "bold", color: "#013042" }}
-                              >
-                                {provider.length > 1 && provider[1].tax}
-                              </span>
-                            </div>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Ticket price:
-                              </span>
-                              <span
-                                style={{ fontWeight: "bold", color: "#013042" }}
-                              >
-                                {bestOffer2.fare.totalFare}
-                              </span>
-                            </div>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Total discount:
-                              </span>{" "}
-                              <span
-                                style={{ fontWeight: "bold", color: "#013042" }}
-                              >
-                                {bestOffer2.fare.totalDiscount}
-                              </span>
-                            </div>
-
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Promo code:
-                              </span>
-                              <span
-                                style={{ fontWeight: "bold", color: "#013042" }}
-                              >
-                                {bestOffer2.promoCode
-                                  ? bestOffer2.promoCode
-                                  : "No offer applicable"}
-                              </span>
-                            </div>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Total price after discount:{" "}
-                              </span>
-                              <b>
+                            : provider.length > 1 &&
+                              provider[1].totalFare +
+                                "-" +
+                                provider[1].provider}
+                          {!provider.length && item[1].fare?.totalFare + "-"}{" "}
+                          {!provider.length && item[0]}
+                        </Link>
+                      </Button>
+                      <Popover
+                        content={
+                          bestOffer2 ? (
+                            <>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Base Fare:
+                                </span>
                                 <span
                                   style={{
                                     fontWeight: "bold",
                                     color: "#013042"
                                   }}
                                 >
-                                  {bestOffer2.fare.totalFareAfterDiscount
-                                    ? bestOffer2.fare.totalFareAfterDiscount
-                                    : bestOffer2.fare.totalFare}
+                                  {provider.length > 1 && provider[1].baseFare}
                                 </span>
-                              </b>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Totall Tax:
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provider.length > 1 && provider[1].tax}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Ticket price:
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {bestOffer2.fare.totalFare}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Total discount:
+                                </span>{" "}
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {bestOffer2.fare.totalDiscount}
+                                </span>
+                              </div>
+
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Promo code:
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {bestOffer2.promoCode
+                                    ? bestOffer2.promoCode
+                                    : "No offer applicable"}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Total price after discount:{" "}
+                                </span>
+                                <b>
+                                  <span
+                                    style={{
+                                      fontWeight: "bold",
+                                      color: "#013042"
+                                    }}
+                                  >
+                                    {bestOffer2.fare.totalFareAfterDiscount
+                                      ? bestOffer2.fare.totalFareAfterDiscount
+                                      : bestOffer2.fare.totalFare}
+                                  </span>
+                                </b>
+                              </div>
+                            </>
+                          ) : (
+                            <div
+                              style={{ fontWeight: "bold", color: "#013042" }}
+                            >
+                              LogIn to get discount offeres
                             </div>
-                          </>
-                        ) : (
-                          <div style={{ fontWeight: "bold", color: "#013042" }}>
-                            LogIn to get discount offeres
-                          </div>
-                        )
-                      }
-                      title={
-                        bestOffer2 && (
-                          <Text
-                            style={{ fontWeight: "bold", color: "#013042" }}
-                          >
-                            Price breakdown
-                          </Text>
-                        )
-                      }
-                      trigger="hover"
-                    >
-                      <Button
-                        shape="circle"
-                        icon={<InfoOutlined style={{ color: "white" }} />}
-                        size="small"
-                        style={{ background: "#4E6F7B" }}
-                      />
-                    </Popover>
-                  </>
-                ) : null
-              }
-            )}
-          />
-        </Card>
-      </>
+                          )
+                        }
+                        title={
+                          bestOffer2 && (
+                            <Text
+                              style={{ fontWeight: "bold", color: "#013042" }}
+                            >
+                              Price breakdown
+                            </Text>
+                          )
+                        }
+                        trigger="hover"
+                      >
+                        <Button
+                          shape="circle"
+                          icon={<InfoOutlined style={{ color: "white" }} />}
+                          size="small"
+                          style={{ background: "#4E6F7B" }}
+                        />
+                      </Popover>
+                    </>
+                  ) : null
+                }
+              )}
+            />
+          </Card>
+        </>
+      )
     )
+  }
 
   const flighInfoTabCard = ({
     fromTime,
@@ -389,6 +435,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
     airLine,
     city
   }: any) => {
+    console.log(airLine)
     return (
       <Card style={{ borderRadius: "5px" }}>
         <Meta
@@ -558,7 +605,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
       <div>
         {flight.stops === 0
           ? flighInfoTabCard({
-              airLine: flight.airline,
+              airLine: flight.flightCode,
               fromTime: flight.depTime,
               fromDate: flight.depDate,
               fromAddress:
@@ -713,7 +760,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
               }}
             >
               <Title level={4} style={{ marginBottom: 0, color: "#013042" }}>
-              Final Fare: ₹
+                Final Fare: ₹
                 <span>
                   {bestOffer &&
                   bestOffer.fare &&
@@ -792,18 +839,19 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
               }
               trigger="hover"
             >
-             
-                <Button
-                  shape="circle"
-                  icon={<InfoOutlined style={{ color: "white" }} />}
-                  size="small"
-                  style={{ background: "#4E6F7B" }}
-                />
-            
+              <Button
+                shape="circle"
+                icon={<InfoOutlined style={{ color: "white" }} />}
+                size="small"
+                style={{ background: "#4E6F7B" }}
+              />
             </Popover>
-                <Text type="secondary" style={{ color: "#4E6F7B",marginLeft:".4rem" }}>
-                  Fare Details
-                </Text>
+            <Text
+              type="secondary"
+              style={{ color: "#4E6F7B", marginLeft: ".4rem" }}
+            >
+              Fare Details
+            </Text>
           </div>
           <div style={{ display: "flex", gap: ".5rem" }}>
             <button
@@ -831,7 +879,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
   )
 
   return (
-    <div>
+    <>
       {/* <Modal
         open={true}
         mask={false}
@@ -855,7 +903,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         {flightDetailsCard}
       </Modal> */}
 
-      <Drawer
+      {/* <Drawer
         height={"auto"}
         autoFocus={false}
         bodyStyle={{
@@ -863,7 +911,9 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         }}
         rootStyle={{
           marginLeft: "calc(200px + 10%)",
-          width: "calc(80% - 200px)"
+          width: "calc(80% - 200px)",
+          position:"sticky",
+          bottom:0
         }}
         placement="bottom"
         mask={false}
@@ -880,9 +930,14 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           )
         }}
         open={modal.flightInfo}
-      >
+      > */}
+      <div>
+
         {flightDetailsCard}
-        <Drawer
+      </div>
+        
+      {/* </Drawer> */}
+      <Drawer
           title="Two-level Drawer"
           placement="bottom"
           closable={true}
@@ -907,8 +962,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
         >
           <Tabs tabBarStyle={{ color: "#013042" }} items={flightInfoTabs} />
         </Drawer>
-      </Drawer>
-    </div>
+    </>
   )
 }
 

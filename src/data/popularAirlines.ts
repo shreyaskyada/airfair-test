@@ -7,7 +7,8 @@ import {
   INIGO,
   SPICEJET,
   STAR_AIR,
-  VISTARA
+  VISTARA,
+  MULTI_AIR
 } from "../assets/images/popularAirlines"
 
 export const Airlines_Data = [
@@ -40,11 +41,26 @@ export const Airlines_Data = [
     image: SPICEJET
   },
   {
-    name:"Star Air",
+    name: "Star Air",
     image: STAR_AIR
   },
   {
-    name:"Alliance Air",
+    name: "Alliance Air",
     image: ALLIANCE_AIR
   }
 ]
+
+export const Airlines_Images:any = {
+  "Indigo": INIGO,
+  "Air India": AIRINDIA,
+  "Air India Express": AIR_INDIA_EXPRESS,
+  "Air Aisia India": AIR_AISIA_INDIA,
+  "Akasa Air": AKASA,
+  "Vistara": VISTARA,
+  "SpiceJet": SPICEJET,
+  "Star Air": STAR_AIR,
+  "Alliance Air": ALLIANCE_AIR,
+  "Multiple Airlines":MULTI_AIR,
+  "AIX Connect":AIRINDIA,
+  "Go First":AKASA
+}

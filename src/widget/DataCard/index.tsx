@@ -1,9 +1,10 @@
 //TODO make it dynamic and move styling to css file
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Avatar, Button, Card, Space, Tag, Typography } from "antd"
 import { DownOutlined, UpOutlined } from "@ant-design/icons"
 import * as _ from "lodash"
 import { airlineMapping } from "../../services/airports"
+import { Airlines_Images } from "../../data/popularAirlines"
 import "./DataCard.css"
 
 const { Text, Title } = Typography
@@ -48,6 +49,23 @@ const DataCard = (props: Props) => {
   const { tags, flight, type, dataKey, onSelectedFlightChange, checked } = props
 
   const [details, setDetails] = useState(false)
+  const [flightNames, setFlightNames] = useState<string[]>([])
+  const [flightImage, setFlightImage] = useState<any>(null)
+
+  useEffect(() => {
+    const _names = _.uniq(
+      flight.company?.split("->").map((item) => item.substring(0, 2))
+    )
+    console.log("names :", _names)
+    setFlightNames(_names)
+
+    if (_names.length > 1) {
+      setFlightImage(Airlines_Images["Multiple Airlines"])
+    } else {
+      setFlightImage(Airlines_Images[airlineMapping[_names[0]]])
+    }
+  }, [flight])
+
   return (
     <Space style={{ width: "100%", marginBottom: "20px" }} direction="vertical">
       <Card
@@ -111,7 +129,14 @@ const DataCard = (props: Props) => {
                       justifyContent: "space-between"
                     }}
                   >
-                    <Avatar size={40} src={flight.companyImg} />
+                    <Avatar
+                      size={50}
+                      src={
+                        <img
+                          src={flightImage ? flightImage : flight.companyImg}
+                        />
+                      }
+                    />
                     <Space align="start" direction="vertical" size={0}>
                       <Text
                         style={{
@@ -121,11 +146,7 @@ const DataCard = (props: Props) => {
                         }}
                         strong
                       >
-                        {_.uniq(
-                          flight.company
-                            ?.split("->")
-                            .map((item) => item.substring(0, 2))
-                        )
+                        {flightNames
                           .map((name) => airlineMapping[name || "AI"])
                           .join(", ")}
                       </Text>
