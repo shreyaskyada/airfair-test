@@ -3,8 +3,10 @@ import {
   AIR_AISIA_INDIA,
   AIR_INDIA_EXPRESS,
   AKASA,
+  ALLIANCE_AIR,
   INIGO,
   SPICEJET,
+  STAR_AIR,
   VISTARA
 } from "../assets/images/popularAirlines"
 
@@ -39,6 +41,10 @@ export const Airlines_Data = [
   },
   {
     name:"Star Air",
-    image: SPICEJET
+    image: STAR_AIR
+  },
+  {
+    name:"Alliance Air",
+    image: ALLIANCE_AIR
   }
 ]

@@ -10,7 +10,7 @@ const PopularAirlines = () => {
         <h1 className="airlineHeading">Popular Domestic Airlines</h1>
         <Row gutter={[10, 10]} justify="space-between">
           {Airlines_Data.map((airline, index) => (
-            <Col key={index} md={3} xs={8}>
+            <Col key={index} md={2} xs={8}>
               <PopularAirlinesItem name={airline.name} image={airline.image} />
             </Col>
           ))}

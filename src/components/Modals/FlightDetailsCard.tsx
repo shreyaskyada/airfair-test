@@ -264,7 +264,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                           bestOffer2.fare &&
                           bestOffer2.fare.totalFareAfterDiscount
                             ? bestOffer2.fare.totalFareAfterDiscount
-                            : provider.length && provider[1].totalFare + "-" + provider[1].provider}
+                            : provider.length > 1 && provider[1].totalFare + "-" + provider[1].provider}
                         {!provider.length && item[1].fare?.totalFare + "-"}{" "}
                         {!provider.length && item[0]}
                       </Link>
