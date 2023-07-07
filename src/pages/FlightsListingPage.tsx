@@ -1,22 +1,14 @@
-import React, { Suspense, useEffect, useState } from "react"
-import SearchFilter from "../components/SearchFilter"
-import { getFlightsConfig } from "../services/api/urlConstants"
-import backendService from "../services/api"
-import { Radio } from "antd"
-import data from "../data/flights.json"
+import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import {
   Flight,
   updateDepartFlights,
-  updateFlights,
   updateReturnFlights
 } from "../redux/slices/flights"
 import { toggleModal, uploadIsLoading } from "../redux/slices/app"
-
-import { updateDestinationFlights } from "../redux/slices/destinationFlight"
-
-import { updateOriginFlights } from "../redux/slices/originFlight"
+import SearchFilter from "../components/SearchFilter"
 import OriginFlight from "../components/FlightsCard/OriginFlight"
+import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
 
 function compareArrays(array1: any, array2: any) {
@@ -155,7 +147,7 @@ const FlightsListingPage = () => {
       <SearchFilter redirectRoute="" />
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
         <div
-          style={{  
+          style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             columnGap: "25px"

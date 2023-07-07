@@ -4,7 +4,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { Spin } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
-const antIcon = <LoadingOutlined spin />;
+const antIcon = <LoadingOutlined spin style={{color:"#DBAE1E"}}/>;
 
 const Loader = () => {
   const { isLoading } = useAppSelector((state) => state.app);

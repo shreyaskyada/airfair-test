@@ -23,7 +23,10 @@
     background-color: var(--secondary-color);
 }
 
-/*============================HEADER==================================*/
+/*==============================================================*/
+
+
+/*============================Layout Body==================================*/
 
 
 .contentLayout {
@@ -36,7 +39,7 @@
 }
 
 /*============================FOOTER==================================*/
-.footerContainer{
+.footerContainer {
     background-color: var(--bg-light-color);
 }
 
@@ -75,4 +78,28 @@
     color: var(--contrast-color)
 }
 
-/*============================FOOTER==================================*/
+/*=============================================================================*/
+
+/*============================Sidebar Menu Item==================================*/
+
+.ant-menu .ant-menu-item {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin-right: 1rem;
+    background-color: #7B9D94;
+}
+
+.ant-menu-inline .ant-menu-item, .ant-menu-vertical .ant-menu-item, .ant-menu-inline .ant-menu-submenu-title, .ant-menu-vertical .ant-menu-submenu-title {
+    margin-inline: 0;
+    margin-block: 10px;
+    background-color: #7B9D94;
+}
+
+.ant-menu-light .ant-menu-item-selected , .ant-menu-item .ant-menu-item-active{
+    background-color: #7B9D94;
+    color: white;
+}
+
+/*=====================================================================================*/
