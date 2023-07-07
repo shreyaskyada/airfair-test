@@ -40,7 +40,10 @@ const menuItems = [
           justifyContent: "space-between"
         }}
       >
-        <span>Hotels Comming Soon</span>{" "}
+        <div style={{display:"flex",flexDirection:"column"}}>
+        <span>Hotels</span>
+        <span>Comming Soon</span>
+        </div>
         <RightOutlined style={{ fontSize: 18 }} />
       </Text>
     ),
