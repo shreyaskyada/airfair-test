@@ -8,5 +8,6 @@ export const bannerImage5 = require("./home-carousel/image-5.jpg");
 export const logoImage = require("./logo.png");
 
 export const planeIcon = require("./planeIcon.png")
+export const hotelIcon = require("./hotel.png")
 
 export const bannerImages = [bannerImage1, bannerImage2];
