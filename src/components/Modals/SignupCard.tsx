@@ -142,10 +142,6 @@ const SignupCard = ({ onFinishHandler }: any) => {
               </Button>
             </Form.Item>
           </Form>
-          <Text type="secondary">
-            By continuing you agree to Skyscanner's Terms of Service and Privacy
-            Policy.
-          </Text>
         </div>
       </Modal>
     </div>

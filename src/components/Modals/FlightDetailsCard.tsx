@@ -208,7 +208,15 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
             flighDetails?.flightCode
               ?.split("->")
               .map((item) => item.substring(0, 2))
-          ).map((name) => airlineMapping[name || "AI"])}
+          )
+          .map((name,index) => {
+            const comma = index !== _.uniq(
+              flighDetails?.flightCode
+                ?.split("->")
+                .map((item) => item.substring(0, 2))
+            ).length-1 ? "," : ""
+            
+            return `${airlineMapping[name || "AI"]}${comma}`})}
         </Title>
         <Card
           style={{ background: "transparent", border: 0, borderRadius: "5px" }}
@@ -252,7 +260,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                         target="_blank"
                       >
                         {provider.length > 1 &&
-                          provider[1].totalFare + "-" + provider[1].provider}
+                          bestOffer2 &&
+                          bestOffer2.fare &&
+                          bestOffer2.fare.totalFareAfterDiscount
+                            ? bestOffer2.fare.totalFareAfterDiscount
+                            : provider.length && provider[1].totalFare + "-" + provider[1].provider}
                         {!provider.length && item[1].fare?.totalFare + "-"}{" "}
                         {!provider.length && item[0]}
                       </Link>
@@ -701,7 +713,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
               }}
             >
               <Title level={4} style={{ marginBottom: 0, color: "#013042" }}>
-                Discounted Fare: ₹
+              Final Fare: ₹
                 <span>
                   {bestOffer &&
                   bestOffer.fare &&

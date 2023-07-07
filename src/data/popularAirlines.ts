@@ -36,5 +36,9 @@ export const Airlines_Data = [
   {
     name: "SpiceJet",
     image: SPICEJET
+  },
+  {
+    name:"Star Air",
+    image: SPICEJET
   }
 ]
