@@ -47,7 +47,7 @@ const CustomDropDown = (props: any) => {
   }, [props.bankName, props.cardType])
 
   return bankData && bankData.length ? (
-    <>
+    <div className="customDropdown">
       {bankData.map((value: any) => (
         <option
           className="menuOptions"
@@ -63,7 +63,7 @@ const CustomDropDown = (props: any) => {
           {value.cardName}
         </option>
       ))}
-    </>
+    </div>
   ) : (
     <div>No Data</div>
   )
@@ -297,7 +297,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                                 marginRight: "10px",
                                 width: "calc(25% - 0px)"
                               }}
-                              placeholder="Bank name"
+                              placeholder="Bank Name"
                               options={bankDetails.names}
                             />
                           </Form.Item>
@@ -324,7 +324,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                               marginRight: "10px",
                               width: "calc(25% - 0px)"
                             }}
-                            placeholder="Card type"
+                            placeholder="Card Type"
                             options={bankDetails.types}
                           />
                         </Form.Item>
@@ -367,7 +367,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                                 form={form}
                               />
                             )}
-                            placeholder="Bank card name"
+                            placeholder="Card Name"
                             options={bankDetails.cardNames}
                           />
                         </Form.Item>
@@ -378,7 +378,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             {
                               required: true,
                               whitespace: true,
-                              message: "bank issuer name"
+                              message: "issuer name"
                             }
                           ]}
                           style={{
@@ -392,7 +392,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                               marginRight: "10px",
                               width: "calc(25% - 0px)"
                             }}
-                            placeholder="Bank issuer name"
+                            placeholder="Issuer Name"
                             options={bankDetails.issuers}
                           />
                         </Form.Item>

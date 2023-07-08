@@ -183,7 +183,7 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      <div style={{position:"sticky",bottom:0,background:"white",maxWidth:"900px",margin:"0 auto"}}>
+      <div style={{position:"sticky",bottom:0,background:"white",maxWidth:"90%",margin:"0 auto"}}>
         {<FlightDetailsCard/>}
       </div>
     </div>

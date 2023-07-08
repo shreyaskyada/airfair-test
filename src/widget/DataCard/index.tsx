@@ -126,17 +126,17 @@ const DataCard = (props: Props) => {
                   <div
                     style={{
                       display: "flex",
+                      alignItems: "center",
                       justifyContent: "space-between"
                     }}
                   >
-                    <Avatar
-                      size={50}
-                      src={
-                        <img
-                          src={flightImage ? flightImage : flight.companyImg}
-                        />
-                      }
-                    />
+                    <div style={{ width: "48px", height: "48px" }}>
+                      <img
+                        src={flightImage ? flightImage : flight.companyImg}
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    </div>
+
                     <Space align="start" direction="vertical" size={0}>
                       <Text
                         style={{

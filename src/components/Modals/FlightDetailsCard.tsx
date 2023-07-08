@@ -28,7 +28,7 @@ import { Airlines_Images } from "../../data/popularAirlines"
 const { Text, Title } = Typography
 const { Meta } = Card
 
-const FlightDetailsCard = ({ onFinishHandler }: any) => {
+const FlightDetailCard = ({ onFinishHandler }: any) => {
   const dispatch = useAppDispatch()
   const [authToken] = useLocalStorage("authToken", "")
 
@@ -248,7 +248,12 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
           >
             <Meta
               avatar={
-                <Avatar src={<img src={image && image} alt="flight" />} />
+                <div style={{ width: "30px", height: "30px" }}>
+                <img
+                  src={image && image}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              </div>
               }
               title={
                 <div
@@ -264,11 +269,14 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                   {/* <span>₹ {flighDetails.cheapestFare}</span> */}
                 </div>
               }
-              description={Object.entries(flighDetails.compare || {}).map(
+              description={<></>}
+            />
+            <div style={{marginTop:"1rem"}}>
+              {Object.entries(flighDetails.compare || {}).map(
                 (item) => {
                   return title === "depart" &&
                     item[0] !== flighDetails.cheapestProvider?.providerCode ? (
-                    <>
+                    <div>
                       <Button
                         style={{
                           color: "#4E6F7B"
@@ -390,7 +398,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                             <div
                               style={{ fontWeight: "bold", color: "#013042" }}
                             >
-                              LogIn to get discount offeres
+                              Unlock Exclusive Deals by Logging In
                             </div>
                           )
                         }
@@ -412,11 +420,11 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                           style={{ background: "#4E6F7B" }}
                         />
                       </Popover>
-                    </>
+                    </div>
                   ) : null
                 }
               )}
-            />
+            </div>
           </Card>
         </>
       )
@@ -435,16 +443,17 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
     airLine,
     city
   }: any) => {
-    console.log(airLine)
     return (
       <Card style={{ borderRadius: "5px" }}>
         <Meta
           style={{ marginBottom: "1rem" }}
           avatar={
-            <Avatar
-              style={{ border: "1px solid #013042" }}
-              src="https://xsgames.co/randomusers/avatar.php?g=pixel"
-            />
+            <div style={{ width: "30px", height: "30px" }}>
+                      <img
+                        src={Airlines_Images[airlineMapping[airLine?.slice(0, 2)]]}
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    </div>
           }
           title={
             <Text style={{ fontWeight: "bold", color: "#013042" }}>
@@ -826,7 +835,7 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
                   </>
                 ) : (
                   <div style={{ fontWeight: "bold", color: "#013042" }}>
-                    LogIn to get get discount offers
+                    Unlock Exclusive Deals by Logging In
                   </div>
                 )
               }
@@ -880,63 +889,10 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
 
   return (
     <>
-      {/* <Modal
-        open={true}
-        mask={false}
-        footer={null}
-        closable={false}
-        width="75vw"
-        className="no-padding"
-        style={{ padding: "0 !important", top: "80vh", left: "100px" }}
-      >
-        {flightDetailsCard}
-      </Modal> */}
-      {/* <Modal
-        open={true}
-        mask={false}
-        footer={null}
-        closable={false}
-        width="75vw"
-        className="no-padding"
-        style={{ padding: "0 !important", top: "80vh", left: "100px" }}
-      >
-        {flightDetailsCard}
-      </Modal> */}
-
-      {/* <Drawer
-        height={"auto"}
-        autoFocus={false}
-        bodyStyle={{
-          padding: 0
-        }}
-        rootStyle={{
-          marginLeft: "calc(200px + 10%)",
-          width: "calc(80% - 200px)",
-          position:"sticky",
-          bottom:0
-        }}
-        placement="bottom"
-        mask={false}
-        headerStyle={{
-          display: "none"
-        }}
-        contentWrapperStyle={{
-          boxShadow: "none"
-        }}
-        footer={null}
-        onClose={() => {
-          dispatch(
-            dispatch(toggleModal({ modal: "flightInfo", status: false }))
-          )
-        }}
-        open={modal.flightInfo}
-      > */}
       <div>
-
         {flightDetailsCard}
       </div>
         
-      {/* </Drawer> */}
       <Drawer
           title="Two-level Drawer"
           placement="bottom"
@@ -966,4 +922,4 @@ const FlightDetailsCard = ({ onFinishHandler }: any) => {
   )
 }
 
-export default FlightDetailsCard
+export default FlightDetailCard

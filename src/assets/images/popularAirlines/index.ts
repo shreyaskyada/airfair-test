@@ -8,6 +8,7 @@ import SPICEJET from "./spicejet.png"
 import ALLIANCE_AIR from "./allienceAir.png"
 import STAR_AIR from "./starAir.png"
 import MULTI_AIR from "./multileAirlines.png"
+import FLY_BIG from "./flyBig.png"
 
 export {
   AIRINDIA,
@@ -19,5 +20,6 @@ export {
   SPICEJET,
   ALLIANCE_AIR,
   STAR_AIR,
-  MULTI_AIR
+  MULTI_AIR,
+  FLY_BIG
 }

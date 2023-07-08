@@ -16,8 +16,9 @@ export const airlineMapping: { [key: string]: string } = {
   "6E": "Indigo",
   SG: "SpiceJet",
   UK: "Vistara",
-  S5:"Star Air",
-  "9I":"Alliance Air"
+  S5: "Star Air",
+  "9I": "Alliance Air",
+  S9: "FLY BIG"
 }
 
 export const getAirportsWrapper = (query: string) => {
