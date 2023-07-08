@@ -1,41 +1,41 @@
-import React from "react";
-import {
-  Button,
-  Card,
-  Form,
-  Input,
-  InputNumber,
-  Modal,
-  Typography,
-} from "antd";
-import { loginBanner } from "../../assets/images";
-import { getFlightsConfig } from "../../services/api/urlConstants";
-import backendService from "../../services/api";
-import { signupUser } from "../../services/auth";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { toggleModal } from "../../redux/slices/app";
+import React from "react"
+import { Button, Card, Form, Input, InputNumber, Modal, Typography } from "antd"
+import { loginBanner } from "../../assets/images"
+import { getFlightsConfig } from "../../services/api/urlConstants"
+import backendService from "../../services/api"
+import { signupUser } from "../../services/auth"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { toggleModal } from "../../redux/slices/app"
+import { uploadIsLoading } from "../../redux/slices/app"
+import { notification } from "../Notification/customNotification"
 
-const { Text, Title } = Typography;
+const { Text, Title } = Typography
 
 const SignupCard = ({ onFinishHandler }: any) => {
-  const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch()
 
-  const [form] = Form.useForm();
+  const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    const dataParams = form.getFieldsValue();
+    const dataParams = form.getFieldsValue()
+    dispatch(uploadIsLoading(true))
     signupUser(dataParams)
       .then((res) => {
-        onFinishHandler(true, dataParams);
+        onFinishHandler(true, dataParams)
+        dispatch(uploadIsLoading(false))
       })
       .catch((err) => {
-        onFinishHandler(false, err);
-      });
-  };
+        const message = err.data.message || "Server Error"
+        notification.error({ message })
+
+        onFinishHandler(false, err)
+        dispatch(uploadIsLoading(false))
+      })
+  }
 
   const onCancelHandler = () => {
-    dispatch(toggleModal({ modal: "signup", status: false }));
-  };
+    dispatch(toggleModal({ modal: "signup", status: false }))
+  }
 
   return (
     <div>
@@ -53,7 +53,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            flexDirection: "column",
+            flexDirection: "column"
           }}
         >
           <img src={loginBanner} alt="Login banner" />
@@ -65,7 +65,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
             name="basic"
             initialValues={{ remember: true }}
             style={{
-              width: "100%",
+              width: "100%"
             }}
             onFinish={onFinish}
             autoComplete="off"
@@ -74,7 +74,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
               style={{ marginBottom: "10px" }}
               name="firstName"
               rules={[
-                { required: true, message: "Please input your firstname!" },
+                { required: true, message: "Please input your firstname!" }
               ]}
             >
               <Input placeholder="First name" />
@@ -83,7 +83,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
               style={{ marginBottom: "10px" }}
               name="lastName"
               rules={[
-                { required: true, message: "Please input your lastname!" },
+                { required: true, message: "Please input your lastname!" }
               ]}
             >
               <Input placeholder="Last name" />
@@ -93,7 +93,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
               name="email"
               rules={[
                 { required: true, message: "Please input your email!" },
-                { type: "email" },
+                { type: "email" }
               ]}
             >
               <Input placeholder="Email" />
@@ -102,7 +102,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
               style={{ marginBottom: "10px" }}
               name="password"
               rules={[
-                { required: true, message: "Please input your password!" },
+                { required: true, message: "Please input your password!" }
               ]}
             >
               <Input.Password placeholder="Password" />
@@ -113,8 +113,8 @@ const SignupCard = ({ onFinishHandler }: any) => {
               rules={[
                 {
                   required: true,
-                  message: "Please input your password again!",
-                },
+                  message: "Please input your password again!"
+                }
               ]}
             >
               <Input.Password placeholder="Confirm password" />
@@ -123,7 +123,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
               style={{ marginBottom: "10px" }}
               name="userName"
               rules={[
-                { required: true, message: "Please input your username!" },
+                { required: true, message: "Please input your username!" }
               ]}
             >
               <Input placeholder="User name" />
@@ -131,7 +131,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
             <Form.Item
               name="phoneNo"
               rules={[
-                { required: true, message: "Please input your phone number!" },
+                { required: true, message: "Please input your phone number!" }
               ]}
             >
               <Input placeholder="Phone number" />
@@ -142,14 +142,10 @@ const SignupCard = ({ onFinishHandler }: any) => {
               </Button>
             </Form.Item>
           </Form>
-          <Text type="secondary">
-            By continuing you agree to Skyscanner's Terms of Service and Privacy
-            Policy.
-          </Text>
         </div>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default SignupCard;
+export default SignupCard

@@ -74,8 +74,9 @@ const VerifyTokenCard = () => {
             // onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
+            <Text>Dear user, please enter the OTP (One-Time Password) received on your email.</Text>
             <Form.Item
-              style={{ marginBottom: "10px" }}
+              style={{ margin: "10px 0" }}
               name="otp"
               rules={[{ required: true, message: "Please input your otp!" }]}
             >
@@ -87,10 +88,6 @@ const VerifyTokenCard = () => {
               </Button>
             </Form.Item>
           </Form>
-          <Text type="secondary">
-            By continuing you agree to Skyscanner's Terms of Service and Privacy
-            Policy.
-          </Text>
         </div>
       </Modal>
     </div>

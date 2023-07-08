@@ -1,8 +1,29 @@
 /*========================Profile========================*/
-.menuOptions{
-    padding-left:.4rem ;
+.customDropdown {
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
-.menuOptions:hover{
+
+.customDropdown::-webkit-scrollbar {
+    width: 8px;
+}
+
+.customDropdown::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.customDropdown::-webkit-scrollbar-thumb {
+    background-color: gray;
+    border-radius: 20px;
+}
+
+.menuOptions {
+    padding-left: .4rem;
+    color: black;
+}
+
+.menuOptions:hover {
     background-color: #EDF7FF;
     cursor: pointer;
     border-radius: 5px;
@@ -11,6 +32,15 @@
 
 /*========================Profile========================*/
 
-.flightBottomDetailCard{
-    background: var(--secondary-color);
+.flightBottomDetailCard {
+    background: #CAE4DB;
+    padding: 25px 25px 10px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+    background-color: var(--primary-color);
 }

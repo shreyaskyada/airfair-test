@@ -1,3 +1,46 @@
+.searchSection {
+    background: url(/src/assets/images/searchBackground.png);
+    background-size: cover;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchSectionFlightPage{
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.searchBarContainerFlightPage{
+    border-radius: 5px;
+    width:100%;
+    background-color: var(--contrast-color);
+    padding:0 1.5rem;
+}
+.searchBarContainer{
+    padding:0 1.5rem;
+    border-radius:5px
+}
+
 .searchBarContainer, .departCityForm, .returnCity, .departDate, .returnDate, .traveller {
     background-color: var(--contrast-color);
+}
+
+.searchButton {
+    border: 1px solid var(--secondary-color);
+    width: 100px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: var(--primary-color);
+    background-color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+    border-color: #4E6F7B;
+    background-color: #4E6F7B;
 }

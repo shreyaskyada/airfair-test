@@ -1,0 +1,8 @@
+ input[type='radio'] {
+     accent-color: var(--light-color);
+ }
+
+ input[type='radio']:hover {
+     accent-color: var(--primary-color);
+     cursor: pointer;
+ }
