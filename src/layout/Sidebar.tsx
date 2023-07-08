@@ -3,7 +3,7 @@ import { Layout, Menu, Typography } from "antd"
 import type { MenuProps } from "antd"
 import { DatabaseOutlined, RightOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
-import { hotelIcon, planeIcon } from "../assets/images"
+import { aboutUsIcon, hotelIcon, planeIcon } from "../assets/images"
 
 const { Sider } = Layout
 const { Text } = Typography
@@ -48,7 +48,25 @@ const menuItems = [
       </Text>
     ),
     path: ""
-  }
+  },
+  {
+    key: "aboutus",
+    icon: <img src={aboutUsIcon} width={30} height={30} alt="info" />,
+    label: (
+      <Text
+        style={{
+          fontSize: "1rem",
+          color: "white",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between"
+        }}
+      >
+        <span>About Us</span> <RightOutlined style={{ fontSize: 18 }} />
+      </Text>
+    ),
+    path: "/aboutUs"
+  },
 ]
 
 const Sidebar = () => {

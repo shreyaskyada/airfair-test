@@ -8,9 +8,11 @@ import { Navigate, Route, Routes } from "react-router-dom"
 import { useAppSelector } from "../redux/hooks"
 import LayoutUI from "../layout"
 import Loader from "../components/Modals/Loader"
+import AboutUs from "../pages/AboutUs"
 
 const HomeScreen = lazy(() => import("../pages/Homepage"))
 const FlightsListingPage = lazy(() => import("../pages/FlightsListingPage"))
+
 export interface RouteType {
   path?: string
   component: JSX.Element
@@ -34,7 +36,10 @@ const routes = [
         component: <FlightsListingPage />,
         index: false
       },
-      { component: <HomeScreen />, index: true }
+      { component: <HomeScreen />, index: true },
+      { path: "aboutUs",
+      component: <AboutUs/>,
+      index: false }
     ]
   }
 ]

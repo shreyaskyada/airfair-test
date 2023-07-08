@@ -25,8 +25,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
         dispatch(uploadIsLoading(false))
       })
       .catch((err) => {
-        const message =
-          err.status === 400 ? "Invalid Request Inputs" : "Server Error"
+        const message = err.data.message || "Server Error"
         notification.error({ message })
 
         onFinishHandler(false, err)
