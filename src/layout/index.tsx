@@ -111,10 +111,6 @@ const LayoutUI = () => {
       dispatch(toggleModal({ modal: "otp", status: true }))
       getUserInfo(dispatch, userDetails.userName, userDetails.token)
     } else {
-      const errorMessage = userDetails.data.message || ""
-      !notifcationModal &&
-        dispatch(updateNotifcationModal(openNotificationWithIcon))
-      openNotificationWithIcon("error", errorMessage)
       getUserInfo(dispatch)
     }
   }
