@@ -25,18 +25,18 @@
   box-shadow: 0px 5px 5px 1px rgba(82, 81, 81, 0.2);
 }
 
-.siteHeading{
+.siteHeading {
   text-align: center;
   font-size: 3rem;
   color: white;
   margin: 0
 }
 
-.pageName{
+.pageName {
   text-align: center;
   font-size: 3rem;
   color: var(--primary-color);
-  margin-top:110px
+  margin-top: 110px
 }
 
 .container {
@@ -57,59 +57,65 @@
   font-weight: bold;
 }
 
-@media only screen and (max-width: 1024px) {
-  .headingText{
+@media only screen and (max-width: 1100px) {
+  .headingText {
     width: 85%;
     min-height: 130px;
   }
 
-  .siteHeading{
+  .siteHeading {
     font-size: 2.3rem;
   }
-  .pageName{
+
+  .pageName {
     font-size: 2.3rem;
     margin-top: 100px;
   }
-  .detail{
+
+  .detail {
     font-size: 1.12rem;
   }
 }
 
 @media only screen and (max-width: 768px) {
-  .headingText{
+  .headingText {
     width: 85%;
     min-height: 110px;
     bottom: -55px;
   }
 
-  .siteHeading{
+  .siteHeading {
     font-size: 2rem;
   }
-  .pageName{
+
+  .pageName {
     font-size: 2rem;
     margin-top: 90px;
   }
-  .detail{
+
+  .detail {
     font-size: 1.1rem;
   }
 }
 
 @media only screen and (max-width: 600px) {
 
-  .headingText{
+  .headingText {
     width: 90%;
     min-height: 100px;
     bottom: -50px;
   }
 
-  .siteHeading{
+  .siteHeading {
     font-size: 1.5rem;
   }
-  .pageName{
+
+  .pageName {
     font-size: 1.5rem;
     margin-top: 80px;
   }
-  .detail{
+
+  .detail {
     font-size: 1rem;
   }
 
@@ -117,22 +123,25 @@
 
 @media only screen and (max-width: 400px) {
 
-  .headingText{
+  .headingText {
     width: 90%;
     min-height: 60px;
     bottom: -30px;
   }
 
-  .siteHeading{
+  .siteHeading {
     font-size: 1.2rem;
   }
-  .pageName{
+
+  .pageName {
     font-size: 1.2rem;
     margin-top: 55px;
   }
-  .detail{
+
+  .detail {
     font-size: .95rem;
   }
 
 }
+
 /*==================================================================================*/
