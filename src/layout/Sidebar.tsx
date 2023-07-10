@@ -3,7 +3,8 @@ import { Layout, Menu, Typography } from "antd"
 import type { MenuProps } from "antd"
 import { DatabaseOutlined, RightOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
-import { aboutUsIcon, hotelIcon, planeIcon } from "../assets/images"
+import { aboutUsIcon, hotelIcon, logoImage, planeIcon } from "../assets/images"
+import { useAppSelector } from "../redux/hooks"
 
 const { Sider } = Layout
 const { Text } = Typography
@@ -71,6 +72,9 @@ const menuItems = [
 
 const Sidebar = () => {
   const navigate = useNavigate()
+  const {showSidebar } = useAppSelector(
+    (state) => state.app
+  )
 
   const items: MenuProps["items"] = menuItems.map((item, index) => ({
     key: item.key,
@@ -82,25 +86,28 @@ const Sidebar = () => {
   }))
 
   return (
-    <Sider
-      className="sideBarContainer"
-      style={{
-        overflow: "auto",
-        height: "100vh",
-        position: "fixed",
-        left: 0,
-        top: 0,
-        bottom: 0,
-        background: "white"
-      }}
+    <div
+      className={!showSidebar ? "sideBarContainer" : "hideSidebar"}
     >
+      <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img
+            src={logoImage}
+            style={{ height: "90px", marginLeft: "1.3rem", marginTop: "1rem" }}
+          />
+        </div>
       <Menu
         mode="inline"
         items={items}
         activeKey="flights"
-        style={{ border: "none", marginTop: "110px" }}
+        style={{ border: "none", marginTop: "1rem" }}
       />
-    </Sider>
+    </div>
   )
 }
 

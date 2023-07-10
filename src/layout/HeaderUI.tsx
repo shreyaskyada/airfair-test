@@ -1,8 +1,10 @@
 import React, { useEffect } from "react"
 import { Button, Layout } from "antd"
+import {MenuFoldOutlined } from "@ant-design/icons"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import {
   toggleModal,
+  toggleSidebar,
   updateIsLoggedIn,
   updateUserDetails
 } from "../redux/slices/app"
@@ -15,7 +17,7 @@ const { Header } = Layout
 
 const HeaderUI = () => {
   const dispatch = useAppDispatch()
-  const { notifcationModal, isLoggedIn: isLoggedInState } = useAppSelector(
+  const { notifcationModal, isLoggedIn: isLoggedInState,showSidebar } = useAppSelector(
     (state) => state.app
   )
 
@@ -110,7 +112,7 @@ const HeaderUI = () => {
         >
           <img
             src={logoImage}
-            style={{ height: "90px", marginLeft: "1.3rem", marginTop: "1rem" }}
+            style={{ height: "52px",marginLeft:"1rem"}}
           />
         </div>
         <div className="buttonContainer">
@@ -145,6 +147,11 @@ const HeaderUI = () => {
               </button>
             </>
           )}
+          <div className="menuButton" onClick={()=>dispatch(toggleSidebar())}>
+
+          <MenuFoldOutlined />
+          </div>
+
         </div>
       </div>
     </div>

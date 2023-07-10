@@ -111,7 +111,9 @@ const Footer = () => {
           {popularFlightsData.map((flights) =>
             flights.destinationFlights.map((flight) => (
               <Col
-                xs={6}
+                 xs={24}
+                 sm={12}
+                 md={8}
                 onClick={() =>
                   getflightDetail(
                     flights.departureFlightCode,
