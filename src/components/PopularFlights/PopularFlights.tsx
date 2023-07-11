@@ -8,9 +8,9 @@ export const PopularFlights = () => {
     <div className="flightSection">
       <div className="flightContainer">
         <h1 className="flightHeading">Popular Flight Routes</h1>
-        <Row gutter={[12, 12]}>
+        <Row gutter={{lg:12, xs:8}}>
           {popularFlightsData.map((flight, index) => (
-            <Col md={8} sm={12} xs={24} key={index}>
+            <Col lg={8} md={12} sm={12} xs={24} key={index}>
               <PopularFlightItem
                 departureFlightCode={flight.departureFlightCode}
                 departureFlightImage={flight.departureFlightImage}

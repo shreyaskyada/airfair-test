@@ -30,8 +30,8 @@
 
 .imageContainer {
   border-radius: 100%;
-  width: 50px;
-  height: 50px;
+  max-width: 50px;
+  width: 100%;
   overflow: hidden;
   margin-right: 1rem;
 }
@@ -61,4 +61,33 @@
 .destinationFlightTitle:hover {
   cursor: pointer;
   color: var(--light-color);
+}
+
+@media only screen and (max-width:1050px){
+  .flightSection{
+    padding: .4rem;
+  }
+  .flightContainer{
+    padding: .8rem;
+  }
+}
+
+@media only screen and (max-width:768px){
+  .imageContainer {
+    max-width: 45px;
+    margin-right: .8rem;
+  }
+
+  .flightHeading{
+    font-size: 1.6rem;
+  }
+}
+
+@media only screen and (max-width:500px){
+  .imageContainer {
+    max-width: 40px;
+  }
+  .flightHeading{
+    font-size: 1.3rem;
+  }
 }
