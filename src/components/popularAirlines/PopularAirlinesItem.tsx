@@ -12,7 +12,7 @@ const PopularAirlinesItem: React.FC<PopularAirlinesItemProps> = ({
   return (
     <div className="itemContainer">
       <div className="airlineImgContainer">
-        <img src={image} alt={name} />
+        <img src={image} alt={name} className="airlineImage"/>
       </div>
       <p className="airlineTitle">{name}</p>
     </div>
