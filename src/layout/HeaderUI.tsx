@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
-import { Button, Layout } from "antd"
-import { MenuFoldOutlined } from "@ant-design/icons"
+import { Button, Divider, Layout, Dropdown, Space, Avatar, Grid } from "antd"
+import type { MenuProps } from "antd"
+import { MenuFoldOutlined, DownOutlined } from "@ant-design/icons"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import {
   toggleModal,
@@ -14,9 +15,11 @@ import { logoImage } from "../assets/images"
 import "./layoutStyles.css"
 
 const { Header } = Layout
+const { useBreakpoint } = Grid
 
 const HeaderUI = () => {
   const dispatch = useAppDispatch()
+  const screens = useBreakpoint()
   const {
     notifcationModal,
     isLoggedIn: isLoggedInState,
@@ -82,6 +85,34 @@ const HeaderUI = () => {
       })
   }
 
+  const items: MenuProps["items"] = [
+    {
+      label: "Login",
+      key: "0",
+      onClick: () => openModal("login")
+    },
+    {
+      label: "Signup",
+      key: "1",
+      onClick: () => openModal("signup")
+    }
+  ]
+
+  const item2: MenuProps["items"] = [
+    {
+      label: "Profile",
+      key: "2",
+      onClick: () => openModal("profile")
+    },
+    {
+      label: "Logout",
+      key: "3",
+      onClick: () => logoutUserHandler()
+    }
+  ]
+
+  useEffect(() => {}, [isLoggedIn])
+
   return (
     <div
       style={{
@@ -115,7 +146,19 @@ const HeaderUI = () => {
           <img src={logoImage} style={{ height: "52px", marginLeft: "1rem" }} />
         </div>
         <div className="buttonContainer">
-          {!isLoggedInState ? (
+          {screens.xs ? (
+            <Dropdown
+              menu={!isLoggedIn ? { items } : { items: item2 }}
+              trigger={["click"]}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <Avatar />
+                  <DownOutlined style={{marginLeft:"-5px",color:"#013042"}}/>
+                </Space>
+              </a>
+            </Dropdown>
+          ) : !isLoggedInState ? (
             <>
               <button
                 onClick={() => openModal("login")}
@@ -146,8 +189,12 @@ const HeaderUI = () => {
               </button>
             </>
           )}
+          <Divider
+            type="vertical"
+            style={{ height: "32px", background: "#f1f3f6" }}
+          />
           <div className="menuButton" onClick={() => dispatch(toggleSidebar())}>
-            <MenuFoldOutlined />
+            <MenuFoldOutlined style={{ fontSize: 25, color: "#013042" }} />
           </div>
         </div>
       </div>

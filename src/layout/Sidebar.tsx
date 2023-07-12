@@ -87,7 +87,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={!showSidebar ? "sideBarContainer" : "hideSidebar"}
+      className={showSidebar ? "sideBarContainer" : "hideSidebar"}
     >
       <div
           style={{

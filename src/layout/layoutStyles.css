@@ -142,6 +142,11 @@
         margin-left: 0;
     }
 
+    .headerButtons{
+        width: 80px;
+        height: 35px;
+    }
+
     .sideBarContainer {
         background-color: white;
         overflow: auto;
