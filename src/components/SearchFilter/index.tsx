@@ -11,7 +11,9 @@ import {
   Typography,
   Space,
   Card,
-  Segmented
+  Segmented,
+  Row,
+  Col
 } from "antd"
 
 import { RangePickerProps } from "antd/es/date-picker"
@@ -342,29 +344,19 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                 >
                   Round trip
                 </Radio>
-                {/* <Radio value="multi-city">Multi city</Radio> */}
               </Radio.Group>
             </Form.Item>
           </div>
           <div
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
-              justifyContent: "center",
-              alignItems: "stretch",
-              //border: "1px solid #E7E7E7"
-            }}
             className="departCityForm"
           >
             <Card
-           
               style={{ borderRadius: "0px" ,background:"transparent"}}
-              bodyStyle={{ padding: 0, width: "250px", height: "100%" }}
+              bodyStyle={{ padding: 0 }}
               onClick={() => {
                 setShowInput((prevState) => ({ ...prevState, from: true }))
               }}
+              className="departCity"
             >
               <div
                 style={{
@@ -373,14 +365,14 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                   alignItems: "flex-start"
                 }}
               >
-                <div style={{ padding: "8px" }}>
-                  <label style={{ height: "50px",color:"#013042" }} className="formLable">From</label>
-                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }} ellipsis className="formTitle">
+                <div className="field">
+                  <label className="fieldLabel">From</label>
+                  <h1 className="fieldTitle">
                     {inputValues.from.city}
-                  </Title>
-                  <Text style={{color:"#4E6F7B"}}>
+                  </h1>
+                  <p className="fieldSubTitle">
                     {inputValues.from.code}, {inputValues.from.name}
-                  </Text>
+                  </p>
                 </div>
                 <Form.Item
                   name="from"
@@ -417,7 +409,7 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
             <Card
             className="returnCity"
               style={{ borderRadius: "0px" }}
-              bodyStyle={{ padding: 0, width: "250px", height: "100%" }}
+              bodyStyle={{ padding: 0 }}
               onClick={() => {
                 setShowInput((prevState) => ({ ...prevState, to: true }))
               }}
@@ -429,14 +421,14 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                   alignItems: "flex-start"
                 }}
               >
-                <div style={{ padding: "8px" }}>
-                  <label style={{ height: "50px" ,color:"#013042"}}>To</label>
-                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }} ellipsis>
+                <div className="field">
+                  <label className="fieldLabel">To</label>
+                  <h1 className="fieldTitle">
                     {inputValues.to.city}
-                  </Title>
-                  <Text style={{color:"#4E6F7B"}}>
+                  </h1>
+                  <p className="fieldSubTitle">
                     {inputValues.to.code}, {inputValues.to.name}
-                  </Text>
+                  </p>
                 </div>
                 <Form.Item
                   name="to"
@@ -471,9 +463,9 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
               </div>
             </Card>
             <Card
-            className="departDate"
+              className="departDate"
               style={{ borderRadius: "0px" }}
-              bodyStyle={{ padding: "8px", width: "150px", maxWidth: "150px" }}
+              bodyStyle={{ padding: "8px"}}
               onClick={() => {
                 setShowInput((prevState) => ({
                   ...prevState,
@@ -488,8 +480,8 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                   alignItems: "flex-start"
                 }}
               >
-                <label style={{color:"#013042"}}>Departure</label>
-                <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
+                <label className="fieldLabel">Departure</label>
+                <h1 className="fieldTitle">
                   {inputValues &&
                     inputValues?.departure &&
                     inputValues.departure.format("DD")}{" "}
@@ -504,12 +496,12 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                       inputValues.departure.format("YY")
                     }`}</Text>
                   }
-                </Title>
-                <Text style={{color:"#4E6F7B"}}>
+                </h1>
+                <p className="fieldSubTitle">
                   {inputValues &&
                     inputValues?.departure &&
                     inputValues.departure.format("dddd")}
-                </Text>
+                </p>
                 <Form.Item
                   name="departure"
                   style={{
@@ -557,7 +549,7 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                 overflow: "hidden",
                 borderRadius: "0px",
               }}
-              bodyStyle={{ padding: "8px", width: "150px", maxWidth: "150px" }}
+              bodyStyle={{ padding: "8px" }}
               onClick={() => {
                 form.setFieldValue("type", "round-trip")
                 setInputValues((prevState: any) => ({
@@ -575,14 +567,14 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                   alignItems: "flex-start"
                 }}
               >
-                <label style={{color:"#013042"}}>Return</label>
+                <label className="fieldLabel">Return</label>
                 {inputValues.type === "one-way" ? (
                   <Text type="secondary">
                     Tap to add a return date for bigger discounts
                   </Text>
                 ) : (
                   <>
-                    <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
+                    <h1 className="fieldTitle">
                       {inputValues &&
                         inputValues?.return &&
                         inputValues.return.format("DD")}{" "}
@@ -597,12 +589,12 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                           inputValues.return.format("YY")
                         }`}</Text>
                       }
-                    </Title>
-                    <Text style={{color:"#4E6F7B"}}>
+                    </h1>
+                    <p className="fieldSubTitle">
                       {inputValues &&
                         inputValues?.return &&
                         inputValues.return.format("dddd")}
-                    </Text>
+                    </p>
                   </>
                 )}
                 <Form.Item
@@ -649,7 +641,7 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
             <Card
             className="traveller"
               style={{ borderRadius: "0px" }}
-              bodyStyle={{ padding: "8px", maxWidth: "150px" }}
+              bodyStyle={{ padding: "8px"}}
               onClick={() => {
                 setShowInput((prevState: any) => ({
                   ...prevState,
@@ -661,7 +653,7 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                 trigger="click"
                 placement="bottomRight"
                 arrow={false}
-                zIndex={!showInput.travellers ? -1 : 1}
+                zIndex={11000}
                 content={
                   <Space direction="vertical">
                     <Form.Item label="Adult" name="adult">
@@ -733,20 +725,20 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                     alignItems: "flex-start"
                   }}
                 >
-                  <label style={{color:"#013042"}}>Travellers & Class</label>
-                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
+                  <label className="fieldLabel">Travellers & Class</label>
+                  <h1 className="fieldTitle">
                     {inputValues.adult +
                       inputValues.child +
                       inputValues.infant +
                       " "}
                     <Text style={{color:"#013042"}}>Traveller</Text>
-                  </Title>
-                  <Text style={{color:"#4E6F7B"}}>
+                  </h1>
+                  <p className="fieldSubTitle">
                     {
                       seatTypes.find((type) => type.value === inputValues.class)
                         ?.label
                     }
-                  </Text>
+                  </p>
                 </div>
               </Popover>
             </Card>

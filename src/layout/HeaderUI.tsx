@@ -189,10 +189,10 @@ const HeaderUI = () => {
               </button>
             </>
           )}
-          <Divider
+          {screens.xs && <Divider
             type="vertical"
             style={{ height: "32px", background: "#f1f3f6" }}
-          />
+          />}
           <div className="menuButton" onClick={() => dispatch(toggleSidebar())}>
             <MenuFoldOutlined style={{ fontSize: 25, color: "#013042" }} />
           </div>
