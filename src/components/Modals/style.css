@@ -30,7 +30,7 @@
 }
 
 
-/*========================Profile========================*/
+/*=========================================================================*/
 
 .flightBottomDetailCard {
     background: #CAE4DB;
@@ -43,4 +43,47 @@
 
 .ant-tabs .ant-tabs-ink-bar {
     background-color: var(--primary-color);
+}
+
+/*================================Fligth Schedule=====================*/
+
+/* .flightScheduleDrawer{
+    margin-left: calc(200px + 5%);
+    width: calc(90% - 200px);
+    border-radius: 5px 5px 0 0;
+    padding:0;
+    background: white
+} */
+
+.flightSchedule{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+/*===================================================================*/
+
+@media only screen and (max-width:1040px){
+    .flightSchedule{
+        flex-direction: column;
+        gap: 1.5rem;
+
+    }
+}
+
+@media only screen and (max-width:768px){
+    .flightSchedule{
+        flex-direction: row;
+        gap: 0;
+
+    }
+}
+
+@media only screen and (max-width:375px){
+    .flightSchedule{
+        flex-direction: column;
+        gap: 1.5rem;
+
+    }
 }

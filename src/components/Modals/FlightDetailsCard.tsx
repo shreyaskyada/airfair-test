@@ -9,7 +9,8 @@ import {
   Tabs,
   Typography,
   Divider,
-  Popover
+  Popover,
+  Grid
 } from "antd"
 import * as _ from "lodash"
 import dayjs from "dayjs"
@@ -27,9 +28,11 @@ import { Airlines_Images } from "../../data/popularAirlines"
 
 const { Text, Title } = Typography
 const { Meta } = Card
+const {useBreakpoint} = Grid
 
 const FlightDetailCard = ({ onFinishHandler }: any) => {
   const dispatch = useAppDispatch()
+  const screen = useBreakpoint()
   const [authToken] = useLocalStorage("authToken", "")
 
   const [bestOffer, setBestOffer] = useState<any>(null)
@@ -463,11 +466,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           description={<Text style={{ color: "#4E6F7B" }}>{airLine}</Text>}
         />
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
-            columnGap: "15px"
-          }}
+          className="flightSchedule"
         >
           <Meta
             title={
@@ -901,13 +900,20 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           headerStyle={{
             display: "none"
           }}
-          style={{
+          style={
+            screen.md ? {
             marginLeft: "calc(200px + 5%)",
             width: "calc(90% - 200px)",
             borderRadius: "5px 5px 0 0",
             padding: "0",
             background: "white"
-          }}
+          }: {borderRadius: "5px 5px 0 0",
+          padding: "0",
+          background: "white",
+        width:"95%",
+        margin:"0 auto"
+        }}
+          className="flightScheduleDrawer"
           contentWrapperStyle={{
             boxShadow: "none"
           }}
