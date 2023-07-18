@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useMemo } from "react"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import {
   Flight,
   updateDepartFlights,
   updateReturnFlights
 } from "../redux/slices/flights"
+import { Typography, Tabs } from "antd"
+import type { TabsProps } from "antd"
 import { toggleModal, uploadIsLoading } from "../redux/slices/app"
 import SearchFilter from "../components/SearchFilter"
 import OriginFlight from "../components/FlightsCard/OriginFlight"
 import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
 import FlightDetailsCard from "../components/Modals/FlightDetailsCard"
+
+const { Text } = Typography
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -139,33 +143,96 @@ const FlightsListingPage = () => {
     }, 500)
   }
 
-  return (
-    <div
-      className="fligtListingSection"
-    >
-      <div className="flightSearch">
+  const TabComponent = () => {
+    return (
+      <Tabs
+        tabBarStyle={{ color: "#013042" }}
+        items={[
+          {
+            key: "1",
+            label: (
+              <Text style={{ fontSize: "1rem", color: "#013042" }}>
+                Departure Flights
+              </Text>
+            ),
+            children: (
+              <div>
+                <OriginFlight
+                  type="depart"
+                  selectedKey={selectedFlight["depart"]}
+                  onSelectedFlightChange={onSelectedFlightChange}
+                />
+              </div>
+            )
+          },
+          {
+            key: "2",
+            label: (
+              <Text style={{ fontSize: "1rem", color: "#013042" }}>
+                Return Flights
+              </Text>
+            ),
+            children: (
+              <div>
+                <DestinationFlight
+                  type="return"
+                  selectedKey={selectedFlight["return"]}
+                  onSelectedFlightChange={onSelectedFlightChange}
+                />
+              </div>
+            )
+          }
+        ]}
+      />
+    )
+  }
 
-      <SearchFilter redirectRoute="" />
+  const [currentTab, setCurrentTab] = useState("depart")
+
+  return (
+    <div className="fligtListingSection">
+      <div className="flightSearch">
+        <SearchFilter redirectRoute="" />
       </div>
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
-        <div
-          className="flightListContainer"
-        >
-          <div>
-            <OriginFlight
-              type="depart"
-              selectedKey={selectedFlight["depart"]}
-              onSelectedFlightChange={onSelectedFlightChange}
-            />
+        <>
+          <div className="flightListContainer">
+            {/* <button onClick={()=>setCurrentTab("depart")}>Depart</button>
+              <button onClick={()=>setCurrentTab("return")}>Return</button>
+               */}
+            <div>
+              <OriginFlight
+                type="depart"
+                selectedKey={selectedFlight["depart"]}
+                onSelectedFlightChange={onSelectedFlightChange}
+              />
+            </div>
+
+            <div>
+              <DestinationFlight
+                type="return"
+                selectedKey={selectedFlight["return"]}
+                onSelectedFlightChange={onSelectedFlightChange}
+              />
+            </div>
           </div>
-          <div>
-            <DestinationFlight
-              type="return"
-              selectedKey={selectedFlight["return"]}
-              onSelectedFlightChange={onSelectedFlightChange}
-            />
+          <div className="flightListContainer bigScreen">
+            <div>
+              <OriginFlight
+                type="depart"
+                selectedKey={selectedFlight["depart"]}
+                onSelectedFlightChange={onSelectedFlightChange}
+              />
+            </div>
+            <div>
+              <DestinationFlight
+                type="return"
+                selectedKey={selectedFlight["return"]}
+                onSelectedFlightChange={onSelectedFlightChange}
+              />
+            </div>
           </div>
-        </div>
+        </>
       ) : (
         <div>
           <OriginFlight
@@ -175,7 +242,7 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      <div
+      {/* <div
         style={{
           position: "sticky",
           bottom: 0,
@@ -185,7 +252,7 @@ const FlightsListingPage = () => {
         }}
       >
         {<FlightDetailsCard />}
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -1,8 +1,156 @@
- input[type='radio'] {
-     accent-color: var(--light-color);
- }
+.flightListContainer.smallScreen{
+    display: none;
+}
 
- input[type='radio']:hover {
-     accent-color: var(--primary-color);
-     cursor: pointer;
- }
+.cardContainer {
+    display: flex;
+    gap: .5rem;
+    height: 140px;
+}
+
+.radioButtonContainer {
+    display: flex;
+    align-items: center;
+    margin-left: -.8rem;
+}
+
+.radioButton {
+    height: 20px;
+    width: 20px;
+}
+
+input[type='radio'] {
+    accent-color: var(--light-color);
+}
+
+input[type='radio']:hover {
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.flightInfoSection {
+    width: 75%;
+    border-right: 1px solid #F0F0F0;
+    padding-right: .5rem;
+}
+
+.flightDetailSection {
+    width: 100%;
+}
+
+.flightImageSection {
+    width: 48px;
+    height: 48px;
+}
+
+.nameTime {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flightNamesSection {
+    display: flex;
+    gap: .4rem;
+    width: 100%;
+}
+
+.flightName, .flightTime, .flightCompany, .flightScheduled, .regularTitle {
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1rem;
+}
+
+.flightRoute, .flightAgent, .regularPrice {
+    color: var(--light-color);
+}
+
+
+.flightCompanySection {
+    margin-top: .5rem;
+}
+
+.flightCompanyInfo {
+    display: flex;
+}
+
+.flightPartener {
+    display: flex;
+    gap: .5rem;
+}
+
+.flightPrice {
+    width: 25%;
+    display: flex;
+    align-items: center;
+}
+
+
+
+@media only screen and (max-width: 1040px) {
+    .flightInfoSection, .flightPrice {
+        width: 100%;
+    }
+
+    .flightInfoSection {
+        border-right: none;
+        padding-left: 0;
+        border-bottom: 1px solid #F0F0F0;
+        padding-bottom: .5rem;
+    }
+
+    .cardContainer {
+        flex-direction: column;
+        height: 230px;
+    }
+
+    .flightImageSection {
+        margin-top: .8rem;
+        width: 50px;
+    }
+
+    .fareSection {
+        display: flex;
+        gap: .5rem;
+        align-items: flex-end;
+    }
+
+    .radioButtonContainer {
+        margin-left: -0.4rem;
+    }
+}
+
+@media only screen and (max-width: 530px) {
+    .flightName, .flightTime, .flightCompany, .flightScheduled, .regularTitle {
+        font-weight: 500;
+        color: var(--primary-color);
+        font-size: .9rem;
+    }
+}
+
+@media only screen and (max-width: 530px) {
+
+    .nameTime {
+        flex-direction: column;
+    }
+
+    .cardContainer {
+        height: 250px;
+    }
+
+    .flightImageSection {
+        width: 30px;
+        height: 28px;
+    }
+}
+
+@media only screen and (max-width: 460px) {
+
+    .flightListContainer.smallScreen{
+        display: block;
+    }
+    .flightListContainer.bigScreen{
+        display: none;
+    }
+
+   
+}
