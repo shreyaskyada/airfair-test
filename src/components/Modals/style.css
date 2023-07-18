@@ -47,14 +47,6 @@
 
 /*================================Fligth Schedule=====================*/
 
-/* .flightScheduleDrawer{
-    margin-left: calc(200px + 5%);
-    width: calc(90% - 200px);
-    border-radius: 5px 5px 0 0;
-    padding:0;
-    background: white
-} */
-
 .flightSchedule{
     display: flex;
     align-items: center;
@@ -80,7 +72,7 @@
     }
 }
 
-@media only screen and (max-width:375px){
+@media only screen and (max-width:460px){
     .flightSchedule{
         flex-direction: column;
         gap: 1.5rem;

@@ -141,37 +141,29 @@ const FlightsListingPage = () => {
 
   return (
     <div
-      style={{
-        margin: "0 2rem",
-        position:"relative"
-      }}
+      className="fligtListingSection"
     >
+      <div className="flightSearch">
+
       <SearchFilter redirectRoute="" />
+      </div>
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
         <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            columnGap: "25px"
-          }}
+          className="flightListContainer"
         >
           <div>
-            <div>
-              <OriginFlight
-                type="depart"
-                selectedKey={selectedFlight["depart"]}
-                onSelectedFlightChange={onSelectedFlightChange}
-              />
-            </div>
+            <OriginFlight
+              type="depart"
+              selectedKey={selectedFlight["depart"]}
+              onSelectedFlightChange={onSelectedFlightChange}
+            />
           </div>
           <div>
-            <div>
-              <DestinationFlight
-                type="return"
-                selectedKey={selectedFlight["return"]}
-                onSelectedFlightChange={onSelectedFlightChange}
-              />
-            </div>
+            <DestinationFlight
+              type="return"
+              selectedKey={selectedFlight["return"]}
+              onSelectedFlightChange={onSelectedFlightChange}
+            />
           </div>
         </div>
       ) : (
@@ -183,8 +175,16 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      <div style={{position:"sticky",bottom:0,background:"white",maxWidth:"90%",margin:"0 auto"}}>
-        {<FlightDetailsCard/>}
+      <div
+        style={{
+          position: "sticky",
+          bottom: 0,
+          background: "white",
+          maxWidth: "90%",
+          margin: "0 auto"
+        }}
+      >
+        {<FlightDetailsCard />}
       </div>
     </div>
   )
