@@ -68,14 +68,11 @@ const DataCard = (props: Props) => {
 
   return (
     // <Space style={{ width: "100%", marginBottom: "20px",padding:0 }} direction="vertical">
-    <Card
+    <div
       style={{
-        width: "100%",
-        boxShadow: "0px 4px 4px 0px rgba(17, 17, 17, 0.1)",
-        cursor: "pointer",
-        borderRadius: "5px",
-        marginBottom: "1.5rem"
+       
       }}
+      className="detailCard"
     >
       <div className="cardContainer">
         <div className="radioButtonContainer">
@@ -395,7 +392,7 @@ const DataCard = (props: Props) => {
               </div>
             </div>
         </div> */}
-    </Card>
+    </div>
     // </Space>
   )
 }

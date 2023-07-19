@@ -1,17 +1,31 @@
-.flightListContainer.smallScreen{
+.flightListContainer.smallScreen {
     display: none;
+}
+
+.detailCard {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    background: white;
+    padding: 1.5rem;
+    height: 160px;
+    box-shadow: 0px 4px 4px 0px rgba(17, 17, 17, 0.1);
 }
 
 .cardContainer {
     display: flex;
     gap: .5rem;
-    height: 140px;
+    width: 100%;
+    height: 100%;
 }
 
 .radioButtonContainer {
     display: flex;
     align-items: center;
-    margin-left: -.8rem;
 }
 
 .radioButton {
@@ -85,7 +99,6 @@ input[type='radio']:hover {
 }
 
 
-
 @media only screen and (max-width: 1040px) {
     .flightInfoSection, .flightPrice {
         width: 100%;
@@ -98,13 +111,15 @@ input[type='radio']:hover {
         padding-bottom: .5rem;
     }
 
-    .cardContainer {
-        flex-direction: column;
+    .detailCard {
         height: 230px;
     }
 
+    .cardContainer {
+        flex-direction: column;
+    }
+
     .flightImageSection {
-        margin-top: .8rem;
         width: 50px;
     }
 
@@ -113,11 +128,8 @@ input[type='radio']:hover {
         gap: .5rem;
         align-items: flex-end;
     }
-
-    .radioButtonContainer {
-        margin-left: -0.4rem;
-    }
 }
+
 
 @media only screen and (max-width: 530px) {
     .flightName, .flightTime, .flightCompany, .flightScheduled, .regularTitle {
@@ -125,9 +137,10 @@ input[type='radio']:hover {
         color: var(--primary-color);
         font-size: .9rem;
     }
-}
 
-@media only screen and (max-width: 530px) {
+    .radioButtonContainer {
+        margin-top: 1.2rem;
+    }
 
     .nameTime {
         flex-direction: column;
@@ -144,13 +157,17 @@ input[type='radio']:hover {
 }
 
 @media only screen and (max-width: 460px) {
-
-    .flightListContainer.smallScreen{
-        display: block;
-    }
-    .flightListContainer.bigScreen{
-        display: none;
+    .flightNamesSection {
+        flex-direction: column;
     }
 
-   
+    .detailCard {
+        height: 290px;
+        padding: .5rem;
+    }
+
+    .radioButtonContainer {
+        margin-top: 0;
+        margin-bottom: .5rem;
+    }
 }
