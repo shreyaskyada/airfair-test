@@ -14,6 +14,14 @@
   column-gap: 1.2rem;
 }
 
+.detailCardContainer {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  max-width: 90%;
+  margin: 0 auto
+}
+
 /*================================================================================*/
 
 /*=================================ABOUT_US=======================================*/
@@ -191,6 +199,12 @@
 
 }
 
+@media only screen and (max-width: 390px) {
+  .detailCardContainer{
+    max-width: 97%;
+  }
+
+}
 
 @media only screen and (max-width: 385px) {
   .flightListContainer {
@@ -206,6 +220,10 @@
   .flightSearch {
     position: relative;
     right: -3%;
+  }
+  .detailCardContainer{
+    max-width: 100%;
+    min-width: 350px;
   }
 }
 

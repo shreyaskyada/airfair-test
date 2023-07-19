@@ -48,6 +48,13 @@ input[type='radio']:hover {
     padding-right: .5rem;
 }
 
+.tagContainer {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
 .flightDetailSection {
     width: 100%;
 }

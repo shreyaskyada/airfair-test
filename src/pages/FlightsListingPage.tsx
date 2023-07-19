@@ -11,6 +11,7 @@ import SearchFilter from "../components/SearchFilter"
 import OriginFlight from "../components/FlightsCard/OriginFlight"
 import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
+import FlightDetailCard from "../components/Modals/FlightDetailsCard"
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -170,17 +171,11 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      {/* <div
-        style={{
-          position: "sticky",
-          bottom: 0,
-          background: "white",
-          maxWidth: "90%",
-          margin: "0 auto"
-        }}
+      <div
+        className="detailCardContainer"
       >
-        {<FlightDetailsCard />}
-      </div> */}
+        {<FlightDetailCard />}
+      </div>
     </div>
   )
 }

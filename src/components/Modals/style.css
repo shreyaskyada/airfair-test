@@ -41,41 +41,129 @@
     border-radius: 5px
 }
 
+.bottomCardContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem
+}
+
+.flightSummaryDetail {
+    display: flex;
+    flex-basis: 70%;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.fareDetail {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem
+}
+
+.fareHeading {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.cardButtons {
+    display: flex;
+    gap: .5rem
+}
+
 .ant-tabs .ant-tabs-ink-bar {
     background-color: var(--primary-color);
 }
 
+.summaryHeadings {
+    display: none;
+}
+
 /*================================Fligth Schedule=====================*/
 
-.flightSchedule{
+.flightSchedule {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
 }
 
+.bottomDrawer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
 /*===================================================================*/
 
-@media only screen and (max-width:1040px){
-    .flightSchedule{
+@media only screen and (max-width:1040px) {
+    .flightSchedule {
         flex-direction: column;
         gap: 1.5rem;
 
     }
 }
 
-@media only screen and (max-width:768px){
-    .flightSchedule{
+@media only screen and (max-width:930px) {
+    .bottomCardContent {
+        flex-direction: column;
+    }
+
+    .flightSummaryDetail {
+        flex-basis: 100%;
+        border-bottom: 1px solid #F0F0F0;
+    }
+
+    .fareDetail {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+}
+
+@media only screen and (max-width:768px) {
+    .flightSchedule {
         flex-direction: row;
         gap: 0;
 
     }
 }
 
-@media only screen and (max-width:460px){
-    .flightSchedule{
+@media only screen and (max-width:730px) {
+    .flightSchedule {
         flex-direction: column;
         gap: 1.5rem;
 
+    }
+}
+
+@media only screen and (max-width:460px) {
+    .flightSchedule {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .cardButtons {
+        flex-direction: column;
+    }
+
+    .fareHeading {
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (max-width:410px) {
+    .summaryHeadings {
+        display: block;
+        font-weight: bold;
+        font-size: 1rem;
+        color: var(--primary-color);
+        margin-bottom: .8rem;
+    }
+
+    .bottomDrawer {
+        grid-template-columns: repeat(1, 1fr);
+        row-gap: 2rem;
     }
 }
