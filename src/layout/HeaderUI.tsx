@@ -148,7 +148,7 @@ const HeaderUI = () => {
         <div className="buttonContainer">
           {screens.xs ? (
             <Dropdown
-              menu={!isLoggedIn ? { items } : { items: item2 }}
+              menu={!isLoggedInState ? { items } : { items: item2 }}
               trigger={["click"]}
             >
               <a onClick={(e) => e.preventDefault()}>
