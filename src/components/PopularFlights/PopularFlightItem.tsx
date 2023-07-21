@@ -15,6 +15,7 @@ import {
 import backendService from "../../services/api"
 import { AIRPORT_DATA } from "../../data/popularFlights"
 import { updateInitialValues } from "../../redux/slices/searchFlights"
+import { notification } from "../Notification/customNotification"
 
 interface DestinationFlight {
   flightTitle: string
@@ -102,6 +103,7 @@ const PopularFlightItem: React.FC<PopularFlightItemProps> = ({
       .catch((error) => {
         dispatch(uploadIsLoading(false))
         console.error(error)
+        notification.warning({message:"No flights Found, Please try again"})
       })
   }
 

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { toggleModal, updateUserDetails } from "../../redux/slices/app"
 import { getBankDetails, getBankName } from "../../services/airports"
 import useLocalStorage from "../../hooks/LocalStorage"
+import { notification } from "../Notification/customNotification"
 import { loginBanner } from "../../assets/images"
 import "./style.css"
 
@@ -165,13 +166,12 @@ const ProfileCard = ({ onFinishHandler }: any) => {
         const userDetail = await getUserProfileDetails()
         dispatch(updateUserDetails(userDetail))
 
-        notifcationModal &&
-          notifcationModal("success", "User profile updated successfully")
+        notification.success({message:"User profile updated successfully"})
         dispatch(toggleModal({ modal: "profile", status: false }))
       })
       .catch((err) => {
         const errorMessage = err.data.message || ""
-        notifcationModal && notifcationModal("error", errorMessage)
+        notification.error({message:errorMessage})
         // onFinishHandler(false, err);
       })
   }

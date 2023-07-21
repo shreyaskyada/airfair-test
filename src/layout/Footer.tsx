@@ -24,6 +24,7 @@ import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import { AIRPORT_DATA } from "../data/popularFlights"
 import "./layoutStyles.css"
 import { updateInitialValues } from "../redux/slices/searchFlights"
+import { notification } from "../components/Notification/customNotification"
 
 const { Title, Text } = Typography
 const { Footer: FooterLayout } = Layout
@@ -98,6 +99,7 @@ const Footer = () => {
       .catch((error) => {
         dispatch(uploadIsLoading(false))
         console.error(error)
+        notification.warning({message:"No flights Found, Please try again"})
       })
   }
   return (

@@ -5,13 +5,13 @@ import {
   updateDepartFlights,
   updateReturnFlights
 } from "../redux/slices/flights"
-import { Typography } from "antd"
 import { toggleModal, uploadIsLoading } from "../redux/slices/app"
 import SearchFilter from "../components/SearchFilter"
 import OriginFlight from "../components/FlightsCard/OriginFlight"
 import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
 import FlightDetailCard from "../components/Modals/FlightDetailsCard"
+import { noResult } from "../assets/images"
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -145,6 +145,19 @@ const FlightsListingPage = () => {
       <div className="flightSearch">
         <SearchFilter redirectRoute="" />
       </div>
+      {flights && Object.keys(flights).length <= 0 && (
+        <div className="notFoundContainer">
+          <img
+            style={{ width: "100px" }}
+            src={noResult}
+            alt="search-not-found-icon"
+          />
+          <h1 className="notFoundHeading">
+            No Flights Found Please Search Again!
+          </h1>
+        </div>
+      )}
+
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
         <div className="flightListContainer bigScreen">
           <div>
@@ -171,11 +184,9 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      <div
-        className="detailCardContainer"
-      >
-        {<FlightDetailCard />}
-      </div>
+      {flights && Object.keys(flights).length > 0 && (
+        <div className="detailCardContainer">{<FlightDetailCard />}</div>
+      )}
     </div>
   )
 }
