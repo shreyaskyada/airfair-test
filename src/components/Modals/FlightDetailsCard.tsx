@@ -94,12 +94,17 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         }))
 
         const res1: any = await getBestOffer(payload[0], token)
+        if(res1){
 
-        setBestOffer(res1.bestOffer)
+          setBestOffer(res1.bestOffer)
+        }
 
         if (payload.length > 1) {
           const res2: any = await getBestOffer(payload[1], token)
-          setBestOffer2(res2.bestOffer)
+          if(res2){
+
+            setBestOffer2(res2.bestOffer)
+          }
         }
       } catch (error) {
         console.log(error)

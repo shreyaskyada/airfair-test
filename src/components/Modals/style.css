@@ -1,4 +1,25 @@
 /*========================Profile========================*/
+.profileModalContent {
+    padding: 40px 10px 0px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formListItem {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr .2fr;
+    gap: .5rem;
+    margin: 1rem 0;
+}
+
+.removeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .customDropdown {
     max-height: 200px;
     overflow-y: auto;
@@ -120,6 +141,48 @@
         justify-content: space-between;
         align-items: flex-end;
     }
+
+    .formListItem {
+        grid-template-columns: 1fr 1fr .1fr;
+        grid-template-rows: 2;
+        margin: 1.4rem 0;
+
+    }
+
+    .bankName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 1;
+        grid-row-end: 1;
+    }
+
+    .cardType {
+        grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 1;
+    }
+
+    .bankCardName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 2;
+        grid-row-end: 2;
+    }
+
+    .bankIssuerName {
+        grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        grid-row-end: 2;
+    }
+
+    .removeButton {
+        grid-column-start: 3;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
 }
 
 @media only screen and (max-width:768px) {
@@ -138,6 +201,14 @@
     }
 }
 
+@media only screen and (max-width:490px) {
+    .profileModalContent {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+}
+
 @media only screen and (max-width:460px) {
     .flightSchedule {
         flex-direction: column;
@@ -150,6 +221,49 @@
 
     .fareHeading {
         font-size: 1rem;
+    }
+
+    .formListItem {
+        grid-template-columns: 2fr.1fr;
+        grid-template-rows: 4;
+        border: 1px solid #F0F0F0;
+        border-radius: 5px;
+        padding: .8rem .5rem;
+    }
+
+    .bankName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 1;
+        grid-row-end: 1;
+    }
+
+    .cardType {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 2;
+        grid-row-end: 2;
+    }
+
+    .bankCardName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 3;
+        grid-row-end: 3;
+    }
+
+    .bankIssuerName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 4;
+        grid-row-end: 4;
+    }
+
+    .removeButton {
+        grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 5;
     }
 }
 
