@@ -57,9 +57,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
       try {
         if (
           !provider.length ||
-          !searchFlightData ||
-          token === '""' ||
-          token === ""
+          !searchFlightData
         ) {
           throw new Error("invalid inputs")
         }
