@@ -42,6 +42,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   const { modal, flightDetails, userDetails } = useAppSelector(
     (state) => state.app
   )
+
   const { departFlight, returnFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
   )
@@ -94,15 +95,13 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         }))
 
         const res1: any = await getBestOffer(payload[0], token)
-        if(res1){
-
+        if (res1) {
           setBestOffer(res1.bestOffer)
         }
 
         if (payload.length > 1) {
           const res2: any = await getBestOffer(payload[1], token)
-          if(res2){
-
+          if (res2) {
             setBestOffer2(res2.bestOffer)
           }
         }
@@ -660,7 +659,13 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   }
 
   const flighInfoTabCardContainer = () => (
-    <div className="bottomDrawer">
+    <div
+      className={
+        searchFlightData && searchFlightData.flightType === "ONE_WAY"
+          ? "bottomDrawerSingleFlight"
+          : "bottomDrawer"
+      }
+    >
       <div>
         <p className="summaryHeadings">Departure Flights</p>
         {flightInfoCardCretor(departFlight)}

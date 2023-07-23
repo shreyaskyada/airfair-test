@@ -115,6 +115,12 @@
     gap: 1rem;
 }
 
+.bottomDrawerSingleFlight{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    row-gap: 1rem;
+}
+
 /*===================================================================*/
 
 @media only screen and (max-width:1040px) {
@@ -276,7 +282,7 @@
         margin-bottom: .8rem;
     }
 
-    .bottomDrawer {
+    .bottomDrawer,.bottomDrawerSingleFlight {
         grid-template-columns: repeat(1, 1fr);
         row-gap: 2rem;
     }

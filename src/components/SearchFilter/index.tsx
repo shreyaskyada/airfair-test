@@ -186,20 +186,21 @@ const SearchFilter = ({
           })
 
           dispatch(updateDestinationFlights(data))
-          dispatch(uploadIsLoading(false))
-
+          
           dispatch(updateDepartFlights(res.flightCompareResponse[0]))
-
+          
           isRoundTrip
-            ? dispatch(updateReturnFlights(data[0]))
-            : dispatch(updateReturnFlights({}))
-
+          ? dispatch(updateReturnFlights(data[0]))
+          : dispatch(updateReturnFlights({}))
+          
           dispatch(updateSaarchFlights(searchFlightData))
+          dispatch(uploadIsLoading(false))
 
           redirectRoute && navigate(redirectRoute)
         })
         .catch((err) => {
           console.error(err)
+          dispatch(uploadIsLoading(false))
           notification.warning({
             message: "No flights Found, Please try again"
           })
