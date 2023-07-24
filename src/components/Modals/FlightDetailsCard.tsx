@@ -55,10 +55,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
       setBestOffer(null)
       setBestOffer2(null)
       try {
-        if (
-          !provider.length ||
-          !searchFlightData
-        ) {
+        if (!provider.length || !searchFlightData) {
           throw new Error("invalid inputs")
         }
         const walletList = userDetails.walletList.map(
@@ -72,12 +69,34 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           ]
         }))
 
+        const departAirlinesCode =
+          departFlight &&
+          departFlight.flightCode
+            ?.split("->")
+            .map((item) => item.substring(0, 2))
+
+        const returnAirlinesCode =
+          departFlight &&
+          returnFlight.flightCode
+            ?.split("->")
+            .map((item) => item.substring(0, 2))
+
+        const departAirlineNames =
+          departAirlinesCode?.map((code) => airlineMapping[code]) || []
+        const returnAirlineNames =
+          returnAirlinesCode?.map((code) => airlineMapping[code]) || []
+
+        const airlineNames = _.uniq([
+          ...departAirlineNames,
+          ...returnAirlineNames
+        ])
+
         const doj = moment(searchFlightData.dateOfDep).valueOf()
         const dob = moment(dayjs().toString()).valueOf()
 
         const payload: any = provider.map((_provider: any) => ({
           provider: _provider.provider,
-          airlines: ["ALL"],
+          airlines: airlineNames.length ? airlineNames : ["ALL"],
           flightType: "DOMESTIC",
           journeyType: searchFlightData.flightType,
           dateOfJourney: doj / 1000,
@@ -299,8 +318,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                         bestOffer2.fare &&
                         bestOffer2.fare.totalFareAfterDiscount
                           ? bestOffer2.fare.totalFareAfterDiscount
-                          : provider.length > 1 &&
-                            provider[1].totalFare}
+                          : provider.length > 1 && provider[1].totalFare}
                         {provider.length > 1 && "-" + provider[1].provider}
                       </Link>
                     </Button>
@@ -336,7 +354,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                             </div>
                             <div>
                               <span style={{ color: "#4E6F7B" }}>
-                                Ticket price:
+                                Total Fare:
                               </span>
                               <span
                                 style={{
@@ -378,7 +396,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                             </div>
                             <div>
                               <span style={{ color: "#4E6F7B" }}>
-                                Total price after discount:{" "}
+                                Total fare after discount:{" "}
                               </span>
                               <b>
                                 <span
@@ -744,7 +762,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                       </span>
                     </div>
                     <div>
-                      <span style={{ color: "#4E6F7B" }}>Ticket price:</span>
+                      <span style={{ color: "#4E6F7B" }}>Total Fare:</span>
                       <span style={{ fontWeight: "bold", color: "#013042" }}>
                         {bestOffer.fare.totalFare}
                       </span>
@@ -766,7 +784,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                     </div>
                     <div>
                       <span style={{ color: "#4E6F7B" }}>
-                        Total price after discount:{" "}
+                        Total fare after discount:{" "}
                       </span>
                       <b>
                         <span style={{ fontWeight: "bold", color: "#013042" }}>
