@@ -79,8 +79,8 @@ export const getBankName = (bankName: string, bankType: string) => {
     .catch((err) => console.error(err))
 }
 
-export const getBestOffer = (data: object, token: string) => {
-  const config = getBestOfferConfig(data, token)
+export const getBestOffer = (data: object) => {
+  const config = getBestOfferConfig(data)
   return backendService
     .request(config)
     .then((res) => {

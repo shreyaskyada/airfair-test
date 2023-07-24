@@ -92,13 +92,13 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           }
         }))
 
-        const res1: any = await getBestOffer(payload[0], token)
+        const res1: any = await getBestOffer(payload[0])
         if (res1) {
           setBestOffer(res1.bestOffer)
         }
 
         if (payload.length > 1) {
-          const res2: any = await getBestOffer(payload[1], token)
+          const res2: any = await getBestOffer(payload[1])
           if (res2) {
             setBestOffer2(res2.bestOffer)
           }
@@ -300,9 +300,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                         bestOffer2.fare.totalFareAfterDiscount
                           ? bestOffer2.fare.totalFareAfterDiscount
                           : provider.length > 1 &&
-                            provider[1].totalFare + "-" + provider[1].provider}
-                        {!provider.length && item[1].fare?.totalFare + "-"}{" "}
-                        {!provider.length && item[0]}
+                            provider[1].totalFare}
+                        {provider.length > 1 && "-" + provider[1].provider}
                       </Link>
                     </Button>
                     <Popover
@@ -324,7 +323,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                             </div>
                             <div>
                               <span style={{ color: "#4E6F7B" }}>
-                                Totall Tax:
+                                Total Tax:
                               </span>
                               <span
                                 style={{
@@ -739,7 +738,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                       </span>
                     </div>
                     <div>
-                      <span style={{ color: "#4E6F7B" }}>Totall Tax:</span>
+                      <span style={{ color: "#4E6F7B" }}>Total Tax:</span>
                       <span style={{ fontWeight: "bold", color: "#013042" }}>
                         {provider.length && provider[0].tax}
                       </span>
