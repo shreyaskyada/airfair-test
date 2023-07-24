@@ -77,7 +77,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
         const payload: any = provider.map((_provider: any) => ({
           provider: _provider.provider,
-          airline: ["ALL"],
+          airlines: ["ALL"],
           flightType: "DOMESTIC",
           journeyType: searchFlightData.flightType,
           dateOfJourney: doj / 1000,
