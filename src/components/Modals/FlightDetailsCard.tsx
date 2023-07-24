@@ -75,9 +75,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             ?.split("->")
             .map((item) => item.substring(0, 2))
 
-        const returnAirlinesCode =
-          departFlight &&
-          returnFlight.flightCode
+        const returnAirlinesCode = returnFlight && returnFlight.flightCode
             ?.split("->")
             .map((item) => item.substring(0, 2))
 
@@ -129,7 +127,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
     const token = localStorage.getItem("authToken")
     getDiscount(token)
-  }, [provider, searchFlightData, userDetails])
+  }, [provider, searchFlightData, userDetails,departFlight,returnFlight])
 
   useEffect(() => {
     let providers: any = []
