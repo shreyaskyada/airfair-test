@@ -299,7 +299,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                   <div>
                     <Button
                       style={{
-                        color: "#4E6F7B"
+                        fontWeight: "bold",
+                        color: "#013042"
                       }}
                       ghost={true}
                       type="text"
@@ -307,7 +308,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                         // dispatch(updateFlightDetails(true));
                       }}
                     >
-                      <Link
+                      ₹<Link
                         to={provider.length > 1 && provider[1].url}
                         target="_blank"
                       >
@@ -729,7 +730,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               }}
             >
               <h4 className="fareHeading">
-                Final Fare: ₹
+                Cheapest Fare: ₹
                 <span>
                   {bestOffer &&
                   bestOffer.fare &&
@@ -743,7 +744,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               {provider.length && provider[0].provider}
             </p>
 
-            <Popover
+             <Popover
               content={
                 bestOffer ? (
                   <>
@@ -817,7 +818,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             </Popover>
             <Text
               type="secondary"
-              style={{ color: "#4E6F7B", marginLeft: ".4rem" }}
+              style={{ fontWeight: "bold",color: "#013042", marginLeft: ".4rem" }}
             >
               Fare Details
             </Text>
