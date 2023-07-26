@@ -22,17 +22,18 @@ const Homepage = () => {
 
       <div className="homepageContent">
         <div className="introSection">
-          <Title
-            level={4}
+          <h3
             style={{
               textAlign: "center",
               margin: "3rem .6rem 0 .6rem",
-              color: "#013042"
+              color: "#013042",
+              fontSize: "1.2rem"
             }}
+            className="introText"
           >
             Unlock Exclusive Flight Deals. Complete Your Profile for
             Personalized Travel Savings. Don't Miss Out{isLoggedIn ?  "!" : ","}{" "}
-            {!isLoggedIn && <Text
+            {!isLoggedIn && <p
               style={{
                 textDecoration: "underline",
                 fontSize: "1.2rem",
@@ -42,8 +43,8 @@ const Homepage = () => {
               onClick={() => openModal("signup")}
             >
               Sign Up Now!
-            </Text>}
-          </Title>
+            </p>}
+          </h3>
         </div>
         <PopularFlights />
         <PopularAirlines />

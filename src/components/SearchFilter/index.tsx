@@ -11,7 +11,9 @@ import {
   Typography,
   Space,
   Card,
-  Segmented
+  Segmented,
+  Row,
+  Col
 } from "antd"
 
 import { RangePickerProps } from "antd/es/date-picker"
@@ -43,6 +45,7 @@ import {
   updateToSearchValues
 } from "../../redux/slices/searchFlights"
 import "./searchFilterStyles.css"
+import { notification } from "../Notification/customNotification"
 
 const { TextArea } = Input
 const { Title, Text } = Typography
@@ -98,7 +101,13 @@ function compareArrays(array1: any, array2: any) {
   return true
 }
 
-const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,origin?:string }) => {
+const SearchFilter = ({
+  redirectRoute = "",
+  origin
+}: {
+  redirectRoute: string
+  origin?: string
+}) => {
   const navigate = useNavigate()
 
   const { userDetails } = useAppSelector((state) => state.app)
@@ -177,19 +186,25 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
           })
 
           dispatch(updateDestinationFlights(data))
-          dispatch(uploadIsLoading(false))
-
+          
           dispatch(updateDepartFlights(res.flightCompareResponse[0]))
-
+          
           isRoundTrip
-            ? dispatch(updateReturnFlights(data[0]))
-            : dispatch(updateReturnFlights({}))
-
+          ? dispatch(updateReturnFlights(data[0]))
+          : dispatch(updateReturnFlights({}))
+          
           dispatch(updateSaarchFlights(searchFlightData))
+          dispatch(uploadIsLoading(false))
 
           redirectRoute && navigate(redirectRoute)
         })
-        .catch((err) => console.error(err))
+        .catch((err) => {
+          console.error(err)
+          dispatch(uploadIsLoading(false))
+          notification.warning({
+            message: "No flights Found, Please try again"
+          })
+        })
     }
   }
 
@@ -298,433 +313,68 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
   }, [inputValues && inputValues.return])
 
   return (
-    <div className={origin === "home" ?"searchSection" : "searchSectionFlightPage"}>
-
     <div
-    className={origin === "home" ? "searchBarContainer" : "searchBarContainerFlightPage" }
+      className={
+        origin === "home" ? "searchSection" : "searchSectionFlightPage"
+      }
     >
-      <Form form={form} onFinish={onFinish} initialValues={_initialValues}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <div style={{alignSelf:"flex-start",margin:"1rem 0 0 0"}}>
-            <Form.Item name="type">
-              <Radio.Group>
-                <Radio
-                  value="one-way"
-                  onClick={() => {
-                    setInputValues((prevState: any) => ({
-                      ...prevState,
-                      type: "one-way"
-                    }))
-                    dispatch(updateFlightType("one-way"))
-                  }}
-                  style={{color:"#013042"}}
-                >
-                  One way
-                </Radio>
-                <Radio
-                  value="round-trip"
-                  onClick={() => {
-                    setInputValues((prevState: any) => ({
-                      ...prevState,
-                      type: "round-trip"
-                    }))
-                    dispatch(updateFlightType("one-way"))
-                  }}
-                  style={{color:"#013042"}}
-                >
-                  Round trip
-                </Radio>
-                {/* <Radio value="multi-city">Multi city</Radio> */}
-              </Radio.Group>
-            </Form.Item>
-          </div>
+      <div
+        className={
+          origin === "home"
+            ? "searchBarContainer"
+            : "searchBarContainerFlightPage"
+        }
+      >
+        <Form form={form} onFinish={onFinish} initialValues={_initialValues}>
           <div
             style={{
-              width: "100%",
               display: "flex",
-              flexDirection: "row",
-              flexWrap: "wrap",
+              flexDirection: "column",
               justifyContent: "center",
-              alignItems: "stretch",
-              //border: "1px solid #E7E7E7"
+              alignItems: "center",
+              width: "100%"
             }}
-            className="departCityForm"
           >
-            <Card
-           
-              style={{ borderRadius: "0px" ,background:"transparent"}}
-              bodyStyle={{ padding: 0, width: "250px", height: "100%" }}
-              onClick={() => {
-                setShowInput((prevState) => ({ ...prevState, from: true }))
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start"
+            <div style={{ alignSelf: "flex-start", margin: "1rem 0 0 0" }}>
+              <Form.Item name="type">
+                <Radio.Group>
+                  <Radio
+                    value="one-way"
+                    onClick={() => {
+                      setInputValues((prevState: any) => ({
+                        ...prevState,
+                        type: "one-way"
+                      }))
+                      dispatch(updateFlightType("one-way"))
+                    }}
+                    style={{ color: "#013042" }}
+                  >
+                    One way
+                  </Radio>
+                  <Radio
+                    value="round-trip"
+                    onClick={() => {
+                      setInputValues((prevState: any) => ({
+                        ...prevState,
+                        type: "round-trip"
+                      }))
+                      dispatch(updateFlightType("one-way"))
+                    }}
+                    style={{ color: "#013042" }}
+                  >
+                    Round trip
+                  </Radio>
+                </Radio.Group>
+              </Form.Item>
+            </div>
+            <div className="departCityForm">
+              <Card
+                style={{ borderRadius: "0px", background: "transparent" }}
+                bodyStyle={{ padding: 0 }}
+                onClick={() => {
+                  setShowInput((prevState) => ({ ...prevState, from: true }))
                 }}
-              >
-                <div style={{ padding: "8px" }}>
-                  <label style={{ height: "50px",color:"#013042" }} className="formLable">From</label>
-                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }} ellipsis className="formTitle">
-                    {inputValues.from.city}
-                  </Title>
-                  <Text style={{color:"#4E6F7B"}}>
-                    {inputValues.from.code}, {inputValues.from.name}
-                  </Text>
-                </div>
-                <Form.Item
-                  name="from"
-                  style={{
-                    margin: "0px",
-                    position: "absolute",
-                    top: "30px",
-                    width: "100%",
-                    zIndex: !showInput.from ? -1 : 1
-                  }}
-                >
-                  {showInput.from && (
-                    <AutoComplete
-                      autoFocus
-                      allowClear
-                      style={{ width: "100%", height: "calc(100% - 20px)" }}
-                      defaultValue=""
-                      placeholder="From field"
-                      onSearch={_.debounce(fromLocationSearchHandler, 500)}
-                      onSelect={fromLocationSearchHandler}
-                      options={fromOptions}
-                    >
-                      <TextArea
-                        onBlur={() => {
-                          textAreaClearHandler({ from: false })
-                        }}
-                        autoSize={{ minRows: 5, maxRows: 8 }}
-                      />
-                    </AutoComplete>
-                  )}
-                </Form.Item>
-              </div>
-            </Card>
-            <Card
-            className="returnCity"
-              style={{ borderRadius: "0px" }}
-              bodyStyle={{ padding: 0, width: "250px", height: "100%" }}
-              onClick={() => {
-                setShowInput((prevState) => ({ ...prevState, to: true }))
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start"
-                }}
-              >
-                <div style={{ padding: "8px" }}>
-                  <label style={{ height: "50px" ,color:"#013042"}}>To</label>
-                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }} ellipsis>
-                    {inputValues.to.city}
-                  </Title>
-                  <Text style={{color:"#4E6F7B"}}>
-                    {inputValues.to.code}, {inputValues.to.name}
-                  </Text>
-                </div>
-                <Form.Item
-                  name="to"
-                  style={{
-                    margin: "0px",
-                    position: "absolute",
-                    top: "30px",
-                    width: "100%",
-                    zIndex: !showInput.to ? -1 : 1
-                  }}
-                >
-                  {showInput.to && (
-                    <AutoComplete
-                      autoFocus
-                      allowClear
-                      style={{ width: "100%", height: "calc(100% - 20px)" }}
-                      defaultValue=""
-                      placeholder="To field"
-                      onSearch={_.debounce(toLocationSearchHandler, 500)}
-                      onSelect={toLocationSearchHandler}
-                      options={toOptions}
-                    >
-                      <TextArea
-                        onBlur={() => {
-                          textAreaClearHandler({ to: false })
-                        }}
-                        autoSize={{ minRows: 5, maxRows: 8 }}
-                      />
-                    </AutoComplete>
-                  )}
-                </Form.Item>
-              </div>
-            </Card>
-            <Card
-            className="departDate"
-              style={{ borderRadius: "0px" }}
-              bodyStyle={{ padding: "8px", width: "150px", maxWidth: "150px" }}
-              onClick={() => {
-                setShowInput((prevState) => ({
-                  ...prevState,
-                  departure: true
-                }))
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start"
-                }}
-              >
-                <label style={{color:"#013042"}}>Departure</label>
-                <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
-                  {inputValues &&
-                    inputValues?.departure &&
-                    inputValues.departure.format("DD")}{" "}
-                  {
-                    <Text style={{color:"#4E6F7B"}}>{`${
-                      inputValues &&
-                      inputValues?.departure &&
-                      inputValues.departure.format("MMM")
-                    }'${
-                      inputValues &&
-                      inputValues?.departure &&
-                      inputValues.departure.format("YY")
-                    }`}</Text>
-                  }
-                </Title>
-                <Text style={{color:"#4E6F7B"}}>
-                  {inputValues &&
-                    inputValues?.departure &&
-                    inputValues.departure.format("dddd")}
-                </Text>
-                <Form.Item
-                  name="departure"
-                  style={{
-                    margin: "0px",
-                    position: "absolute",
-                    top: "30px",
-                    left: "0px",
-                    width: "100%",
-                    zIndex: !showInput.departure ? -1 : 1
-                  }}
-                >
-                  {showInput.departure && (
-                    <DatePicker
-                      autoFocus
-                      open
-                      placeholder=""
-                      showTime={false}
-                      format="DD-MMM-YY"
-                      showToday={false}
-                      defaultValue={dayjs()}
-                      size="large"
-                      style={{ height: "78px", width: "100%" }}
-                      disabledDate={disabledDate}
-                      onChange={(value) => {
-                        setInputValues((prevState: any) => ({
-                          ...prevState,
-                          departure: value || dayjs()
-                        }))
-                        dispatch(updateDepartureDate(value || dayjs()))
-                      }}
-                      onBlur={() =>
-                        setShowInput((prevState) => ({
-                          ...prevState,
-                          departure: false
-                        }))
-                      }
-                    />
-                  )}
-                </Form.Item>
-              </div>
-            </Card>
-            <Card
-            className="returnDate"
-              style={{
-                overflow: "hidden",
-                borderRadius: "0px",
-              }}
-              bodyStyle={{ padding: "8px", width: "150px", maxWidth: "150px" }}
-              onClick={() => {
-                form.setFieldValue("type", "round-trip")
-                setInputValues((prevState: any) => ({
-                  ...prevState,
-                  type: "round-trip"
-                }))
-                setShowInput((prevState) => ({ ...prevState, return: true }))
-                dispatch(updateFlightType("round-trip"))
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start"
-                }}
-              >
-                <label style={{color:"#013042"}}>Return</label>
-                {inputValues.type === "one-way" ? (
-                  <Text type="secondary">
-                    Tap to add a return date for bigger discounts
-                  </Text>
-                ) : (
-                  <>
-                    <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
-                      {inputValues &&
-                        inputValues?.return &&
-                        inputValues.return.format("DD")}{" "}
-                      {
-                        <Text style={{color:"#4E6F7B"}}>{`${
-                          inputValues &&
-                          inputValues?.return &&
-                          inputValues.return.format("MMM")
-                        }'${
-                          inputValues &&
-                          inputValues?.return &&
-                          inputValues.return.format("YY")
-                        }`}</Text>
-                      }
-                    </Title>
-                    <Text style={{color:"#4E6F7B"}}>
-                      {inputValues &&
-                        inputValues?.return &&
-                        inputValues.return.format("dddd")}
-                    </Text>
-                  </>
-                )}
-                <Form.Item
-                  name="return"
-                  style={{
-                    margin: "0px",
-                    position: "absolute",
-                    top: "30px",
-                    left: "0px",
-                    width: "100%",
-                    zIndex: !showInput.return ? -1 : 1
-                  }}
-                >
-                  {showInput.return && (
-                    <DatePicker
-                      autoFocus
-                      open
-                      placeholder=""
-                      showTime={false}
-                      showToday={false}
-                      size="large"
-                      style={{ height: "78px", width: "100%" }}
-                      disabledDate={disabledDate}
-                      onChange={
-                        (value) =>
-                        {
-                          setInputValues((prevState: any) => ({
-                            ...prevState,
-                            return: value
-                          }))
-                        dispatch(updateReturnDate(value || dayjs()))
-                      }}
-                      onBlur={() =>
-                        setShowInput((prevState: any) => ({
-                          ...prevState,
-                          return: false
-                        }))
-                      }
-                    />
-                  )}
-                </Form.Item>
-              </div>
-            </Card>
-            <Card
-            className="traveller"
-              style={{ borderRadius: "0px" }}
-              bodyStyle={{ padding: "8px", maxWidth: "150px" }}
-              onClick={() => {
-                setShowInput((prevState: any) => ({
-                  ...prevState,
-                  travellers: true
-                }))
-              }}
-            >
-              <Popover
-                trigger="click"
-                placement="bottomRight"
-                arrow={false}
-                zIndex={!showInput.travellers ? -1 : 1}
-                content={
-                  <Space direction="vertical">
-                    <Form.Item label="Adult" name="adult">
-                      <Segmented
-                        options={[
-                          ...segmentAdultValues,
-                          { label: "9+", value: 10 }
-                        ]}
-                        onChange={(value) => {
-                          setInputValues((prevState: any) => ({
-                            ...prevState,
-                            adult: Number(value)
-                          }))
-                          dispatch(updateAdults(Number(value)))
-                        }}
-                      />
-                    </Form.Item>
-                    <Space>
-                      <Form.Item label="Child" name="child">
-                        <Segmented
-                          options={[
-                            ...segmentOtherValues,
-                            { label: "6+", value: 7 }
-                          ]}
-                          onChange={(value) => {
-                            setInputValues((prevState: any) => ({
-                              ...prevState,
-                              child: Number(value)
-                            }))
-                            dispatch(updateChild(Number(value)))
-                          }}
-                        />
-                      </Form.Item>
-                      <Form.Item label="Infant" name="infant">
-                        <Segmented
-                          options={[
-                            ...segmentOtherValues,
-                            { label: "6+", value: 7 }
-                          ]}
-                          onChange={(value) => {
-                            setInputValues((prevState: any) => ({
-                              ...prevState,
-                              infant: Number(value)
-                            }))
-                            dispatch(updateInfant(Number(value)))
-                          }}
-                        />
-                      </Form.Item>
-                    </Space>
-                    <Form.Item label="Choose Travel Class" name="class">
-                      <Segmented
-                        options={seatTypes}
-                        onChange={(value) => {
-                          setInputValues((prevState: any) => ({
-                            ...prevState,
-                            class: value.toString()
-                          }))
-                          dispatch(updateClass(value.toString()))
-                        }}
-                      />
-                    </Form.Item>
-                  </Space>
-                }
+                className="departCity"
               >
                 <div
                   style={{
@@ -733,41 +383,397 @@ const SearchFilter = ({ redirectRoute = "",origin }: { redirectRoute: string,ori
                     alignItems: "flex-start"
                   }}
                 >
-                  <label style={{color:"#013042"}}>Travellers & Class</label>
-                  <Title style={{ padding: "0px", margin: "0px",color:"#013042" }}>
-                    {inputValues.adult +
-                      inputValues.child +
-                      inputValues.infant +
-                      " "}
-                    <Text style={{color:"#013042"}}>Traveller</Text>
-                  </Title>
-                  <Text style={{color:"#4E6F7B"}}>
-                    {
-                      seatTypes.find((type) => type.value === inputValues.class)
-                        ?.label
-                    }
-                  </Text>
+                  <div className="field">
+                    <label className="fieldLabel">From</label>
+                    <h1 className="fieldTitle">{inputValues.from.city}</h1>
+                    <p className="fieldSubTitle">
+                      {inputValues.from.code}, {inputValues.from.name}
+                    </p>
+                  </div>
+                  <Form.Item
+                    name="from"
+                    style={{
+                      margin: "0px",
+                      position: "absolute",
+                      top: "30px",
+                      width: "100%",
+                      zIndex: !showInput.from ? -1 : 1
+                    }}
+                  >
+                    {showInput.from && (
+                      <AutoComplete
+                        autoFocus
+                        allowClear
+                        style={{ width: "100%", height: "calc(100% - 20px)" }}
+                        defaultValue=""
+                        placeholder="From field"
+                        onSearch={_.debounce(fromLocationSearchHandler, 500)}
+                        onSelect={fromLocationSearchHandler}
+                        options={fromOptions}
+                      >
+                        <TextArea
+                          onBlur={() => {
+                            textAreaClearHandler({ from: false })
+                          }}
+                          autoSize={{ minRows: 5, maxRows: 8 }}
+                        />
+                      </AutoComplete>
+                    )}
+                  </Form.Item>
                 </div>
-              </Popover>
-            </Card>
+              </Card>
+              <Card
+                className="returnCity"
+                style={{ borderRadius: "0px" }}
+                bodyStyle={{ padding: 0 }}
+                onClick={() => {
+                  setShowInput((prevState) => ({ ...prevState, to: true }))
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start"
+                  }}
+                >
+                  <div className="field">
+                    <label className="fieldLabel">To</label>
+                    <h1 className="fieldTitle">{inputValues.to.city}</h1>
+                    <p className="fieldSubTitle">
+                      {inputValues.to.code}, {inputValues.to.name}
+                    </p>
+                  </div>
+                  <Form.Item
+                    name="to"
+                    style={{
+                      margin: "0px",
+                      position: "absolute",
+                      top: "30px",
+                      width: "100%",
+                      zIndex: !showInput.to ? -1 : 1
+                    }}
+                  >
+                    {showInput.to && (
+                      <AutoComplete
+                        autoFocus
+                        allowClear
+                        style={{ width: "100%", height: "calc(100% - 20px)" }}
+                        defaultValue=""
+                        placeholder="To field"
+                        onSearch={_.debounce(toLocationSearchHandler, 500)}
+                        onSelect={toLocationSearchHandler}
+                        options={toOptions}
+                      >
+                        <TextArea
+                          onBlur={() => {
+                            textAreaClearHandler({ to: false })
+                          }}
+                          autoSize={{ minRows: 5, maxRows: 8 }}
+                        />
+                      </AutoComplete>
+                    )}
+                  </Form.Item>
+                </div>
+              </Card>
+              <Card
+                className="departDate"
+                style={{ borderRadius: "0px" }}
+                bodyStyle={{ padding: "8px" }}
+                onClick={() => {
+                  setShowInput((prevState) => ({
+                    ...prevState,
+                    departure: true
+                  }))
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start"
+                  }}
+                >
+                  <label className="fieldLabel">Departure</label>
+                  <h1 className="fieldTitle">
+                    {inputValues &&
+                      inputValues?.departure &&
+                      inputValues.departure.format("DD")}{" "}
+                    {
+                      <Text style={{ color: "#4E6F7B" }}>{`${
+                        inputValues &&
+                        inputValues?.departure &&
+                        inputValues.departure.format("MMM")
+                      }'${
+                        inputValues &&
+                        inputValues?.departure &&
+                        inputValues.departure.format("YY")
+                      }`}</Text>
+                    }
+                  </h1>
+                  <p className="fieldSubTitle">
+                    {inputValues &&
+                      inputValues?.departure &&
+                      inputValues.departure.format("dddd")}
+                  </p>
+                  <Form.Item
+                    name="departure"
+                    style={{
+                      margin: "0px",
+                      position: "absolute",
+                      top: "30px",
+                      left: "0px",
+                      width: "100%",
+                      zIndex: !showInput.departure ? -1 : 1
+                    }}
+                  >
+                    {showInput.departure && (
+                      <DatePicker
+                        autoFocus
+                        open
+                        placeholder=""
+                        showTime={false}
+                        format="DD-MMM-YY"
+                        showToday={false}
+                        defaultValue={dayjs()}
+                        size="large"
+                        style={{ height: "78px", width: "100%" }}
+                        disabledDate={disabledDate}
+                        onChange={(value) => {
+                          setInputValues((prevState: any) => ({
+                            ...prevState,
+                            departure: value || dayjs()
+                          }))
+                          dispatch(updateDepartureDate(value || dayjs()))
+                        }}
+                        onBlur={() =>
+                          setShowInput((prevState) => ({
+                            ...prevState,
+                            departure: false
+                          }))
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                </div>
+              </Card>
+              <Card
+                className="returnDate"
+                style={{
+                  overflow: "hidden",
+                  borderRadius: "0px"
+                }}
+                bodyStyle={{ padding: "8px" }}
+                onClick={() => {
+                  form.setFieldValue("type", "round-trip")
+                  setInputValues((prevState: any) => ({
+                    ...prevState,
+                    type: "round-trip"
+                  }))
+                  setShowInput((prevState) => ({ ...prevState, return: true }))
+                  dispatch(updateFlightType("round-trip"))
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start"
+                  }}
+                >
+                  <label className="fieldLabel">Return</label>
+                  {inputValues.type === "one-way" ? (
+                    <Text type="secondary">
+                      Tap to add a return date for bigger discounts
+                    </Text>
+                  ) : (
+                    <>
+                      <h1 className="fieldTitle">
+                        {inputValues &&
+                          inputValues?.return &&
+                          inputValues.return.format("DD")}{" "}
+                        {
+                          <Text style={{ color: "#4E6F7B" }}>{`${
+                            inputValues &&
+                            inputValues?.return &&
+                            inputValues.return.format("MMM")
+                          }'${
+                            inputValues &&
+                            inputValues?.return &&
+                            inputValues.return.format("YY")
+                          }`}</Text>
+                        }
+                      </h1>
+                      <p className="fieldSubTitle">
+                        {inputValues &&
+                          inputValues?.return &&
+                          inputValues.return.format("dddd")}
+                      </p>
+                    </>
+                  )}
+                  <Form.Item
+                    name="return"
+                    style={{
+                      margin: "0px",
+                      position: "absolute",
+                      top: "30px",
+                      left: "0px",
+                      width: "100%",
+                      zIndex: !showInput.return ? -1 : 1
+                    }}
+                  >
+                    {showInput.return && (
+                      <DatePicker
+                        autoFocus
+                        open
+                        placeholder=""
+                        showTime={false}
+                        showToday={false}
+                        size="large"
+                        style={{ height: "78px", width: "100%" }}
+                        disabledDate={disabledDate}
+                        onChange={(value) => {
+                          setInputValues((prevState: any) => ({
+                            ...prevState,
+                            return: value
+                          }))
+                          dispatch(updateReturnDate(value || dayjs()))
+                        }}
+                        onBlur={() =>
+                          setShowInput((prevState: any) => ({
+                            ...prevState,
+                            return: false
+                          }))
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                </div>
+              </Card>
+              <Card
+                className="traveller"
+                style={{ borderRadius: "0px" }}
+                bodyStyle={{ padding: "8px" }}
+                onClick={() => {
+                  setShowInput((prevState: any) => ({
+                    ...prevState,
+                    travellers: true
+                  }))
+                }}
+              >
+                <Popover
+                  trigger="click"
+                  placement="bottomRight"
+                  arrow={false}
+                  zIndex={11000}
+                  content={
+                    <Space direction="vertical">
+                      <Form.Item label="Adult" name="adult">
+                        <Segmented
+                          options={[
+                            ...segmentAdultValues,
+                            { label: "9+", value: 10 }
+                          ]}
+                          onChange={(value) => {
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              adult: Number(value)
+                            }))
+                            dispatch(updateAdults(Number(value)))
+                          }}
+                        />
+                      </Form.Item>
+                      <Space>
+                        <Form.Item label="Child" name="child">
+                          <Segmented
+                            options={[
+                              ...segmentOtherValues,
+                              { label: "6+", value: 7 }
+                            ]}
+                            onChange={(value) => {
+                              setInputValues((prevState: any) => ({
+                                ...prevState,
+                                child: Number(value)
+                              }))
+                              dispatch(updateChild(Number(value)))
+                            }}
+                          />
+                        </Form.Item>
+                        <Form.Item label="Infant" name="infant">
+                          <Segmented
+                            options={[
+                              ...segmentOtherValues,
+                              { label: "6+", value: 7 }
+                            ]}
+                            onChange={(value) => {
+                              setInputValues((prevState: any) => ({
+                                ...prevState,
+                                infant: Number(value)
+                              }))
+                              dispatch(updateInfant(Number(value)))
+                            }}
+                          />
+                        </Form.Item>
+                      </Space>
+                      <Form.Item label="Choose Travel Class" name="class">
+                        <Segmented
+                          options={seatTypes}
+                          onChange={(value) => {
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              class: value.toString()
+                            }))
+                            dispatch(updateClass(value.toString()))
+                          }}
+                        />
+                      </Form.Item>
+                    </Space>
+                  }
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start"
+                    }}
+                  >
+                    <label className="fieldLabel">Travellers & Class</label>
+                    <h1 className="fieldTitle">
+                      {inputValues.adult +
+                        inputValues.child +
+                        inputValues.infant +
+                        " "}
+                      <Text style={{ color: "#013042" }}>Traveller</Text>
+                    </h1>
+                    <p className="fieldSubTitle">
+                      {
+                        seatTypes.find(
+                          (type) => type.value === inputValues.class
+                        )?.label
+                      }
+                    </p>
+                  </div>
+                </Popover>
+              </Card>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+                position: "relative",
+                top: "16px"
+              }}
+            >
+              <Form.Item style={{ margin: "0px" }}>
+                <button type="submit" className="searchButton">
+                  SEARCH
+                </button>
+              </Form.Item>
+            </div>
           </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-evenly",
-              position: "relative",
-              top: "16px"
-            }}
-          >
-            <Form.Item style={{ margin: "0px" }}>
-              <button type="submit" className="searchButton">SEARCH</button>
-            </Form.Item>
-          </div>
-        </div>
-      </Form>
+        </Form>
+      </div>
     </div>
-    </div>
-
   )
 }
 

@@ -23,6 +23,10 @@
     background-color: var(--secondary-color);
 }
 
+.menuButton {
+    display: none;
+}
+
 /*==============================================================*/
 
 
@@ -34,9 +38,25 @@
     background: var(--bg-light-color);
 }
 
-.sideBarContainer {
-    background-color: white;
+.siteLayout {
+    background: white;
+    margin-left: 200px;
+    margin-top: 72px
 }
+
+.sideBarContainer, .hideSidebar {
+    background-color: white;
+    overflow: auto;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 200px;
+    z-index: 1002;
+
+}
+
 
 /*============================FOOTER==================================*/
 .footerContainer {
@@ -48,6 +68,11 @@
     background: var(--primary-color);
     padding: 1.5rem;
     margin: 0 1.5rem;
+}
+
+
+.footerHeading {
+    color: white;
 }
 
 .flightLinks {
@@ -98,9 +123,70 @@
     background-color: #7B9D94;
 }
 
-.ant-menu-light .ant-menu-item-selected , .ant-menu-item .ant-menu-item-active{
+.ant-menu-light .ant-menu-item-selected, .ant-menu-item .ant-menu-item-active {
     background-color: #7B9D94;
     color: white;
 }
 
 /*=====================================================================================*/
+
+@media only screen and (max-width: 1100px) {
+    .footerSection {
+        margin: 0 1rem;
+        padding: 1.5rem 1rem;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .siteLayout {
+        margin-left: 0;
+    }
+
+    .headerButtons{
+        width: 80px;
+        height: 35px;
+    }
+
+    .sideBarContainer {
+        background-color: white;
+        overflow: auto;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 200px;
+        z-index: 10002;
+        box-shadow: 0px 1px 4px 1px rgba(163, 163, 163, 0.4);
+        transform: translateX(0);
+        transition: transform .4s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    .sideBarmask{
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(7, 7, 7, 0.5);
+        position: relative;
+        z-index: 1001;
+        
+    }
+
+    .hideSidebar {
+        transform: translateX(-100%);
+        transition: transform .4s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    .menuButton {
+        display: flex;
+    }
+
+    .flightLinks {
+        font-size: .9rem;
+    }
+
+    .footerSection {
+        margin: 0;
+        padding: 1.5rem 1rem;
+    }
+    
+}

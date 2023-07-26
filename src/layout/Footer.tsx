@@ -24,6 +24,7 @@ import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import { AIRPORT_DATA } from "../data/popularFlights"
 import "./layoutStyles.css"
 import { updateInitialValues } from "../redux/slices/searchFlights"
+import { notification } from "../components/Notification/customNotification"
 
 const { Title, Text } = Typography
 const { Footer: FooterLayout } = Layout
@@ -98,20 +99,24 @@ const Footer = () => {
       .catch((error) => {
         dispatch(uploadIsLoading(false))
         console.error(error)
+        notification.warning({message:"No flights Found, Please try again"})
       })
   }
   return (
     <div className="footerContainer">
       <div className="footerSection">
-        <Title level={3} style={{ color: "white" }}>
+        <h2 className="footerHeading" >
           Top Flights
-        </Title>
+        </h2>
         <Divider style={{ background: "white" }} />
         <Row gutter={[0, 6]}>
           {popularFlightsData.map((flights) =>
             flights.destinationFlights.map((flight) => (
               <Col
-                xs={6}
+                xs={24}
+                sm={12}
+                md={8}
+                xl={6}
                 onClick={() =>
                   getflightDetail(
                     flights.departureFlightCode,
@@ -120,7 +125,7 @@ const Footer = () => {
                 }
               >
                 <Text className="flightLinks">
-                  {flights.departureFlightTitle} To {flight.flightTitle}
+                  {flights.departureFlightTitle.split(" ")[0]} To {flight.flightTitle}
                 </Text>
               </Col>
             ))

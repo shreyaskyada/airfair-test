@@ -15,7 +15,7 @@ const Loader = () => {
         centered
         footer={null}
         closable={false}
-        zIndex={1001}
+        zIndex={2000}
         width={"auto"}
         maskClosable={false}
       >

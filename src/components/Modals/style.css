@@ -1,4 +1,25 @@
 /*========================Profile========================*/
+.profileModalContent {
+    padding: 40px 10px 0px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formListItem {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr .2fr;
+    gap: .5rem;
+    margin: 1rem 0;
+}
+
+.removeButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .customDropdown {
     max-height: 200px;
     overflow-y: auto;
@@ -30,7 +51,7 @@
 }
 
 
-/*========================Profile========================*/
+/*=========================================================================*/
 
 .flightBottomDetailCard {
     background: #CAE4DB;
@@ -41,6 +62,228 @@
     border-radius: 5px
 }
 
+.bottomCardContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1rem
+}
+
+.flightSummaryDetail {
+    display: flex;
+    flex-basis: 70%;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.fareDetail {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem
+}
+
+.fareHeading {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+.cardButtons {
+    display: flex;
+    gap: .5rem
+}
+
 .ant-tabs .ant-tabs-ink-bar {
     background-color: var(--primary-color);
+}
+
+.summaryHeadings {
+    display: none;
+}
+
+/*================================Fligth Schedule=====================*/
+
+.flightSchedule {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.bottomDrawer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.bottomDrawerSingleFlight{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    row-gap: 1rem;
+}
+
+/*===================================================================*/
+
+@media only screen and (max-width:1040px) {
+    .flightSchedule {
+        flex-direction: column;
+        gap: 1.5rem;
+
+    }
+}
+
+@media only screen and (max-width:930px) {
+    .bottomCardContent {
+        flex-direction: column;
+    }
+
+    .flightSummaryDetail {
+        flex-basis: 100%;
+        border-bottom: 1px solid #F0F0F0;
+    }
+
+    .fareDetail {
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .formListItem {
+        grid-template-columns: 1fr 1fr .1fr;
+        grid-template-rows: 2;
+        margin: 1.4rem 0;
+
+    }
+
+    .bankName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 1;
+        grid-row-end: 1;
+    }
+
+    .cardType {
+        grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 1;
+    }
+
+    .bankCardName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 2;
+        grid-row-end: 2;
+    }
+
+    .bankIssuerName {
+        grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        grid-row-end: 2;
+    }
+
+    .removeButton {
+        grid-column-start: 3;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
+}
+
+@media only screen and (max-width:768px) {
+    .flightSchedule {
+        flex-direction: row;
+        gap: 0;
+
+    }
+}
+
+@media only screen and (max-width:730px) {
+    .flightSchedule {
+        flex-direction: column;
+        gap: 1.5rem;
+
+    }
+}
+
+@media only screen and (max-width:490px) {
+    .profileModalContent {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+}
+
+@media only screen and (max-width:460px) {
+    .flightSchedule {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .cardButtons {
+        flex-direction: column;
+    }
+
+    .fareHeading {
+        font-size: 1rem;
+    }
+
+    .formListItem {
+        grid-template-columns: 2fr.1fr;
+        grid-template-rows: 4;
+        border: 1px solid #F0F0F0;
+        border-radius: 5px;
+        padding: .8rem .5rem;
+    }
+
+    .bankName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 1;
+        grid-row-end: 1;
+    }
+
+    .cardType {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 2;
+        grid-row-end: 2;
+    }
+
+    .bankCardName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 3;
+        grid-row-end: 3;
+    }
+
+    .bankIssuerName {
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 4;
+        grid-row-end: 4;
+    }
+
+    .removeButton {
+        grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 5;
+    }
+}
+
+@media only screen and (max-width:410px) {
+    .summaryHeadings {
+        display: block;
+        font-weight: bold;
+        font-size: 1rem;
+        color: var(--primary-color);
+        margin-bottom: .8rem;
+    }
+
+    .bottomDrawer,.bottomDrawerSingleFlight {
+        grid-template-columns: repeat(1, 1fr);
+        row-gap: 2rem;
+    }
 }

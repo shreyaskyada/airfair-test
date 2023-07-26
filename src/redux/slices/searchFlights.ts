@@ -21,7 +21,7 @@ const searchFlights: ISearchFlights = {
     to: { code: "BOM", city: "Mumbai", name: "C S M International Airport" },
     type: "one-way",
     departure: dayjs(),
-    return: dayjs(),
+    return: "",
     adult: 1,
     child: 0,
     infant: 0,

@@ -34,6 +34,7 @@ export interface AppState {
   };
   appName: string;
   userDetails: UserDetailsType;
+  showSidebar : boolean
 }
 
 export const initialState: AppState = {
@@ -59,6 +60,7 @@ export const initialState: AppState = {
     bankList: [],
     walletList: [],
   },
+  showSidebar:false
 };
 
 // const getUserProfile = createAsyncThunk(
@@ -94,6 +96,9 @@ const appSlice = createSlice({
     },
     updateUserDetails: (state, action: PayloadAction<UserDetailsType>) => {
       state.userDetails = { ...state.userDetails, ...action.payload };
+    },
+    toggleSidebar: (state) => {
+      state.showSidebar = !state.showSidebar
     },
     toggleModal: (
       state,
@@ -161,6 +166,7 @@ export const {
   toggleModal,
   updateNotifcationModal,
   updateIsLoggedIn,
+  toggleSidebar
 } = appSlice.actions;
 
 export default appSlice.reducer;

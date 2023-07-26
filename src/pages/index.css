@@ -2,6 +2,42 @@
   padding: .2rem .5rem;
 }
 
+/*================================Flight Listing=================================*/
+.fligtListingSection {
+  margin: 0 2rem;
+  position: relative
+}
+
+.flightListContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 1.2rem;
+}
+
+.detailCardContainer {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  max-width: 90%;
+  margin: 0 auto
+}
+
+.notFoundContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem;
+  gap: 1rem
+}
+
+.notFoundHeading {
+  text-align: center;
+  color: #013042;
+  font-size: 2rem;
+}
+
+/*================================================================================*/
+
 /*=================================ABOUT_US=======================================*/
 .aboutUsContainer {
   max-height: 500px;
@@ -25,6 +61,20 @@
   box-shadow: 0px 5px 5px 1px rgba(82, 81, 81, 0.2);
 }
 
+.siteHeading {
+  text-align: center;
+  font-size: 3rem;
+  color: white;
+  margin: 0
+}
+
+.pageName {
+  text-align: center;
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin-top: 110px
+}
+
 .container {
   max-width: 1000px;
   margin: 30px auto 50px auto;
@@ -41,6 +91,162 @@
 .highlight {
   color: #013042;
   font-weight: bold;
+}
+
+@media only screen and (max-width: 1100px) {
+  .headingText {
+    width: 85%;
+    min-height: 130px;
+  }
+
+  .siteHeading {
+    font-size: 2.3rem;
+  }
+
+  .pageName {
+    font-size: 2.3rem;
+    margin-top: 100px;
+  }
+
+  .detail {
+    font-size: 1.12rem;
+  }
+}
+
+@media only screen and (max-width: 860px) {
+  .fligtListingSection {
+    padding-top: 2rem;
+  }
+
+  .flightSearch {
+    margin-bottom: 2rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .fligtListingSection {
+    padding-top: 0;
+    margin: 0 1.5rem;
+  }
+
+  .headingText {
+    width: 85%;
+    min-height: 110px;
+    bottom: -55px;
+  }
+
+  .siteHeading {
+    font-size: 2rem;
+  }
+
+  .pageName {
+    font-size: 2rem;
+    margin-top: 90px;
+  }
+
+  .detail {
+    font-size: 1.1rem;
+  }
+}
+
+@media only screen and (max-width: 630px) {
+
+  .fligtListingSection {
+    padding-top: 2rem;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .headingText {
+    width: 90%;
+    min-height: 100px;
+    bottom: -50px;
+  }
+
+  .fligtListingSection {
+    margin: 0 1rem;
+  }
+
+  .siteHeading {
+    font-size: 1.5rem;
+  }
+
+  .pageName {
+    font-size: 1.5rem;
+    margin-top: 80px;
+  }
+
+  .detail {
+    font-size: 1rem;
+  }
+
+}
+
+@media only screen and (max-width: 460px) {
+  .fligtListingSection {
+    margin: 0 .5rem;
+  }
+
+}
+
+
+@media only screen and (max-width: 400px) {
+
+  .headingText {
+    width: 90%;
+    min-height: 60px;
+    bottom: -30px;
+  }
+
+  .siteHeading {
+    font-size: 1.2rem;
+  }
+
+  .pageName {
+    font-size: 1.2rem;
+    margin-top: 55px;
+  }
+
+  .detail {
+    font-size: .95rem;
+  }
+
+}
+
+@media only screen and (max-width: 390px) {
+  .detailCardContainer {
+    max-width: 97%;
+  }
+
+}
+
+@media only screen and (max-width: 385px) {
+  .flightListContainer {
+    column-gap: .5rem;
+  }
+
+  .fligtListingSection {
+    margin: 0;
+  }
+}
+
+@media only screen and (max-width: 345px) {
+  .flightSearch {
+    position: relative;
+    right: -3%;
+  }
+
+  .detailCardContainer {
+    max-width: 100%;
+    min-width: 350px;
+  }
+}
+
+@media only screen and (max-width: 330px) {
+  .flightSearch {
+    position: relative;
+    right: -5%;
+  }
 }
 
 /*==================================================================================*/

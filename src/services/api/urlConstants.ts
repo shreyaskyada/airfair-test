@@ -215,12 +215,12 @@ export const updateProfileConfig = (
   }
 }
 
-export const getBestOfferConfig = (data: object, token: string) => {
+export const getBestOfferConfig = (data: object) => {
   return {
     url: `offers/offer/getBestOffer`,
     method: "POST",
     baseURL: "http://gateway.mytripsaver.in",
     data: data,
-    headers: { token }
+    //headers: { token }
   }
 }

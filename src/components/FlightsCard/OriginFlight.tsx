@@ -1,5 +1,6 @@
 import DataCard from "../../widget/DataCard";
 import { useAppSelector } from "../../redux/hooks";
+import { useEffect, useState } from "react";
 
 const OriginFlight = (props:any) => {
 

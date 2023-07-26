@@ -14,32 +14,20 @@ function AboutUs() {
           style={{ width: "100%", height: "100%" }}
         />
         <div className="headingText">
-          <Title
-            style={{
-              textAlign: "center",
-              fontSize: "3rem",
-              color: "white",
-              margin: 0
-            }}
-            level={1}
+          <h1
+            className="siteHeading"
           >
             Welcome to MYTRIPSAVER
-          </Title>
+          </h1>
         </div>
       </div>
 
       <div className="container">
-        <Title
-          style={{
-            textAlign: "center",
-            marginTop: "110px",
-            fontSize: "3rem",
-            color: "#013042"
-          }}
-          level={1}
+        <h1
+          className="pageName"
         >
           About Us
-        </Title>
+        </h1>
 
         <p className="detail">
           At <span className="highlight">MYTRIPSAVER</span>, we are dedicated to

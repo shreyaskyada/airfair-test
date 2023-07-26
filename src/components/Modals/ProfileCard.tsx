@@ -1,15 +1,17 @@
 import { useEffect, useState, useRef } from "react"
-import { Form, Input, Modal, Space, Select, Button, Typography } from "antd"
+import { Form, Input, Modal, Space, Select, Button, Typography,Grid } from "antd"
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons"
 import { updateProfileDetails, getProfileDetails } from "../../services/auth"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { toggleModal, updateUserDetails } from "../../redux/slices/app"
 import { getBankDetails, getBankName } from "../../services/airports"
 import useLocalStorage from "../../hooks/LocalStorage"
+import { notification } from "../Notification/customNotification"
 import { loginBanner } from "../../assets/images"
 import "./style.css"
 
 const { Text, Title } = Typography
+const {useBreakpoint} = Grid
 
 const walletOptions = {
   names: [
@@ -75,6 +77,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
   const [userId] = useLocalStorage("userId", "")
   const selectRef = useRef<any>(null)
   const [form] = Form.useForm()
+  const screen = useBreakpoint()
 
   const { notifcationModal } = useAppSelector((state: any) => state.app)
 
@@ -163,13 +166,12 @@ const ProfileCard = ({ onFinishHandler }: any) => {
         const userDetail = await getUserProfileDetails()
         dispatch(updateUserDetails(userDetail))
 
-        notifcationModal &&
-          notifcationModal("success", "User profile updated successfully")
+        notification.success({message:"User profile updated successfully"})
         dispatch(toggleModal({ modal: "profile", status: false }))
       })
       .catch((err) => {
         const errorMessage = err.data.message || ""
-        notifcationModal && notifcationModal("error", errorMessage)
+        notification.error({message:errorMessage})
         // onFinishHandler(false, err);
       })
   }
@@ -183,19 +185,15 @@ const ProfileCard = ({ onFinishHandler }: any) => {
       <Modal
         open={true}
         centered
-        width={800}
+        width={screen.lg ?  800 : "100%"}
         footer={null}
         closable={true}
+        zIndex={1003}
         onCancel={onCancelHandler}
+        className="profileModal"
       >
         <div
-          style={{
-            padding: "40px 10px 10px",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column"
-          }}
+          className="profileModalContent"
         >
           <img src={loginBanner} alt="Login banner" />
           <Title level={3} style={{ font: "Robotto" }}>
@@ -269,11 +267,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                     return (
                       <div
                         key={(Math.random() + 1).toString(36).substring(2)}
-                        style={{
-                          display: "flex",
-                          margin: "1rem 0",
-                          alignItems: "center"
-                        }}
+                        className="formListItem"
                       >
                         {bankDetails.names.length && (
                           <Form.Item
@@ -286,16 +280,14 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                                 message: "Please input bank name"
                               }
                             ]}
-                            style={{
-                              display: "inline-block"
-                            }}
+                            className="bankName"
                             noStyle
                           >
                             <Select
                               allowClear
                               style={{
-                                marginRight: "10px",
-                                width: "calc(25% - 0px)"
+                                // marginRight: "10px",
+                                // width: "calc(25% - 0px)"
                               }}
                               placeholder="Bank Name"
                               options={bankDetails.names}
@@ -313,16 +305,14 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                             }
                           ]}
                           name={[field.name, "bankCardType"]}
-                          style={{
-                            display: "inline-block"
-                          }}
+                          className="cardType"
                           noStyle
                         >
                           <Select
                             allowClear
                             style={{
-                              marginRight: "10px",
-                              width: "calc(25% - 0px)"
+                              // marginRight: "10px",
+                              // width: "calc(25% - 0px)"
                             }}
                             placeholder="Card Type"
                             options={bankDetails.types}
@@ -338,16 +328,14 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                               message: "bank's card name"
                             }
                           ]}
-                          style={{
-                            display: "inline-block"
-                          }}
+                          className="bankCardName"
                           noStyle
                         >
                           <Select
                             allowClear
                             style={{
-                              marginRight: "10px",
-                              width: "calc(25% - 0px)"
+                              // marginRight: "10px",
+                              // width: "calc(25% - 0px)"
                             }}
                             ref={selectRef}
                             dropdownRender={() => (
@@ -381,24 +369,24 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                               message: "issuer name"
                             }
                           ]}
-                          style={{
-                            display: "inline-block"
-                          }}
+                          className="bankIssuerName"
                           noStyle
                         >
                           <Select
                             allowClear
                             style={{
-                              marginRight: "10px",
-                              width: "calc(25% - 0px)"
+                              // marginRight: "10px",
+                              // width: "calc(25% - 0px)"
                             }}
                             placeholder="Issuer Name"
                             options={bankDetails.issuers}
                           />
                         </Form.Item>
-                        {
+                        <div className="removeButton">
+
                           <MinusCircleOutlined
                             className="dynamic-delete-button"
+                            style={{fontSize:20}}
                             onClick={() => {
                               remove(index)
                               setBankDetails((prevState) => ({
@@ -406,8 +394,9 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                                 cardNames: []
                               }))
                             }}
-                          />
-                        }
+                            />
+                        
+                            </div>
                       </div>
                     )
                   })}

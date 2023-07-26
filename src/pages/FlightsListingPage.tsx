@@ -10,7 +10,8 @@ import SearchFilter from "../components/SearchFilter"
 import OriginFlight from "../components/FlightsCard/OriginFlight"
 import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
-import FlightDetailsCard from "../components/Modals/FlightDetailsCard"
+import FlightDetailCard from "../components/Modals/FlightDetailsCard"
+import { noResult } from "../assets/images"
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -140,38 +141,38 @@ const FlightsListingPage = () => {
   }
 
   return (
-    <div
-      style={{
-        margin: "0 2rem",
-        position:"relative"
-      }}
-    >
-      <SearchFilter redirectRoute="" />
+    <div className="fligtListingSection">
+      <div className="flightSearch">
+        <SearchFilter redirectRoute="" />
+      </div>
+      {flights && Object.keys(flights).length <= 0 && (
+        <div className="notFoundContainer">
+          <img
+            style={{ width: "100px" }}
+            src={noResult}
+            alt="search-not-found-icon"
+          />
+          <h1 className="notFoundHeading">
+            No Flights Found Please Search Again!
+          </h1>
+        </div>
+      )}
+
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            columnGap: "25px"
-          }}
-        >
+        <div className="flightListContainer bigScreen">
           <div>
-            <div>
-              <OriginFlight
-                type="depart"
-                selectedKey={selectedFlight["depart"]}
-                onSelectedFlightChange={onSelectedFlightChange}
-              />
-            </div>
+            <OriginFlight
+              type="depart"
+              selectedKey={selectedFlight["depart"]}
+              onSelectedFlightChange={onSelectedFlightChange}
+            />
           </div>
           <div>
-            <div>
-              <DestinationFlight
-                type="return"
-                selectedKey={selectedFlight["return"]}
-                onSelectedFlightChange={onSelectedFlightChange}
-              />
-            </div>
+            <DestinationFlight
+              type="return"
+              selectedKey={selectedFlight["return"]}
+              onSelectedFlightChange={onSelectedFlightChange}
+            />
           </div>
         </div>
       ) : (
@@ -183,9 +184,9 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      <div style={{position:"sticky",bottom:0,background:"white",maxWidth:"90%",margin:"0 auto"}}>
-        {<FlightDetailsCard/>}
-      </div>
+      {flights && Object.keys(flights).length > 0 && (
+        <div className="detailCardContainer">{<FlightDetailCard />}</div>
+      )}
     </div>
   )
 }

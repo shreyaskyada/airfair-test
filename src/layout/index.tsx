@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react"
 import { useLocation } from "react-router-dom"
-import { Layout, notification } from "antd"
+import { Layout, notification,Grid } from "antd"
 import Sidebar from "./Sidebar"
 import HeaderUI from "./HeaderUI"
 import { Outlet } from "react-router"
@@ -21,7 +21,6 @@ import useLocalStorage from "../hooks/LocalStorage"
 import ProfileCard from "../components/Modals/ProfileCard"
 import { getProfileDetails } from "../services/auth"
 import Footer from "./Footer"
-import { relative } from "path"
 
 export type NotificationType = "success" | "info" | "warning" | "error"
 
@@ -160,14 +159,13 @@ const LayoutUI = () => {
 
   return (
     <>
-      <Layout hasSider>
+      <Layout>
         <Sidebar />
         <HeaderUI />
-        <Layout
-          className="site-layout"
-          style={{ background: "white", marginLeft: 200, marginTop: "72px" }}
+        <div
+          className="siteLayout"
         >
-          <Content
+          <div
             className="contentLayout"
             style={{
               overflow: "initial",
@@ -176,11 +174,6 @@ const LayoutUI = () => {
             <div style={{minHeight:"100vh",
               position:"relative"
             }}>
-              {/* {modal.flightInfo &&
-                location &&
-                location.pathname === "/flights-listing" && (
-                  <FlightDetailsCard />
-                )} */}
 
               {modal.signup && (
                 <SignupCard onFinishHandler={onSignupFinishHandler} />
@@ -194,9 +187,9 @@ const LayoutUI = () => {
               )}
               <Outlet />
             </div>
-          </Content>
+          </div>
           <Footer />
-        </Layout>
+        </div>
       </Layout>
       <Loader />
     </>

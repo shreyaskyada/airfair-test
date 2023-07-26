@@ -27,13 +27,13 @@
     flex-wrap: wrap;
 }
 
-.airlineTitle{
+.airlineTitle {
     color: var(--primary-color);
 }
 
 /*------------------------POPULAR AIRLINE ITEM SECTION---------------------------------------*/
 
-.itemContainer{
+.itemContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -42,4 +42,46 @@
 .airlineTitle {
     text-align: center;
     font-weight: bold;
+}
+
+
+.airlineImage {
+    width: 100%;
+}
+
+@media only screen and (max-width:1050px) {
+    .airlineSection {
+        padding: .4rem;
+    }
+
+    .airlineContainer {
+        padding: .8rem;
+    }
+}
+
+@media only screen and (max-width:768px) {
+
+    .airlineHeading {
+        font-size: 1.6rem;
+    }
+
+    .airlineImgContainer {
+        max-width: 60px;
+    }
+
+}
+
+@media only screen and (max-width:500px) {
+    .airlineHeading {
+        font-size: 1.3rem;
+        margin:1rem 0 1.2rem 0;
+    }
+
+    .airlineImgContainer {
+        max-width: 50px;
+    }
+
+    .airlineSection{
+        margin-top: 1rem;
+    }
 }

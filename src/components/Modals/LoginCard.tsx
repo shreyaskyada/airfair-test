@@ -5,6 +5,7 @@ import { loginBanner } from "../../assets/images";
 import { toggleModal } from "../../redux/slices/app";
 import { useAppDispatch } from "../../redux/hooks";
 import { loginUser } from "../../services/auth";
+import { notification } from "../Notification/customNotification"
 
 const { Text, Title } = Typography;
 
@@ -17,9 +18,11 @@ const LoginCard = ({ onFinishHandler }: any) => {
     loginUser(dataParams)
       .then((res) => {
         onFinishHandler(true, { ...res, username: dataParams.username });
+        notification.success({message:"LoggedIn Successfully!!!"})
       })
       .catch((err) => {
         onFinishHandler(false, err);
+        notification.error({message:err.data.message || "Server Error"})
       });
   };
 
@@ -34,6 +37,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
         centered
         footer={null}
         closable={true}
+        zIndex={1003}
         onCancel={onCancelHandler}
         width="350px"
       >

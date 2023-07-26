@@ -1,8 +1,11 @@
 import React, { useEffect } from "react"
-import { Button, Layout } from "antd"
+import { Button, Divider, Layout, Dropdown, Space, Avatar, Grid } from "antd"
+import type { MenuProps } from "antd"
+import { MenuFoldOutlined, DownOutlined } from "@ant-design/icons"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import {
   toggleModal,
+  toggleSidebar,
   updateIsLoggedIn,
   updateUserDetails
 } from "../redux/slices/app"
@@ -12,12 +15,16 @@ import { logoImage } from "../assets/images"
 import "./layoutStyles.css"
 
 const { Header } = Layout
+const { useBreakpoint } = Grid
 
 const HeaderUI = () => {
   const dispatch = useAppDispatch()
-  const { notifcationModal, isLoggedIn: isLoggedInState } = useAppSelector(
-    (state) => state.app
-  )
+  const screens = useBreakpoint()
+  const {
+    notifcationModal,
+    isLoggedIn: isLoggedInState,
+    showSidebar
+  } = useAppSelector((state) => state.app)
 
   const openModal = (type: "signup" | "login" | "profile") => {
     dispatch(toggleModal({ modal: type, status: true }))
@@ -78,6 +85,34 @@ const HeaderUI = () => {
       })
   }
 
+  const items: MenuProps["items"] = [
+    {
+      label: "Login",
+      key: "0",
+      onClick: () => openModal("login")
+    },
+    {
+      label: "Signup",
+      key: "1",
+      onClick: () => openModal("signup")
+    }
+  ]
+
+  const item2: MenuProps["items"] = [
+    {
+      label: "Profile",
+      key: "2",
+      onClick: () => openModal("profile")
+    },
+    {
+      label: "Logout",
+      key: "3",
+      onClick: () => logoutUserHandler()
+    }
+  ]
+
+  useEffect(() => {}, [isLoggedIn])
+
   return (
     <div
       style={{
@@ -108,13 +143,22 @@ const HeaderUI = () => {
             height: "100%"
           }}
         >
-          <img
-            src={logoImage}
-            style={{ height: "90px", marginLeft: "1.3rem", marginTop: "1rem" }}
-          />
+          <img src={logoImage} style={{ height: "52px", marginLeft: "1rem" }} />
         </div>
         <div className="buttonContainer">
-          {!isLoggedInState ? (
+          {screens.xs ? (
+            <Dropdown
+              menu={!isLoggedInState ? { items } : { items: item2 }}
+              trigger={["click"]}
+            >
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <Avatar />
+                  <DownOutlined style={{marginLeft:"-5px",color:"#013042"}}/>
+                </Space>
+              </a>
+            </Dropdown>
+          ) : !isLoggedInState ? (
             <>
               <button
                 onClick={() => openModal("login")}
@@ -145,6 +189,13 @@ const HeaderUI = () => {
               </button>
             </>
           )}
+          {screens.xs && <Divider
+            type="vertical"
+            style={{ height: "32px", background: "#f1f3f6" }}
+          />}
+          <div className="menuButton" onClick={() => dispatch(toggleSidebar())}>
+            <MenuFoldOutlined style={{ fontSize: 25, color: "#013042" }} />
+          </div>
         </div>
       </div>
     </div>
