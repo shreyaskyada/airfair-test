@@ -63,9 +63,9 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         )
 
         const bankList = userDetails.bankList.map((bank: any) => ({
-          bankName: bank.bankName.toUpperCase(),
+          bankName: bank.bankName,
           bankCards: [
-            (bank.bankCardType + "-" + bank.bankCardName).toUpperCase()
+            (bank.bankCardType + "-" + bank.bankCardName)
           ]
         }))
 
