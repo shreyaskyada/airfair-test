@@ -4,7 +4,7 @@ export const getAirports = (query: string): AxiosRequestConfig => {
   return {
     url: `api/airports/search/${query}`,
     method: "GET",
-    baseURL: "http://gateway.mytripsaver.in"
+    baseURL: "https://gateway.mytripsaver.in"
   }
 }
 
@@ -21,7 +21,7 @@ export const singupUserConfig = (data: {
   return {
     url: `auth/register`,
     method: "POST",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     data: {
       ...data,
       roles: ["USER"]
@@ -36,7 +36,7 @@ export const logoutUserConfig = (data: {
   return {
     url: `auth/logoff`,
     method: "POST",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     data: {
       token: data.authToken,
       username: data.userId
@@ -51,7 +51,7 @@ export const loginUserConfig = (data: {
   return {
     url: `auth/login`,
     method: "POST",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     data
   }
 }
@@ -60,7 +60,7 @@ export const verifyTokenConfig = (token: string, userName: string) => {
   return {
     url: `auth/verifyotp`,
     method: "POST",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     data: { otp: token, username: userName }
   }
 }
@@ -97,7 +97,7 @@ export const getFlightsConfig = (data: {
   return {
     url: "api/flight/compare",
     method: "POST",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     data: {
       from,
       to,
@@ -124,7 +124,7 @@ export const getProfileDetailsConfig = (userName: string, token: string) => {
   return {
     url: `profile/get-profile/${userName}`,
     method: "GET",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     headers: { token }
   }
 }
@@ -133,7 +133,7 @@ export const getBankDetailsConfig = (status: string) => {
   return {
     url: `profile/bank/details`,
     method: "GET",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     params: {
       status
     }
@@ -144,7 +144,7 @@ export const getBankNameConfig = (bankName: string, bankType: string) => {
   return {
     url: `profile/bank/card/details`,
     method: "GET",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     params: {
       bankName,
       cardType: bankType
@@ -152,7 +152,7 @@ export const getBankNameConfig = (bankName: string, bankType: string) => {
   }
 }
 
-// curl --location 'http://localhost:8765/profile/add-profile' \
+// curl --location 'https://localhost:8765/profile/add-profile' \
 // --header 'Content-Type: application/json' \
 // --header 'token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZ2FtLmFicm9sMTIiLCJyb2xlcyI6W10sImlhdCI6MTY4NTA5ODIwNCwiZXhwIjoxNjg1MTAxODA0fQ.hzw2TvHWMT_S5GxDtYrfCaNvYu5riQXqe1FPaB1GHWk' \
 // --data-raw '{
@@ -203,7 +203,7 @@ export const updateProfileConfig = (
   return {
     url: `profile/add-profile`,
     method: "POST",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     data: {
       mobileNo: phoneNo,
       username: userName,
@@ -219,7 +219,7 @@ export const getBestOfferConfig = (data: object) => {
   return {
     url: `offers/offer/getBestOffer`,
     method: "POST",
-    baseURL: "http://gateway.mytripsaver.in",
+    baseURL: "https://gateway.mytripsaver.in",
     data: data,
     //headers: { token }
   }

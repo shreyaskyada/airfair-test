@@ -4,6 +4,7 @@ import SearchFilter from "../components/SearchFilter"
 import PopularFlights from "../components/PopularFlights/PopularFlights"
 import { PopularAirlines } from "../components/popularAirlines"
 import { toggleModal } from "../redux/slices/app"
+import { useEffect } from "react"
 
 const { Title, Text } = Typography
 
@@ -16,9 +17,15 @@ const Homepage = () => {
     dispatch(toggleModal({ modal: type, status: true }))
   }
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      openModal("login")
+    }
+  }, [])
+
   return (
     <div>
-      <SearchFilter redirectRoute={"/flights-listing"} origin="home"/>
+      <SearchFilter redirectRoute={"/flights-listing"} origin="home" />
 
       <div className="homepageContent">
         <div className="introSection">
@@ -32,18 +39,20 @@ const Homepage = () => {
             className="introText"
           >
             Unlock Exclusive Flight Deals. Complete Your Profile for
-            Personalized Travel Savings. Don't Miss Out{isLoggedIn ?  "!" : ","}{" "}
-            {!isLoggedIn && <p
-              style={{
-                textDecoration: "underline",
-                fontSize: "1.2rem",
-                color: "#DBAE1E",
-                cursor: "pointer"
-              }}
-              onClick={() => openModal("signup")}
-            >
-              Sign Up Now!
-            </p>}
+            Personalized Travel Savings. Don't Miss Out{isLoggedIn ? "!" : ","}{" "}
+            {!isLoggedIn && (
+              <p
+                style={{
+                  textDecoration: "underline",
+                  fontSize: "1.2rem",
+                  color: "#DBAE1E",
+                  cursor: "pointer"
+                }}
+                onClick={() => openModal("signup")}
+              >
+                Sign Up Now!
+              </p>
+            )}
           </h3>
         </div>
         <PopularFlights />
