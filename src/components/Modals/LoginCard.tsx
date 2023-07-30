@@ -1,34 +1,39 @@
-import React from "react";
-import { Button, Card, Form, Input, Modal, Typography } from "antd";
-import Meta from "antd/es/card/Meta";
-import { loginBanner } from "../../assets/images";
-import { toggleModal } from "../../redux/slices/app";
-import { useAppDispatch } from "../../redux/hooks";
-import { loginUser } from "../../services/auth";
+import React from "react"
+import { Button, Card, Form, Input, Modal, Typography } from "antd"
+import Meta from "antd/es/card/Meta"
+import { loginBanner } from "../../assets/images"
+import { toggleModal } from "../../redux/slices/app"
+import { useAppDispatch } from "../../redux/hooks"
+import { loginUser } from "../../services/auth"
 import { notification } from "../Notification/customNotification"
 
-const { Text, Title } = Typography;
+const { Text, Title } = Typography
 
 const LoginCard = ({ onFinishHandler }: any) => {
-  const dispatch = useAppDispatch();
-  const [form] = Form.useForm();
+  const dispatch = useAppDispatch()
+  const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    const dataParams = form.getFieldsValue();
+    const dataParams = form.getFieldsValue()
     loginUser(dataParams)
       .then((res) => {
-        onFinishHandler(true, { ...res, username: dataParams.username });
-        notification.success({message:"LoggedIn Successfully!!!"})
+        onFinishHandler(true, { ...res, username: dataParams.username })
+        notification.success({ message: "LoggedIn Successfully!!!" })
       })
       .catch((err) => {
-        onFinishHandler(false, err);
-        notification.error({message:err.data.message || "Server Error"})
-      });
-  };
+        onFinishHandler(false, err)
+        notification.error({ message: err.data.message || "Server Error" })
+      })
+  }
 
   const onCancelHandler = () => {
-    dispatch(toggleModal({ modal: "login", status: false }));
-  };
+    dispatch(toggleModal({ modal: "login", status: false }))
+  }
+
+  const handleSignupModal = () => {
+    dispatch(toggleModal({ modal: "signup", status: true }))
+    dispatch(toggleModal({ modal: "login", status: false }))
+  }
 
   return (
     <div>
@@ -47,19 +52,29 @@ const LoginCard = ({ onFinishHandler }: any) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            flexDirection: "column",
+            flexDirection: "column"
           }}
         >
           <img src={loginBanner} alt="Login banner" />
-          <Title level={3} style={{ font: "Robotto" }}>
-            Log in
-          </Title>
+          <Text
+            style={{
+              font: "Robotto",
+              textAlign: "center",
+              margin: "1rem 0",
+              fontWeight: 600,
+              fontSize: "1rem",
+              color: "#013042"
+            }}
+          >
+            Unlock exclusive deals tailored to you! Log in to access
+            personalized best deals now.
+          </Text>
 
           <Form
             name="basic"
             initialValues={{ remember: true }}
             style={{
-              width: "100%",
+              width: "100%"
             }}
             form={form}
             onFinish={onFinish}
@@ -68,29 +83,39 @@ const LoginCard = ({ onFinishHandler }: any) => {
             <Form.Item
               name="username"
               rules={[
-                { required: true, message: "Please input your username!" },
+                { required: true, message: "Please input your username!" }
               ]}
             >
-              <Input />
+              <Input placeholder="username" />
             </Form.Item>
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: "Please input your password!" },
+                { required: true, message: "Please input your password!" }
               ]}
             >
-              <Input.Password />
+              <Input.Password placeholder="password" />
             </Form.Item>
             <Form.Item style={{ textAlign: "center" }}>
               <Button type="primary" htmlType="submit">
-                Submit
+                Login
               </Button>
             </Form.Item>
           </Form>
         </div>
+        <div style={{ display: "flex", alignItems: "center", gap: ".2rem" }}>
+          <Text>Don't Have an account?</Text>
+          <Button
+            type="text"
+            style={{ color: "#013042", fontWeight: 600 }}
+            onClick={handleSignupModal}
+          >
+            Sign Up
+          </Button>
+        </div>
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default LoginCard;
+export default LoginCard
