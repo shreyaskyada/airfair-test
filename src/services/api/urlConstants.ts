@@ -224,3 +224,17 @@ export const getBestOfferConfig = (data: object) => {
     //headers: { token }
   }
 }
+
+export const sendOTPConfig = (
+  userName: string
+) => {
+  return {
+    url: `auth/sendotp`,
+    method: "POST",
+    baseURL: "https://gateway.mytripsaver.in",
+    data: {
+      username: userName,
+      purpose: "test"
+    },
+  }
+}
