@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Card, Form, Input, Modal, Typography } from "antd"
+import { Button, Card, Divider, Form, Input, Modal, Typography } from "antd"
 import Meta from "antd/es/card/Meta"
 import { loginBanner } from "../../assets/images"
 import { toggleModal } from "../../redux/slices/app"
@@ -103,15 +103,16 @@ const LoginCard = ({ onFinishHandler }: any) => {
             </Form.Item>
           </Form>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: ".2rem" }}>
-          <Text>Don't Have an account?</Text>
-          <Button
-            type="text"
-            style={{ color: "#013042", fontWeight: 600 }}
+        <Divider style={{backgroundColor:"#F0F0F0",margin:"0"}}/>
+        <div style={{ display: "flex", flexDirection:"column",alignItems: "center", gap: ".8rem",marginTop:"1rem" }}>
+          <Text>Don't have an Account with MTS?</Text>
+          <button
+          className="headerButtons filled"
+          style={{width:"150px"}}
             onClick={handleSignupModal}
           >
-            Sign Up
-          </Button>
+            Create new account
+          </button>
         </div>
       </Modal>
     </div>
