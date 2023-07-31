@@ -19,9 +19,9 @@ const Homepage = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      openModal("login")
+      dispatch(toggleModal({ modal: "login", status: true }))
     }
-  }, [])
+  }, [isLoggedIn,dispatch])
 
   return (
     <div>
