@@ -103,12 +103,20 @@ const LoginCard = ({ onFinishHandler }: any) => {
             </Form.Item>
           </Form>
         </div>
-        <Divider style={{backgroundColor:"#F0F0F0",margin:"0"}}/>
-        <div style={{ display: "flex", flexDirection:"column",alignItems: "center", gap: ".8rem",marginTop:"1rem" }}>
+        <Divider style={{ backgroundColor: "#F0F0F0", margin: "0" }} />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: ".8rem",
+            marginTop: "1rem"
+          }}
+        >
           <Text>Don't have an Account with MTS?</Text>
           <button
-          className="headerButtons filled"
-          style={{width:"150px"}}
+            className="headerButtons filled"
+            style={{ width: "150px" }}
             onClick={handleSignupModal}
           >
             Create new account

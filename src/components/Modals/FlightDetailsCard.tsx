@@ -64,9 +64,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
         const bankList = userDetails.bankList.map((bank: any) => ({
           bankName: bank.bankName,
-          bankCards: [
-            (bank.bankCardType + "-" + bank.bankCardName)
-          ]
+          bankCards: [bank.bankCardType + "-" + bank.bankCardName]
         }))
 
         const departAirlinesCode =
@@ -75,7 +73,9 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             ?.split("->")
             .map((item) => item.substring(0, 2))
 
-        const returnAirlinesCode = returnFlight && returnFlight.flightCode
+        const returnAirlinesCode =
+          returnFlight &&
+          returnFlight.flightCode
             ?.split("->")
             .map((item) => item.substring(0, 2))
 
@@ -114,10 +114,31 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           setBestOffer(res1.bestOffer)
         }
 
+        let res2: any
         if (payload.length > 1) {
-          const res2: any = await getBestOffer(payload[1])
+          res2 = await getBestOffer(payload[1])
           if (res2) {
             setBestOffer2(res2.bestOffer)
+          }
+        }
+
+        if (payload.length > 1 && res1 && res2) {
+          
+          let offer1DiscountedFare = res1.bestOffer.fareReduced
+            ? res1.bestOffer.fare.totalFareAfterDiscount
+            : res1.bestOffer.fare.totalFare
+
+          let offer2DiscountedFare = res2.bestOffer.fareReduced
+            ? res2.bestOffer.fare.totalFareAfterDiscount
+            : res2.bestOffer.fare.totalFare
+
+          if (offer1DiscountedFare > offer2DiscountedFare) {
+            let offer1 = provider[0]
+            let offer2 = provider[1]
+            setProvider([offer2, offer1])
+
+            setBestOffer(res2.bestOffer)
+            setBestOffer2(res1.bestOffer)
           }
         }
       } catch (error) {
@@ -127,7 +148,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
     const token = localStorage.getItem("authToken")
     getDiscount(token)
-  }, [provider, searchFlightData, userDetails,departFlight,returnFlight])
+  }, [provider, searchFlightData, userDetails, departFlight, returnFlight])
 
   useEffect(() => {
     let providers: any = []
@@ -308,7 +329,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                         // dispatch(updateFlightDetails(true));
                       }}
                     >
-                      ₹<Link
+                      ₹
+                      <Link
                         to={provider.length > 1 && provider[1].url}
                         target="_blank"
                       >
@@ -744,7 +766,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               {provider.length && provider[0].provider}
             </p>
 
-             <Popover
+            <Popover
               content={
                 bestOffer ? (
                   <>
@@ -818,7 +840,11 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             </Popover>
             <Text
               type="secondary"
-              style={{ fontWeight: "bold",color: "#013042", marginLeft: ".4rem" }}
+              style={{
+                fontWeight: "bold",
+                color: "#013042",
+                marginLeft: ".4rem"
+              }}
             >
               Fare Details
             </Text>
