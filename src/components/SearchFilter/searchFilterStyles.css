@@ -29,6 +29,7 @@
 
 .searchBarContainer, .departCityForm, .returnCity, .departDate, .returnDate, .traveller {
     background-color: var(--contrast-color);
+    width: 100%;
 }
 
 .departCityForm {

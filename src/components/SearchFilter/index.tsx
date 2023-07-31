@@ -356,9 +356,11 @@ const SearchFilter = ({
                     onClick={() => {
                       setInputValues((prevState: any) => ({
                         ...prevState,
-                        type: "round-trip"
+                        type: "round-trip",
+                        return: dayjs().add(1,"day")
                       }))
-                      dispatch(updateFlightType("one-way"))
+                      dispatch(updateFlightType("round-trip"))
+                      dispatch(updateReturnDate(dayjs().add(1,'day')))
                     }}
                     style={{ color: "#013042" }}
                   >
@@ -627,17 +629,19 @@ const SearchFilter = ({
                         autoFocus
                         open
                         placeholder=""
+                        format="DD-MMM-YY"
                         showTime={false}
                         showToday={false}
                         size="large"
+                        defaultValue={dayjs().add(1,'day')}
                         style={{ height: "78px", width: "100%" }}
                         disabledDate={disabledDate}
                         onChange={(value) => {
                           setInputValues((prevState: any) => ({
                             ...prevState,
-                            return: value
+                            return: value || dayjs().add(1,'day')
                           }))
-                          dispatch(updateReturnDate(value || dayjs()))
+                          dispatch(updateReturnDate(value || dayjs().add(1,'day')))
                         }}
                         onBlur={() =>
                           setShowInput((prevState: any) => ({
