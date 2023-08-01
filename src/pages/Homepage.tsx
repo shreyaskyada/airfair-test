@@ -1,17 +1,15 @@
-import { Typography } from "antd"
+import { useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import SearchFilter from "../components/SearchFilter"
 import PopularFlights from "../components/PopularFlights/PopularFlights"
 import { PopularAirlines } from "../components/popularAirlines"
 import { toggleModal } from "../redux/slices/app"
-import { useEffect } from "react"
-
-const { Title, Text } = Typography
+import Carousel from "../components/carousel"
 
 const Homepage = () => {
   const dispatch = useAppDispatch()
 
-  const { isLoggedIn,modal } = useAppSelector((state) => state.app)
+  const { isLoggedIn, modal } = useAppSelector((state) => state.app)
 
   const openModal = (type: "signup" | "login" | "profile") => {
     dispatch(toggleModal({ modal: type, status: true }))
@@ -21,7 +19,7 @@ const Homepage = () => {
     if (!isLoggedIn && !modal.otp) {
       dispatch(toggleModal({ modal: "login", status: true }))
     }
-  }, [isLoggedIn,dispatch])
+  }, [isLoggedIn, dispatch])
 
   return (
     <div>
@@ -55,6 +53,7 @@ const Homepage = () => {
             )}
           </h3>
         </div>
+        <Carousel />
         <PopularFlights />
         <PopularAirlines />
       </div>
