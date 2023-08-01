@@ -11,14 +11,14 @@ const { Title, Text } = Typography
 const Homepage = () => {
   const dispatch = useAppDispatch()
 
-  const { isLoggedIn } = useAppSelector((state) => state.app)
+  const { isLoggedIn,modal } = useAppSelector((state) => state.app)
 
   const openModal = (type: "signup" | "login" | "profile") => {
     dispatch(toggleModal({ modal: type, status: true }))
   }
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && !modal.otp) {
       dispatch(toggleModal({ modal: "login", status: true }))
     }
   }, [isLoggedIn,dispatch])
