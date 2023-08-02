@@ -1,14 +1,15 @@
 import { CSSProperties } from "react"
 import { Carousel as AntCarousel } from "antd"
-import { carousalImage1 } from "../../assets/images"
+import { carousalImageList } from "../../assets/images"
 import "./carousel.styles.css"
 
 const contentStyle: CSSProperties = {
-  height: "170px",
+  maxHeight: "170px",
+  height:"100%",
   color: "#fff",
-  lineHeight: "170px",
   textAlign: "center",
-  borderRadius: "5px"
+  borderRadius: "5px",
+  border:"1px solid black"
 }
 
 const Carousel = () => {
@@ -21,9 +22,12 @@ const Carousel = () => {
         autoplaySpeed={4000}
         touchMove={true}
       >
-        <div style={contentStyle}>
-          <img src={carousalImage1} alt="add" style={{width:"100%"}}/>
-        </div>
+        {carousalImageList &&
+          carousalImageList.map((image: any, index: number) => (
+            <div style={contentStyle} key={index}>
+              <img src={image} alt="add" style={{ width: "100%" ,height:"170px"}} />
+            </div>
+          ))}
       </AntCarousel>
     </div>
   )

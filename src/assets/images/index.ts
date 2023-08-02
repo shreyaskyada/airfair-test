@@ -11,3 +11,5 @@ export const aboutUsIcon = require("./aboutUsIcon.png")
 
 export const carousalImage1 = require("./home-carousel/image1.png")
 
+export const carousalImageList = [carousalImage1]
+
