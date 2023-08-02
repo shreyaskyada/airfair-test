@@ -101,14 +101,15 @@ const LayoutUI = () => {
     if (success) {
       console.log("User Detail 2 :", userDetails)
       dispatch(updateIsLoggedIn(true))
-      setIsLoggedIn(true)
+      //setIsLoggedIn(true)
       setUserId(userDetails.userName)
       setAuthToken(userDetails.token)
       const {token,...filteredUser} = userDetails
       dispatch(updateUserDetails(filteredUser))
       dispatch(toggleModal({ modal: "signup", status: false }))
-      dispatch(toggleModal({ modal: "otp", status: true }))
+      dispatch(toggleModal({ modal: "login", status: false }))
       getUserInfo(dispatch, userDetails.userName, userDetails.token)
+      dispatch(toggleModal({ modal: "otp", status: true }))
     } else {
       getUserInfo(dispatch)
     }
