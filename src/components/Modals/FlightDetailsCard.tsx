@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { InfoOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom"
 import {
@@ -10,7 +10,9 @@ import {
   Typography,
   Divider,
   Popover,
-  Grid
+  Grid,
+  Dropdown,
+  MenuProps
 } from "antd"
 import * as _ from "lodash"
 import dayjs from "dayjs"
@@ -25,6 +27,7 @@ import { getBestOffer } from "../../services/airports"
 import moment from "moment"
 import { ISearchFlights } from "../../redux/slices/searchFlights"
 import { Airlines_Images } from "../../data/popularAirlines"
+import { useDimensions } from "../../hooks/useDimensions"
 
 const { Text, Title } = Typography
 const { Meta } = Card
@@ -39,6 +42,47 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   const [bestOffer2, setBestOffer2] = useState<any>(null)
   const [provider, setProvider] = useState<any>([])
 
+  const modalRef = useRef<HTMLDivElement>(null)
+  const leftColRef = useRef<HTMLDivElement>(null)
+  const rightColRef = useRef<HTMLDivElement>(null)
+
+  const [P, setP] = useState<any>([
+    {
+      baseFare: 6340,
+      provider: "IXIGO",
+      tax: 1270,
+      totalFare: 7610,
+      url: "http"
+    },
+    {
+      baseFare: 5940,
+      provider: "HAPPYEASYGO",
+      tax: 1750,
+      totalFare: 7690,
+      url: "http"
+    },
+    {
+      baseFare: 6340,
+      provider: "IXIGO",
+      tax: 1270,
+      totalFare: 7610,
+      url: "http"
+    },
+    {
+      baseFare: 5940,
+      provider: "HAPPYEASYGO",
+      tax: 1750,
+      totalFare: 7690,
+      url: "http"
+    }
+  ])
+
+  const [P2, setP2] = useState<any>([])
+
+  const [height, width] = useDimensions(modalRef)
+  const [leftColHeight, leftColwidth] = useDimensions(leftColRef)
+  const [rightColHeight, rightColwidth] = useDimensions(rightColRef)
+
   const { modal, flightDetails, userDetails } = useAppSelector(
     (state) => state.app
   )
@@ -49,6 +93,24 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
   )
+
+  useEffect(() => {
+    console.log("Dimensions : ", leftColwidth + rightColwidth + 18, width)
+    if (leftColwidth + rightColwidth > width) {
+      let items = [...P]
+      let items2 = [...P2]
+      let i = items.pop() || {}
+      items2.push(i)
+      // }else if(leftColwidth+rightColwidth + 18 < width){
+      //   if(items2.length){
+      //     let i2 = items2.pop()
+      //     items.push(i2)
+      //   }
+      // }
+      setP(items)
+      setP2(items2)
+    }
+  }, [leftColwidth, rightColwidth, width])
 
   useEffect(() => {
     const getDiscount = async (token: any) => {
@@ -92,7 +154,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         const doj = moment(searchFlightData.dateOfDep).valueOf()
         const dob = moment(dayjs().toString()).valueOf()
 
-        const payload: any = provider.map((_provider: any) => ({
+        const payloads: any = provider.map((_provider: any) => ({
           provider: _provider.provider,
           airlines: airlineNames.length ? airlineNames : ["ALL"],
           flightType: "DOMESTIC",
@@ -109,38 +171,63 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           }
         }))
 
-        const res1: any = await getBestOffer(payload[0])
-        if (res1) {
-          setBestOffer(res1.bestOffer)
-        }
+        let payloadResponse:any = []
+        for(const payload of payloads){
+          try{
+            const res: any = await getBestOffer(payload)
 
-        let res2: any
-        if (payload.length > 1) {
-          res2 = await getBestOffer(payload[1])
-          if (res2) {
-            setBestOffer2(res2.bestOffer)
+            if(res){
+              payloadResponse.push(res.bestOffer)
+            }else{
+              payloadResponse.push({})
+            }
+          }
+          catch(error){
+            console.log(error)
           }
         }
 
-        if (payload.length > 1 && res1 && res2) {
-          
-          let offer1DiscountedFare = res1.bestOffer.fareReduced
-            ? res1.bestOffer.fare.totalFareAfterDiscount
-            : res1.bestOffer.fare.totalFare
-
-          let offer2DiscountedFare = res2.bestOffer.fareReduced
-            ? res2.bestOffer.fare.totalFareAfterDiscount
-            : res2.bestOffer.fare.totalFare
-
-          if (offer1DiscountedFare > offer2DiscountedFare) {
-            let offer1 = provider[0]
-            let offer2 = provider[1]
-            setProvider([offer2, offer1])
-
-            setBestOffer(res2.bestOffer)
-            setBestOffer2(res1.bestOffer)
+        const providersWithOffer = provider.map((_provider:any,index:number)=>{
+          return {
+            ..._provider,
+            bestOffer:payloadResponse[index]
           }
-        }
+        })
+
+        setProvider(providersWithOffer)
+        //console.log("🚀 ~ file: FlightDetailsCard.tsx:196 ~ providersWithOffer ~ providersWithOffer:", providersWithOffer)
+
+
+        // if (res1) {
+        //   setBestOffer(res1.bestOffer)
+        // }
+
+        // let res2: any
+        // if (payload.length > 1) {
+        //   res2 = await getBestOffer(payload[1])
+        //   if (res2) {
+        //     setBestOffer2(res2.bestOffer)
+        //   }
+        // }
+
+        // if (payload.length > 1 && res1 && res2) {
+        //   let offer1DiscountedFare = res1.bestOffer.fareReduced
+        //     ? res1.bestOffer.fare.totalFareAfterDiscount
+        //     : res1.bestOffer.fare.totalFare
+
+        //   let offer2DiscountedFare = res2.bestOffer.fareReduced
+        //     ? res2.bestOffer.fare.totalFareAfterDiscount
+        //     : res2.bestOffer.fare.totalFare
+
+        //   if (offer1DiscountedFare > offer2DiscountedFare) {
+        //     let offer1 = provider[0]
+        //     let offer2 = provider[1]
+        //     setProvider([offer2, offer1])
+
+        //     setBestOffer(res2.bestOffer)
+        //     setBestOffer2(res1.bestOffer)
+        //   }
+        // }
       } catch (error) {
         console.log(error)
       }
@@ -203,8 +290,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             tax: totalTax
           })
         })
-
       providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
+
       setProvider(providers)
     } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
       const keys = Object.keys(departFlight.compare || {})
@@ -313,159 +400,50 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               }
               description={<></>}
             />
-            <div style={{ marginTop: ".8rem" }}>
-              {Object.entries(flighDetails.compare || {}).map((item) => {
-                return title === "depart" &&
-                  item[0] !== flighDetails.cheapestProvider?.providerCode ? (
-                  <div>
-                    <Button
-                      style={{
-                        fontWeight: "bold",
-                        color: "#013042"
-                      }}
-                      ghost={true}
-                      type="text"
-                      onClick={() => {
-                        // dispatch(updateFlightDetails(true));
-                      }}
-                    >
-                      ₹
-                      <Link
-                        to={provider.length > 1 && provider[1].url}
-                        target="_blank"
-                      >
-                        {provider.length > 1 &&
-                        bestOffer2 &&
-                        bestOffer2.fare &&
-                        bestOffer2.fare.totalFareAfterDiscount
-                          ? bestOffer2.fare.totalFareAfterDiscount
-                          : provider.length > 1 && provider[1].totalFare}
-                        {provider.length > 1 && "-" + provider[1].provider}
-                      </Link>
-                    </Button>
-                    <Popover
-                      content={
-                        bestOffer2 ? (
-                          <>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Base Fare:
-                              </span>
-                              <span
-                                style={{
-                                  fontWeight: "bold",
-                                  color: "#013042"
-                                }}
-                              >
-                                {provider.length > 1 && provider[1].baseFare}
-                              </span>
-                            </div>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Total Tax:
-                              </span>
-                              <span
-                                style={{
-                                  fontWeight: "bold",
-                                  color: "#013042"
-                                }}
-                              >
-                                {provider.length > 1 && provider[1].tax}
-                              </span>
-                            </div>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Total Fare:
-                              </span>
-                              <span
-                                style={{
-                                  fontWeight: "bold",
-                                  color: "#013042"
-                                }}
-                              >
-                                {bestOffer2.fare.totalFare}
-                              </span>
-                            </div>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Total discount:
-                              </span>{" "}
-                              <span
-                                style={{
-                                  fontWeight: "bold",
-                                  color: "#013042"
-                                }}
-                              >
-                                {bestOffer2.fare.totalDiscount}
-                              </span>
-                            </div>
-
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Promo code:
-                              </span>
-                              <span
-                                style={{
-                                  fontWeight: "bold",
-                                  color: "#013042"
-                                }}
-                              >
-                                {bestOffer2.promoCode
-                                  ? bestOffer2.promoCode
-                                  : "No offer applicable"}
-                              </span>
-                            </div>
-                            <div>
-                              <span style={{ color: "#4E6F7B" }}>
-                                Total fare after discount:{" "}
-                              </span>
-                              <b>
-                                <span
-                                  style={{
-                                    fontWeight: "bold",
-                                    color: "#013042"
-                                  }}
-                                >
-                                  {bestOffer2.fare.totalFareAfterDiscount
-                                    ? bestOffer2.fare.totalFareAfterDiscount
-                                    : bestOffer2.fare.totalFare}
-                                </span>
-                              </b>
-                            </div>
-                          </>
-                        ) : (
-                          <div style={{ fontWeight: "bold", color: "#013042" }}>
-                            Unlock Exclusive Deals by Logging In
-                          </div>
-                        )
-                      }
-                      title={
-                        bestOffer2 && (
-                          <Text
-                            style={{ fontWeight: "bold", color: "#013042" }}
-                          >
-                            Price breakdown
-                          </Text>
-                        )
-                      }
-                      trigger="hover"
-                    >
-                      <Button
-                        shape="circle"
-                        icon={<InfoOutlined style={{ color: "white" }} />}
-                        size="small"
-                        style={{ background: "#4E6F7B" }}
-                      />
-                    </Popover>
-                  </div>
-                ) : null
-              })}
-            </div>
           </Card>
         </>
       )
     )
   }
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: (
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.antgroup.com"
+        >
+          1st menu item
+        </a>
+      )
+    },
+    {
+      key: "2",
+      label: (
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.aliyun.com"
+        >
+          2nd menu item
+        </a>
+      )
+    },
+    {
+      key: "3",
+      label: (
+        <a
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.luohanacademy.com"
+        >
+          3rd menu item
+        </a>
+      )
+    }
+  ]
 
   const flighInfoTabCard = ({
     fromTime,
@@ -732,146 +710,464 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
     // }
   ]
 
-  const flightDetailsCard = (
-    <div className="flightBottomDetailCard">
-      <div style={{}} className="bottomCardContent">
-        <div className="flightSummaryDetail">
-          <div>{detailsCard("depart", departFlight)}</div>
+  const SingleProviderFareDetail: React.FC<any> = ({ provider }) => {
+    return (
+      <div
+        style={{
+          border: "1px solid black",
+          display: "flex",
+          alignItems: "center"
+        }}
+      >
+        <Button
+          style={{
+            fontWeight: "bold",
+            color: "#013042"
+          }}
+          type="text"
+        >
+          ₹
+          <Link to={provider.url} target="_blank">
+            {provider.bestOffer &&
+            provider.bestOffer.fare &&
+            provider.bestOffer.fare.totalFareAfterDiscount
+              ? provider.bestOffer.fare.totalFareAfterDiscount
+              : provider.totalFare}
+            {+"-" + provider.provider}
+          </Link>
+        </Button>
+        <Popover
+          content={
+            provider && provider.bestOffer ? (
+              <>
+                <div>
+                  <span style={{ color: "#4E6F7B" }}>Base Fare:</span>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "#013042"
+                    }}
+                  >
+                    {provider && provider.baseFare}
+                  </span>
+                </div>
+                <div>
+                  <span style={{ color: "#4E6F7B" }}>Total Tax:</span>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "#013042"
+                    }}
+                  >
+                    {provider && provider.tax}
+                  </span>
+                </div>
+                <div>
+                  <span style={{ color: "#4E6F7B" }}>Total Fare:</span>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "#013042"
+                    }}
+                  >
+                    {provider && provider.bestOffer.fare.totalFare}
+                  </span>
+                </div>
+                <div>
+                  <span style={{ color: "#4E6F7B" }}>Total discount:</span>{" "}
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "#013042"
+                    }}
+                  >
+                    {provider && provider.bestOffer.fare.totalDiscount}
+                  </span>
+                </div>
 
-          {!_.isEmpty(returnFlight) && (
-            <div>{detailsCard("return", returnFlight)}</div>
-          )}
-        </div>
-        <div className="fareDetail">
-          <div>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: ".4rem"
-              }}
-            >
-              <h4 className="fareHeading">
-                Cheapest Fare: ₹
-                <span>
-                  {bestOffer &&
-                  bestOffer.fare &&
-                  bestOffer.fare.totalFareAfterDiscount
-                    ? bestOffer.fare.totalFareAfterDiscount
-                    : provider.length && provider[0].totalFare}
-                </span>
-              </h4>
-            </div>
-            <p style={{ margin: 0, color: "#013042" }}>
-              {provider.length && provider[0].provider}
-            </p>
+                <div>
+                  <span style={{ color: "#4E6F7B" }}>Promo code:</span>
+                  <span
+                    style={{
+                      fontWeight: "bold",
+                      color: "#013042"
+                    }}
+                  >
+                    {provider.bestOffer.promoCode
+                      ? bestOffer.promoCode
+                      : "No offer applicable"}
+                  </span>
+                </div>
+                <div>
+                  <span style={{ color: "#4E6F7B" }}>
+                    Total fare after discount:{" "}
+                  </span>
+                  <b>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#013042"
+                      }}
+                    >
+                      {provider.bestOffer.fare.totalFareAfterDiscount
+                        ? provider.bestOffer.fare.totalFareAfterDiscount
+                        : provider.bestOffer.fare.totalFare}
+                    </span>
+                  </b>
+                </div>
+              </>
+            ) : (
+              <div style={{ fontWeight: "bold", color: "#013042" }}>
+                Unlock Exclusive Deals by Logging In
+              </div>
+            )
+          }
+          title={
+            provider.bestOffer && (
+              <Text style={{ fontWeight: "bold", color: "#013042" }}>
+                Price breakdown
+              </Text>
+            )
+          }
+          trigger="hover"
+        >
+          <Button
+            shape="circle"
+            icon={<InfoOutlined style={{ color: "white" }} />}
+            size="small"
+            style={{ background: "#4E6F7B" }}
+          />
+        </Popover>
+      </div>
+    )
+  }
 
-            <Popover
-              content={
-                bestOffer ? (
-                  <>
-                    <div>
-                      <span style={{ color: "#4E6F7B" }}>Base Fare:</span>
-                      <span style={{ fontWeight: "bold", color: "#013042" }}>
-                        {provider.length && provider[0].baseFare}
-                      </span>
-                    </div>
-                    <div>
-                      <span style={{ color: "#4E6F7B" }}>Total Tax:</span>
-                      <span style={{ fontWeight: "bold", color: "#013042" }}>
-                        {provider.length && provider[0].tax}
-                      </span>
-                    </div>
-                    <div>
-                      <span style={{ color: "#4E6F7B" }}>Total Fare:</span>
-                      <span style={{ fontWeight: "bold", color: "#013042" }}>
-                        {bestOffer.fare.totalFare}
-                      </span>
-                    </div>
-                    <div>
-                      <span style={{ color: "#4E6F7B" }}>Total discount:</span>{" "}
-                      <span style={{ fontWeight: "bold", color: "#013042" }}>
-                        {bestOffer.fare.totalDiscount}
-                      </span>
-                    </div>
+  const providerList = (
+    // <div
+    //   style={{
+    //     marginTop: ".8rem",
+    //     display: "flex",
+    //     justifyContent: "space-between",
+    //     alignItems: "center",
+    //     flexWrap: "wrap",
+    //     border: "1px solid black"
+    //   }}
+    // >
+    <div
+      style={{
+        marginTop: ".8rem",
+        display: "flex",
+        gap: "1rem",
+        alignItems: "center",
+        //flexWrap: "wrap",
+        border: "1px solid blue"
+      }}
+    >
+      {P.map((item: any) => (
+        <div
+          style={{
+            border: "1px solid black",
+            display: "flex",
+            alignItems: "center"
+          }}
+        >
+          <Button
+            style={{
+              fontWeight: "bold",
+              color: "#013042"
+            }}
+            type="text"
+          >
+            ₹
+            <Link to={item.url} target="_blank">
+              {/* {provider.length > 1 &&
+            bestOffer2 &&
+            bestOffer2.fare &&
+            bestOffer2.fare.totalFareAfterDiscount
+              ? bestOffer2.fare.totalFareAfterDiscount
+            : provider.length > 1 && provider[1].totalFare}
+              */}
 
-                    <div>
-                      <span style={{ color: "#4E6F7B" }}>Promo code:</span>
-                      <span style={{ fontWeight: "bold", color: "#013042" }}>
-                        {bestOffer.promoCode
-                          ? bestOffer.promoCode
-                          : "No offer applicable"}
-                      </span>
-                    </div>
-                    <div>
-                      <span style={{ color: "#4E6F7B" }}>
-                        Total fare after discount:{" "}
-                      </span>
-                      <b>
-                        <span style={{ fontWeight: "bold", color: "#013042" }}>
-                          {bestOffer.fare.totalFareAfterDiscount
-                            ? bestOffer.fare.totalFareAfterDiscount
-                            : bestOffer.fare.totalFare}
-                        </span>
-                      </b>
-                    </div>
-                  </>
-                ) : (
-                  <div style={{ fontWeight: "bold", color: "#013042" }}>
-                    Unlock Exclusive Deals by Logging In
+              {item.totalFare + "-" + item.provider}
+            </Link>
+          </Button>
+          <Popover
+            content={
+              bestOffer2 ? (
+                <>
+                  <div>
+                    <span style={{ color: "#4E6F7B" }}>Base Fare:</span>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#013042"
+                      }}
+                    >
+                      {provider.length > 1 && provider[1].baseFare}
+                    </span>
                   </div>
-                )
-              }
-              title={
-                bestOffer && (
-                  <Text style={{ fontWeight: "bold", color: "#013042" }}>
-                    Price breakdown
-                  </Text>
-                )
-              }
-              trigger="hover"
-            >
-              <Button
-                shape="circle"
-                icon={<InfoOutlined style={{ color: "white" }} />}
-                size="small"
-                style={{ background: "#4E6F7B" }}
-              />
-            </Popover>
-            <Text
-              type="secondary"
-              style={{
-                fontWeight: "bold",
-                color: "#013042",
-                marginLeft: ".4rem"
-              }}
-            >
-              Fare Details
-            </Text>
-          </div>
-          <div className="cardButtons">
-            <button
-              onClick={() => {
-                const link = provider.length && provider[0].url
-                window.open(link, "_blank")
-              }}
-              className="headerButtons filled"
-            >
-              Book now
-            </button>
+                  <div>
+                    <span style={{ color: "#4E6F7B" }}>Total Tax:</span>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#013042"
+                      }}
+                    >
+                      {provider.length > 1 && provider[1].tax}
+                    </span>
+                  </div>
+                  <div>
+                    <span style={{ color: "#4E6F7B" }}>Total Fare:</span>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#013042"
+                      }}
+                    >
+                      {bestOffer2.fare.totalFare}
+                    </span>
+                  </div>
+                  <div>
+                    <span style={{ color: "#4E6F7B" }}>Total discount:</span>{" "}
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#013042"
+                      }}
+                    >
+                      {bestOffer2.fare.totalDiscount}
+                    </span>
+                  </div>
 
-            <button
-              onClick={() => {
-                dispatch(updateFlightDetails(true))
-              }}
-              className="headerButtons outlined"
-            >
-              Flight Details
-            </button>
+                  <div>
+                    <span style={{ color: "#4E6F7B" }}>Promo code:</span>
+                    <span
+                      style={{
+                        fontWeight: "bold",
+                        color: "#013042"
+                      }}
+                    >
+                      {bestOffer2.promoCode
+                        ? bestOffer2.promoCode
+                        : "No offer applicable"}
+                    </span>
+                  </div>
+                  <div>
+                    <span style={{ color: "#4E6F7B" }}>
+                      Total fare after discount:{" "}
+                    </span>
+                    <b>
+                      <span
+                        style={{
+                          fontWeight: "bold",
+                          color: "#013042"
+                        }}
+                      >
+                        {bestOffer2.fare.totalFareAfterDiscount
+                          ? bestOffer2.fare.totalFareAfterDiscount
+                          : bestOffer2.fare.totalFare}
+                      </span>
+                    </b>
+                  </div>
+                </>
+              ) : (
+                <div style={{ fontWeight: "bold", color: "#013042" }}>
+                  Unlock Exclusive Deals by Logging In
+                </div>
+              )
+            }
+            title={
+              bestOffer2 && (
+                <Text style={{ fontWeight: "bold", color: "#013042" }}>
+                  Price breakdown
+                </Text>
+              )
+            }
+            trigger="hover"
+          >
+            <Button
+              shape="circle"
+              icon={<InfoOutlined style={{ color: "white" }} />}
+              size="small"
+              style={{ background: "#4E6F7B" }}
+            />
+          </Popover>
+        </div>
+      ))}
+      {P2.length && (
+        <div
+          style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
+        >
+          <Dropdown menu={{ items }} placement="top">
+            <Button type="text">More {">>"}</Button>
+          </Dropdown>
+        </div>
+      )}
+    </div>
+  )
+
+  const flightDetailsCard = (
+    <>
+      <div className="flightBottomDetailCard">
+        <div
+          className="bottomCardContent"
+          style={{ border: "1px solid yellow", width: "100%" }}
+          ref={modalRef}
+        >
+          <div
+            style={{ border: "1px solid red", width: "100%" }}
+            ref={leftColRef}
+          >
+            <div className="flightSummaryDetail">
+              <div>{detailsCard("depart", departFlight)}</div>
+
+              {!_.isEmpty(returnFlight) && (
+                <div>{detailsCard("return", returnFlight)}</div>
+              )}
+            </div>
+
+            <div>{providerList}</div>
+          </div>
+          <div
+            className="fareDetail"
+            style={{ border: "1px solid green" }}
+            ref={rightColRef}
+          >
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: ".4rem"
+                }}
+              >
+                <h4 className="fareHeading">
+                  Cheapest Fare: ₹
+                  {provider.length && <span>
+                    {provider.length && provider[0].bestOffer &&
+                    provider[0].bestOffer.fare &&
+                    provider[0].bestOffer.fare.totalFareAfterDiscount
+                      ? provider[0].bestOffer.fare.totalFareAfterDiscount
+                      : provider[0].totalFare}
+                  </span>}
+                </h4>
+              </div>
+              <p style={{ margin: 0, color: "#013042" }}>
+                {provider.length && provider[0].provider}
+              </p>
+
+              <Popover
+                content={
+                  provider.length && provider[0].bestOffer ? (
+                    <>
+                      <div>
+                        <span style={{ color: "#4E6F7B" }}>Base Fare:</span>
+                        <span style={{ fontWeight: "bold", color: "#013042" }}>
+                          {provider.length && provider[0].baseFare}
+                        </span>
+                      </div>
+                      <div>
+                        <span style={{ color: "#4E6F7B" }}>Total Tax:</span>
+                        <span style={{ fontWeight: "bold", color: "#013042" }}>
+                          {provider.length && provider[0].tax}
+                        </span>
+                      </div>
+                      <div>
+                        <span style={{ color: "#4E6F7B" }}>Total Fare:</span>
+                        <span style={{ fontWeight: "bold", color: "#013042" }}>
+                          {provider.length && provider[0].bestOffer.fare.totalFare}
+                        </span>
+                      </div>
+                      <div>
+                        <span style={{ color: "#4E6F7B" }}>
+                          Total discount:
+                        </span>{" "}
+                        <span style={{ fontWeight: "bold", color: "#013042" }}>
+                          {provider.length && provider[0].bestOffer.fare.totalDiscount}
+                        </span>
+                      </div>
+
+                      <div>
+                        <span style={{ color: "#4E6F7B" }}>Promo code:</span>
+                        <span style={{ fontWeight: "bold", color: "#013042" }}>
+                          {provider[0].bestOffer.promoCode
+                            ? bestOffer.promoCode
+                            : "No offer applicable"}
+                        </span>
+                      </div>
+                      <div>
+                        <span style={{ color: "#4E6F7B" }}>
+                          Total fare after discount:{" "}
+                        </span>
+                        <b>
+                          <span
+                            style={{ fontWeight: "bold", color: "#013042" }}
+                          >
+                            {provider[0].bestOffer.fare.totalFareAfterDiscount
+                              ? provider[0].bestOffer.fare.totalFareAfterDiscount
+                              : provider[0].bestOffer.fare.totalFare}
+                          </span>
+                        </b>
+                      </div>
+                    </>
+                  ) : (
+                    <div style={{ fontWeight: "bold", color: "#013042" }}>
+                      Unlock Exclusive Deals by Logging In
+                    </div>
+                  )
+                }
+                title={
+                  provider.length && provider[0].bestOffer && (
+                    <Text style={{ fontWeight: "bold", color: "#013042" }}>
+                      Price breakdown
+                    </Text>
+                  )
+                }
+                trigger="hover"
+              >
+                <Button
+                  shape="circle"
+                  icon={<InfoOutlined style={{ color: "white" }} />}
+                  size="small"
+                  style={{ background: "#4E6F7B" }}
+                />
+              </Popover>
+              <Text
+                type="secondary"
+                style={{
+                  fontWeight: "bold",
+                  color: "#013042",
+                  marginLeft: ".4rem"
+                }}
+              >
+                Fare Details
+              </Text>
+            </div>
+            <div className="cardButtons">
+              <button
+                onClick={() => {
+                  const link = provider.length && provider[0].url
+                  window.open(link, "_blank")
+                }}
+                className="headerButtons filled"
+              >
+                Book now
+              </button>
+
+              <button
+                onClick={() => {
+                  dispatch(updateFlightDetails(true))
+                }}
+                className="headerButtons outlined"
+              >
+                Flight Details
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 
   return (
