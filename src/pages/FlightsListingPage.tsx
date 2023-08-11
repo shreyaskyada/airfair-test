@@ -108,9 +108,7 @@ const FlightsListingPage = () => {
   }
 
   const onSelectedFlightChange = (value: any, type: string, flight: Flight) => {
-    if (type === "depart") {
-      dispatch(uploadIsLoading(true))
-    }
+    dispatch(uploadIsLoading(true))
     setTimeout(() => {
       setSelectedFlight((prevDate) => ({
         ...prevDate,
@@ -123,7 +121,6 @@ const FlightsListingPage = () => {
           const data = filterFlightList(compareData, type)
           dispatch(updateDestinationFlights(data))
           dispatch(updateReturnFlights(data[0]))
-          dispatch(uploadIsLoading(false))
           break
         }
         case "return": {
