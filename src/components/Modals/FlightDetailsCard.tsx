@@ -20,7 +20,11 @@ import useLocalStorage from "../../hooks/LocalStorage"
 import { Drawer } from "antd"
 import type { TabsProps } from "antd"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
-import { toggleModal, updateFlightDetails, uploadIsLoading } from "../../redux/slices/app"
+import {
+  toggleModal,
+  updateFlightDetails,
+  uploadIsLoading
+} from "../../redux/slices/app"
 import { Flight, FlightState } from "../../redux/slices/flights"
 import { airlineMapping } from "../../services/airports"
 import { getBestOffer } from "../../services/airports"
@@ -36,9 +40,7 @@ const { useBreakpoint } = Grid
 const FlightDetailCard = ({ onFinishHandler }: any) => {
   const dispatch = useAppDispatch()
   const screen = useBreakpoint()
-  const [authToken] = useLocalStorage("authToken", "")
 
-  const [provider, setProvider] = useState<any>([])
   const [providerWithOffers, setProviderWithOffers] = useState<any>([])
   const [providerWithOffers2, setProviderWithOffers2] = useState<any>([])
 
@@ -52,7 +54,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   const [rightColHeight, rightColwidth] = useDimensions(rightColRef)
   const [providerHeight, providerwidth] = useDimensions(providerListRef)
 
-  const { modal, flightDetails, userDetails } = useAppSelector(
+  const { flightDetails, userDetails } = useAppSelector(
     (state) => state.app
   )
 
@@ -65,9 +67,10 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
   useEffect(() => {
     if (
-      (leftColwidth + rightColwidth > width &&
+      providerWithOffers.length > 1 &&
+      ((leftColwidth + rightColwidth > width &&
         leftColwidth !== rightColwidth) ||
-      (leftColwidth === rightColwidth && providerwidth > width)
+        (leftColwidth === rightColwidth && providerwidth > width))
     ) {
       let items: any = [...providerWithOffers]
       let items2 = [...providerWithOffers2]
@@ -78,102 +81,97 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
       setProviderWithOffers(items)
       setProviderWithOffers2(items2)
     }
-  }, [leftColwidth, rightColwidth, width, providerWithOffers])
+  }, [leftColwidth, rightColwidth, width,providerWithOffers])
 
-  useEffect(() => {
-    const getDiscount = async (token: any) => {
-      setProviderWithOffers([])
-      setProviderWithOffers2([])
-      try {
-        if (!provider.length || !searchFlightData) {
-          throw new Error("invalid inputs")
-        }
-        const walletList = userDetails.walletList.map(
-          (wallet: any) => wallet.walletName
-        )
-
-        const bankList = userDetails.bankList.map((bank: any) => ({
-          bankName: bank.bankName,
-          bankCards: [bank.bankCardType + "-" + bank.bankCardName]
-        }))
-
-        const departAirlinesCode =
-          departFlight &&
-          departFlight.flightCode
-            ?.split("->")
-            .map((item) => item.substring(0, 2))
-
-        const returnAirlinesCode =
-          returnFlight &&
-          returnFlight.flightCode
-            ?.split("->")
-            .map((item) => item.substring(0, 2))
-
-        const departAirlineNames =
-          departAirlinesCode?.map((code) => airlineMapping[code]) || []
-        const returnAirlineNames =
-          returnAirlinesCode?.map((code) => airlineMapping[code]) || []
-
-        const airlineNames = _.uniq([
-          ...departAirlineNames,
-          ...returnAirlineNames
-        ])
-
-        const doj = moment(searchFlightData.dateOfDep).valueOf()
-        const dob = moment(dayjs().toString()).valueOf()
-
-        const payloads: any = provider.map((_provider: any) => ({
-          provider: _provider.provider,
-          airlines: airlineNames.length ? airlineNames : ["ALL"],
-          flightType: "DOMESTIC",
-          journeyType: searchFlightData.flightType,
-          dateOfJourney: doj / 1000,
-          dateOfBooking: dob / 1000,
-          bankList: bankList,
-          walletList,
-          noOfTravellers: searchFlightData.totalTravellers,
-          fare: {
-            baseFare: _provider.baseFare,
-            tax: _provider.tax,
-            totalFare: _provider.totalFare
-          }
-        }))
-
-        let payloadResponse: any = []
-        for (const payload of payloads) {
-          try {
-            const res: any = await getBestOffer(payload)
-
-            if (res) {
-              payloadResponse.push(res.bestOffer)
-            } else {
-              payloadResponse.push({})
-            }
-          } catch (error) {
-            console.log(error)
-          }
-        }
-
-        const _providersWithOffer = provider.map(
-          (_provider: any, index: number) => {
-            return {
-              ..._provider,
-              bestOffer: payloadResponse[index]
-            }
-          }
-        )
-
-        setProviderWithOffers(_providersWithOffer)
-        dispatch(uploadIsLoading(false))
-      } catch (error) {
-        console.log(error)
-        dispatch(uploadIsLoading(false))
+  const getDiscount = async (provider: []) => {
+    try {
+      if (!provider.length || !searchFlightData) {
+        throw new Error("invalid inputs")
       }
-    }
 
-    const token = localStorage.getItem("authToken")
-    getDiscount(token)
-  }, [provider, searchFlightData, userDetails, departFlight, returnFlight])
+      const walletList = userDetails.walletList.map(
+        (wallet: any) => wallet.walletName
+      )
+
+      const bankList = userDetails.bankList.map((bank: any) => ({
+        bankName: bank.bankName,
+        bankCards: [bank.bankCardType + "-" + bank.bankCardName]
+      }))
+
+      const departAirlinesCode =
+        departFlight &&
+        departFlight.flightCode
+          ?.split("->")
+          .map((item) => item.substring(0, 2))
+
+      const returnAirlinesCode =
+        returnFlight &&
+        returnFlight.flightCode
+          ?.split("->")
+          .map((item) => item.substring(0, 2))
+
+      const departAirlineNames =
+        departAirlinesCode?.map((code) => airlineMapping[code]) || []
+      const returnAirlineNames =
+        returnAirlinesCode?.map((code) => airlineMapping[code]) || []
+
+      const airlineNames = _.uniq([
+        ...departAirlineNames,
+        ...returnAirlineNames
+      ])
+
+      const doj = moment(searchFlightData.dateOfDep).valueOf()
+      const dob = moment(dayjs().toString()).valueOf()
+
+      const payloads: any = provider.map((_provider: any) => ({
+        provider: _provider.provider,
+        airlines: airlineNames.length ? airlineNames : ["ALL"],
+        flightType: "DOMESTIC",
+        journeyType: searchFlightData.flightType,
+        dateOfJourney: doj / 1000,
+        dateOfBooking: dob / 1000,
+        bankList: bankList,
+        walletList,
+        noOfTravellers: searchFlightData.totalTravellers,
+        fare: {
+          baseFare: _provider.baseFare,
+          tax: _provider.tax,
+          totalFare: _provider.totalFare
+        }
+      }))
+
+      let payloadResponse: any = []
+      for (const payload of payloads) {
+        try {
+          const res: any = await getBestOffer(payload)
+
+          if (res) {
+            payloadResponse.push(res.bestOffer)
+          } else {
+            payloadResponse.push({})
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      const _providersWithOffer = provider.map(
+        (_provider: any, index: number) => {
+          return {
+            ..._provider,
+            bestOffer: payloadResponse[index]
+          }
+        }
+      )
+
+      setProviderWithOffers(_providersWithOffer)
+      console.log("🚀 ~ file: FlightDetailsCard.tsx:168 ~ getDiscount ~ _providersWithOffer:", _providersWithOffer)
+      dispatch(uploadIsLoading(false))
+    } catch (error) {
+      console.log(error)
+      dispatch(uploadIsLoading(false))
+    }
+  }
 
   useEffect(() => {
     let providers: any = []
@@ -228,9 +226,9 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             tax: totalTax
           })
         })
-      providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
 
-      setProvider(providers)
+      getDiscount(providers)
+
     } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
       const keys = Object.keys(departFlight.compare || {})
       keys &&
@@ -262,9 +260,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             tax: totalTax
           })
         })
-      providers.sort((a: any, b: any) => a.totalFare - b.totalFare)
 
-      setProvider(providers)
+      getDiscount(providers)
     }
   }, [departFlight, returnFlight])
 
@@ -789,10 +786,12 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         >
           <Dropdown
             menu={{
-              items: providerWithOffers2.map((_provider: any, index: number) => ({
-                key: index,
-                label: <SingleProviderFareDetail provider={_provider} />
-              }))
+              items: providerWithOffers2.map(
+                (_provider: any, index: number) => ({
+                  key: index,
+                  label: <SingleProviderFareDetail provider={_provider} />
+                })
+              )
             }}
             placement="top"
             trigger={["click"]}
