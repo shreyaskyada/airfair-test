@@ -54,9 +54,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   const [rightColHeight, rightColwidth] = useDimensions(rightColRef)
   const [providerHeight, providerwidth] = useDimensions(providerListRef)
 
-  const { flightDetails, userDetails } = useAppSelector(
-    (state) => state.app
-  )
+  const { flightDetails, userDetails } = useAppSelector((state) => state.app)
 
   const { departFlight, returnFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
@@ -81,7 +79,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
       setProviderWithOffers(items)
       setProviderWithOffers2(items2)
     }
-  }, [leftColwidth, rightColwidth, width,providerWithOffers])
+  }, [leftColwidth, rightColwidth, width, providerWithOffers])
 
   const getDiscount = async (provider: []) => {
     try {
@@ -100,15 +98,11 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
       const departAirlinesCode =
         departFlight &&
-        departFlight.flightCode
-          ?.split("->")
-          .map((item) => item.substring(0, 2))
+        departFlight.flightCode?.split("->").map((item) => item.substring(0, 2))
 
       const returnAirlinesCode =
         returnFlight &&
-        returnFlight.flightCode
-          ?.split("->")
-          .map((item) => item.substring(0, 2))
+        returnFlight.flightCode?.split("->").map((item) => item.substring(0, 2))
 
       const departAirlineNames =
         departAirlinesCode?.map((code) => airlineMapping[code]) || []
@@ -164,8 +158,21 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         }
       )
 
+      _providersWithOffer.length > 1 &&
+        _providersWithOffer.sort((a, b) => {
+          const aFare =
+            a.bestOffer.fare.totalFareAfterDiscount > 0
+              ? a.bestOffer.fare.totalFareAfterDiscount
+              : a.totalFare
+          const bFare =
+            b.bestOffer.fare.totalFareAfterDiscount > 0
+              ? b.bestOffer.fare.totalFareAfterDiscount
+              : b.totalFare
+
+          return aFare - bFare
+        })
+
       setProviderWithOffers(_providersWithOffer)
-      console.log("🚀 ~ file: FlightDetailsCard.tsx:168 ~ getDiscount ~ _providersWithOffer:", _providersWithOffer)
       dispatch(uploadIsLoading(false))
     } catch (error) {
       console.log(error)
@@ -228,7 +235,6 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         })
 
       getDiscount(providers)
-
     } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
       const keys = Object.keys(departFlight.compare || {})
       keys &&
