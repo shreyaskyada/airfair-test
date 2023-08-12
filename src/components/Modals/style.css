@@ -65,7 +65,6 @@
 .bottomCardContent {
     display: flex;
     justify-content: space-between;
-    width: 100%;
     gap: 1rem
 }
 

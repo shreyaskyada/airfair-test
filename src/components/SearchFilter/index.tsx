@@ -194,7 +194,7 @@ const SearchFilter = ({
           : dispatch(updateReturnFlights({}))
           
           dispatch(updateSaarchFlights(searchFlightData))
-          dispatch(uploadIsLoading(false))
+          //dispatch(uploadIsLoading(false))
 
           redirectRoute && navigate(redirectRoute)
         })
