@@ -1,40 +1,41 @@
 import { CSSProperties } from "react"
 import { Carousel as AntCarousel } from "antd"
+import { carousalImageList } from "../../assets/images"
 import "./carousel.styles.css"
 
 const contentStyle: CSSProperties = {
-  height: "170px",
-  color: "#fff",
-  lineHeight: "170px",
+  maxHeight: "170px",
+  height: "100%",
   textAlign: "center",
-  background: "#013042",
-  borderRadius: "5px"
 }
 
 const Carousel = () => {
   return (
-    <div className="carouselContainer">
-      <AntCarousel
-        autoplay
-        arrows={true}
-        dots={false}
-        autoplaySpeed={4000}
-        touchMove={true}
-      >
-        <div>
-          <h3 style={contentStyle}>1</h3>
+    <>
+      {carousalImageList && carousalImageList.length && (
+        <div className="carouselContainer">
+          <AntCarousel
+            autoplay
+            arrows={true}
+            dots={false}
+            autoplaySpeed={4000}
+            touchMove={true}
+          >
+            {carousalImageList.map((image: any, index: number) => (
+              <div style={contentStyle} key={index}>
+                <div style={{ height: "170px" }}>
+                  <img
+                    src={image}
+                    alt="add"
+                    style={{ width: "100%", height: "100%" }}
+                  />
+                </div>
+              </div>
+            ))}
+          </AntCarousel>
         </div>
-        <div>
-          <h3 style={contentStyle}>2</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>3</h3>
-        </div>
-        <div>
-          <h3 style={contentStyle}>4</h3>
-        </div>
-      </AntCarousel>
-    </div>
+      )}
+    </>
   )
 }
 

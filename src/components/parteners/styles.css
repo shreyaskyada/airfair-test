@@ -1,0 +1,87 @@
+/*------------------------PARTENERS SECTION---------------------------------------*/
+
+.airlineSection {
+    padding: 1.2rem;
+    margin: 2rem 0;
+}
+
+.airlineContainer {
+    padding: 1.2rem;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 0px 1px rgba(77, 77, 77, 0.1);
+}
+
+.airlineHeading {
+    margin: 1.2rem 0 2rem 0;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.airlinesList {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.airlineTitle {
+    color: var(--primary-color);
+}
+
+/*------------------------PARTENER SECTION---------------------------------------*/
+
+.itemContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.airlineTitle {
+    text-align: center;
+    font-weight: bold;
+}
+
+
+.airlineImage {
+    width: 100%;
+}
+
+@media only screen and (max-width:1050px) {
+    .airlineSection {
+        padding: .4rem;
+    }
+
+    .airlineContainer {
+        padding: .8rem;
+    }
+}
+
+@media only screen and (max-width:768px) {
+
+    .airlineHeading {
+        font-size: 1.6rem;
+    }
+
+    .airlineImgContainer {
+        max-width: 60px;
+    }
+
+}
+
+@media only screen and (max-width:500px) {
+    .airlineHeading {
+        font-size: 1.3rem;
+        margin:1rem 0 1.2rem 0;
+    }
+
+    .airlineImgContainer {
+        max-width: 50px;
+    }
+
+    .airlineSection{
+        margin-top: 1rem;
+    }
+}
