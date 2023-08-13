@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { InfoOutlined } from "@ant-design/icons"
 import { Link } from "react-router-dom"
 import {
@@ -37,6 +37,82 @@ const { Text, Title } = Typography
 const { Meta } = Card
 const { useBreakpoint } = Grid
 
+const P = [{
+  "provider": "Easy",
+  "totalFare": 4496,
+  "url": "https://www.happyeasygo.com/flights/DEL-BOM/2023-08-13?tripType=&adults=1&childs=0&baby=0&cabinClass=E&airline=&carrier=",
+  "baseFare": 3311,
+  "tax": 1185,
+  "bestOffer": {
+      "offerType": "PROMOCODE_OFFER",
+      "bankName": null,
+      "cardName": null,
+      "cardType": null,
+      "walletName": null,
+      "promoCode": null,
+      "discountType": null,
+      "primaryDiscountType": null,
+      "fare": {
+          "baseFare": 3311,
+          "tax": 1185,
+          "comission": 0,
+          "cashbackDiscount": 0,
+          "instantDiscount": 0,
+          "totalDiscount": 0,
+          "totalFare": 4496,
+          "totalFareAfterDiscount": 0,
+          "totalBaseFare": 0,
+          "adultBaseFare": 0,
+          "adultTax": 0,
+          "totalTax": 0,
+          "adultTotalFare": 0,
+          "totalCommission": 0,
+          "surcharge": 0,
+          "otherCharges": 0
+      },
+      "comment": null,
+      "fareReduced": false
+  }
+},
+{
+  "provider": "HAPPYE",
+  "totalFare": 4496,
+  "url": "https://www.happyeasygo.com/flights/DEL-BOM/2023-08-13?tripType=&adults=1&childs=0&baby=0&cabinClass=E&airline=&carrier=",
+  "baseFare": 3311,
+  "tax": 1185,
+  "bestOffer": {
+      "offerType": "PROMOCODE_OFFER",
+      "bankName": null,
+      "cardName": null,
+      "cardType": null,
+      "walletName": null,
+      "promoCode": null,
+      "discountType": null,
+      "primaryDiscountType": null,
+      "fare": {
+          "baseFare": 3311,
+          "tax": 1185,
+          "comission": 0,
+          "cashbackDiscount": 0,
+          "instantDiscount": 0,
+          "totalDiscount": 0,
+          "totalFare": 4496,
+          "totalFareAfterDiscount": 0,
+          "totalBaseFare": 0,
+          "adultBaseFare": 0,
+          "adultTax": 0,
+          "totalTax": 0,
+          "adultTotalFare": 0,
+          "totalCommission": 0,
+          "surcharge": 0,
+          "otherCharges": 0
+      },
+      "comment": null,
+      "fareReduced": false
+  }
+}
+]
+
 const FlightDetailCard = ({ onFinishHandler }: any) => {
   const dispatch = useAppDispatch()
   const screen = useBreakpoint()
@@ -65,22 +141,22 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
   useEffect(() => {
     if (
-      providerWithOffers.length > 1 &&
       ((leftColwidth + rightColwidth > width &&
         leftColwidth !== rightColwidth) ||
         (leftColwidth === rightColwidth && providerwidth > width))
     ) {
       let items: any = [...providerWithOffers]
       let items2 = [...providerWithOffers2]
-
+      
       let i = items.pop()
       items2.push(i)
-
+      
       setProviderWithOffers(items)
       setProviderWithOffers2(items2)
+      
     }
-  }, [leftColwidth, rightColwidth, width, providerWithOffers])
-
+  }, [leftColwidth, rightColwidth, width, providerwidth])
+  
   const getDiscount = async (provider: []) => {
     try {
       if (!provider.length || !searchFlightData) {
@@ -149,7 +225,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         }
       }
 
-      const _providersWithOffer = provider.map(
+      let _providersWithOffer = provider.map(
         (_provider: any, index: number) => {
           return {
             ..._provider,
@@ -157,6 +233,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           }
         }
       )
+
+      _providersWithOffer = [..._providersWithOffer,...P]
 
       _providersWithOffer.length > 1 &&
         _providersWithOffer.sort((a, b) => {
@@ -173,6 +251,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         })
 
       setProviderWithOffers(_providersWithOffer)
+      setProviderWithOffers2([])
       dispatch(uploadIsLoading(false))
     } catch (error) {
       console.log(error)
@@ -614,7 +693,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
   const SingleProviderFareDetail: React.FC<any> = ({ provider }) => {
     return (
-      <div>
+      <div onClick={(e)=>e.stopPropagation()}>
         {provider ? (
           <div
             style={{

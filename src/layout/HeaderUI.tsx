@@ -12,18 +12,16 @@ import {
 import useLocalStorage from "../hooks/LocalStorage"
 import { logoutUser } from "../services/auth"
 import { logoImage } from "../assets/images"
+import { notification } from "../components/Notification/customNotification"
 import "./layoutStyles.css"
 
-const { Header } = Layout
 const { useBreakpoint } = Grid
 
 const HeaderUI = () => {
   const dispatch = useAppDispatch()
   const screens = useBreakpoint()
   const {
-    notifcationModal,
     isLoggedIn: isLoggedInState,
-    showSidebar
   } = useAppSelector((state) => state.app)
 
   const openModal = (type: "signup" | "login" | "profile") => {
@@ -53,12 +51,10 @@ const HeaderUI = () => {
             roles: []
           })
         )
-        notifcationModal &&
-          notifcationModal("success", "Logged out successfully!")
+        notification.success({ message: "LoggedOut successfully" })
       })
       .catch((err) => {
         console.log(err)
-        // 400 response is used for Invalid request that means token is no longer valid
         if (err?.response?.status === 400) {
           setIsLoggedIn(false)
           setUserId("")
@@ -76,12 +72,9 @@ const HeaderUI = () => {
               roles: []
             })
           )
-          notifcationModal &&
-            notifcationModal("success", "Logged out successfully!")
-          // console.log(err);
-          // notifcationModal &&
-          //   notifcationModal("error", `Logout failed (${err.message})`);
+          
         }
+        notification.error({ message: "unexpected Error while logging out!!!" })
       })
   }
 
