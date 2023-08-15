@@ -54,10 +54,10 @@ const Homepage = () => {
             )}
           </h3>
         </div>
-        <Carousel />
+        {/* <Carousel /> */}
         <PopularFlights />
         <PopularAirlines />
-        <Parteners/>
+        {/* <Parteners/> */}
       </div>
     </div>
   )

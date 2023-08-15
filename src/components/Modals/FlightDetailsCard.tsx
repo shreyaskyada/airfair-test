@@ -37,81 +37,81 @@ const { Text, Title } = Typography
 const { Meta } = Card
 const { useBreakpoint } = Grid
 
-const P = [{
-  "provider": "Easy",
-  "totalFare": 4496,
-  "url": "https://www.happyeasygo.com/flights/DEL-BOM/2023-08-13?tripType=&adults=1&childs=0&baby=0&cabinClass=E&airline=&carrier=",
-  "baseFare": 3311,
-  "tax": 1185,
-  "bestOffer": {
-      "offerType": "PROMOCODE_OFFER",
-      "bankName": null,
-      "cardName": null,
-      "cardType": null,
-      "walletName": null,
-      "promoCode": null,
-      "discountType": null,
-      "primaryDiscountType": null,
-      "fare": {
-          "baseFare": 3311,
-          "tax": 1185,
-          "comission": 0,
-          "cashbackDiscount": 0,
-          "instantDiscount": 0,
-          "totalDiscount": 0,
-          "totalFare": 4496,
-          "totalFareAfterDiscount": 0,
-          "totalBaseFare": 0,
-          "adultBaseFare": 0,
-          "adultTax": 0,
-          "totalTax": 0,
-          "adultTotalFare": 0,
-          "totalCommission": 0,
-          "surcharge": 0,
-          "otherCharges": 0
-      },
-      "comment": null,
-      "fareReduced": false
-  }
-},
-{
-  "provider": "HAPPYE",
-  "totalFare": 4496,
-  "url": "https://www.happyeasygo.com/flights/DEL-BOM/2023-08-13?tripType=&adults=1&childs=0&baby=0&cabinClass=E&airline=&carrier=",
-  "baseFare": 3311,
-  "tax": 1185,
-  "bestOffer": {
-      "offerType": "PROMOCODE_OFFER",
-      "bankName": null,
-      "cardName": null,
-      "cardType": null,
-      "walletName": null,
-      "promoCode": null,
-      "discountType": null,
-      "primaryDiscountType": null,
-      "fare": {
-          "baseFare": 3311,
-          "tax": 1185,
-          "comission": 0,
-          "cashbackDiscount": 0,
-          "instantDiscount": 0,
-          "totalDiscount": 0,
-          "totalFare": 4496,
-          "totalFareAfterDiscount": 0,
-          "totalBaseFare": 0,
-          "adultBaseFare": 0,
-          "adultTax": 0,
-          "totalTax": 0,
-          "adultTotalFare": 0,
-          "totalCommission": 0,
-          "surcharge": 0,
-          "otherCharges": 0
-      },
-      "comment": null,
-      "fareReduced": false
-  }
-}
-]
+// const P = [{
+//   "provider": "Easy",
+//   "totalFare": 4496,
+//   "url": "https://www.happyeasygo.com/flights/DEL-BOM/2023-08-13?tripType=&adults=1&childs=0&baby=0&cabinClass=E&airline=&carrier=",
+//   "baseFare": 3311,
+//   "tax": 1185,
+//   "bestOffer": {
+//       "offerType": "PROMOCODE_OFFER",
+//       "bankName": null,
+//       "cardName": null,
+//       "cardType": null,
+//       "walletName": null,
+//       "promoCode": null,
+//       "discountType": null,
+//       "primaryDiscountType": null,
+//       "fare": {
+//           "baseFare": 3311,
+//           "tax": 1185,
+//           "comission": 0,
+//           "cashbackDiscount": 0,
+//           "instantDiscount": 0,
+//           "totalDiscount": 0,
+//           "totalFare": 4496,
+//           "totalFareAfterDiscount": 0,
+//           "totalBaseFare": 0,
+//           "adultBaseFare": 0,
+//           "adultTax": 0,
+//           "totalTax": 0,
+//           "adultTotalFare": 0,
+//           "totalCommission": 0,
+//           "surcharge": 0,
+//           "otherCharges": 0
+//       },
+//       "comment": null,
+//       "fareReduced": false
+//   }
+// },
+// {
+//   "provider": "HAPPYE",
+//   "totalFare": 4496,
+//   "url": "https://www.happyeasygo.com/flights/DEL-BOM/2023-08-13?tripType=&adults=1&childs=0&baby=0&cabinClass=E&airline=&carrier=",
+//   "baseFare": 3311,
+//   "tax": 1185,
+//   "bestOffer": {
+//       "offerType": "PROMOCODE_OFFER",
+//       "bankName": null,
+//       "cardName": null,
+//       "cardType": null,
+//       "walletName": null,
+//       "promoCode": null,
+//       "discountType": null,
+//       "primaryDiscountType": null,
+//       "fare": {
+//           "baseFare": 3311,
+//           "tax": 1185,
+//           "comission": 0,
+//           "cashbackDiscount": 0,
+//           "instantDiscount": 0,
+//           "totalDiscount": 0,
+//           "totalFare": 4496,
+//           "totalFareAfterDiscount": 0,
+//           "totalBaseFare": 0,
+//           "adultBaseFare": 0,
+//           "adultTax": 0,
+//           "totalTax": 0,
+//           "adultTotalFare": 0,
+//           "totalCommission": 0,
+//           "surcharge": 0,
+//           "otherCharges": 0
+//       },
+//       "comment": null,
+//       "fareReduced": false
+//   }
+// }
+// ]
 
 const FlightDetailCard = ({ onFinishHandler }: any) => {
   const dispatch = useAppDispatch()
@@ -234,7 +234,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         }
       )
 
-      _providersWithOffer = [..._providersWithOffer,...P]
+      _providersWithOffer = [..._providersWithOffer]
 
       _providersWithOffer.length > 1 &&
         _providersWithOffer.sort((a, b) => {
