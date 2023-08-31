@@ -5,6 +5,7 @@ import * as _ from "lodash"
 import { airlineMapping } from "../../services/airports"
 import { Airlines_Images } from "../../data/popularAirlines"
 import "./DataCard.css"
+import { useNavigate } from "react-router"
 
 interface Props {
   checked?: boolean
@@ -60,6 +61,8 @@ const DataCard = (props: Props) => {
   const [flightNames, setFlightNames] = useState<string[]>([])
   const [flightImage, setFlightImage] = useState<any>(null)
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     const _names = _.uniq(
       flight.company?.split("->").map((item) => item.substring(0, 2))
@@ -74,7 +77,7 @@ const DataCard = (props: Props) => {
   }, [flight])
 
   return (
-    <div className="detailCard">
+    <div className="detailCard" onClick={()=>navigate("/flights/1")}>
       <div className="cardContainer">
         <div className="radioButtonContainer">
           <input

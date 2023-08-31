@@ -9,6 +9,7 @@ import { useAppSelector } from "../redux/hooks"
 import LayoutUI from "../layout"
 import Loader from "../components/Modals/Loader"
 import AboutUs from "../pages/AboutUs"
+import FlightDetailPage from "../pages/FlightDetailPage"
 
 const HomeScreen = lazy(() => import("../pages/Homepage"))
 const FlightsListingPage = lazy(() => import("../pages/FlightsListingPage"))
@@ -34,7 +35,12 @@ const routes = [
       {
         path: "flights-listing",
         component: <FlightsListingPage />,
-        index: false
+        index: false,
+      },
+      {
+        path: "flights/:flight",
+        component: <FlightDetailPage />,
+        index: false,
       },
       { component: <HomeScreen />, index: true },
       { path: "aboutUs",
