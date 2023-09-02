@@ -93,18 +93,18 @@
   gap: 16px;
 }
 
-.leftCol .providerTitle{
+.leftCol .providerTitle {
   font-size: 14px;
   color: var(--primary-color);
   font-weight: 700;
 }
 
-.leftCol .ticketPrice{
+.leftCol .ticketPrice {
   color: var(--secondary-color);
   font-weight: bold;
 }
 
-.rightCol .tooltipContent{
+.rightCol .tooltipContent {
   background-color: var(--dark-color);
   font-size: 1rem;
   font-weight: 700;
@@ -118,6 +118,128 @@
   align-items: center;
   justify-content: center;
 }
+
+.flighCompleteDetail {
+  background: var(--bg-light-color);
+  border-radius: 8px;
+}
+
+.flightDetailContent {
+  padding: 1rem;
+}
+
+.flightNameContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.flightTimeDetail {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.cityDivider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: min-content;
+  width: 100%;
+}
+
+
+.cityDivider .divider {
+  border-bottom: 2px dotted yellow;
+  width: 100%;
+}
+
+.cityDivider .circle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background: white;
+}
+
+.cityDivider .circle1 {
+  left: -2px;
+}
+
+.cityDivider .circle2 {
+  right: -2px;
+}
+
+.flightCity {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+}
+
+.flightCity p {
+  color: var(--light-color);
+}
+
+.flightCity p:nth-child(2) {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+
+.chipsSection {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  max-width: 800px;
+  margin: 1rem auto;
+  gap: 0.8rem;
+}
+
+.chip {
+  padding: 0.4rem;
+  background: white;
+  border-radius: 20px;
+}
+
+.chip p {
+  text-align: center;
+  color: var(--light-color);
+}
+
+.mainDivider {
+  margin: 1rem 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: min-content;
+  width: 100%;
+}
+
+.mainDivider .divider {
+  border-bottom: 3px dashed white;
+  width: 100%;
+}
+
+.mainDivider .circle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: white;
+}
+
+.mainDivider .circle1 {
+  left: -10px;
+}
+
+.mainDivider .circle2 {
+  right: -10px;
+}
+
+
+
+
 
 /*=================================ABOUT_US=======================================*/
 .aboutUsContainer {
@@ -192,8 +314,19 @@
   .detail {
     font-size: 1.12rem;
   }
-  .providersSection{
-    grid-template-columns: repeat(1,1fr);
+
+  .providersSection {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media only screen and (max-width: 970px) {
+.flightNameContainer{
+  justify-content: center;
+}
+
+  .chipsSection{
+    grid-template-columns: repeat(2,1fr);
   }
 }
 
