@@ -43,7 +43,7 @@
 .headerCard {
   padding: 1.2rem;
   background-color: #fff;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: 0px 0px 0px 1px rgba(88, 88, 88, 0.1);
 }
 
@@ -172,6 +172,12 @@
   right: -2px;
 }
 
+.cityDivider .dividerIcon{
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+}
+
 .flightCity {
   display: flex;
   justify-content: space-between;
@@ -190,7 +196,7 @@
 
 .chipsSection {
   display: grid;
-  grid-template-columns: repeat(4,1fr);
+  grid-template-columns: repeat(4, 1fr);
   max-width: 800px;
   margin: 1rem auto;
   gap: 0.8rem;
@@ -238,6 +244,30 @@
 
 .mainDivider .circle2 {
   right: -10px;
+}
+
+.terminalContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.6rem 0;
+}
+
+.terminalContainer p {
+  color: var(--light-color);
+}
+
+.layovers {
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border-radius: 20px;
+  max-width: 600px;
+  background: var(--light-color);
+  color: white;
+  margin: 0.8rem auto;
 }
 
 
@@ -324,12 +354,12 @@
 }
 
 @media only screen and (max-width: 970px) {
-.flightNameContainer{
-  justify-content: center;
-}
+  .flightNameContainer {
+    justify-content: center;
+  }
 
-  .chipsSection{
-    grid-template-columns: repeat(2,1fr);
+  .chipsSection {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 

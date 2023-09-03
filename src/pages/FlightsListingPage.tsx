@@ -39,7 +39,8 @@ const FlightsListingPage = () => {
 
   const {
     flights,
-    departFlight
+    departFlight,
+    returnFlight
   }: { flights: any; departFlight: any; returnFlight: any } = useAppSelector(
     (state) => state.flight
   )
@@ -181,7 +182,7 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      {flights && Object.keys(flights).length > 0 && (
+      {flights && Object.keys(flights).length > 0 && flights?.returnJourneyCompareResponse?.length > 0 && (
         <div className="detailCardContainer">{<FlightDetailCard />}</div>
       )}
     </div>

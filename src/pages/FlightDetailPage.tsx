@@ -10,24 +10,18 @@ import { airlineMapping } from "../services/airports"
 import { getBestOffer } from "../services/airports"
 import { uploadIsLoading } from "../redux/slices/app"
 import { Airlines_Images } from "../data/popularAirlines"
+import { Link } from "react-router-dom"
+import { airplaneIcon } from "../assets/images"
 
 const FlightDetailPage = () => {
   const dispatch = useAppDispatch()
 
   const [providerWithOffers, setProviderWithOffers] = useState<any>([])
-  console.log(
-    "🚀 ~ file: FlightDetailPage.tsx:17 ~ FlightDetailPage ~ providerWithOffers:",
-    providerWithOffers
-  )
 
   const { userDetails } = useAppSelector((state) => state.app)
 
   const { departFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
-  )
-  console.log(
-    "🚀 ~ file: FlightDetailPage.tsx:22 ~ FlightDetailPage ~ departFlight:",
-    departFlight
   )
 
   const searchFlightData = useAppSelector(
@@ -202,19 +196,48 @@ const FlightDetailPage = () => {
           <div className="flightTime">
             <h3>{fromTime}</h3>
           </div>
+
           <div className="cityDivider">
             <span className="circle circle1"></span>
+            <img
+              src={airplaneIcon}
+              alt="aeroplane"
+              width={25}
+              height={25}
+              className="dividerIcon"
+            />
             <div className="divider"></div>
             <span className="circle circle2"></span>
           </div>
+
           <div className="flightTime">
             <h3>{toTime}</h3>
           </div>
         </div>
         <div className="flightCity">
           <p>{city?.from}</p>
-          <p>{duration} - 1 Stop</p>
+          <p>{duration}</p>
           <p>{city?.to}</p>
+        </div>
+        <div className="terminalContainer">
+          <p>
+            {`${
+              fromAddress
+                ? fromAddress.includes("Terminal")
+                  ? ""
+                  : "Terminal "
+                : "Terminal "
+            } ${fromAddress || "--"}`}
+          </p>
+          <p>
+            {`${
+              toAddress
+                ? toAddress.includes("Terminal")
+                  ? ""
+                  : "Terminal "
+                : "Terminal "
+            } ${toAddress || "--"}`}
+          </p>
         </div>
         <div className="chipsSection">
           <div className="chip">
@@ -223,12 +246,16 @@ const FlightDetailPage = () => {
           <div className="chip">
             <p>{fromDate}</p>
           </div>
-          <div className="chip">
-            <p>{cabinBaggage}</p>
-          </div>
-          <div className="chip">
-            <p>{checkinBaggage}</p>
-          </div>
+          {cabinBaggage && (
+            <div className="chip">
+              <p>{cabinBaggage}</p>
+            </div>
+          )}
+          {checkinBaggage && (
+            <div className="chip">
+              <p>{checkinBaggage}</p>
+            </div>
+          )}
         </div>
       </div>
     )
@@ -252,11 +279,13 @@ const FlightDetailPage = () => {
                 {departFlight &&
                   `${moment(departFlight.depDate).format("D MMM")}`}
               </p>
-              <p className="passengers">1 Traveller</p>
+              <p className="passengers">
+                {searchFlightData && searchFlightData.totalTravellers} Traveller
+              </p>
             </div>
             <Divider />
             <div className="providersSection">
-              {providerWithOffers.length &&
+              {!!providerWithOffers.length &&
                 providerWithOffers.map((provideDetail: any) => (
                   <div className="providerDetail">
                     <div className="leftCol">
@@ -264,14 +293,128 @@ const FlightDetailPage = () => {
                       <p className="ticketPrice">$ {provideDetail.totalFare}</p>
                     </div>
                     <div className="rightCol">
-                      <Tooltip title="Ant User" placement="top">
+                      <Tooltip
+                        color="white"
+                        title={
+                          provideDetail.bestOffer ? (
+                            <>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Base Fare:
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail.baseFare}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Total Tax:
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail.tax}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Total Fare:
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail &&
+                                    provideDetail.bestOffer &&
+                                    provideDetail.bestOffer.fare &&
+                                    provideDetail.bestOffer.fare.totalFare}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Total discount:
+                                </span>{" "}
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail &&
+                                    provideDetail.bestOffer &&
+                                    provideDetail.bestOffer.fare &&
+                                    provideDetail.bestOffer.fare.totalDiscount}
+                                </span>
+                              </div>
+
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Promo code:
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail.bestOffer &&
+                                  provideDetail.bestOffer.promoCode
+                                    ? provideDetail.bestOffer.promoCode
+                                    : "No offer applicable"}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Total fare after discount:{" "}
+                                </span>
+                                <b>
+                                  <span
+                                    style={{
+                                      fontWeight: "bold",
+                                      color: "#013042"
+                                    }}
+                                  >
+                                    {provideDetail.bestOffer &&
+                                    provideDetail.bestOffer.fare &&
+                                    provideDetail.bestOffer.fare
+                                      .totalFareAfterDiscount
+                                      ? provideDetail.bestOffer.fare
+                                          .totalFareAfterDiscount
+                                      : provideDetail.bestOffer.fare &&
+                                        provideDetail.bestOffer.fare.totalFare}
+                                  </span>
+                                </b>
+                              </div>
+                            </>
+                          ) : (
+                            <div
+                              style={{ fontWeight: "bold", color: "#013042" }}
+                            >
+                              Unlock Exclusive Deals by Logging In
+                            </div>
+                          )
+                        }
+                        placement="top"
+                      >
                         <p className="tooltipContent">i</p>
                       </Tooltip>
                       <button
                         className="headerButtons filled"
                         style={{ width: "100px" }}
                       >
-                        View Detail
+                        <Link to={provideDetail.url} target="_blank">
+                          View Detail
+                        </Link>
                       </button>
                     </div>
                   </div>
@@ -281,64 +424,107 @@ const FlightDetailPage = () => {
         </div>
         <div className="headerCard" style={{ margin: "2rem 0" }}>
           <div className="flighCompleteDetail">
-            {departFlight &&
-              departFlight.startTimeList?.map((ele, index) => (
-                <Fragment key={index}>
-                  {flighInfoTabCard({
-                    airLine: departFlight.flightCode?.split("->")[index],
-                    fromTime: moment(
-                      departFlight?.startTimeList
-                        ? departFlight?.startTimeList[index]
-                        : new Date()
-                    ).format("HH:mm"),
-                    fromDate: moment(
-                      departFlight?.startTimeList
-                        ? departFlight?.startTimeList[index]
-                        : new Date()
-                    ).format("DD/MM/YYYY"),
-                    fromAddress:
-                      departFlight.departureTerminalList &&
-                      departFlight.departureTerminalList[index],
-                    toTime: moment(
-                      departFlight?.endTimeList
-                        ? departFlight?.endTimeList[index]
-                        : new Date()
-                    ).format("HH:mm"),
-                    toDate: moment(
-                      departFlight?.endTimeList
-                        ? departFlight?.endTimeList[index]
-                        : new Date()
-                    ).format("DD/MM/YYYY"),
-                    duration:
-                      departFlight.durationsList &&
-                      departFlight.durationsList[index].substring(
-                        2,
-                        departFlight.durationsList[index].length
-                      ),
-                    toAddress:
-                      departFlight.arrivalTerminalList &&
-                      departFlight.arrivalTerminalList[index],
-                    flightCode: departFlight.flightCode,
-                    city: {
-                      from:
-                        index === 0
-                          ? departFlight.fromCity
-                          : departFlight?.transitFlight &&
-                            departFlight?.transitFlight[index - 1]?.viaCity,
-                      to:
-                        index !==
-                        (departFlight.startTimeList &&
-                          departFlight.startTimeList.length - 1)
-                          ? departFlight?.transitFlight &&
-                            departFlight?.transitFlight[index]?.viaCity
-                          : departFlight.toCity
-                    },
-                    stop: departFlight.stops,
-                    cabinBaggage: departFlight.cabinBaggage[index],
-                    checkinBaggage: departFlight.checkinBaggage[index]
-                  })}
-                </Fragment>
-              ))}
+            {departFlight.stops === 0
+              ? flighInfoTabCard({
+                  airLine: departFlight.flightCode,
+                  fromTime: departFlight.depTime,
+                  fromDate: departFlight.depDate,
+                  fromAddress:
+                    departFlight.departureTerminalList &&
+                    departFlight.departureTerminalList[0],
+                  toTime: departFlight.arrTime,
+                  toDate: departFlight.arrDate,
+                  duration: departFlight.duration,
+                  toAddress:
+                    departFlight.arrivalTerminalList &&
+                    departFlight.arrivalTerminalList[0],
+                  flightCode: departFlight.flightCode,
+                  city: {
+                    from: departFlight.fromCity,
+                    to: departFlight.toCity
+                  },
+                  stop: departFlight.stops,
+                  cabinBaggage:
+                    departFlight.cabinBaggage && departFlight.cabinBaggage[0],
+                  checkinBaggage:
+                    departFlight.checkinBaggage &&
+                    departFlight.checkinBaggage[0]
+                })
+              : departFlight &&
+                departFlight.startTimeList?.map((ele, index) => (
+                  <Fragment key={index}>
+                    {flighInfoTabCard({
+                      airLine: departFlight.flightCode?.split("->")[index],
+                      fromTime: moment(
+                        departFlight?.startTimeList
+                          ? departFlight?.startTimeList[index]
+                          : new Date()
+                      ).format("HH:mm"),
+                      fromDate: moment(
+                        departFlight?.startTimeList
+                          ? departFlight?.startTimeList[index]
+                          : new Date()
+                      ).format("DD/MM/YYYY"),
+                      fromAddress:
+                        departFlight.departureTerminalList &&
+                        departFlight.departureTerminalList[index],
+                      toTime: moment(
+                        departFlight?.endTimeList
+                          ? departFlight?.endTimeList[index]
+                          : new Date()
+                      ).format("HH:mm"),
+                      toDate: moment(
+                        departFlight?.endTimeList
+                          ? departFlight?.endTimeList[index]
+                          : new Date()
+                      ).format("DD/MM/YYYY"),
+                      duration:
+                        departFlight.durationsList &&
+                        departFlight.durationsList[index].substring(
+                          2,
+                          departFlight.durationsList[index].length
+                        ),
+                      toAddress:
+                        departFlight.arrivalTerminalList &&
+                        departFlight.arrivalTerminalList[index],
+                      flightCode: departFlight.flightCode,
+                      city: {
+                        from:
+                          index === 0
+                            ? departFlight.fromCity
+                            : departFlight?.transitFlight &&
+                              departFlight?.transitFlight[index - 1]?.viaCity,
+                        to:
+                          index !==
+                          (departFlight.startTimeList &&
+                            departFlight.startTimeList.length - 1)
+                            ? departFlight?.transitFlight &&
+                              departFlight?.transitFlight[index]?.viaCity
+                            : departFlight.toCity
+                      },
+                      stop: departFlight.stops,
+                      cabinBaggage: departFlight.cabinBaggage[index],
+                      checkinBaggage: departFlight.checkinBaggage[index]
+                    })}
+                    {departFlight.stops && index < departFlight.stops ? (
+                      <div className="layovers">
+                        <p>
+                          {departFlight.layoverDurationList &&
+                            departFlight.layoverDurationList[index].substring(
+                              2,
+                              departFlight.layoverDurationList[index].length
+                            )}
+                        </p>
+                        <p> - Change of planes in</p>
+                        <p>
+                          {departFlight.via?.split("-")[index] ||
+                            (departFlight?.transitFlight &&
+                              departFlight?.transitFlight[index]?.viaCity)}
+                        </p>
+                      </div>
+                    ) : null}
+                  </Fragment>
+                ))}
 
             {/* <div className="mainDivider">
               <span className="circle circle1"></span>
