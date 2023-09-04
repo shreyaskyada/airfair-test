@@ -447,8 +447,7 @@ const FlightDetailPage = () => {
                   cabinBaggage:
                     departFlight.cabinBaggage && departFlight.cabinBaggage[0],
                   checkinBaggage:
-                    departFlight.checkinBaggage &&
-                    departFlight.checkinBaggage[0]
+                    departFlight.checkinBaggage && departFlight.checkinBaggage[0] 
                 })
               : departFlight &&
                 departFlight.startTimeList?.map((ele, index) => (
@@ -503,8 +502,8 @@ const FlightDetailPage = () => {
                             : departFlight.toCity
                       },
                       stop: departFlight.stops,
-                      cabinBaggage: departFlight.cabinBaggage[index],
-                      checkinBaggage: departFlight.checkinBaggage[index]
+                      cabinBaggage: departFlight.cabinBaggage && departFlight.cabinBaggage[index],
+                      checkinBaggage: departFlight.checkinBaggage && departFlight.checkinBaggage[index]
                     })}
                     {departFlight.stops && index < departFlight.stops ? (
                       <div className="layovers">
