@@ -261,6 +261,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
   useEffect(() => {
     let providers: any = []
+    dispatch(uploadIsLoading(true))
 
     if (!_.isEmpty(departFlight) && !_.isEmpty(returnFlight)) {
       const keys = Object.keys(departFlight.compare || {})
@@ -348,6 +349,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
       getDiscount(providers)
     }
+    dispatch(uploadIsLoading(false))
+
   }, [departFlight, returnFlight])
 
   const detailsCard = (title: string, flighDetails: Flight) => {

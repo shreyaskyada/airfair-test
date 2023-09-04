@@ -122,10 +122,12 @@ const FlightsListingPage = () => {
           const data = filterFlightList(compareData, type)
           dispatch(updateDestinationFlights(data))
           dispatch(updateReturnFlights(data[0]))
+          dispatch(uploadIsLoading(false))
           break
         }
         case "return": {
           dispatch(updateReturnFlights(flight))
+          dispatch(uploadIsLoading(false))
           //dispatch(updateOriginFlights(filterFlightList(compareData, type)));
           break
         }
@@ -133,9 +135,11 @@ const FlightsListingPage = () => {
           console.log(
             "onSelectedFlightChange :: Error occured white updating file"
           )
+          dispatch(uploadIsLoading(false))
         }
       }
     }, 500)
+    dispatch(uploadIsLoading(false))
   }
 
   return (

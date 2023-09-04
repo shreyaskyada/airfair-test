@@ -196,6 +196,8 @@ const SearchFilter = ({
           dispatch(updateSaarchFlights(searchFlightData))
           //dispatch(uploadIsLoading(false))
 
+          dispatch(uploadIsLoading(false))
+
           redirectRoute && navigate(redirectRoute)
         })
         .catch((err) => {
