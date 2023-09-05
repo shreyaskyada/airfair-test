@@ -1,4 +1,4 @@
-import { Avatar, Typography, Skeleton,Divider, Tooltip } from "antd"
+import { Avatar, Typography, Skeleton, Divider, Tooltip } from "antd"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { useState, useEffect, Fragment } from "react"
 import { FlightState } from "../redux/slices/flights"
@@ -287,11 +287,20 @@ const FlightDetailPage = () => {
             </div>
             <Divider />
             <div className="providersSection">
-              {!!providerWithOffers.length ?  providerWithOffers.map((provideDetail: any) => (
+              {!!providerWithOffers.length ? (
+                providerWithOffers.map((provideDetail: any) => (
                   <div className="providerDetail">
                     <div className="leftCol">
                       <p className="providerTitle">{provideDetail.provider}</p>
-                      <p className="ticketPrice">$ {provideDetail.totalFare}</p>
+                      <p className="ticketPrice">
+                        ₹{" "}
+                        {provideDetail.bestOffer &&
+                        provideDetail.bestOffer.fare &&
+                        provideDetail.bestOffer.fare.totalFareAfterDiscount
+                          ? provideDetail.bestOffer.fare.totalFareAfterDiscount
+                          : provideDetail.bestOffer.fare &&
+                            provideDetail.bestOffer.fare.totalFare}
+                      </p>
                     </div>
                     <div className="rightCol">
                       <Tooltip
@@ -419,7 +428,14 @@ const FlightDetailPage = () => {
                       </button>
                     </div>
                   </div>
-                )) : <Skeleton.Input active={true} size="large" style={{width:"100%"}}/>}
+                ))
+              ) : (
+                <Skeleton.Input
+                  active={true}
+                  size="large"
+                  style={{ width: "100%" }}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -448,7 +464,8 @@ const FlightDetailPage = () => {
                   cabinBaggage:
                     departFlight.cabinBaggage && departFlight.cabinBaggage[0],
                   checkinBaggage:
-                    departFlight.checkinBaggage && departFlight.checkinBaggage[0] 
+                    departFlight.checkinBaggage &&
+                    departFlight.checkinBaggage[0]
                 })
               : departFlight &&
                 departFlight.startTimeList?.map((ele, index) => (
@@ -503,8 +520,12 @@ const FlightDetailPage = () => {
                             : departFlight.toCity
                       },
                       stop: departFlight.stops,
-                      cabinBaggage: departFlight.cabinBaggage && departFlight.cabinBaggage[index],
-                      checkinBaggage: departFlight.checkinBaggage && departFlight.checkinBaggage[index]
+                      cabinBaggage:
+                        departFlight.cabinBaggage &&
+                        departFlight.cabinBaggage[index],
+                      checkinBaggage:
+                        departFlight.checkinBaggage &&
+                        departFlight.checkinBaggage[index]
                     })}
                     {departFlight.stops && index < departFlight.stops ? (
                       <div className="layovers">
