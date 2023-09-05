@@ -1,4 +1,4 @@
-import { Avatar, Typography, Divider, Tooltip } from "antd"
+import { Avatar, Typography, Skeleton,Divider, Tooltip } from "antd"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { useState, useEffect, Fragment } from "react"
 import { FlightState } from "../redux/slices/flights"
@@ -33,6 +33,8 @@ const FlightDetailPage = () => {
       if (!provider.length || !searchFlightData) {
         throw new Error("invalid inputs")
       }
+
+      setProviderWithOffers([])
 
       const walletList = userDetails.walletList.map(
         (wallet: any) => wallet.walletName
@@ -96,7 +98,7 @@ const FlightDetailPage = () => {
         }
       )
 
-      _providersWithOffer = [..._providersWithOffer]
+      //_providersWithOffer = [..._providersWithOffer]
 
       _providersWithOffer.length > 1 &&
         _providersWithOffer.sort((a, b) => {
@@ -285,8 +287,7 @@ const FlightDetailPage = () => {
             </div>
             <Divider />
             <div className="providersSection">
-              {!!providerWithOffers.length &&
-                providerWithOffers.map((provideDetail: any) => (
+              {!!providerWithOffers.length ?  providerWithOffers.map((provideDetail: any) => (
                   <div className="providerDetail">
                     <div className="leftCol">
                       <p className="providerTitle">{provideDetail.provider}</p>
@@ -418,7 +419,7 @@ const FlightDetailPage = () => {
                       </button>
                     </div>
                   </div>
-                ))}
+                )) : <Skeleton.Input active={true} size="large" style={{width:"100%"}}/>}
             </div>
           </div>
         </div>

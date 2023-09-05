@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Button, Card, Space, Tag } from "antd"
 import { DownOutlined, UpOutlined } from "@ant-design/icons"
 import * as _ from "lodash"
@@ -16,6 +16,7 @@ interface Props {
   type: string
   selectedKey: string
   onSelectedFlightChange: any
+  _flight?:any
   tags: {
     color: string
     name: string
@@ -60,6 +61,7 @@ const DataCard = (props: Props) => {
   const [details, setDetails] = useState(false)
   const [flightNames, setFlightNames] = useState<string[]>([])
   const [flightImage, setFlightImage] = useState<any>(null)
+  const ref = useRef(null)
 
   const navigate = useNavigate()
 
@@ -77,10 +79,11 @@ const DataCard = (props: Props) => {
   }, [flight])
 
   return (
-    <div className="detailCard" onClick={()=>navigate("/flights/1")}>
+    <div className="detailCard" onClick={()=>{ onSelectedFlightChange(ref.current); navigate("/flights/"+`${type}-${dataKey}`+`${flight.route.from} - ${flight.route.to}`)}}>
       <div className="cardContainer">
         <div className="radioButtonContainer">
           <input
+            ref={ref}
             type="radio"
             name={type}
             id={type}

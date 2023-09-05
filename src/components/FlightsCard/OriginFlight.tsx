@@ -1,30 +1,25 @@
-import DataCard from "../../widget/DataCard";
-import { useAppSelector } from "../../redux/hooks";
-import { useEffect, useState } from "react";
+import DataCard from "../../widget/DataCard"
+import { useAppSelector } from "../../redux/hooks"
+import { useEffect, useState } from "react"
 
-const OriginFlight = (props:any) => {
+const OriginFlight = (props: any) => {
+  const { originFlights } = useAppSelector((state) => state.originFlight)
+  const { departFlight } = useAppSelector((state) => state.flight)
 
-  const { originFlights } = useAppSelector((state) => state.originFlight);
-  const { departFlight } = useAppSelector(
-    (state) => state.flight
-  );
+  const { type, selectedKey, onSelectedFlightChange } = props
 
-    const {
-        type,
-        selectedKey,
-        onSelectedFlightChange
-    } = props;
-
-    return <>{
-      originFlights?.map((flight: any, index: number) => (
+  return (
+    <>
+      {originFlights?.map((flight: any, index: number) => (
         <DataCard
-        key={index}
+          key={index}
           index={index}
           type={type}
           selectedKey={selectedKey}
-          onSelectedFlightChange={(data: any) =>
+          onSelectedFlightChange={(data: any) => {
+            console.log("data  :", data)
             onSelectedFlightChange(data, type, flight)
-          }
+          }}
           checked={departFlight.flightCode === flight.flightCode}
           dataKey={index}
           tags={[]}
@@ -38,21 +33,21 @@ const OriginFlight = (props:any) => {
             totalTime: flight.duration,
             schedule: {
               departure: flight.depTime,
-              arrival: flight.arrTime,
+              arrival: flight.arrTime
             },
             route: {
               from: flight.from + " " + flight.fromCity,
-              to: flight.to + " " + flight.toCity,
+              to: flight.to + " " + flight.toCity
             },
             partners: Object.entries(flight.compare).map((item: any) => ({
               price: item[1].fare.totalFareAfterDiscount.toString(),
-              name: item[0],
-            })),
+              name: item[0]
+            }))
           }}
         />
-      ))
-    }</>
-
+      ))}
+    </>
+  )
 }
 
 export default OriginFlight
