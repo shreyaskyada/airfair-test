@@ -6,6 +6,7 @@ import { airlineMapping } from "../../services/airports"
 import { Airlines_Images } from "../../data/popularAirlines"
 import "./DataCard.css"
 import { useNavigate } from "react-router"
+import { airplaneIcon } from "../../assets/images"
 
 interface Props {
   checked?: boolean
@@ -16,7 +17,7 @@ interface Props {
   type: string
   selectedKey: string
   onSelectedFlightChange: any
-  _flight?:any
+  _flight?: any
   tags: {
     color: string
     name: string
@@ -79,9 +80,20 @@ const DataCard = (props: Props) => {
   }, [flight])
 
   return (
-    <div className="detailCard" onClick={()=>{ onSelectedFlightChange(ref.current); navigate("/flights/"+`${type}-${dataKey}`+`${flight.route.from} - ${flight.route.to}`)}}>
+    <div
+      className="detailCard"
+      onClick={() => {
+        onSelectedFlightChange(ref.current)
+        navigate(
+          "/flights/" +
+            `${type}-${dataKey}` +
+            `${flight.route.from} - ${flight.route.to}`
+        )
+      }}
+      style={{border:checked ? "1px solid #4E6F7B" : ""}}
+    >
       <div className="cardContainer">
-        <div className="radioButtonContainer">
+        {/* <div className="radioButtonContainer">
           <input
             ref={ref}
             type="radio"
@@ -92,10 +104,10 @@ const DataCard = (props: Props) => {
             checked={checked}
             onChange={onSelectedFlightChange}
           />
-        </div>
+        </div> */}
         <div className="flightInfoSection">
           <div className="flightNamesSection">
-            <div className="flightImageSection">
+            <div className="flightImageSection" style={{ marginRight: "20px" }}>
               <img
                 src={flightImage ? flightImage : flight.companyImg}
                 style={{ width: "100%", height: "100%" }}
@@ -109,27 +121,62 @@ const DataCard = (props: Props) => {
                   ))}
                 </div>
               </div>
-              <div className="nameTime">
+              <div className="nameTime" style={{ marginBottom: "0.5rem" }}>
                 <p className="flightName">
                   {flightNames
                     .map((name) => airlineMapping[name || "AI"])
                     .join(", ")}
                 </p>
-                <p className="flightTime"> {flight.totalTime}</p>
+                {/* <p className="flightTime"> {flight.totalTime}</p> */}
               </div>
 
-              <p className="flightScheduled">
+              <div className="flightTimeDetail" style={{ margin: "0.5rem 0" }}>
+                <div className="flightTime">
+                  <h3>{flight.schedule.departure}</h3>
+                </div>
+
+                <div className="cityDivider">
+                  <span
+                    className="circle circle1"
+                    //style={{ background: "#4E6F7B" }}
+                  ></span>
+                  <img
+                    src={airplaneIcon}
+                    alt="aeroplane"
+                    width={25}
+                    height={25}
+                    className="dividerIcon"
+                  />
+                  <div className="divider" style={{borderBottom:"3px dotted #013042"}}></div>
+                  <span
+                    className="circle circle2"
+                    //style={{ background: "#4E6F7B" }}
+                  ></span>
+                </div>
+
+                <div className="flightTime">
+                  <h3>{flight.schedule.arrival}</h3>
+                </div>
+              </div>
+
+              {/* <p className="flightScheduled">
                 {flight.schedule.departure} - {flight.schedule.arrival}
-              </p>
-              <p className="flightRoute">
+              </p> */}
+
+              <div className="flightCity" style={{fontWeight:"bold"}}>
+                <p>{flight.route.from}</p>
+                <p>{flight.totalTime}</p>
+                <p>{flight.route.to}</p>
+              </div>
+              {/* <p className="flightRoute">
                 {flight.route.from} - {flight.route.to}
-              </p>
+              </p> */}
               <p className="flightConnectivity">{flight.connectivity}</p>
             </div>
           </div>
           <div className="flightCompanySection">
             <p className="flightCompany">{flight.company}</p>
-            <div className="flightCompanyInfo">
+            {/* <div className="flightCompanyInfo">
               <p>
                 {flight.partners.map((partner) => {
                   return Array.isArray(flight.agent)
@@ -175,28 +222,27 @@ const DataCard = (props: Props) => {
                     </div>
                   ))}
               </p>
-            </div>
-            <div>
-              {flight.partners.length - 2 > 0 && (
-                <div>
-                  <p>{!details ? `+${flight.partners.length - 2} more` : ""}</p>
-                  <Button
-                    onClick={() => setDetails((prevState) => !prevState)}
-                    type="link"
-                    icon={!details ? <DownOutlined /> : <UpOutlined />}
-                  />
-                </div>
-              )}
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="flightPrice">
           <div className="flightPriceContent">
-            <div className="fareSection">
+            <div className="fareSection" style={{ marginBottom: "0.3rem" }}>
               <p className="regularTitle">Regular Fare:</p>
               <p className="regularPrice">₹{flight.price}</p>
             </div>
             <p className="flightAgent">{flight.agent}</p>
+            <div style={{ marginTop: "0.3rem" }}>
+              {flight.partners.length - 2 > 0 && (
+                <div>
+                  <p>
+                    {!details
+                      ? `+${flight.partners.length - 2} more provider`
+                      : ""}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -152,7 +152,7 @@
 
 
 .cityDivider .divider {
-  border-bottom: 2px dotted yellow;
+  border-bottom: 3px dotted yellow;
   width: 100%;
 }
 
@@ -161,7 +161,7 @@
   width: 14px;
   height: 14px;
   border-radius: 7px;
-  background: white;
+  background: rgb(187, 187, 187);
 }
 
 .cityDivider .circle1 {

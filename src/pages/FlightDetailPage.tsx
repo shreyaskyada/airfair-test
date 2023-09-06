@@ -216,12 +216,12 @@ const FlightDetailPage = () => {
             <h3>{toTime}</h3>
           </div>
         </div>
-        <div className="flightCity">
+        <div className="flightCity" style={{fontWeight:"bold"}}>
           <p>{city?.from}</p>
           <p>{duration}</p>
           <p>{city?.to}</p>
         </div>
-        <div className="terminalContainer">
+        <div className="terminalContainer" style={{fontWeight:"bold"}}>
           <p>
             {`${
               fromAddress
