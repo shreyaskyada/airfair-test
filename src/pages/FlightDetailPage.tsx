@@ -20,7 +20,7 @@ const FlightDetailPage = () => {
 
   const { userDetails } = useAppSelector((state) => state.app)
 
-  const { departFlight } = useAppSelector(
+  const { departFlight, returnFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
   )
 
@@ -216,12 +216,12 @@ const FlightDetailPage = () => {
             <h3>{toTime}</h3>
           </div>
         </div>
-        <div className="flightCity" style={{fontWeight:"bold"}}>
+        <div className="flightCity" style={{ fontWeight: "bold" }}>
           <p>{city?.from}</p>
           <p>{duration}</p>
           <p>{city?.to}</p>
         </div>
-        <div className="terminalContainer" style={{fontWeight:"bold"}}>
+        <div className="terminalContainer" style={{ fontWeight: "bold" }}>
           <p>
             {`${
               fromAddress
@@ -547,11 +547,121 @@ const FlightDetailPage = () => {
                   </Fragment>
                 ))}
 
-            {/* <div className="mainDivider">
-              <span className="circle circle1"></span>
-              <div className="divider"></div>
-              <span className="circle circle2"></span>
-            </div> */}
+            {returnFlight && (
+              <div className="mainDivider">
+                <span className="circle circle1"></span>
+                <div className="divider"></div>
+                <span className="circle circle2"></span>
+              </div>
+            )}
+
+            <div>
+              {returnFlight.stops === 0
+                ? flighInfoTabCard({
+                    airLine: returnFlight.flightCode,
+                    fromTime: returnFlight.depTime,
+                    fromDate: returnFlight.depDate,
+                    fromAddress:
+                      returnFlight.departureTerminalList &&
+                      returnFlight.departureTerminalList[0],
+                    toTime: returnFlight.arrTime,
+                    toDate: returnFlight.arrDate,
+                    duration: returnFlight.duration,
+                    toAddress:
+                      returnFlight.arrivalTerminalList &&
+                      returnFlight.arrivalTerminalList[0],
+                    flightCode: returnFlight.flightCode,
+                    city: {
+                      from: returnFlight.fromCity,
+                      to: returnFlight.toCity
+                    },
+                    stop: returnFlight.stops,
+                    cabinBaggage:
+                      returnFlight.cabinBaggage && returnFlight.cabinBaggage[0],
+                    checkinBaggage:
+                      returnFlight.checkinBaggage &&
+                      returnFlight.checkinBaggage[0]
+                  })
+                : returnFlight &&
+                  returnFlight.startTimeList?.map((ele, index) => (
+                    <Fragment key={index}>
+                      {flighInfoTabCard({
+                        airLine: returnFlight.flightCode?.split("->")[index],
+                        fromTime: moment(
+                          returnFlight?.startTimeList
+                            ? returnFlight?.startTimeList[index]
+                            : new Date()
+                        ).format("HH:mm"),
+                        fromDate: moment(
+                          returnFlight?.startTimeList
+                            ? returnFlight?.startTimeList[index]
+                            : new Date()
+                        ).format("DD/MM/YYYY"),
+                        fromAddress:
+                          returnFlight.departureTerminalList &&
+                          returnFlight.departureTerminalList[index],
+                        toTime: moment(
+                          returnFlight?.endTimeList
+                            ? returnFlight?.endTimeList[index]
+                            : new Date()
+                        ).format("HH:mm"),
+                        toDate: moment(
+                          returnFlight?.endTimeList
+                            ? returnFlight?.endTimeList[index]
+                            : new Date()
+                        ).format("DD/MM/YYYY"),
+                        duration:
+                          returnFlight.durationsList &&
+                          returnFlight.durationsList[index].substring(
+                            2,
+                            returnFlight.durationsList[index].length
+                          ),
+                        toAddress:
+                          returnFlight.arrivalTerminalList &&
+                          returnFlight.arrivalTerminalList[index],
+                        flightCode: returnFlight.flightCode,
+                        city: {
+                          from:
+                            index === 0
+                              ? returnFlight.fromCity
+                              : returnFlight?.transitFlight &&
+                                returnFlight?.transitFlight[index - 1]?.viaCity,
+                          to:
+                            index !==
+                            (returnFlight.startTimeList &&
+                              returnFlight.startTimeList.length - 1)
+                              ? returnFlight?.transitFlight &&
+                                returnFlight?.transitFlight[index]?.viaCity
+                              : returnFlight.toCity
+                        },
+                        stop: returnFlight.stops,
+                        cabinBaggage:
+                          returnFlight.cabinBaggage &&
+                          returnFlight.cabinBaggage[index],
+                        checkinBaggage:
+                          returnFlight.checkinBaggage &&
+                          returnFlight.checkinBaggage[index]
+                      })}
+                      {returnFlight.stops && index < returnFlight.stops ? (
+                        <div className="layovers">
+                          <p>
+                            {returnFlight.layoverDurationList &&
+                              returnFlight.layoverDurationList[index].substring(
+                                2,
+                                returnFlight.layoverDurationList[index].length
+                              )}
+                          </p>
+                          <p> - Change of planes in</p>
+                          <p>
+                            {returnFlight.via?.split("-")[index] ||
+                              (returnFlight?.transitFlight &&
+                                returnFlight?.transitFlight[index]?.viaCity)}
+                          </p>
+                        </div>
+                      ) : null}
+                    </Fragment>
+                  ))}
+            </div>
           </div>
         </div>
       </div>

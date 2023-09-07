@@ -7,6 +7,8 @@ import { Airlines_Images } from "../../data/popularAirlines"
 import "./DataCard.css"
 import { useNavigate } from "react-router"
 import { airplaneIcon } from "../../assets/images"
+import { useAppSelector } from "../../redux/hooks"
+import { ISearchFlights } from "../../redux/slices/searchFlights"
 
 interface Props {
   checked?: boolean
@@ -66,6 +68,10 @@ const DataCard = (props: Props) => {
 
   const navigate = useNavigate()
 
+  const searchFlightData = useAppSelector(
+    (state: { searchFlights: ISearchFlights }) => state.searchFlights
+  )
+
   useEffect(() => {
     const _names = _.uniq(
       flight.company?.split("->").map((item) => item.substring(0, 2))
@@ -81,33 +87,45 @@ const DataCard = (props: Props) => {
 
   return (
     <div
-      className="detailCard"
+      className={
+        searchFlightData && searchFlightData.flightType === "ONE_WAY"
+          ? "detailCard"
+          : "roundTripDetailCard"
+      }
       onClick={() => {
-        onSelectedFlightChange(ref.current)
-        navigate(
-          "/flights/" +
-            `${type}-${dataKey}` +
-            `${flight.route.from} - ${flight.route.to}`
-        )
+        if (searchFlightData && searchFlightData.flightType === "ONE_WAY") {
+          onSelectedFlightChange(ref.current)
+          navigate(
+            "/flights/" +
+              `${type}-${dataKey}` +
+              `${flight.route.from} - ${flight.route.to}`
+          )
+        }
       }}
-      style={{border:checked ? "1px solid #4E6F7B" : ""}}
+      style={
+        searchFlightData && searchFlightData.flightType === "ONE_WAY"
+          ? { border: checked ? "1px solid #4E6F7B" : "" }
+          : {}
+      }
     >
       <div className="cardContainer">
-        {/* <div className="radioButtonContainer">
-          <input
-            ref={ref}
-            type="radio"
-            name={type}
-            id={type}
-            className="radioButton"
-            value={`${type}-${dataKey}`}
-            checked={checked}
-            onChange={onSelectedFlightChange}
-          />
-        </div> */}
+        {searchFlightData && searchFlightData.flightType !== "ONE_WAY" && (
+          <div className="radioButtonContainer">
+            <input
+              ref={ref}
+              type="radio"
+              name={type}
+              id={type}
+              className="radioButton"
+              value={`${type}-${dataKey}`}
+              checked={checked}
+              onChange={onSelectedFlightChange}
+            />
+          </div>
+        )}
         <div className="flightInfoSection">
           <div className="flightNamesSection">
-            <div className="flightImageSection" style={{ marginRight: "20px" }}>
+            <div className="flightImageSection" style={{ marginRight: "10px" }}>
               <img
                 src={flightImage ? flightImage : flight.companyImg}
                 style={{ width: "100%", height: "100%" }}
@@ -147,7 +165,10 @@ const DataCard = (props: Props) => {
                     height={25}
                     className="dividerIcon"
                   />
-                  <div className="divider" style={{borderBottom:"3px dotted #013042"}}></div>
+                  <div
+                    className="divider"
+                    style={{ borderBottom: "3px dotted #013042" }}
+                  ></div>
                   <span
                     className="circle circle2"
                     //style={{ background: "#4E6F7B" }}
@@ -163,7 +184,7 @@ const DataCard = (props: Props) => {
                 {flight.schedule.departure} - {flight.schedule.arrival}
               </p> */}
 
-              <div className="flightCity" style={{fontWeight:"bold"}}>
+              <div className="flightCity" style={{ fontWeight: "bold" }}>
                 <p>{flight.route.from}</p>
                 <p>{flight.totalTime}</p>
                 <p>{flight.route.to}</p>
@@ -228,16 +249,15 @@ const DataCard = (props: Props) => {
         <div className="flightPrice">
           <div className="flightPriceContent">
             <div className="fareSection" style={{ marginBottom: "0.3rem" }}>
-              <p className="regularTitle">Regular Fare:</p>
-              <p className="regularPrice">₹{flight.price}</p>
+              <p className="regularTitle">₹{flight.price}</p>
             </div>
             <p className="flightAgent">{flight.agent}</p>
             <div style={{ marginTop: "0.3rem" }}>
-              {flight.partners.length - 2 > 0 && (
+              {flight.partners.length > 1 && (
                 <div>
                   <p>
                     {!details
-                      ? `+${flight.partners.length - 2} more provider`
+                      ? `+${flight.partners.length - 1} more providers`
                       : ""}
                   </p>
                 </div>

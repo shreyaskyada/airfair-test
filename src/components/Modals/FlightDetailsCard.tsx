@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { InfoOutlined } from "@ant-design/icons"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import {
   Button,
   Card,
@@ -139,24 +139,25 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
   )
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     if (
-      ((leftColwidth + rightColwidth > width &&
+      (leftColwidth + rightColwidth > width &&
         leftColwidth !== rightColwidth) ||
-        (leftColwidth === rightColwidth && providerwidth > width))
+      (leftColwidth === rightColwidth && providerwidth > width)
     ) {
       let items: any = [...providerWithOffers]
       let items2 = [...providerWithOffers2]
-      
+
       let i = items.pop()
       items2.push(i)
-      
+
       setProviderWithOffers(items)
       setProviderWithOffers2(items2)
-      
     }
   }, [leftColwidth, rightColwidth, width, providerwidth])
-  
+
   const getDiscount = async (provider: []) => {
     try {
       if (!provider.length || !searchFlightData) {
@@ -350,7 +351,6 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
       getDiscount(providers)
     }
     dispatch(uploadIsLoading(false))
-
   }, [departFlight, returnFlight])
 
   const detailsCard = (title: string, flighDetails: Flight) => {
@@ -696,7 +696,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
   const SingleProviderFareDetail: React.FC<any> = ({ provider }) => {
     return (
-      <div onClick={(e)=>e.stopPropagation()}>
+      <div onClick={(e) => e.stopPropagation()}>
         {provider ? (
           <div
             style={{
@@ -910,9 +910,9 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               )}
             </div>
 
-            <div style={{ width: "max-content" }} ref={providerListRef}>
+            {/* <div style={{ width: "max-content" }} ref={providerListRef}>
               {providerList}
-            </div>
+            </div> */}
           </div>
           <div className="fareDetail" ref={rightColRef}>
             <div>
@@ -1036,7 +1036,9 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                   marginLeft: ".4rem"
                 }}
               >
-                Fare Details
+                {providerWithOffers.length > 1
+                  ? `+${providerWithOffers.length - 1} more providers`
+                  : ""}
               </Text>
             </div>
             <div className="cardButtons">
@@ -1053,7 +1055,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
               <button
                 onClick={() => {
-                  dispatch(updateFlightDetails(true))
+                  //dispatch(updateFlightDetails(true))
+                  navigate("/flights/round-trip")
                 }}
                 className="headerButtons outlined"
               >

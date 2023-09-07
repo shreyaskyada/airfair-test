@@ -2,7 +2,7 @@
     display: none;
 }
 
-.detailCard {
+.detailCard,.roundTripDetailCard {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,6 +15,7 @@
     height: 160px;
     box-shadow: 0px 4px 4px 0px rgba(17, 17, 17, 0.1);
 }
+
 .detailCard:hover{
    border:1px solid #4E6F7B;
 }
@@ -48,7 +49,7 @@ input[type='radio']:hover {
 .flightInfoSection {
     width: 75%;
     border-right: 1px solid #F0F0F0;
-    padding-right: .5rem;
+    padding-right: .8rem;
 }
 
 .tagContainer {
@@ -106,10 +107,12 @@ input[type='radio']:hover {
     width: 25%;
     display: flex;
     align-items: center;
+    justify-content: center;
+    padding-left: 0.5rem;
 }
 
 
-@media only screen and (max-width: 1040px) {
+@media only screen and (max-width: 1100px) {
     .flightInfoSection, .flightPrice {
         width: 100%;
     }
@@ -118,14 +121,15 @@ input[type='radio']:hover {
         border-right: none;
         padding-left: 0;
         border-bottom: 1px solid #F0F0F0;
-        padding-bottom: .5rem;
+        padding-bottom: .8rem;
     }
 
-    .detailCard {
-        height: 230px;
+    .detailCard,.roundTripDetailCard {
+        height: 270px;
     }
 
     .cardContainer {
+        gap: 1rem;
         flex-direction: column;
     }
 
@@ -138,7 +142,30 @@ input[type='radio']:hover {
         gap: .5rem;
         align-items: flex-end;
     }
+
+    .flightAgent{
+        margin-top: 0.5rem;
+    }
 }
+
+@media only screen and (max-width: 880px) {
+
+    .detailCard,.roundTripDetailCard {
+        height: 330px;
+    }
+
+.flightNamesSection{
+    flex-direction: column;
+    align-items: center;
+}
+
+.flightName{
+    text-align: center;
+    width: 100%;
+}
+
+}
+
 
 
 @media only screen and (max-width: 530px) {
@@ -166,12 +193,12 @@ input[type='radio']:hover {
     }
 }
 
-@media only screen and (max-width: 460px) {
+@media only screen and (max-width: 520px) {
     .flightNamesSection {
         flex-direction: column;
     }
 
-    .detailCard {
+    .detailCard,.roundTripDetailCard {
         height: 290px;
         padding: .5rem;
     }
