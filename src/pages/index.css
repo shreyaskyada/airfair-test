@@ -196,10 +196,16 @@
 
 
 .chipsSection {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   max-width: 800px;
   margin: 1rem auto;
+  gap: 0.8rem;
+}
+
+.rowChip{
+  display: flex;
   gap: 0.8rem;
 }
 
@@ -210,6 +216,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 180px;
 }
 
 .chip p {
@@ -354,14 +361,18 @@
   }
 }
 
+@media only screen and (max-width: 1100px) {
+.chipsSection{
+  flex-direction: column;
+}
+}
+
 @media only screen and (max-width: 970px) {
   .flightNameContainer {
     justify-content: center;
   }
 
-  .chipsSection {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  
 }
 
 @media only screen and (max-width: 860px) {
@@ -438,6 +449,10 @@
     margin: 0 .5rem;
   }
 
+  .chip{
+    width: 160px;
+  }
+
 }
 
 
@@ -461,6 +476,15 @@
   .detail {
     font-size: .95rem;
   }
+  .rowChip{
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .chip{
+    width: 100%
+  }
+
 
 }
 

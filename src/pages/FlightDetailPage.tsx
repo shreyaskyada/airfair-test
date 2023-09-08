@@ -173,7 +173,8 @@ const FlightDetailPage = () => {
     city,
     stops,
     cabinBaggage,
-    checkinBaggage
+    checkinBaggage,
+    flipPlaneIcon = false
   }: any) => {
     return (
       <div className="flightDetailContent">
@@ -207,6 +208,11 @@ const FlightDetailPage = () => {
               width={25}
               height={25}
               className="dividerIcon"
+              style={{
+                transform: flipPlaneIcon
+                  ? "translateX(50%) rotateY(180deg)"
+                  : "translateX(50%) rotateY(0deg)"
+              }}
             />
             <div className="divider"></div>
             <span className="circle circle2"></span>
@@ -242,22 +248,28 @@ const FlightDetailPage = () => {
           </p>
         </div>
         <div className="chipsSection">
-          <div className="chip">
-            <p>Economy</p>
-          </div>
-          <div className="chip">
-            <p>{fromDate}</p>
-          </div>
-          {cabinBaggage && (
+          <div className="rowChip">
             <div className="chip">
-              <p>{cabinBaggage}</p>
+              <p>Economy</p>
             </div>
-          )}
-          {checkinBaggage && (
             <div className="chip">
-              <p>{checkinBaggage}</p>
+              <p>{fromDate}</p>
             </div>
-          )}
+          </div>
+
+          <div className="rowChip">
+            {cabinBaggage && (
+              <div className="chip">
+                <p>{cabinBaggage}</p>
+              </div>
+            )}
+
+            {checkinBaggage && (
+              <div className="chip">
+                <p>{checkinBaggage}</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     )
@@ -441,7 +453,7 @@ const FlightDetailPage = () => {
         </div>
         <div className="headerCard" style={{ margin: "2rem 0" }}>
           <div className="flighCompleteDetail">
-            {departFlight.stops === 0
+            {departFlight && departFlight.stops === 0
               ? flighInfoTabCard({
                   airLine: departFlight.flightCode,
                   fromTime: departFlight.depTime,
@@ -556,24 +568,25 @@ const FlightDetailPage = () => {
             )}
 
             <div>
-              {returnFlight.stops === 0
+              {returnFlight && returnFlight.stops === 0
                 ? flighInfoTabCard({
+                    flipPlaneIcon: true,
                     airLine: returnFlight.flightCode,
-                    fromTime: returnFlight.depTime,
-                    fromDate: returnFlight.depDate,
-                    fromAddress:
+                    toTime: returnFlight.depTime,
+                    toDate: returnFlight.depDate,
+                    toAddress:
                       returnFlight.departureTerminalList &&
                       returnFlight.departureTerminalList[0],
-                    toTime: returnFlight.arrTime,
-                    toDate: returnFlight.arrDate,
+                    fromTime: returnFlight.arrTime,
+                    fromDate: returnFlight.arrDate,
                     duration: returnFlight.duration,
-                    toAddress:
+                    fromAddress:
                       returnFlight.arrivalTerminalList &&
                       returnFlight.arrivalTerminalList[0],
                     flightCode: returnFlight.flightCode,
                     city: {
-                      from: returnFlight.fromCity,
-                      to: returnFlight.toCity
+                      to: returnFlight.fromCity,
+                      from: returnFlight.toCity
                     },
                     stop: returnFlight.stops,
                     cabinBaggage:
@@ -586,26 +599,27 @@ const FlightDetailPage = () => {
                   returnFlight.startTimeList?.map((ele, index) => (
                     <Fragment key={index}>
                       {flighInfoTabCard({
+                        flipPlaneIcon: true,
                         airLine: returnFlight.flightCode?.split("->")[index],
-                        fromTime: moment(
+                        toTime: moment(
                           returnFlight?.startTimeList
                             ? returnFlight?.startTimeList[index]
                             : new Date()
                         ).format("HH:mm"),
-                        fromDate: moment(
+                        toDate: moment(
                           returnFlight?.startTimeList
                             ? returnFlight?.startTimeList[index]
                             : new Date()
                         ).format("DD/MM/YYYY"),
-                        fromAddress:
+                        toAddress:
                           returnFlight.departureTerminalList &&
                           returnFlight.departureTerminalList[index],
-                        toTime: moment(
+                        fromTime: moment(
                           returnFlight?.endTimeList
                             ? returnFlight?.endTimeList[index]
                             : new Date()
                         ).format("HH:mm"),
-                        toDate: moment(
+                        fromDate: moment(
                           returnFlight?.endTimeList
                             ? returnFlight?.endTimeList[index]
                             : new Date()
@@ -616,17 +630,17 @@ const FlightDetailPage = () => {
                             2,
                             returnFlight.durationsList[index].length
                           ),
-                        toAddress:
+                        fromAddress:
                           returnFlight.arrivalTerminalList &&
                           returnFlight.arrivalTerminalList[index],
                         flightCode: returnFlight.flightCode,
                         city: {
-                          from:
+                          to:
                             index === 0
                               ? returnFlight.fromCity
                               : returnFlight?.transitFlight &&
                                 returnFlight?.transitFlight[index - 1]?.viaCity,
-                          to:
+                          from:
                             index !==
                             (returnFlight.startTimeList &&
                               returnFlight.startTimeList.length - 1)

@@ -164,6 +164,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         throw new Error("invalid inputs")
       }
 
+
       const walletList = userDetails.walletList.map(
         (wallet: any) => wallet.walletName
       )
@@ -943,91 +944,6 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                 {providerWithOffers.length && providerWithOffers[0].provider}
               </p>
 
-              <Popover
-                content={
-                  providerWithOffers.length &&
-                  providerWithOffers[0].bestOffer ? (
-                    <>
-                      <div>
-                        <span style={{ color: "#4E6F7B" }}>Base Fare:</span>
-                        <span style={{ fontWeight: "bold", color: "#013042" }}>
-                          {providerWithOffers.length &&
-                            providerWithOffers[0].baseFare}
-                        </span>
-                      </div>
-                      <div>
-                        <span style={{ color: "#4E6F7B" }}>Total Tax:</span>
-                        <span style={{ fontWeight: "bold", color: "#013042" }}>
-                          {providerWithOffers.length &&
-                            providerWithOffers[0].tax}
-                        </span>
-                      </div>
-                      <div>
-                        <span style={{ color: "#4E6F7B" }}>Total Fare:</span>
-                        <span style={{ fontWeight: "bold", color: "#013042" }}>
-                          {providerWithOffers.length &&
-                            providerWithOffers[0].bestOffer.fare.totalFare}
-                        </span>
-                      </div>
-                      <div>
-                        <span style={{ color: "#4E6F7B" }}>
-                          Total discount:
-                        </span>{" "}
-                        <span style={{ fontWeight: "bold", color: "#013042" }}>
-                          {providerWithOffers.length &&
-                            providerWithOffers[0].bestOffer.fare.totalDiscount}
-                        </span>
-                      </div>
-
-                      <div>
-                        <span style={{ color: "#4E6F7B" }}>Promo code:</span>
-                        <span style={{ fontWeight: "bold", color: "#013042" }}>
-                          {providerWithOffers[0].bestOffer &&
-                          providerWithOffers[0].bestOffer.promoCode
-                            ? providerWithOffers[0].bestOffer.promoCode
-                            : "No offer applicable"}
-                        </span>
-                      </div>
-                      <div>
-                        <span style={{ color: "#4E6F7B" }}>
-                          Total fare after discount:{" "}
-                        </span>
-                        <b>
-                          <span
-                            style={{ fontWeight: "bold", color: "#013042" }}
-                          >
-                            {providerWithOffers[0].bestOffer.fare
-                              .totalFareAfterDiscount
-                              ? providerWithOffers[0].bestOffer.fare
-                                  .totalFareAfterDiscount
-                              : providerWithOffers[0].bestOffer.fare.totalFare}
-                          </span>
-                        </b>
-                      </div>
-                    </>
-                  ) : (
-                    <div style={{ fontWeight: "bold", color: "#013042" }}>
-                      Unlock Exclusive Deals by Logging In
-                    </div>
-                  )
-                }
-                title={
-                  providerWithOffers.length &&
-                  providerWithOffers[0].bestOffer && (
-                    <Text style={{ fontWeight: "bold", color: "#013042" }}>
-                      Price breakdown
-                    </Text>
-                  )
-                }
-                trigger="hover"
-              >
-                <Button
-                  shape="circle"
-                  icon={<InfoOutlined style={{ color: "white" }} />}
-                  size="small"
-                  style={{ background: "#4E6F7B" }}
-                />
-              </Popover>
               <Text
                 type="secondary"
                 style={{
@@ -1042,25 +958,15 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               </Text>
             </div>
             <div className="cardButtons">
-              <button
-                onClick={() => {
-                  const link =
-                    providerWithOffers.length && providerWithOffers[0].url
-                  window.open(link, "_blank")
-                }}
-                className="headerButtons filled"
-              >
-                Book now
-              </button>
 
               <button
                 onClick={() => {
                   //dispatch(updateFlightDetails(true))
                   navigate("/flights/round-trip")
                 }}
-                className="headerButtons outlined"
+                className="headerButtons filled"
               >
-                Flight Details
+                Select Deal
               </button>
             </div>
           </div>
