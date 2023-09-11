@@ -27,6 +27,10 @@
     height: 100%;
 }
 
+.smallTime{
+    display: none;
+}
+
 .radioButtonContainer {
     display: flex;
     align-items: center;
@@ -184,7 +188,8 @@ input[type='radio']:hover {
     }
 
     .cardContainer {
-        height: 250px;
+        height: 290px;
+        /* padding: 0.7rem 0 0.5rem 0; */
     }
 
     .flightImageSection {
@@ -204,7 +209,19 @@ input[type='radio']:hover {
     }
 
     .radioButtonContainer {
-        margin-top: 0;
-        margin-bottom: .5rem;
+        margin: .5rem 0;
+    }
+}
+
+
+@media only screen and (max-width: 400px) {
+
+    .flightTotalTime{
+        display: none;
+    }
+
+    .detailCard,.roundTripDetailCard {
+        height: 320px;
+        padding: .5rem;
     }
 }

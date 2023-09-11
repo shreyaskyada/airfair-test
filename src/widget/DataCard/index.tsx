@@ -92,16 +92,6 @@ const DataCard = (props: Props) => {
           ? "detailCard"
           : "roundTripDetailCard"
       }
-      onClick={() => {
-        if (searchFlightData && searchFlightData.flightType === "ONE_WAY") {
-          onSelectedFlightChange(ref.current)
-          navigate(
-            "/flights/" +
-              `${flight.route.from}-${flight.route.to}` +
-              `-${flight.company}-${flight.totalTime}-${flight.schedule.departure}`
-          )
-        }
-      }}
       style={
         searchFlightData && searchFlightData.flightType === "ONE_WAY"
           ? { border: checked ? "1px solid #4E6F7B" : "" }
@@ -186,17 +176,27 @@ const DataCard = (props: Props) => {
 
               <div className="flightCity" style={{ fontWeight: "bold" }}>
                 <p>{flight.route.from}</p>
-                <p>{flight.totalTime}</p>
+                <p className="flightTotalTime">{flight.totalTime}</p>
                 <p>{flight.route.to}</p>
               </div>
               {/* <p className="flightRoute">
                 {flight.route.from} - {flight.route.to}
               </p> */}
-              <p className="flightConnectivity">{flight.connectivity}</p>
+              <div>
+                <p className="flightConnectivity">{flight.connectivity}</p>
+              </div>
             </div>
           </div>
-          <div className="flightCompanySection">
+          <div
+            className="flightCompanySection"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between"
+            }}
+          >
             <p className="flightCompany">{flight.company}</p>
+            <p className="smallTime">{flight.totalTime}</p>
             {/* <div className="flightCompanyInfo">
               <p>
                 {flight.partners.map((partner) => {
@@ -263,6 +263,27 @@ const DataCard = (props: Props) => {
                 </div>
               )}
             </div>
+            {searchFlightData && searchFlightData.flightType === "ONE_WAY" && (
+              <button
+                className="headerButtons filled"
+                style={{ marginTop: "0.5rem", height: "34px" }}
+                onClick={() => {
+                  if (
+                    searchFlightData &&
+                    searchFlightData.flightType === "ONE_WAY"
+                  ) {
+                    onSelectedFlightChange(ref.current)
+                    navigate(
+                      "/flights/" +
+                        `${flight.route.from}-${flight.route.to}` +
+                        `-${flight.company}-${flight.totalTime}-${flight.schedule.departure}`
+                    )
+                  }
+                }}
+              >
+                Select Deal
+              </button>
+            )}
           </div>
         </div>
       </div>

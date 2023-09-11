@@ -353,10 +353,10 @@ const FlightDetailPage = () => {
             <Divider />
             <div className="providersSection">
               {!!providerWithOffers.length ? (
-                providerWithOffers.map((provideDetail: any) => (
+                providerWithOffers.map((provideDetail: any,index:number) => (
                   <div className="providerDetail">
                     <div className="leftCol">
-                      <p className="providerTitle">{provideDetail.provider}</p>
+                         <p className="providerTitle">{provideDetail.provider}</p>
                       <p className="ticketPrice">
                         ₹{" "}
                         {provideDetail.bestOffer &&
@@ -366,6 +366,9 @@ const FlightDetailPage = () => {
                           : provideDetail.bestOffer.fare &&
                             provideDetail.bestOffer.fare.totalFare}
                       </p>
+                    </div>
+                    <div>
+                    {index === 0  && providerWithOffers.length > 1 && <p className="cheaptag">Cheapest</p>}
                     </div>
                     <div className="rightCol">
                       <Tooltip
@@ -485,7 +488,7 @@ const FlightDetailPage = () => {
                       </Tooltip>
                       <button
                         className="headerButtons filled"
-                        style={{ width: "100px" }}
+                        style={{ width: "100px"}}
                       >
                         <Link to={provideDetail.url} target="_blank">
                           View Detail

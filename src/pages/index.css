@@ -18,7 +18,7 @@
   position: sticky;
   bottom: 0;
   background: white;
-  max-width: 90%;
+  max-width: 800px;
   margin: 0 auto
 }
 
@@ -225,7 +225,7 @@
 }
 
 .mainDivider {
-  margin: 1rem 0;
+  margin: 3rem 0;
   position: relative;
   display: flex;
   align-items: center;
@@ -234,24 +234,24 @@
 }
 
 .mainDivider .divider {
-  border-bottom: 3px dashed white;
+  border-bottom: 4px dashed white;
   width: 100%;
 }
 
 .mainDivider .circle {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  border-radius: 10px;
+  width: 25px;
+  height: 25px;
+  border-radius: 12.5px;
   background: white;
 }
 
 .mainDivider .circle1 {
-  left: -10px;
+  left: -12.5px;
 }
 
 .mainDivider .circle2 {
-  right: -10px;
+  right: -12.5px;
 }
 
 .terminalContainer {
