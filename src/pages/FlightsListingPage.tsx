@@ -139,7 +139,6 @@ const FlightsListingPage = () => {
         }
       }
     }, 500)
-    dispatch(uploadIsLoading(false))
   }
 
   return (
