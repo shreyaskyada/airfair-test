@@ -97,8 +97,8 @@ const DataCard = (props: Props) => {
           onSelectedFlightChange(ref.current)
           navigate(
             "/flights/" +
-              `${type}-${dataKey}` +
-              `${flight.route.from} - ${flight.route.to}`
+              `${flight.route.from}-${flight.route.to}` +
+              `-${flight.company}-${flight.totalTime}-${flight.schedule.departure}`
           )
         }
       }}

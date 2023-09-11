@@ -98,7 +98,7 @@ const FlightDetailPage = () => {
         }
       )
 
-      //_providersWithOffer = [..._providersWithOffer]
+      _providersWithOffer = [..._providersWithOffer]
 
       _providersWithOffer.length > 1 &&
         _providersWithOffer.sort((a, b) => {
@@ -124,7 +124,8 @@ const FlightDetailPage = () => {
 
   useEffect(() => {
     let providers: any = []
-    if (!Loadash.isEmpty(departFlight)) {
+
+    if (!Loadash.isEmpty(departFlight) && Loadash.isEmpty(returnFlight)) {
       const keys = Object.keys(departFlight.compare || {})
       keys &&
         keys.forEach((key: any) => {
@@ -157,8 +158,60 @@ const FlightDetailPage = () => {
         })
 
       getDiscount(providers)
+    } else if (!Loadash.isEmpty(departFlight) && !Loadash.isEmpty(returnFlight)) {
+      const keys = Object.keys(departFlight.compare || {})
+      keys &&
+        keys.forEach((key: any) => {
+          let totalDepartFare =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalFareAfterDiscount
+              : 0
+          let totalreturnFare =
+            returnFlight.compare && returnFlight.compare[key]
+              ? returnFlight.compare[key].fare?.totalFareAfterDiscount
+              : 0
+          let url = departFlight.compare && departFlight.compare[key].redirecUrl
+          const totalFare =
+            totalDepartFare && totalreturnFare
+              ? totalreturnFare + totalDepartFare
+              : 0
+          let totalDepartTax =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalTax ||
+                departFlight.compare[key].fare?.tax
+              : 0
+          let totalReturnTax =
+            returnFlight.compare && returnFlight.compare[key]
+              ? returnFlight.compare[key].fare?.totalTax ||
+                returnFlight.compare[key].fare?.tax
+              : 0
+
+          let totalTax = (totalDepartTax || 0) + (totalReturnTax || 0)
+
+          let baseFareDepart =
+            departFlight.compare && departFlight.compare[key]
+              ? departFlight.compare[key].fare?.totalBaseFare ||
+                departFlight.compare[key].fare?.baseFare
+              : 0
+          let baseFareReturn =
+            returnFlight.compare && returnFlight.compare[key]
+              ? returnFlight.compare[key].fare?.totalBaseFare ||
+                returnFlight.compare[key].fare?.baseFare
+              : 0
+          let baseFare = (baseFareDepart || 0) + (baseFareReturn || 0)
+
+          providers.push({
+            provider: key,
+            totalFare: totalFare,
+            url: url,
+            baseFare: baseFare,
+            tax: totalTax
+          })
+        })
+
+      getDiscount(providers)
     }
-  }, [departFlight])
+  }, [departFlight,returnFlight])
 
   const flighInfoTabCard = ({
     fromTime,

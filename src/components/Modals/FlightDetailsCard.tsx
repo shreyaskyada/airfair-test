@@ -962,7 +962,9 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               <button
                 onClick={() => {
                   //dispatch(updateFlightDetails(true))
-                  navigate("/flights/round-trip")
+                  navigate("/flights/" +
+                  `${departFlight.from}-${departFlight.to}` +
+                  `-${departFlight.flightCode}-${departFlight.duration}-${departFlight.depTime}`)
                 }}
                 className="headerButtons filled"
               >
