@@ -23,7 +23,10 @@ import { updateOriginFlights } from "../redux/slices/originFlight"
 import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import { AIRPORT_DATA } from "../data/popularFlights"
 import "./layoutStyles.css"
-import { updateInitialValues } from "../redux/slices/searchFlights"
+import {
+  updateFlightType,
+  updateInitialValues
+} from "../redux/slices/searchFlights"
 import { notification } from "../components/Notification/customNotification"
 
 const { Title, Text } = Typography
@@ -91,6 +94,7 @@ const Footer = () => {
         dispatch(updateOriginFlights(res.flightCompareResponse))
         dispatch(updateDestinationFlights(res.returnJourneyCompareResponse))
         dispatch(updateDepartFlights(res.flightCompareResponse[0]))
+        dispatch(updateFlightType("ONE_WAY"))
         dispatch(updateReturnFlights({}))
         dispatch(updateInitialValues(searchedData))
         dispatch(uploadIsLoading(false))
@@ -99,15 +103,13 @@ const Footer = () => {
       .catch((error) => {
         dispatch(uploadIsLoading(false))
         console.error(error)
-        notification.warning({message:"No flights Found, Please try again"})
+        notification.warning({ message: "No flights Found, Please try again" })
       })
   }
   return (
     <div className="footerContainer">
       <div className="footerSection">
-        <h2 className="footerHeading" >
-          Top Flights
-        </h2>
+        <h2 className="footerHeading">Top Flights</h2>
         <Divider style={{ background: "white" }} />
         <Row gutter={[0, 6]}>
           {popularFlightsData.map((flights) =>
@@ -125,7 +127,8 @@ const Footer = () => {
                 }
               >
                 <Text className="flightLinks">
-                  {flights.departureFlightTitle.split(" ")[0]} To {flight.flightTitle}
+                  {flights.departureFlightTitle.split(" ")[0]} To{" "}
+                  {flight.flightTitle}
                 </Text>
               </Col>
             ))

@@ -18,6 +18,7 @@ interface CompareFlightCompanyDetails {
         totalCommission?: number
         surcharge?: number
         otherCharges?: number
+        convenienceFee?:number
     }
     offerApplied?: boolean
     offerDescription?: {    

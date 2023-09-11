@@ -1,4 +1,4 @@
-import { Avatar, Typography, Skeleton, Divider, Tooltip } from "antd"
+import { Avatar, Typography, Skeleton, Divider, Tooltip, Tag } from "antd"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { useState, useEffect, Fragment } from "react"
 import { FlightState } from "../redux/slices/flights"
@@ -99,119 +99,152 @@ const FlightDetailPage = () => {
       )
 
       _providersWithOffer = [..._providersWithOffer]
+      console.log(
+        "🚀 ~ file: FlightDetailPage.tsx:102 ~ getDiscount ~ _providersWithOffer:",
+        _providersWithOffer
+      )
 
       _providersWithOffer.length > 1 &&
         _providersWithOffer.sort((a, b) => {
           const aFare =
             a.bestOffer.fare.totalFareAfterDiscount > 0
-              ? a.bestOffer.fare.totalFareAfterDiscount
-              : a.totalFare
+              ? a.bestOffer.fare.totalFareAfterDiscount + a.convenienceFee
+              : a.totalFare + a.convenienceFee
           const bFare =
             b.bestOffer.fare.totalFareAfterDiscount > 0
-              ? b.bestOffer.fare.totalFareAfterDiscount
-              : b.totalFare
+              ? b.bestOffer.fare.totalFareAfterDiscount + b.convenienceFee
+              : b.totalFare + b.convenienceFee
 
           return aFare - bFare
         })
 
-      setProviderWithOffers(_providersWithOffer)
       dispatch(uploadIsLoading(false))
+      setProviderWithOffers(_providersWithOffer)
     } catch (error) {
       console.log(error)
       dispatch(uploadIsLoading(false))
+      return []
     }
   }
 
   useEffect(() => {
-    let providers: any = []
+    const makeProvideres = async () => {
+      let providers: any = []
 
-    if (!Loadash.isEmpty(departFlight) && Loadash.isEmpty(returnFlight)) {
-      const keys = Object.keys(departFlight.compare || {})
-      keys &&
-        keys.forEach((key: any) => {
-          let totalDepartFare =
-            departFlight.compare && departFlight.compare[key]
-              ? departFlight.compare[key].fare?.totalFareAfterDiscount
-              : 0
+      if (!Loadash.isEmpty(departFlight) && Loadash.isEmpty(returnFlight)) {
+        const keys = Object.keys(departFlight.compare || {})
+        keys &&
+          keys.forEach((key: any) => {
+            let totalDepartFare =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalFareAfterDiscount
+                : 0
 
-          let url = departFlight.compare && departFlight.compare[key].redirecUrl
+            let url =
+              departFlight.compare && departFlight.compare[key].redirecUrl
 
-          let totalTax =
-            departFlight.compare && departFlight.compare[key]
-              ? departFlight.compare[key].fare?.totalTax ||
-                departFlight.compare[key].fare?.tax
-              : 0
+            let totalTax =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalTax ||
+                  departFlight.compare[key].fare?.tax
+                : 0
 
-          let baseFare =
-            departFlight.compare && departFlight.compare[key]
-              ? departFlight.compare[key].fare?.totalBaseFare ||
-                departFlight.compare[key].fare?.baseFare
-              : 0
+            let baseFare =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalBaseFare ||
+                  departFlight.compare[key].fare?.baseFare
+                : 0
 
-          providers.push({
-            provider: key,
-            totalFare: totalDepartFare,
-            url: url,
-            baseFare: baseFare,
-            tax: totalTax
+            let convfee =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.convenienceFee
+                : 0
+
+            providers.push({
+              provider: key,
+              totalFare: totalDepartFare,
+              url: url,
+              baseFare: baseFare,
+              tax: totalTax,
+              convenienceFee: convfee
+            })
           })
-        })
 
-      getDiscount(providers)
-    } else if (!Loadash.isEmpty(departFlight) && !Loadash.isEmpty(returnFlight)) {
-      const keys = Object.keys(departFlight.compare || {})
-      keys &&
-        keys.forEach((key: any) => {
-          let totalDepartFare =
-            departFlight.compare && departFlight.compare[key]
-              ? departFlight.compare[key].fare?.totalFareAfterDiscount
-              : 0
-          let totalreturnFare =
-            returnFlight.compare && returnFlight.compare[key]
-              ? returnFlight.compare[key].fare?.totalFareAfterDiscount
-              : 0
-          let url = departFlight.compare && departFlight.compare[key].redirecUrl
-          const totalFare =
-            totalDepartFare && totalreturnFare
-              ? totalreturnFare + totalDepartFare
-              : 0
-          let totalDepartTax =
-            departFlight.compare && departFlight.compare[key]
-              ? departFlight.compare[key].fare?.totalTax ||
-                departFlight.compare[key].fare?.tax
-              : 0
-          let totalReturnTax =
-            returnFlight.compare && returnFlight.compare[key]
-              ? returnFlight.compare[key].fare?.totalTax ||
-                returnFlight.compare[key].fare?.tax
-              : 0
+        await getDiscount(providers)
+      } else if (
+        !Loadash.isEmpty(departFlight) &&
+        !Loadash.isEmpty(returnFlight)
+      ) {
+        const keys = Object.keys(departFlight.compare || {})
+        keys &&
+          keys.forEach((key: any) => {
+            let totalDepartFare =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalFareAfterDiscount
+                : 0
+            let totalreturnFare =
+              returnFlight.compare && returnFlight.compare[key]
+                ? returnFlight.compare[key].fare?.totalFareAfterDiscount
+                : 0
+            let url =
+              departFlight.compare && departFlight.compare[key].redirecUrl
+            const totalFare =
+              totalDepartFare && totalreturnFare
+                ? totalreturnFare + totalDepartFare
+                : 0
+            let totalDepartTax =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalTax ||
+                  departFlight.compare[key].fare?.tax
+                : 0
+            let totalReturnTax =
+              returnFlight.compare && returnFlight.compare[key]
+                ? returnFlight.compare[key].fare?.totalTax ||
+                  returnFlight.compare[key].fare?.tax
+                : 0
 
-          let totalTax = (totalDepartTax || 0) + (totalReturnTax || 0)
+            let totalTax = (totalDepartTax || 0) + (totalReturnTax || 0)
 
-          let baseFareDepart =
-            departFlight.compare && departFlight.compare[key]
-              ? departFlight.compare[key].fare?.totalBaseFare ||
-                departFlight.compare[key].fare?.baseFare
-              : 0
-          let baseFareReturn =
-            returnFlight.compare && returnFlight.compare[key]
-              ? returnFlight.compare[key].fare?.totalBaseFare ||
-                returnFlight.compare[key].fare?.baseFare
-              : 0
-          let baseFare = (baseFareDepart || 0) + (baseFareReturn || 0)
+            let baseFareDepart =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalBaseFare ||
+                  departFlight.compare[key].fare?.baseFare
+                : 0
+            let baseFareReturn =
+              returnFlight.compare && returnFlight.compare[key]
+                ? returnFlight.compare[key].fare?.totalBaseFare ||
+                  returnFlight.compare[key].fare?.baseFare
+                : 0
+            let baseFare = (baseFareDepart || 0) + (baseFareReturn || 0)
 
-          providers.push({
-            provider: key,
-            totalFare: totalFare,
-            url: url,
-            baseFare: baseFare,
-            tax: totalTax
+            let departConvfee =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.convenienceFee
+                : 0
+
+            let returnConvfee =
+              returnFlight.compare && returnFlight.compare[key]
+                ? returnFlight.compare[key].fare?.convenienceFee
+                : 0
+
+            let convfee = (departConvfee || 0) + (returnConvfee || 0)
+
+            providers.push({
+              provider: key,
+              totalFare: totalFare,
+              url: url,
+              baseFare: baseFare,
+              tax: totalTax,
+              convenienceFee: convfee
+            })
           })
-        })
 
-      getDiscount(providers)
+        await getDiscount(providers)
+      }
     }
-  }, [departFlight,returnFlight])
+
+    makeProvideres()
+  }, [departFlight, returnFlight])
 
   const flighInfoTabCard = ({
     fromTime,
@@ -261,11 +294,11 @@ const FlightDetailPage = () => {
               width={25}
               height={25}
               className="dividerIcon"
-              style={{
-                transform: flipPlaneIcon
-                  ? "translateX(50%) rotateY(180deg)"
-                  : "translateX(50%) rotateY(0deg)"
-              }}
+              // style={{
+              //   transform: flipPlaneIcon
+              //     ? "translateX(50%) rotateY(180deg)"
+              //     : "translateX(50%) rotateY(0deg)"
+              // }}
             />
             <div className="divider"></div>
             <span className="circle circle2"></span>
@@ -353,10 +386,10 @@ const FlightDetailPage = () => {
             <Divider />
             <div className="providersSection">
               {!!providerWithOffers.length ? (
-                providerWithOffers.map((provideDetail: any,index:number) => (
+                providerWithOffers.map((provideDetail: any, index: number) => (
                   <div className="providerDetail">
                     <div className="leftCol">
-                         <p className="providerTitle">{provideDetail.provider}</p>
+                      <p className="providerTitle">{provideDetail.provider}</p>
                       <p className="ticketPrice">
                         ₹{" "}
                         {provideDetail.bestOffer &&
@@ -365,10 +398,15 @@ const FlightDetailPage = () => {
                           ? provideDetail.bestOffer.fare.totalFareAfterDiscount
                           : provideDetail.bestOffer.fare &&
                             provideDetail.bestOffer.fare.totalFare}
+                        {` + ${provideDetail.convenienceFee} conv fee`}
                       </p>
                     </div>
                     <div>
-                    {index === 0  && providerWithOffers.length > 1 && <p className="cheaptag">Cheapest</p>}
+                      {index === 0 && providerWithOffers.length > 1 && (
+                        <p className="cheaptag">
+                          <Tag color="#4E6F7B"> Cheapest</Tag>
+                        </p>
+                      )}
                     </div>
                     <div className="rightCol">
                       <Tooltip
@@ -400,6 +438,19 @@ const FlightDetailPage = () => {
                                   }}
                                 >
                                   {provideDetail.tax}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Convenience Fee :
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail.convenienceFee}
                                 </span>
                               </div>
                               <div>
@@ -473,6 +524,30 @@ const FlightDetailPage = () => {
                                   </span>
                                 </b>
                               </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Total fare after Convenience Fee :{" "}
+                                </span>
+                                <b>
+                                  <span
+                                    style={{
+                                      fontWeight: "bold",
+                                      color: "#013042"
+                                    }}
+                                  >
+                                    {provideDetail.bestOffer &&
+                                    provideDetail.bestOffer.fare &&
+                                    provideDetail.bestOffer.fare
+                                      .totalFareAfterDiscount
+                                      ? provideDetail.bestOffer.fare
+                                          .totalFareAfterDiscount +
+                                        provideDetail.convenienceFee
+                                      : provideDetail.bestOffer.fare &&
+                                        provideDetail.bestOffer.fare.totalFare +
+                                          provideDetail.convenienceFee}
+                                  </span>
+                                </b>
+                              </div>
                             </>
                           ) : (
                             <div
@@ -488,7 +563,7 @@ const FlightDetailPage = () => {
                       </Tooltip>
                       <button
                         className="headerButtons filled"
-                        style={{ width: "100px"}}
+                        style={{ width: "100px" }}
                       >
                         <Link to={provideDetail.url} target="_blank">
                           View Detail
@@ -628,21 +703,21 @@ const FlightDetailPage = () => {
                 ? flighInfoTabCard({
                     flipPlaneIcon: true,
                     airLine: returnFlight.flightCode,
-                    toTime: returnFlight.depTime,
-                    toDate: returnFlight.depDate,
-                    toAddress:
+                    fromTime: returnFlight.depTime,
+                    fromDate: returnFlight.depDate,
+                    fromAddress:
                       returnFlight.departureTerminalList &&
                       returnFlight.departureTerminalList[0],
-                    fromTime: returnFlight.arrTime,
-                    fromDate: returnFlight.arrDate,
+                    toTime: returnFlight.arrTime,
+                    toDate: returnFlight.arrDate,
                     duration: returnFlight.duration,
-                    fromAddress:
+                    toAddress:
                       returnFlight.arrivalTerminalList &&
                       returnFlight.arrivalTerminalList[0],
                     flightCode: returnFlight.flightCode,
                     city: {
-                      to: returnFlight.fromCity,
-                      from: returnFlight.toCity
+                      from: returnFlight.fromCity,
+                      to: returnFlight.toCity
                     },
                     stop: returnFlight.stops,
                     cabinBaggage:
@@ -657,25 +732,25 @@ const FlightDetailPage = () => {
                       {flighInfoTabCard({
                         flipPlaneIcon: true,
                         airLine: returnFlight.flightCode?.split("->")[index],
-                        toTime: moment(
+                        fromTime: moment(
                           returnFlight?.startTimeList
                             ? returnFlight?.startTimeList[index]
                             : new Date()
                         ).format("HH:mm"),
-                        toDate: moment(
+                        fromDate: moment(
                           returnFlight?.startTimeList
                             ? returnFlight?.startTimeList[index]
                             : new Date()
                         ).format("DD/MM/YYYY"),
-                        toAddress:
+                        fromAddress:
                           returnFlight.departureTerminalList &&
                           returnFlight.departureTerminalList[index],
-                        fromTime: moment(
+                        toTime: moment(
                           returnFlight?.endTimeList
                             ? returnFlight?.endTimeList[index]
                             : new Date()
                         ).format("HH:mm"),
-                        fromDate: moment(
+                        toDate: moment(
                           returnFlight?.endTimeList
                             ? returnFlight?.endTimeList[index]
                             : new Date()
@@ -686,17 +761,17 @@ const FlightDetailPage = () => {
                             2,
                             returnFlight.durationsList[index].length
                           ),
-                        fromAddress:
+                        toAddress:
                           returnFlight.arrivalTerminalList &&
                           returnFlight.arrivalTerminalList[index],
                         flightCode: returnFlight.flightCode,
                         city: {
-                          to:
+                          from:
                             index === 0
                               ? returnFlight.fromCity
                               : returnFlight?.transitFlight &&
                                 returnFlight?.transitFlight[index - 1]?.viaCity,
-                          from:
+                          to:
                             index !==
                             (returnFlight.startTimeList &&
                               returnFlight.startTimeList.length - 1)
