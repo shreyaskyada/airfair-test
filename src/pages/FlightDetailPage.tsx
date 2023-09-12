@@ -398,7 +398,7 @@ const FlightDetailPage = () => {
                           ? provideDetail.bestOffer.fare.totalFareAfterDiscount
                           : provideDetail.bestOffer.fare &&
                             provideDetail.bestOffer.fare.totalFare}
-                        {` + ${provideDetail.convenienceFee} conv fee`}
+                        <span style={{ color: "#4E6F7B",fontSize:"0.7rem"}}>{` + ${provideDetail.convenienceFee} conv fee`}</span>
                       </p>
                     </div>
                     <div>
