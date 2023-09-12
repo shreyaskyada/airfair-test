@@ -442,19 +442,6 @@ const FlightDetailPage = () => {
                               </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Convenience Fee :
-                                </span>
-                                <span
-                                  style={{
-                                    fontWeight: "bold",
-                                    color: "#013042"
-                                  }}
-                                >
-                                  {provideDetail.convenienceFee}
-                                </span>
-                              </div>
-                              <div>
-                                <span style={{ color: "#4E6F7B" }}>
                                   Total Fare:
                                 </span>
                                 <span
@@ -485,7 +472,19 @@ const FlightDetailPage = () => {
                                     provideDetail.bestOffer.fare.totalDiscount}
                                 </span>
                               </div>
-
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Convenience Fee :
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail.convenienceFee}
+                                </span>
+                              </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
                                   Promo code:
