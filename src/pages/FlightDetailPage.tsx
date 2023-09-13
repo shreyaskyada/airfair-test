@@ -99,11 +99,7 @@ const FlightDetailPage = () => {
         }
       )
 
-      _providersWithOffer = [..._providersWithOffer]
-      console.log(
-        "🚀 ~ file: FlightDetailPage.tsx:102 ~ getDiscount ~ _providersWithOffer:",
-        _providersWithOffer
-      )
+      //_providersWithOffer = [..._providersWithOffer]
 
       _providersWithOffer.length > 1 &&
         _providersWithOffer.sort((a, b) => {
@@ -132,47 +128,7 @@ const FlightDetailPage = () => {
     const makeProvideres = async () => {
       let providers: any = []
 
-      if (!Loadash.isEmpty(departFlight) && Loadash.isEmpty(returnFlight)) {
-        const keys = Object.keys(departFlight.compare || {})
-        keys &&
-          keys.forEach((key: any) => {
-            let totalDepartFare =
-              departFlight.compare && departFlight.compare[key]
-                ? departFlight.compare[key].fare?.totalFareAfterDiscount
-                : 0
-
-            let url =
-              departFlight.compare && departFlight.compare[key].redirecUrl
-
-            let totalTax =
-              departFlight.compare && departFlight.compare[key]
-                ? departFlight.compare[key].fare?.totalTax ||
-                  departFlight.compare[key].fare?.tax
-                : 0
-
-            let baseFare =
-              departFlight.compare && departFlight.compare[key]
-                ? departFlight.compare[key].fare?.totalBaseFare ||
-                  departFlight.compare[key].fare?.baseFare
-                : 0
-
-            let convfee =
-              departFlight.compare && departFlight.compare[key]
-                ? departFlight.compare[key].fare?.convenienceFee
-                : 0
-
-            providers.push({
-              provider: key,
-              totalFare: totalDepartFare,
-              url: url,
-              baseFare: baseFare,
-              tax: totalTax,
-              convenienceFee: convfee
-            })
-          })
-
-        await getDiscount(providers)
-      } else if (
+      if (
         !Loadash.isEmpty(departFlight) &&
         !Loadash.isEmpty(returnFlight)
       ) {
@@ -233,6 +189,46 @@ const FlightDetailPage = () => {
             providers.push({
               provider: key,
               totalFare: totalFare,
+              url: url,
+              baseFare: baseFare,
+              tax: totalTax,
+              convenienceFee: convfee
+            })
+          })
+
+        await getDiscount(providers)
+      }else if (!Loadash.isEmpty(departFlight) && Loadash.isEmpty(returnFlight)) {
+        const keys = Object.keys(departFlight.compare || {})
+        keys &&
+          keys.forEach((key: any) => {
+            let totalDepartFare =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalFareAfterDiscount
+                : 0
+
+            let url =
+              departFlight.compare && departFlight.compare[key].redirecUrl
+
+            let totalTax =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalTax ||
+                  departFlight.compare[key].fare?.tax
+                : 0
+
+            let baseFare =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.totalBaseFare ||
+                  departFlight.compare[key].fare?.baseFare
+                : 0
+
+            let convfee =
+              departFlight.compare && departFlight.compare[key]
+                ? departFlight.compare[key].fare?.convenienceFee
+                : 0
+
+            providers.push({
+              provider: key,
+              totalFare: totalDepartFare,
               url: url,
               baseFare: baseFare,
               tax: totalTax,
