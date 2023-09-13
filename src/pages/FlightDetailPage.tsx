@@ -402,7 +402,7 @@ const FlightDetailPage = () => {
                           ? provideDetail.bestOffer.fare.totalFareAfterDiscount
                           : provideDetail.bestOffer.fare &&
                             provideDetail.bestOffer.fare.totalFare}
-                        {` + ${provideDetail.convenienceFee} conv fee`}
+                        <span style={{ color: "#4E6F7B",fontSize:"0.7rem"}}>{` + ${provideDetail.convenienceFee} conv fee`}</span>
                       </p>
                     </div>
                     <div className="rightCol">
@@ -439,19 +439,6 @@ const FlightDetailPage = () => {
                               </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Convenience Fee :
-                                </span>
-                                <span
-                                  style={{
-                                    fontWeight: "bold",
-                                    color: "#013042"
-                                  }}
-                                >
-                                  {provideDetail.convenienceFee}
-                                </span>
-                              </div>
-                              <div>
-                                <span style={{ color: "#4E6F7B" }}>
                                   Total Fare:
                                 </span>
                                 <span
@@ -482,7 +469,19 @@ const FlightDetailPage = () => {
                                     provideDetail.bestOffer.fare.totalDiscount}
                                 </span>
                               </div>
-
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Convenience Fee :
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail.convenienceFee}
+                                </span>
+                              </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
                                   Promo code:
