@@ -29,6 +29,7 @@ const FlightDetailPage = () => {
   )
 
   const getDiscount = async (provider: []) => {
+    console.log("🚀 ~ file: FlightDetailPage.tsx:32 ~ getDiscount ~ provider:", provider)
     try {
       if (!provider.length || !searchFlightData) {
         throw new Error("invalid inputs")
@@ -389,7 +390,14 @@ const FlightDetailPage = () => {
                 providerWithOffers.map((provideDetail: any, index: number) => (
                   <div className="providerDetail">
                     <div className="leftCol">
-                      <p className="providerTitle">{provideDetail.provider}</p>
+                      <div>
+                      <div style={{display:"flex",alignItems:"center",gap:"0.5rem"}}>
+                        <p className="providerTitle">{provideDetail.provider}</p>
+                        {index === 0 && providerWithOffers.length > 1 && (
+                            <Tag color="#4E6F7B"> Cheapest</Tag>
+                        )}
+                    </div>
+                      </div>
                       <p className="ticketPrice">
                         ₹{" "}
                         {provideDetail.bestOffer &&
@@ -400,13 +408,6 @@ const FlightDetailPage = () => {
                             provideDetail.bestOffer.fare.totalFare}
                         {` + ${provideDetail.convenienceFee} conv fee`}
                       </p>
-                    </div>
-                    <div>
-                      {index === 0 && providerWithOffers.length > 1 && (
-                        <p className="cheaptag">
-                          <Tag color="#4E6F7B"> Cheapest</Tag>
-                        </p>
-                      )}
                     </div>
                     <div className="rightCol">
                       <Tooltip

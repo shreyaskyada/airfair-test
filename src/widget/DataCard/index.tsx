@@ -273,11 +273,13 @@ const DataCard = (props: Props) => {
                     searchFlightData.flightType === "ONE_WAY"
                   ) {
                     onSelectedFlightChange(ref.current)
-                    navigate(
-                      "/flights/" +
-                        `${flight.route.from}-${flight.route.to}` +
-                        `-${flight.company}-${flight.totalTime}-${flight.schedule.departure}`
-                    )
+                    setTimeout(()=>{
+                      navigate(
+                        "/flights/" +
+                          `${flight.route.from}-${flight.route.to}` +
+                          `-${flight.company}-${flight.totalTime}-${flight.schedule.departure}`
+                      )
+                    },500)
                   }
                 }}
               >

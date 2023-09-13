@@ -12,6 +12,7 @@ import { updateDestinationFlights } from "../redux/slices/destinationFlight"
 import DestinationFlight from "../components/FlightsCard/DestinationFlight"
 import FlightDetailCard from "../components/Modals/FlightDetailsCard"
 import { noResult } from "../assets/images"
+import { ISearchFlights } from "../redux/slices/searchFlights"
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -43,6 +44,10 @@ const FlightsListingPage = () => {
     returnFlight
   }: { flights: any; departFlight: any; returnFlight: any } = useAppSelector(
     (state) => state.flight
+  )
+
+  const searchFlightData = useAppSelector(
+    (state: { searchFlights: ISearchFlights }) => state.searchFlights
   )
 
   useEffect(() => {
@@ -111,34 +116,36 @@ const FlightsListingPage = () => {
   const onSelectedFlightChange = (value: any, type: string, flight: Flight) => {
     dispatch(uploadIsLoading(true))
     setTimeout(() => {
-      setSelectedFlight((prevDate) => ({
-        ...prevDate,
-        [type]: value.target.value
-      }))
-      let compareData = Object.keys(flight.compare || {})
-      switch (type) {
-        case "depart": {
-          dispatch(updateDepartFlights(flight))
-          const data = filterFlightList(compareData, type)
-          dispatch(updateDestinationFlights(data))
-          dispatch(updateReturnFlights(data[0]))
+    setSelectedFlight((prevDate) => ({
+      ...prevDate,
+      [type]: value.target.value
+    }))
+    let compareData = Object.keys(flight.compare || {})
+    switch (type) {
+      case "depart": {
+        dispatch(updateDepartFlights(flight))
+        const data = filterFlightList(compareData, type)
+        dispatch(updateDestinationFlights(data))
+        dispatch(updateReturnFlights(data[0]))
+
+        searchFlightData.flightType === "ONE_WAY" &&
           dispatch(uploadIsLoading(false))
-          break
-        }
-        case "return": {
-          dispatch(updateReturnFlights(flight))
-          dispatch(uploadIsLoading(false))
-          //dispatch(updateOriginFlights(filterFlightList(compareData, type)));
-          break
-        }
-        default: {
-          console.log(
-            "onSelectedFlightChange :: Error occured white updating file"
-          )
-          dispatch(uploadIsLoading(false))
-        }
+        break
       }
-    }, 500)
+      case "return": {
+        dispatch(updateReturnFlights(flight))
+        //dispatch(uploadIsLoading(false))
+        //dispatch(updateOriginFlights(filterFlightList(compareData, type)));
+        break
+      }
+      default: {
+        console.log(
+          "onSelectedFlightChange :: Error occured white updating file"
+        )
+        dispatch(uploadIsLoading(false))
+      }
+    }
+    }, 1000)
   }
 
   return (
@@ -185,9 +192,11 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      {flights && Object.keys(flights).length > 0 && flights?.returnJourneyCompareResponse?.length > 0 && (
-        <div className="detailCardContainer">{<FlightDetailCard />}</div>
-      )}
+      {flights &&
+        Object.keys(flights).length > 0 &&
+        flights?.returnJourneyCompareResponse?.length > 0 && (
+          <div className="detailCardContainer">{<FlightDetailCard />}</div>
+        )}
     </div>
   )
 }
