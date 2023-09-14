@@ -18,6 +18,7 @@ interface CompareFlightCompanyDetails {
         totalCommission?: number
         surcharge?: number
         otherCharges?: number
+        convenienceFee?:number
     }
     offerApplied?: boolean
     offerDescription?: {    
@@ -72,6 +73,8 @@ export interface Flight {
     departureTerminalList?: string[]
     arrivalTerminalList?: string[]
     transitFlight?: { viaCity: string; viaAirportName: string; viaAirportCode: string }[]
+    cabinBaggage: string[]
+    checkinBaggage:string[]
 }
 
 export interface FlightState {
@@ -82,8 +85,8 @@ export interface FlightState {
 
 export const initialState: FlightState = {
   flights: {},
-  departFlight: {},
-  returnFlight: {},
+  departFlight: {} as Flight,
+  returnFlight: {} as Flight,
 };
 
 export const flightsSlice = createSlice({

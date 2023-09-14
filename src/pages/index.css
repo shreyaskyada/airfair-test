@@ -18,7 +18,7 @@
   position: sticky;
   bottom: 0;
   background: white;
-  max-width: 90%;
+  max-width: 800px;
   margin: 0 auto
 }
 
@@ -37,6 +37,250 @@
 }
 
 /*================================================================================*/
+
+
+/*================================Flight_Detail===================================*/
+.headerCard {
+  padding: 1.2rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 0px 1px rgba(88, 88, 88, 0.1);
+}
+
+.flightStats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+}
+
+.flightStats .heading {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--primary-color);
+}
+
+.flightStats .date, .flightStats .passengers {
+  color: var(--light-color);
+}
+
+.providersSection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 1rem 0;
+  gap: 1rem;
+}
+
+.providerDetail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--bg-light-color);
+  border-radius: 10px;
+  padding: 0.6rem 0.8rem;
+}
+
+.providerDetail .leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.providerDetail .rightCol {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.leftCol .providerTitle {
+  font-size: 14px;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.leftCol .ticketPrice {
+  color: var(--secondary-color);
+  font-weight: bold;
+}
+
+.rightCol .tooltipContent {
+  background-color: var(--dark-color);
+  font-size: 1rem;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flighCompleteDetail {
+  background: var(--bg-light-color);
+  border-radius: 8px;
+}
+
+.flightDetailContent {
+  padding: 1rem;
+}
+
+.flightNameContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.flightTimeDetail {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.cityDivider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: min-content;
+  width: 100%;
+  gap:0.2rem
+}
+
+
+.cityDivider .divider {
+  border-bottom: 3px dotted yellow;
+  width: 100%;
+}
+
+.cityDivider .circle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background: rgb(187, 187, 187);
+}
+
+.cityDivider .circle1 {
+  left: -2px;
+}
+
+.cityDivider .circle2 {
+  right: -2px;
+}
+
+.cityDivider .dividerIcon{
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.flightCity {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+}
+
+.flightCity p {
+  color: var(--light-color);
+}
+
+.flightCity p:nth-child(2) {
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+
+.chipsSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+  margin: 1rem auto;
+  gap: 0.8rem;
+}
+
+.rowChip{
+  display: flex;
+  gap: 0.8rem;
+}
+
+.chip {
+  padding: 0.4rem;
+  background: white;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+}
+
+.chip p {
+  text-align: center;
+  color: var(--light-color);
+}
+
+.mainDivider {
+  margin: 5rem 0;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: min-content;
+  width: 100%;
+}
+
+.mainDivider .divider {
+  border-bottom: 4px dashed white;
+  width: 100%;
+}
+
+.mainDivider .circle {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 12.5px;
+  background: white;
+}
+
+.mainDivider .circle1 {
+  left: -12.5px;
+}
+
+.mainDivider .circle2 {
+  right: -12.5px;
+}
+
+.terminalContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.6rem 0;
+}
+
+.terminalContainer p {
+  color: var(--light-color);
+}
+
+.layovers {
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border-radius: 20px;
+  max-width: 600px;
+  background: var(--light-color);
+  color: white;
+  margin: 0.8rem auto;
+}
+
+
+
+
 
 /*=================================ABOUT_US=======================================*/
 .aboutUsContainer {
@@ -111,6 +355,24 @@
   .detail {
     font-size: 1.12rem;
   }
+
+  .providersSection {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+.chipsSection{
+  flex-direction: column;
+}
+}
+
+@media only screen and (max-width: 970px) {
+  .flightNameContainer {
+    justify-content: center;
+  }
+
+  
 }
 
 @media only screen and (max-width: 860px) {
@@ -187,6 +449,10 @@
     margin: 0 .5rem;
   }
 
+  .chip{
+    width: 160px;
+  }
+
 }
 
 
@@ -210,6 +476,15 @@
   .detail {
     font-size: .95rem;
   }
+  .rowChip{
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .chip{
+    width: 100%
+  }
+
 
 }
 
