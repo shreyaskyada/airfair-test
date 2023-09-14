@@ -413,7 +413,7 @@ const FlightDetailPage = () => {
                             <>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Base Fare:
+                                  Base Fare:{" "}
                                 </span>
                                 <span
                                   style={{
@@ -426,7 +426,7 @@ const FlightDetailPage = () => {
                               </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Total Tax:
+                                  Total Tax:{" "}
                                 </span>
                                 <span
                                   style={{
@@ -439,7 +439,7 @@ const FlightDetailPage = () => {
                               </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Total Fare:
+                                  Total Fare:{" "}
                                 </span>
                                 <span
                                   style={{
@@ -455,7 +455,7 @@ const FlightDetailPage = () => {
                               </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Total discount:
+                                  Total Discount:{" "}
                                 </span>{" "}
                                 <span
                                   style={{
@@ -471,20 +471,7 @@ const FlightDetailPage = () => {
                               </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Convenience Fee :
-                                </span>
-                                <span
-                                  style={{
-                                    fontWeight: "bold",
-                                    color: "#013042"
-                                  }}
-                                >
-                                  {provideDetail.convenienceFee}
-                                </span>
-                              </div>
-                              <div>
-                                <span style={{ color: "#4E6F7B" }}>
-                                  Promo code:
+                                  Promo Code:{" "}
                                 </span>
                                 <span
                                   style={{
@@ -500,7 +487,7 @@ const FlightDetailPage = () => {
                               </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Total fare after discount:{" "}
+                                  Total Fare After Discount:{" "}
                                 </span>
                                 <b>
                                   <span
@@ -522,7 +509,20 @@ const FlightDetailPage = () => {
                               </div>
                               <div>
                                 <span style={{ color: "#4E6F7B" }}>
-                                  Total fare after Convenience Fee :{" "}
+                                  Conv Fee :{" "}
+                                </span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    color: "#013042"
+                                  }}
+                                >
+                                  {provideDetail.convenienceFee}
+                                </span>
+                              </div>
+                              <div>
+                                <span style={{ color: "#4E6F7B" }}>
+                                  Final Fare:{" "}
                                 </span>
                                 <b>
                                   <span
