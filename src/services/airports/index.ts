@@ -19,7 +19,6 @@ export const airlineMapping: { [key: string]: string } = {
   S5: "Star Air",
   "9I": "Alliance Air",
   S9: "FLY BIG"
-
   ,GB: "ABX Air",
   A3: "Aegean Airlines",
   EI: "Aer Lingus",
