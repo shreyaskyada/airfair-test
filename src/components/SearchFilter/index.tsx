@@ -57,7 +57,7 @@ const options = [
 ]
 
 const seatTypes = [
-  { label: "Economy/Premium Economy", value: "ECONOMY" },
+  { label: "Economy", value: "ECONOMY" },
   { label: "Premium Economy", value: "PREMIUM_ECONOMY" },
   { label: "Business", value: "BUSINESS" },
   { label: "First Class", value: "FIRST_CLASS" }

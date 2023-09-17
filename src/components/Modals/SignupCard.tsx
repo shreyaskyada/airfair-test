@@ -37,6 +37,25 @@ const SignupCard = ({ onFinishHandler }: any) => {
     dispatch(toggleModal({ modal: "signup", status: false }))
   }
 
+  const phoneValidator = (rule:any, value:any, callback:any) => {
+    if(value && value.length < 10){
+      callback('Phone number must be 10 digits');
+    }
+    if (value && !/^\d{10}$/.test(value)) {
+      callback('Phone number should only cotain numbers');
+    } else {
+      callback();
+    }
+  };
+
+  const usernameValidator = (rule:any, value:any, callback:any) => {
+    if (value && value.length < 8) {
+      callback('Username must be at least 8 characters');
+    } else {
+      callback();
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -124,7 +143,10 @@ const SignupCard = ({ onFinishHandler }: any) => {
               style={{ marginBottom: "10px" }}
               name="userName"
               rules={[
-                { required: true, message: "Please input your username!" }
+                { required: true, message: "Please input your username!" },
+                {
+                  validator: usernameValidator,
+                },
               ]}
             >
               <Input placeholder="User name" />
@@ -132,7 +154,10 @@ const SignupCard = ({ onFinishHandler }: any) => {
             <Form.Item
               name="phoneNo"
               rules={[
-                { required: true, message: "Please input your phone number!" }
+                { required: true, message: "Please input your phone number!" },
+                {
+                  validator: phoneValidator,
+                },
               ]}
             >
               <Input placeholder="Phone number" />
