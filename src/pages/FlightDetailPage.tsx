@@ -115,12 +115,11 @@ const FlightDetailPage = () => {
           return aFare - bFare
         })
 
-      dispatch(uploadIsLoading(false))
-      setProviderWithOffers(_providersWithOffer)
+        setProviderWithOffers(_providersWithOffer)
+        dispatch(uploadIsLoading(false))
     } catch (error) {
       console.log(error)
       dispatch(uploadIsLoading(false))
-      return []
     }
   }
 
@@ -196,7 +195,7 @@ const FlightDetailPage = () => {
             })
           })
 
-        await getDiscount(providers)
+        getDiscount(providers)
       }else if (!Loadash.isEmpty(departFlight) && Loadash.isEmpty(returnFlight)) {
         const keys = Object.keys(departFlight.compare || {})
         keys &&
@@ -236,7 +235,7 @@ const FlightDetailPage = () => {
             })
           })
 
-        await getDiscount(providers)
+        getDiscount(providers)
       }
     }
 
@@ -370,7 +369,9 @@ const FlightDetailPage = () => {
               </Avatar.Group>
 
               <h2 className="heading">
-                {departFlight && `${departFlight.from} - ${departFlight.to}`}
+                {departFlight && departFlight.from}
+                -
+                {departFlight && departFlight.to}
               </h2>
               <p className="date">
                 {departFlight &&
