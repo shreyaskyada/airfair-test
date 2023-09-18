@@ -369,10 +369,10 @@ const SearchFilter = ({
                       setInputValues((prevState: any) => ({
                         ...prevState,
                         type: "round-trip",
-                        return: inputValues && inputValues.departure.add(1,'day')
+                        return: inputValues && inputValues.departure
                       }))
                       dispatch(updateFlightType("round-trip"))
-                      dispatch(updateReturnDate(inputValues && inputValues.departure.add(1,'day')))
+                      dispatch(updateReturnDate(inputValues && inputValues.departure))
                     }}
                     style={{ color: "#013042" }}
                   >
@@ -556,12 +556,16 @@ const SearchFilter = ({
                         onChange={(value) => {
                           setInputValues((prevState: any) => ({
                             ...prevState,
-                            departure: value || dayjs(),
-                            return : (value && value.add(1,'day')) || (dayjs().add(1,'day'))
+                            departure: value || dayjs()
                           }))
                           dispatch(updateDepartureDate(value || dayjs()))
+                          
                           if(inputValues && inputValues.type === 'round-trip'){
-                            dispatch(updateReturnDate((value && value.add(1,'day')) || (dayjs().add(1,'day'))))
+                            dispatch(updateReturnDate(value && value))
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              return: value || dayjs()
+                            }))
                           }
                         }}
                         onBlur={() =>
@@ -649,15 +653,15 @@ const SearchFilter = ({
                         showTime={false}
                         showToday={false}
                         size="large"
-                        defaultValue={inputValues ? inputValues.departure.add(1,'day') :  dayjs().add(1,'day')}
+                        defaultValue={inputValues && inputValues.return}
                         style={{ height: "78px", width: "100%" }}
                         disabledDate={disableReturnDates}
                         onChange={(value) => {
                           setInputValues((prevState: any) => ({
                             ...prevState,
-                            return: value || (inputValues && inputValues.departure.add(1,'day'))
+                            return: value
                           }))
-                          dispatch(updateReturnDate(value || (inputValues && inputValues.departure.add(1,'day'))))
+                          dispatch(updateReturnDate(value || (inputValues && inputValues.departure)))
                         }}
                         onBlur={() =>
                           setShowInput((prevState: any) => ({

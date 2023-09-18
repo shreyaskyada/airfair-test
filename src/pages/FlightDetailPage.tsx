@@ -670,7 +670,7 @@ const FlightDetailPage = () => {
                       <div className="layovers">
                         <p>
                           {departFlight.layoverDurationList &&
-                            departFlight.layoverDurationList[index].substring(
+                           departFlight.layoverDurationList[index] && departFlight.layoverDurationList[index].substring(
                               2,
                               departFlight.layoverDurationList[index].length
                             )}
@@ -787,7 +787,7 @@ const FlightDetailPage = () => {
                         <div className="layovers">
                           <p>
                             {returnFlight.layoverDurationList &&
-                              returnFlight.layoverDurationList[index].substring(
+                              returnFlight.layoverDurationList[index] && returnFlight.layoverDurationList[index].substring(
                                 2,
                                 returnFlight.layoverDurationList[index].length
                               )}
