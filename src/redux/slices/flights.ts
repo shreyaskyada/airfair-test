@@ -57,6 +57,7 @@ export interface Flight {
     depTerminal?: string
     arrTerminal?: string
     airline?: string
+    seatingClass?: string
     startTimeList?: ["2023-05-12T23:15:00"]
     endTimeList?: ["2023-05-13T01:20:00"]
     layoverDurationList?: string[]

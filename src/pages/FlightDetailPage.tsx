@@ -256,6 +256,7 @@ const FlightDetailPage = () => {
     stops,
     cabinBaggage,
     checkinBaggage,
+    seatingClass,
     flipPlaneIcon = false
   }: any) => {
     return (
@@ -331,9 +332,24 @@ const FlightDetailPage = () => {
         </div>
         <div className="chipsSection">
           <div className="rowChip">
-            <div className="chip">
-              <p>Economy</p>
-            </div>
+          <div className="chip">
+  <p>
+    {(() => {
+      switch (seatingClass) {
+        case 'B':
+          return 'Business';
+        case 'E':
+          return 'Economy';
+        case 'PE':
+          return 'Premium Economy';
+        case 'FC':
+          return 'First Class';
+        default:
+          return seatingClass; // Default case if none of the above values match
+      }
+    })()}
+  </p>
+</div>
             <div className="chip">
               <p>{fromDate}</p>
             </div>
@@ -601,6 +617,7 @@ const FlightDetailPage = () => {
                     to: departFlight.toCity
                   },
                   stop: departFlight.stops,
+                  seatingClass:departFlight.seatingClass,
                   cabinBaggage:
                     departFlight.cabinBaggage && departFlight.cabinBaggage[0],
                   checkinBaggage:
@@ -660,6 +677,7 @@ const FlightDetailPage = () => {
                             : departFlight.toCity
                       },
                       stop: departFlight.stops,
+                      seatingClass:departFlight.seatingClass,
                       cabinBaggage:
                         departFlight.cabinBaggage &&
                         departFlight.cabinBaggage[index],
@@ -717,6 +735,7 @@ const FlightDetailPage = () => {
                       to: returnFlight.toCity
                     },
                     stop: returnFlight.stops,
+                    seatingClass:departFlight.seatingClass,
                     cabinBaggage:
                       returnFlight.cabinBaggage && returnFlight.cabinBaggage[0],
                     checkinBaggage:
