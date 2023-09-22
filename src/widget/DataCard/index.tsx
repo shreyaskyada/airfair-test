@@ -7,8 +7,10 @@ import { Airlines_Images } from "../../data/popularAirlines"
 import "./DataCard.css"
 import { useNavigate } from "react-router"
 import { airplaneIcon } from "../../assets/images"
-import { useAppSelector } from "../../redux/hooks"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { ISearchFlights } from "../../redux/slices/searchFlights"
+import { updateDepartFlights } from "../../redux/slices/flights"
+import { useDispatch } from "react-redux"
 
 interface Props {
   checked?: boolean
@@ -60,7 +62,7 @@ const DataCard = (props: Props) => {
     currentCode,
     departCode
   } = props
-
+  const dispatch = useAppDispatch()
   const [details, setDetails] = useState(false)
   const [flightNames, setFlightNames] = useState<string[]>([])
   const [flightImage, setFlightImage] = useState<any>(null)
@@ -268,19 +270,15 @@ const DataCard = (props: Props) => {
                 className="headerButtons filled"
                 style={{ marginTop: "0.5rem", height: "34px" }}
                 onClick={() => {
-                  if (
-                    searchFlightData &&
-                    searchFlightData.flightType === "ONE_WAY"
-                  ) {
+                    dispatch(updateDepartFlights({}))
                     onSelectedFlightChange(ref.current)
-                    setTimeout(()=>{
+                    //setTimeout(()=>{
                       navigate(
                         "/flights/" +
                           `${flight.route.from}-${flight.route.to}` +
                           `-${flight.company}-${flight.totalTime}-${flight.schedule.departure}`
                       )
-                    },500)
-                  }
+                    // },1100)
                 }}
               >
                 Select Deal

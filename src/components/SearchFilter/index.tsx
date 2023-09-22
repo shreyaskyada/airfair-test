@@ -57,7 +57,7 @@ const options = [
 ]
 
 const seatTypes = [
-  { label: "Economy/Premium Economy", value: "ECONOMY" },
+  { label: "Economy", value: "ECONOMY" },
   { label: "Premium Economy", value: "PREMIUM_ECONOMY" },
   { label: "Business", value: "BUSINESS" },
   { label: "First Class", value: "FIRST_CLASS" }
@@ -78,11 +78,6 @@ const seatTypes = [
 //   infant: 0,
 //   class: "ECONOMY"
 // }
-
-const disabledDate: RangePickerProps["disabledDate"] = (current) => {
-  // Can not select days before today and today
-  return current && current < dayjs().subtract(1, "day").endOf("day")
-}
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -133,6 +128,21 @@ const SearchFilter = ({
   useEffect(() => {
     setInputValues(_initialValues)
   }, [_initialValues])
+
+  const disabledDate: RangePickerProps["disabledDate"] = (current) => {
+    // Can not select days before today and today
+    if(current && current < dayjs().subtract(1, "day").endOf("day")){
+      return true
+    }
+    return false
+  }
+
+  const disableReturnDates: RangePickerProps["disabledDate"] = (current) => {
+    if((current && current < dayjs().subtract(1, "day").endOf("day")) || (inputValues && current < inputValues.departure.subtract(1, "day").endOf("day"))){
+      return true
+    }
+    return false
+  }
 
   const segmentAdultValues = Array(9)
     .fill(0)
@@ -359,10 +369,10 @@ const SearchFilter = ({
                       setInputValues((prevState: any) => ({
                         ...prevState,
                         type: "round-trip",
-                        return: dayjs().add(1,"day")
+                        return: inputValues && inputValues.departure
                       }))
                       dispatch(updateFlightType("round-trip"))
-                      dispatch(updateReturnDate(dayjs().add(1,'day')))
+                      dispatch(updateReturnDate(inputValues && inputValues.departure))
                     }}
                     style={{ color: "#013042" }}
                   >
@@ -549,6 +559,14 @@ const SearchFilter = ({
                             departure: value || dayjs()
                           }))
                           dispatch(updateDepartureDate(value || dayjs()))
+                          
+                          if(inputValues && inputValues.type === 'round-trip'){
+                            dispatch(updateReturnDate(value && value))
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              return: value || dayjs()
+                            }))
+                          }
                         }}
                         onBlur={() =>
                           setShowInput((prevState) => ({
@@ -635,15 +653,15 @@ const SearchFilter = ({
                         showTime={false}
                         showToday={false}
                         size="large"
-                        defaultValue={dayjs().add(1,'day')}
+                        defaultValue={inputValues && inputValues.return}
                         style={{ height: "78px", width: "100%" }}
-                        disabledDate={disabledDate}
+                        disabledDate={disableReturnDates}
                         onChange={(value) => {
                           setInputValues((prevState: any) => ({
                             ...prevState,
-                            return: value || dayjs().add(1,'day')
+                            return: value
                           }))
-                          dispatch(updateReturnDate(value || dayjs().add(1,'day')))
+                          dispatch(updateReturnDate(value || (inputValues && inputValues.departure)))
                         }}
                         onBlur={() =>
                           setShowInput((prevState: any) => ({

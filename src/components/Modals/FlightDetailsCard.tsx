@@ -607,7 +607,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                     >
                       Change of planes |{" "}
                       {flight.layoverDurationList &&
-                        flight.layoverDurationList[index].substring(
+                        flight.layoverDurationList[index] && flight.layoverDurationList[index].substring(
                           2,
                           flight.layoverDurationList[index].length
                         )}{" "}
@@ -620,7 +620,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                     <Divider plain style={{ color: "#4E6F7B" }}>
                       Change of planes |{" "}
                       {flight.layoverDurationList &&
-                        flight.layoverDurationList[index].substring(
+                        flight.layoverDurationList[index] && flight.layoverDurationList[index].substring(
                           2,
                           flight.layoverDurationList[index].length
                         )}{" "}

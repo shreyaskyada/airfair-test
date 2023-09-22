@@ -192,9 +192,7 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      {flights &&
-        Object.keys(flights).length > 0 &&
-        flights?.returnJourneyCompareResponse?.length > 0 && (
+      {flights && searchFlightData.flightType !== "ONE_WAY" && (
           <div className="detailCardContainer">{<FlightDetailCard />}</div>
         )}
     </div>

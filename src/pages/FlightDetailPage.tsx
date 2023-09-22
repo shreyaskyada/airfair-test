@@ -115,12 +115,11 @@ const FlightDetailPage = () => {
           return aFare - bFare
         })
 
-      dispatch(uploadIsLoading(false))
-      setProviderWithOffers(_providersWithOffer)
+        setProviderWithOffers(_providersWithOffer)
+        dispatch(uploadIsLoading(false))
     } catch (error) {
       console.log(error)
       dispatch(uploadIsLoading(false))
-      return []
     }
   }
 
@@ -196,7 +195,7 @@ const FlightDetailPage = () => {
             })
           })
 
-        await getDiscount(providers)
+        getDiscount(providers)
       }else if (!Loadash.isEmpty(departFlight) && Loadash.isEmpty(returnFlight)) {
         const keys = Object.keys(departFlight.compare || {})
         keys &&
@@ -236,7 +235,7 @@ const FlightDetailPage = () => {
             })
           })
 
-        await getDiscount(providers)
+        getDiscount(providers)
       }
     }
 
@@ -257,6 +256,7 @@ const FlightDetailPage = () => {
     stops,
     cabinBaggage,
     checkinBaggage,
+    seatingClass,
     flipPlaneIcon = false
   }: any) => {
     return (
@@ -332,9 +332,24 @@ const FlightDetailPage = () => {
         </div>
         <div className="chipsSection">
           <div className="rowChip">
-            <div className="chip">
-              <p>Economy</p>
-            </div>
+          <div className="chip">
+  <p>
+    {(() => {
+      switch (seatingClass) {
+        case 'B':
+          return 'Business';
+        case 'E':
+          return 'Economy';
+        case 'PE':
+          return 'Premium Economy';
+        case 'FC':
+          return 'First Class';
+        default:
+          return seatingClass; // Default case if none of the above values match
+      }
+    })()}
+  </p>
+</div>
             <div className="chip">
               <p>{fromDate}</p>
             </div>
@@ -370,7 +385,9 @@ const FlightDetailPage = () => {
               </Avatar.Group>
 
               <h2 className="heading">
-                {departFlight && `${departFlight.from} - ${departFlight.to}`}
+                {departFlight && departFlight.from}
+                -
+                {departFlight && departFlight.to}
               </h2>
               <p className="date">
                 {departFlight &&
@@ -600,6 +617,7 @@ const FlightDetailPage = () => {
                     to: departFlight.toCity
                   },
                   stop: departFlight.stops,
+                  seatingClass:departFlight.seatingClass,
                   cabinBaggage:
                     departFlight.cabinBaggage && departFlight.cabinBaggage[0],
                   checkinBaggage:
@@ -659,6 +677,7 @@ const FlightDetailPage = () => {
                             : departFlight.toCity
                       },
                       stop: departFlight.stops,
+                      seatingClass:departFlight.seatingClass,
                       cabinBaggage:
                         departFlight.cabinBaggage &&
                         departFlight.cabinBaggage[index],
@@ -670,7 +689,7 @@ const FlightDetailPage = () => {
                       <div className="layovers">
                         <p>
                           {departFlight.layoverDurationList &&
-                            departFlight.layoverDurationList[index].substring(
+                           departFlight.layoverDurationList[index] && departFlight.layoverDurationList[index].substring(
                               2,
                               departFlight.layoverDurationList[index].length
                             )}
@@ -716,6 +735,7 @@ const FlightDetailPage = () => {
                       to: returnFlight.toCity
                     },
                     stop: returnFlight.stops,
+                    seatingClass:departFlight.seatingClass,
                     cabinBaggage:
                       returnFlight.cabinBaggage && returnFlight.cabinBaggage[0],
                     checkinBaggage:
@@ -787,7 +807,7 @@ const FlightDetailPage = () => {
                         <div className="layovers">
                           <p>
                             {returnFlight.layoverDurationList &&
-                              returnFlight.layoverDurationList[index].substring(
+                              returnFlight.layoverDurationList[index] && returnFlight.layoverDurationList[index].substring(
                                 2,
                                 returnFlight.layoverDurationList[index].length
                               )}
