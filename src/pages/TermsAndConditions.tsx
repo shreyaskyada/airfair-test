@@ -3,11 +3,8 @@ import React from 'react';
 const TermsAndConditions = () => {
   return (
     <div>
-      <div
-        className='container'
-        style={{ textAlign: 'left', marginTop: '-72px' }}
-      >
-        <h1 className='pageName'>TERMS OF USE</h1>
+      <div className='container' style={{ textAlign: 'left' }}>
+        <h1 className='pageName mt-0'>TERMS OF USE</h1>
         <p className='detail' style={{ textAlign: 'center' }}>
           Last updated October 16, 2023
         </p>

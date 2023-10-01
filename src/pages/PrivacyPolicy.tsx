@@ -3,11 +3,8 @@ import './index.css';
 const PrivacyPolicy = () => {
   return (
     <div>
-      <div
-        className='container'
-        style={{ textAlign: 'left', marginTop: '-72px' }}
-      >
-        <h1 className='pageName'>Privacy Policy</h1>
+      <div className='container' style={{ textAlign: 'left' }}>
+        <h1 className='pageName mt-0'>Privacy Policy</h1>
         <p className='detail' style={{ textAlign: 'center' }}>
           Last updated October 16, 2023
         </p>

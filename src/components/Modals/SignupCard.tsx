@@ -172,7 +172,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
 
           <small>
             By cliking submit, you agree to our{' '}
-            <Link target='_blank' to='/terms-and-conditions'>Terms</Link> and{' '}
+            <Link target='_blank' to='/terms-and-conditions'>Terms of Use</Link> and{' '}
             <Link target='_blank' to='/privacy-policy'>Privacy Policy</Link>.
           </small>
         </div>

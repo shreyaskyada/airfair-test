@@ -13,6 +13,7 @@ import VerifyTokenCard from "../components/Modals/VerifyTokenCard"
 import LoginCard from "../components/Modals/LoginCard"
 import {
   toggleModal,
+  toggleSidebar,
   updateIsLoggedIn,
   updateNotifcationModal,
   updateUserDetails
@@ -77,7 +78,7 @@ const LayoutUI = () => {
   const dispatch = useAppDispatch()
   const location = useLocation()
 
-  const { modal, notifcationModal } = useAppSelector((state) => state.app)
+  const { modal, notifcationModal, showSidebar } = useAppSelector((state) => state.app)
 
   const [userId, setUserId] = useLocalStorage("userId", "")
   const [isLoggedIn, setIsLoggedIn] = useLocalStorage("isLoggedIn", "")
@@ -165,6 +166,7 @@ const LayoutUI = () => {
         <HeaderUI />
         <div
           className="siteLayout"
+          onClick={() => showSidebar && dispatch(toggleSidebar())}
         >
           <div
             className="contentLayout"

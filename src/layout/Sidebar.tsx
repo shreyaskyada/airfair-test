@@ -4,7 +4,8 @@ import type { MenuProps } from "antd"
 import { DatabaseOutlined, RightOutlined } from "@ant-design/icons"
 import { useNavigate } from "react-router-dom"
 import { aboutUsIcon, hotelIcon, logoImage, planeIcon } from "../assets/images"
-import { useAppSelector } from "../redux/hooks"
+import { useAppDispatch, useAppSelector } from "../redux/hooks"
+import { toggleSidebar } from "../redux/slices/app"
 
 const { Sider } = Layout
 const { Text } = Typography
@@ -75,13 +76,14 @@ const Sidebar = () => {
   const {showSidebar } = useAppSelector(
     (state) => state.app
   )
+  const dispatch = useAppDispatch()
 
   const items: MenuProps["items"] = menuItems.map((item, index) => ({
     key: item.key,
     icon: item.icon,
     label: item.label,
     onClick: () => {
-      item.path && navigate(item.path)
+      item.path && dispatch(toggleSidebar()) && navigate(item.path)
     }
   }))
 
