@@ -134,45 +134,65 @@ const Footer = () => {
             ))
           )}
         </Row>
-        <Divider style={{ background: "white" }} />
-        <div className="socialLinksSection">
-          <div className="socialLinkContainer">
-            <a
-              href="https://www.instagram.com/mytripsaver/"
-              className="linkUrl"
-              target="_blank"
-            >
-              <InstagramOutlined style={{ fontSize: 25, color: "white" }} />
-            </a>
-          </div>
-          <div className="socialLinkContainer">
-            <a
-              href="https://www.linkedin.com/company/mytripsaver/"
-              className="linkUrl"
-              target="_blank"
-            >
-              <LinkedinOutlined style={{ fontSize: 25, color: "white" }} />
-            </a>
-          </div>
-          <div className="socialLinkContainer">
-            <a
-              href="https://twitter.com/mytripsaver?t=iR40aB6zc6DO-25z31dkdQ&s=09"
-              className="linkUrl"
-              target="_blank"
-            >
-              <TwitterOutlined style={{ fontSize: 25, color: "white" }} />
-            </a>
-          </div>
-          <div className="socialLinkContainer">
-            <a
-              href="https://youtube.com/@mytripsaver"
-              className="linkUrl"
-              target="_blank"
-            >
-              <YoutubeOutlined style={{ fontSize: 25, color: "white" }} />
-            </a>
-          </div>
-        </div>
+        <Divider style={{ background: 'white' }} />
+        <Row gutter={[0, 6]}>
+          <Col xs={24} sm={12} md={8} xl={6}>
+            <div className='socialLinksSection'>
+              <div className='socialLinkContainer'>
+                <a
+                  href='https://www.instagram.com/mytripsaver/'
+                  className='linkUrl'
+                  target='_blank'
+                >
+                  <InstagramOutlined style={{ fontSize: 25, color: 'white' }} />
+                </a>
+              </div>
+              <div className='socialLinkContainer'>
+                <a
+                  href='https://www.linkedin.com/company/mytripsaver/'
+                  className='linkUrl'
+                  target='_blank'
+                >
+                  <LinkedinOutlined style={{ fontSize: 25, color: 'white' }} />
+                </a>
+              </div>
+              <div className='socialLinkContainer'>
+                <a
+                  href='https://twitter.com/mytripsaver?t=iR40aB6zc6DO-25z31dkdQ&s=09'
+                  className='linkUrl'
+                  target='_blank'
+                >
+                  <TwitterOutlined style={{ fontSize: 25, color: 'white' }} />
+                </a>
+              </div>
+              <div className='socialLinkContainer'>
+                <a
+                  href='https://youtube.com/@mytripsaver'
+                  className='linkUrl'
+                  target='_blank'
+                >
+                  <YoutubeOutlined style={{ fontSize: 25, color: 'white' }} />
+                </a>
+              </div>
+            </div>
+          </Col>
+          <Col
+            xs={24}
+            sm={12}
+            md={{
+              offset: 8,
+              span: 8,
+            }}
+            xl={{
+              offset: 12,
+              span: 6,
+            }}
+          >
+            <div onClick={() => navigate('/privacy-policy')}>
+              <Text className='flightLinks'>Privacy Policy</Text>
+            </div>
+          </Col>
+        </Row>
       </div>
     </div>
   )

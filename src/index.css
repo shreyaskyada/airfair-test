@@ -89,3 +89,11 @@ body {
     border-style: dotted;
     transform: rotate(90deg);
 } */
+
+.go-to-id {
+    color: inherit;
+}
+
+.go-to-id:hover {
+    color: inherit;
+}
