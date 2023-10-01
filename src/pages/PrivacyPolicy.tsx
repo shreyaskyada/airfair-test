@@ -562,8 +562,7 @@ const PrivacyPolicy = () => {
             We may share your data with third-party vendors, service providers,
             contractors, or agents ('third parties') who perform services for us
             or on our behalf and require access to such information to do that
-            work. The categories of third parties we may share personal
-            information with are as follows:
+            work.
           </p>
 
           <p className='detail'>
