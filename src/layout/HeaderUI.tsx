@@ -136,7 +136,7 @@ const HeaderUI = () => {
             height: "100%"
           }}
         >
-          <img src={logoImage} style={{ height: "52px", marginLeft: "1rem" }} />
+          {/* <img src={logoImage} style={{ height: "52px", marginLeft: "1rem" }} /> */}
         </div>
         <div className="buttonContainer">
           {screens.xs ? (

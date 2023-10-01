@@ -3,55 +3,61 @@
  * @returns RoutesWrapper | Routes wrapper consisting of all routes with their child routes used for screen management
  */
 
-import { Suspense, lazy } from "react"
-import { Navigate, Route, Routes } from "react-router-dom"
-import { useAppSelector } from "../redux/hooks"
-import LayoutUI from "../layout"
-import Loader from "../components/Modals/Loader"
-import AboutUs from "../pages/AboutUs"
-import FlightDetailPage from "../pages/FlightDetailPage"
+import { Suspense, lazy } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { useAppSelector } from '../redux/hooks';
+import LayoutUI from '../layout';
+import Loader from '../components/Modals/Loader';
+import AboutUs from '../pages/AboutUs';
+import FlightDetailPage from '../pages/FlightDetailPage';
+import PrivacyPolicy from '../pages/PrivacyPolicy';
+import TermsAndConditions from '../pages/TermsAndConditions';
 
-const HomeScreen = lazy(() => import("../pages/Homepage"))
-const FlightsListingPage = lazy(() => import("../pages/FlightsListingPage"))
+const HomeScreen = lazy(() => import('../pages/Homepage'));
+const FlightsListingPage = lazy(() => import('../pages/FlightsListingPage'));
 
 export interface RouteType {
-  path?: string
-  component: JSX.Element
-  index?: boolean
-  childRoutes?: RouteType[]
+  path?: string;
+  component: JSX.Element;
+  index?: boolean;
+  childRoutes?: RouteType[];
 }
 
 interface ProtectedRoutesType {
-  allowedPermissions: any[]
-  children: JSX.Element
+  allowedPermissions: any[];
+  children: JSX.Element;
 }
 
 const routes = [
   {
-    path: "/*",
+    path: '/*',
     component: <LayoutUI />,
     index: false,
     childRoutes: [
       {
-        path: "flights-listing",
+        path: 'flights-listing',
         component: <FlightsListingPage />,
         index: false,
       },
       {
-        path: "flights/:flight",
+        path: 'flights/:flight',
         component: <FlightDetailPage />,
         index: false,
       },
       { component: <HomeScreen />, index: true },
-      { path: "aboutUs",
-      component: <AboutUs/>,
-      index: false }
-    ]
-  }
-]
+      { path: 'aboutUs', component: <AboutUs />, index: false },
+      { path: 'privacy-policy', component: <PrivacyPolicy />, index: false },
+      {
+        path: 'terms-and-conditions',
+        component: <TermsAndConditions />,
+        index: false,
+      },
+    ],
+  },
+];
 
 const RoutesWrapper = () => (
-  <Suspense fallback={<Loader/>}>
+  <Suspense fallback={<Loader />}>
     <Routes>
       {routes.map((route, parentIndex) =>
         route.childRoutes?.length ? (
@@ -76,6 +82,6 @@ const RoutesWrapper = () => (
       )}
     </Routes>
   </Suspense>
-)
+);
 
-export default RoutesWrapper
+export default RoutesWrapper;

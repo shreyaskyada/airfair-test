@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { toggleModal } from "../../redux/slices/app"
 import { uploadIsLoading } from "../../redux/slices/app"
 import { notification } from "../Notification/customNotification"
+import { Link } from "react-router-dom"
 
 const { Text, Title } = Typography
 
@@ -168,6 +169,12 @@ const SignupCard = ({ onFinishHandler }: any) => {
               </Button>
             </Form.Item>
           </Form>
+
+          <small>
+            By cliking submit, you agree to our{' '}
+            <Link target='_blank' to='/terms-and-conditions'>Terms of Use</Link> and{' '}
+            <Link target='_blank' to='/privacy-policy'>Privacy Policy</Link>.
+          </small>
         </div>
       </Modal>
     </div>

@@ -89,3 +89,7 @@ body {
     border-style: dotted;
     transform: rotate(90deg);
 } */
+
+.go-to-id {
+    text-decoration: underline;
+}
