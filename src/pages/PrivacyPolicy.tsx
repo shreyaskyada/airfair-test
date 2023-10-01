@@ -1,21 +1,12 @@
-import { aboutUs } from '../assets/images';
 import './index.css';
 
 const PrivacyPolicy = () => {
   return (
     <div>
-      <div className='aboutUsContainer'>
-        <img
-          src={aboutUs}
-          alt='plane-flying'
-          style={{ width: '100%', height: '100%' }}
-        />
-        <div className='headingText'>
-          <h1 className='siteHeading'>Welcome to MYTRIPSAVER</h1>
-        </div>
-      </div>
-
-      <div className='container' style={{ textAlign: 'left' }}>
+      <div
+        className='container'
+        style={{ textAlign: 'left', marginTop: '-72px' }}
+      >
         <h1 className='pageName'>Privacy Policy</h1>
         <p className='detail' style={{ textAlign: 'center' }}>
           Last updated October 16, 2023

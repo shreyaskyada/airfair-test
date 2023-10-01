@@ -91,9 +91,5 @@ body {
 } */
 
 .go-to-id {
-    color: inherit;
-}
-
-.go-to-id:hover {
-    color: inherit;
+    text-decoration: underline;
 }

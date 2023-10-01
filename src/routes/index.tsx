@@ -11,6 +11,7 @@ import Loader from '../components/Modals/Loader';
 import AboutUs from '../pages/AboutUs';
 import FlightDetailPage from '../pages/FlightDetailPage';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
+import TermsAndConditions from '../pages/TermsAndConditions';
 
 const HomeScreen = lazy(() => import('../pages/Homepage'));
 const FlightsListingPage = lazy(() => import('../pages/FlightsListingPage'));
@@ -46,6 +47,11 @@ const routes = [
       { component: <HomeScreen />, index: true },
       { path: 'aboutUs', component: <AboutUs />, index: false },
       { path: 'privacy-policy', component: <PrivacyPolicy />, index: false },
+      {
+        path: 'terms-and-conditions',
+        component: <TermsAndConditions />,
+        index: false,
+      },
     ],
   },
 ];

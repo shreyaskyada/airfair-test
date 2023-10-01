@@ -98,7 +98,7 @@ const Sidebar = () => {
         >
           <img
             src={logoImage}
-            style={{ height: "90px", marginLeft: "1.3rem", marginTop: "1rem" }}
+            style={{ height: "60px", marginLeft: "1.3rem", marginTop: "1rem" }}
           />
         </div>
       <Menu
