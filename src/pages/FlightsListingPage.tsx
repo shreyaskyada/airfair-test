@@ -155,7 +155,7 @@ const FlightsListingPage = () => {
       <div className="flightSearch">
         <SearchFilter redirectRoute="" />
       </div>
-      <Filters />
+      {flights && Object.keys(flights).length > 0 && <Filters />}
       {flights && Object.keys(flights).length <= 0 && (
         <div className="notFoundContainer">
           <img
