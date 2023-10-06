@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import dayjs from "dayjs"
+import { TripType } from "../../data/contants"
 
 export interface ISearchFlights {
   flightType: string
@@ -9,7 +10,7 @@ export interface ISearchFlights {
 }
 
 const searchFlights: ISearchFlights = {
-  flightType: "ONE_WAY",
+  flightType: TripType.ONE_WAY,
   totalTravellers: 1,
   dateOfDep: dayjs().toString(),
   initialValues: {

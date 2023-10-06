@@ -13,6 +13,8 @@ import DestinationFlight from "../components/FlightsCard/DestinationFlight"
 import FlightDetailCard from "../components/Modals/FlightDetailsCard"
 import { noResult } from "../assets/images"
 import { ISearchFlights } from "../redux/slices/searchFlights"
+import Filters from "../components/Filters"
+import { TripType } from "../data/contants"
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -128,7 +130,7 @@ const FlightsListingPage = () => {
         dispatch(updateDestinationFlights(data))
         dispatch(updateReturnFlights(data[0]))
 
-        searchFlightData.flightType === "ONE_WAY" &&
+        searchFlightData.flightType === TripType.ONE_WAY &&
           dispatch(uploadIsLoading(false))
         break
       }
@@ -153,6 +155,7 @@ const FlightsListingPage = () => {
       <div className="flightSearch">
         <SearchFilter redirectRoute="" />
       </div>
+      <Filters />
       {flights && Object.keys(flights).length <= 0 && (
         <div className="notFoundContainer">
           <img
@@ -192,7 +195,7 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      {flights && searchFlightData.flightType !== "ONE_WAY" && (
+      {flights && searchFlightData.flightType !== TripType.ONE_WAY && (
           <div className="detailCardContainer">{<FlightDetailCard />}</div>
         )}
     </div>

@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react"
-import { InfoOutlined } from "@ant-design/icons"
-import { Link, useNavigate } from "react-router-dom"
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { InfoOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -12,30 +12,31 @@ import {
   Popover,
   Grid,
   Dropdown,
-  MenuProps
-} from "antd"
-import * as _ from "lodash"
-import dayjs from "dayjs"
-import useLocalStorage from "../../hooks/LocalStorage"
-import { Drawer } from "antd"
-import type { TabsProps } from "antd"
-import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+  MenuProps,
+} from 'antd';
+import * as _ from 'lodash';
+import dayjs from 'dayjs';
+import useLocalStorage from '../../hooks/LocalStorage';
+import { Drawer } from 'antd';
+import type { TabsProps } from 'antd';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   toggleModal,
   updateFlightDetails,
-  uploadIsLoading
-} from "../../redux/slices/app"
-import { Flight, FlightState } from "../../redux/slices/flights"
-import { airlineMapping } from "../../services/airports"
-import { getBestOffer } from "../../services/airports"
-import moment from "moment"
-import { ISearchFlights } from "../../redux/slices/searchFlights"
-import { Airlines_Images } from "../../data/popularAirlines"
-import { useDimensions } from "../../hooks/useDimensions"
+  uploadIsLoading,
+} from '../../redux/slices/app';
+import { Flight, FlightState } from '../../redux/slices/flights';
+import { airlineMapping } from '../../services/airports';
+import { getBestOffer } from '../../services/airports';
+import moment from 'moment';
+import { ISearchFlights } from '../../redux/slices/searchFlights';
+import { Airlines_Images } from '../../data/popularAirlines';
+import { useDimensions } from '../../hooks/useDimensions';
+import { TripType } from '../../data/contants';
 
-const { Text, Title } = Typography
-const { Meta } = Card
-const { useBreakpoint } = Grid
+const { Text, Title } = Typography;
+const { Meta } = Card;
+const { useBreakpoint } = Grid;
 
 // const P = [{
 //   "provider": "Easy",
@@ -114,69 +115,72 @@ const { useBreakpoint } = Grid
 // ]
 
 const FlightDetailCard = ({ onFinishHandler }: any) => {
-  const dispatch = useAppDispatch()
-  const screen = useBreakpoint()
+  const dispatch = useAppDispatch();
+  const screen = useBreakpoint();
 
-  const [providerWithOffers, setProviderWithOffers] = useState<any>([])
-  const [providerWithOffers2, setProviderWithOffers2] = useState<any>([])
+  const [providerWithOffers, setProviderWithOffers] = useState<any>([]);
+  const [providerWithOffers2, setProviderWithOffers2] = useState<any>([]);
 
-  const modalRef = useRef<HTMLDivElement>(null)
-  const providerListRef = useRef<HTMLDivElement>(null)
-  const leftColRef = useRef<HTMLDivElement>(null)
-  const rightColRef = useRef<HTMLDivElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null);
+  const providerListRef = useRef<HTMLDivElement>(null);
+  const leftColRef = useRef<HTMLDivElement>(null);
+  const rightColRef = useRef<HTMLDivElement>(null);
 
-  const { flightDetails, userDetails } = useAppSelector((state) => state.app)
+  const { flightDetails, userDetails } = useAppSelector((state) => state.app);
 
   const { departFlight, returnFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
-  )
+  );
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
-  )
+  );
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const getDiscount = async (provider: []) => {
     try {
       if (!provider.length || !searchFlightData) {
-        throw new Error("invalid inputs")
+        throw new Error('invalid inputs');
       }
-
 
       const walletList = userDetails.walletList.map(
         (wallet: any) => wallet.walletName
-      )
+      );
 
       const bankList = userDetails.bankList.map((bank: any) => ({
         bankName: bank.bankName,
-        bankCards: [bank.bankCardType + "-" + bank.bankCardName]
-      }))
+        bankCards: [bank.bankCardType + '-' + bank.bankCardName],
+      }));
 
       const departAirlinesCode =
         departFlight &&
-        departFlight.flightCode?.split("->").map((item) => item.substring(0, 2))
+        departFlight.flightCode
+          ?.split('->')
+          .map((item) => item.substring(0, 2));
 
       const returnAirlinesCode =
         returnFlight &&
-        returnFlight.flightCode?.split("->").map((item) => item.substring(0, 2))
+        returnFlight.flightCode
+          ?.split('->')
+          .map((item) => item.substring(0, 2));
 
       const departAirlineNames =
-        departAirlinesCode?.map((code) => airlineMapping[code]) || []
+        departAirlinesCode?.map((code) => airlineMapping[code]) || [];
       const returnAirlineNames =
-        returnAirlinesCode?.map((code) => airlineMapping[code]) || []
+        returnAirlinesCode?.map((code) => airlineMapping[code]) || [];
 
       const airlineNames = _.uniq([
         ...departAirlineNames,
-        ...returnAirlineNames
-      ])
+        ...returnAirlineNames,
+      ]);
 
-      const doj = moment(searchFlightData.dateOfDep).valueOf()
-      const dob = moment(dayjs().toString()).valueOf()
+      const doj = moment(searchFlightData.dateOfDep).valueOf();
+      const dob = moment(dayjs().toString()).valueOf();
 
       const payloads: any = provider.map((_provider: any) => ({
         provider: _provider.provider,
-        airlines: airlineNames.length ? airlineNames : ["ALL"],
-        flightType: "DOMESTIC",
+        airlines: airlineNames.length ? airlineNames : ['ALL'],
+        flightType: 'DOMESTIC',
         journeyType: searchFlightData.flightType,
         dateOfJourney: doj / 1000,
         dateOfBooking: dob / 1000,
@@ -186,22 +190,22 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         fare: {
           baseFare: _provider.baseFare,
           tax: _provider.tax,
-          totalFare: _provider.totalFare
-        }
-      }))
+          totalFare: _provider.totalFare,
+        },
+      }));
 
-      let payloadResponse: any = []
+      let payloadResponse: any = [];
       for (const payload of payloads) {
         try {
-          const res: any = await getBestOffer(payload)
+          const res: any = await getBestOffer(payload);
 
           if (res) {
-            payloadResponse.push(res.bestOffer)
+            payloadResponse.push(res.bestOffer);
           } else {
-            payloadResponse.push({})
+            payloadResponse.push({});
           }
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       }
 
@@ -209,194 +213,196 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         (_provider: any, index: number) => {
           return {
             ..._provider,
-            bestOffer: payloadResponse[index]
-          }
+            bestOffer: payloadResponse[index],
+          };
         }
-      )
+      );
 
-      _providersWithOffer = [..._providersWithOffer]
+      _providersWithOffer = [..._providersWithOffer];
 
       _providersWithOffer.length > 1 &&
         _providersWithOffer.sort((a, b) => {
           const aFare =
             a.bestOffer.fare.totalFareAfterDiscount > 0
               ? a.bestOffer.fare.totalFareAfterDiscount
-              : a.totalFare
+              : a.totalFare;
           const bFare =
             b.bestOffer.fare.totalFareAfterDiscount > 0
               ? b.bestOffer.fare.totalFareAfterDiscount
-              : b.totalFare
+              : b.totalFare;
 
-          return aFare - bFare
-        })
+          return aFare - bFare;
+        });
 
-      setProviderWithOffers(_providersWithOffer)
-      setProviderWithOffers2([])
+      setProviderWithOffers(_providersWithOffer);
+      setProviderWithOffers2([]);
     } catch (error) {
-      console.log(error)
-      dispatch(uploadIsLoading(false))
+      console.log(error);
+      dispatch(uploadIsLoading(false));
     }
-  }
+  };
 
   useEffect(() => {
-    const makeDiscount = async()=>{
-      let providers: any = []
-      dispatch(uploadIsLoading(true))
-  
+    const makeDiscount = async () => {
+      let providers: any = [];
+      dispatch(uploadIsLoading(true));
+
       if (!_.isEmpty(departFlight) && !_.isEmpty(returnFlight)) {
-        const keys = Object.keys(departFlight.compare || {})
+        const keys = Object.keys(departFlight.compare || {});
         keys &&
           keys.forEach((key: any) => {
             let totalDepartFare =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalFareAfterDiscount
-                : 0
+                : 0;
             let totalreturnFare =
               returnFlight.compare && returnFlight.compare[key]
                 ? returnFlight.compare[key].fare?.totalFareAfterDiscount
-                : 0
-            let url = departFlight.compare && departFlight.compare[key].redirecUrl
+                : 0;
+            let url =
+              departFlight.compare && departFlight.compare[key].redirecUrl;
             const totalFare =
               totalDepartFare && totalreturnFare
                 ? totalreturnFare + totalDepartFare
-                : 0
+                : 0;
             let totalDepartTax =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalTax ||
                   departFlight.compare[key].fare?.tax
-                : 0
+                : 0;
             let totalReturnTax =
               returnFlight.compare && returnFlight.compare[key]
                 ? returnFlight.compare[key].fare?.totalTax ||
                   returnFlight.compare[key].fare?.tax
-                : 0
-  
-            let totalTax = (totalDepartTax || 0) + (totalReturnTax || 0)
-  
+                : 0;
+
+            let totalTax = (totalDepartTax || 0) + (totalReturnTax || 0);
+
             let baseFareDepart =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalBaseFare ||
                   departFlight.compare[key].fare?.baseFare
-                : 0
+                : 0;
             let baseFareReturn =
               returnFlight.compare && returnFlight.compare[key]
                 ? returnFlight.compare[key].fare?.totalBaseFare ||
                   returnFlight.compare[key].fare?.baseFare
-                : 0
-            let baseFare = (baseFareDepart || 0) + (baseFareReturn || 0)
-  
+                : 0;
+            let baseFare = (baseFareDepart || 0) + (baseFareReturn || 0);
+
             providers.push({
               provider: key,
               totalFare: totalFare,
               url: url,
               baseFare: baseFare,
-              tax: totalTax
-            })
-          })
-  
-       await getDiscount(providers)
+              tax: totalTax,
+            });
+          });
+
+        await getDiscount(providers);
       } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
-        const keys = Object.keys(departFlight.compare || {})
+        const keys = Object.keys(departFlight.compare || {});
         keys &&
           keys.forEach((key: any) => {
             let totalDepartFare =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalFareAfterDiscount
-                : 0
-  
-            let url = departFlight.compare && departFlight.compare[key].redirecUrl
-  
+                : 0;
+
+            let url =
+              departFlight.compare && departFlight.compare[key].redirecUrl;
+
             let totalTax =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalTax ||
                   departFlight.compare[key].fare?.tax
-                : 0
-  
+                : 0;
+
             let baseFare =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalBaseFare ||
                   departFlight.compare[key].fare?.baseFare
-                : 0
-  
+                : 0;
+
             providers.push({
               provider: key,
               totalFare: totalDepartFare,
               url: url,
               baseFare: baseFare,
-              tax: totalTax
-            })
-          })
-  
-       await getDiscount(providers)
+              tax: totalTax,
+            });
+          });
+
+        await getDiscount(providers);
       }
-      dispatch(uploadIsLoading(false))
-    }
-    makeDiscount()
-  }, [departFlight, returnFlight])
+      dispatch(uploadIsLoading(false));
+    };
+    makeDiscount();
+  }, [departFlight, returnFlight]);
 
   const detailsCard = (title: string, flighDetails: Flight) => {
     const _names = _.uniq(
-      flighDetails?.flightCode?.split("->").map((item) => item.substring(0, 2))
-    )
+      flighDetails?.flightCode?.split('->').map((item) => item.substring(0, 2))
+    );
 
-    let image
+    let image;
 
     if (_names.length > 1) {
-      image = Airlines_Images["Multiple Airlines"]
+      image = Airlines_Images['Multiple Airlines'];
     } else {
-      image = Airlines_Images[airlineMapping[_names[0]]]
+      image = Airlines_Images[airlineMapping[_names[0]]];
     }
 
     return (
       flighDetails && (
         <>
-          <h4 className="fareHeading">
-            {title === "depart" ? "Departure" : "Return"} |{" "}
+          <h4 className='fareHeading'>
+            {title === 'depart' ? 'Departure' : 'Return'} |{' '}
             {_.uniq(
               flighDetails?.flightCode
-                ?.split("->")
+                ?.split('->')
                 .map((item) => item.substring(0, 2))
             ).map((name, index) => {
               const comma =
                 index !==
                 _.uniq(
                   flighDetails?.flightCode
-                    ?.split("->")
+                    ?.split('->')
                     .map((item) => item.substring(0, 2))
                 ).length -
                   1
-                  ? ","
-                  : ""
+                  ? ','
+                  : '';
 
-              return `${airlineMapping[name || "AI"]}${comma}`
+              return `${airlineMapping[name || 'AI']}${comma}`;
             })}
           </h4>
           <Card
             style={{
-              background: "transparent",
+              background: 'transparent',
               border: 0,
-              borderRadius: "5px"
+              borderRadius: '5px',
             }}
-            bodyStyle={{ paddingLeft: "0" }}
+            bodyStyle={{ paddingLeft: '0' }}
           >
             <Meta
               avatar={
-                <div style={{ width: "30px", height: "30px" }}>
+                <div style={{ width: '30px', height: '30px' }}>
                   <img
                     src={image && image}
-                    style={{ width: "100%", height: "100%" }}
+                    style={{ width: '100%', height: '100%' }}
                   />
                 </div>
               }
               title={
                 <div
                   style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center"
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
-                  <span style={{ color: "#013042" }}>
+                  <span style={{ color: '#013042' }}>
                     {flighDetails.from} → {flighDetails.to}
                   </span>
                   {/* <span>₹ {flighDetails.cheapestFare}</span> */}
@@ -407,8 +413,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           </Card>
         </>
       )
-    )
-  }
+    );
+  };
 
   const flighInfoTabCard = ({
     fromTime,
@@ -420,67 +426,67 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
     toAddress,
     flightCode,
     airLine,
-    city
+    city,
   }: any) => {
     return (
-      <Card style={{ borderRadius: "5px" }}>
+      <Card style={{ borderRadius: '5px' }}>
         <Meta
-          style={{ marginBottom: "1rem" }}
+          style={{ marginBottom: '1rem' }}
           avatar={
-            <div style={{ width: "30px", height: "30px" }}>
+            <div style={{ width: '30px', height: '30px' }}>
               <img
                 src={Airlines_Images[airlineMapping[airLine?.slice(0, 2)]]}
-                style={{ width: "100%", height: "100%" }}
+                style={{ width: '100%', height: '100%' }}
               />
             </div>
           }
           title={
-            <Text style={{ fontWeight: "bold", color: "#013042" }}>
-              {airlineMapping[airLine?.slice(0, 2) || "AI"]}
+            <Text style={{ fontWeight: 'bold', color: '#013042' }}>
+              {airlineMapping[airLine?.slice(0, 2) || 'AI']}
             </Text>
           }
-          description={<Text style={{ color: "#4E6F7B" }}>{airLine}</Text>}
+          description={<Text style={{ color: '#4E6F7B' }}>{airLine}</Text>}
         />
-        <div className="flightSchedule">
+        <div className='flightSchedule'>
           <Meta
             title={
               <div>
-                <b className="time" style={{ color: "#013042" }}>
+                <b className='time' style={{ color: '#013042' }}>
                   {fromTime}
                 </b>
                 <br />
-                <span className="date" style={{ color: "#4E6F7B" }}>
+                <span className='date' style={{ color: '#4E6F7B' }}>
                   {fromDate}
                 </span>
               </div>
             }
             description={
               <div>
-                <span className="city" style={{ color: "#4E6F7B" }}>
+                <span className='city' style={{ color: '#4E6F7B' }}>
                   {city?.from}
                 </span>
                 <br />
-                <span className="terminal" style={{ color: "#4E6F7B" }}>
-                  {" "}
+                <span className='terminal' style={{ color: '#4E6F7B' }}>
+                  {' '}
                   {`${
                     fromAddress
-                      ? fromAddress.includes("Terminal")
-                        ? ""
-                        : "Terminal "
-                      : "Terminal "
-                  } ${fromAddress || "--"}`}
+                      ? fromAddress.includes('Terminal')
+                        ? ''
+                        : 'Terminal '
+                      : 'Terminal '
+                  } ${fromAddress || '--'}`}
                 </span>
               </div>
             }
           />
           <hr style={{ opacity: 0 }} />
           <Meta
-            className="middle"
-            style={{ height: "100%" }}
+            className='middle'
+            style={{ height: '100%' }}
             title={
-              <div className="middle-info">
+              <div className='middle-info'>
                 <b
-                  style={{ fontWeight: "bold", color: "#013042" }}
+                  style={{ fontWeight: 'bold', color: '#013042' }}
                 >{`Duration ${duration}`}</b>
               </div>
             }
@@ -488,40 +494,40 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           <hr style={{ opacity: 0 }} />
           <Meta
             title={
-              <div className="right-info">
+              <div className='right-info'>
                 <b
-                  className="time"
-                  style={{ fontWeight: "bold", color: "#013042" }}
+                  className='time'
+                  style={{ fontWeight: 'bold', color: '#013042' }}
                 >
                   {toTime}
                 </b>
-                <span className="date" style={{ color: "#4E6F7B" }}>
+                <span className='date' style={{ color: '#4E6F7B' }}>
                   {toDate}
                 </span>
               </div>
             }
             description={
-              <div className="right-info">
-                <span className="city" style={{ color: "#4E6F7B" }}>
+              <div className='right-info'>
+                <span className='city' style={{ color: '#4E6F7B' }}>
                   {city?.to}
                 </span>
-                <span className="terminal" style={{ color: "#4E6F7B" }}>
-                  {" "}
+                <span className='terminal' style={{ color: '#4E6F7B' }}>
+                  {' '}
                   {`${
                     toAddress
-                      ? toAddress.includes("Terminal")
-                        ? ""
-                        : "Terminal "
-                      : "Terminal "
-                  } ${toAddress || "--"}`}
+                      ? toAddress.includes('Terminal')
+                        ? ''
+                        : 'Terminal '
+                      : 'Terminal '
+                  } ${toAddress || '--'}`}
                 </span>
               </div>
             }
           />
         </div>
       </Card>
-    )
-  }
+    );
+  };
 
   const flightInfoCardCretor = (flight: Flight) => {
     return (
@@ -541,23 +547,23 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               flightCode: flight.flightCode,
               city: {
                 from: flight.fromCity,
-                to: flight.toCity
-              }
+                to: flight.toCity,
+              },
             })
           : flight.startTimeList?.map((ele, index) => (
               <React.Fragment key={index}>
                 {flighInfoTabCard({
-                  airLine: flight.flightCode?.split("->")[index],
+                  airLine: flight.flightCode?.split('->')[index],
                   fromTime: moment(
                     flight?.startTimeList
                       ? flight?.startTimeList[index]
                       : new Date()
-                  ).format("HH:mm"),
+                  ).format('HH:mm'),
                   fromDate: moment(
                     flight?.startTimeList
                       ? flight?.startTimeList[index]
                       : new Date()
-                  ).format("DD/MM/YYYY"),
+                  ).format('DD/MM/YYYY'),
                   fromAddress:
                     flight.departureTerminalList &&
                     flight.departureTerminalList[index],
@@ -565,12 +571,12 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                     flight?.endTimeList
                       ? flight?.endTimeList[index]
                       : new Date()
-                  ).format("HH:mm"),
+                  ).format('HH:mm'),
                   toDate: moment(
                     flight?.endTimeList
                       ? flight?.endTimeList[index]
                       : new Date()
-                  ).format("DD/MM/YYYY"),
+                  ).format('DD/MM/YYYY'),
                   duration:
                     flight.durationsList &&
                     flight.durationsList[index].substring(
@@ -592,40 +598,42 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                       (flight.startTimeList && flight.startTimeList.length - 1)
                         ? flight?.transitFlight &&
                           flight?.transitFlight[index]?.viaCity
-                        : flight.toCity
-                  }
+                        : flight.toCity,
+                  },
                 })}
                 {flight.stops && index < flight.stops ? (
                   screen.xs ? (
                     <p
                       style={{
-                        color: "#4E6F7B",
-                        width: "100%",
-                        textAlign: "center",
-                        margin: ".5rem 0"
+                        color: '#4E6F7B',
+                        width: '100%',
+                        textAlign: 'center',
+                        margin: '.5rem 0',
                       }}
                     >
-                      Change of planes |{" "}
+                      Change of planes |{' '}
                       {flight.layoverDurationList &&
-                        flight.layoverDurationList[index] && flight.layoverDurationList[index].substring(
+                        flight.layoverDurationList[index] &&
+                        flight.layoverDurationList[index].substring(
                           2,
                           flight.layoverDurationList[index].length
-                        )}{" "}
-                      | via{" "}
-                      {flight.via?.split("-")[index] ||
+                        )}{' '}
+                      | via{' '}
+                      {flight.via?.split('-')[index] ||
                         (flight?.transitFlight &&
                           flight?.transitFlight[index]?.viaAirportCode)}
                     </p>
                   ) : (
-                    <Divider plain style={{ color: "#4E6F7B" }}>
-                      Change of planes |{" "}
+                    <Divider plain style={{ color: '#4E6F7B' }}>
+                      Change of planes |{' '}
                       {flight.layoverDurationList &&
-                        flight.layoverDurationList[index] && flight.layoverDurationList[index].substring(
+                        flight.layoverDurationList[index] &&
+                        flight.layoverDurationList[index].substring(
                           2,
                           flight.layoverDurationList[index].length
-                        )}{" "}
-                      | via{" "}
-                      {flight.via?.split("-")[index] ||
+                        )}{' '}
+                      | via{' '}
+                      {flight.via?.split('-')[index] ||
                         (flight?.transitFlight &&
                           flight?.transitFlight[index]?.viaAirportCode)}
                     </Divider>
@@ -634,46 +642,46 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               </React.Fragment>
             ))}
       </div>
-    )
-  }
+    );
+  };
 
   const flighInfoTabCardContainer = () => (
     <div
       className={
-        searchFlightData && searchFlightData.flightType === "ONE_WAY"
-          ? "bottomDrawerSingleFlight"
-          : "bottomDrawer"
+        searchFlightData && searchFlightData.flightType === TripType.ONE_WAY
+          ? 'bottomDrawerSingleFlight'
+          : 'bottomDrawer'
       }
     >
       <div>
-        <p className="summaryHeadings">Departure Flights</p>
+        <p className='summaryHeadings'>Departure Flights</p>
         {flightInfoCardCretor(departFlight)}
       </div>
       {!_.isEmpty(returnFlight) && (
         <div>
-          <p className="summaryHeadings">Return Flights</p>
+          <p className='summaryHeadings'>Return Flights</p>
           {flightInfoCardCretor(returnFlight)}
         </div>
       )}
     </div>
-  )
+  );
 
-  const flightInfoTabs: TabsProps["items"] = [
+  const flightInfoTabs: TabsProps['items'] = [
     {
-      key: "1",
+      key: '1',
       label: (
-        <Text style={{ fontSize: "1rem", color: "#013042" }}>
+        <Text style={{ fontSize: '1rem', color: '#013042' }}>
           Flight details
         </Text>
       ),
-      children: flighInfoTabCardContainer()
-    }
+      children: flighInfoTabCardContainer(),
+    },
     // {
     //   key: "2",
     //   label: `Fare summary`,
     //   children: flighSummaryCard()
     // }
-  ]
+  ];
 
   const SingleProviderFareDetail: React.FC<any> = ({ provider }) => {
     return (
@@ -681,25 +689,25 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         {provider ? (
           <div
             style={{
-              display: "flex",
-              alignItems: "center"
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
             <Button
               style={{
-                fontWeight: "bold",
-                color: "#013042"
+                fontWeight: 'bold',
+                color: '#013042',
               }}
-              type="text"
+              type='text'
             >
               ₹
-              <Link to={provider.url} target="_blank">
+              <Link to={provider.url} target='_blank'>
                 {provider.bestOffer &&
                 provider.bestOffer.fare &&
                 provider.bestOffer.fare.totalFareAfterDiscount
                   ? provider.bestOffer.fare.totalFareAfterDiscount
                   : provider.totalFare}
-                {"-" + provider.provider}
+                {'-' + provider.provider}
               </Link>
             </Button>
             <Popover
@@ -708,33 +716,33 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                 provider && provider.bestOffer ? (
                   <>
                     <div>
-                      <span style={{ color: "#4E6F7B" }}>Base Fare:</span>
+                      <span style={{ color: '#4E6F7B' }}>Base Fare:</span>
                       <span
                         style={{
-                          fontWeight: "bold",
-                          color: "#013042"
+                          fontWeight: 'bold',
+                          color: '#013042',
                         }}
                       >
                         {provider && provider.baseFare}
                       </span>
                     </div>
                     <div>
-                      <span style={{ color: "#4E6F7B" }}>Total Tax:</span>
+                      <span style={{ color: '#4E6F7B' }}>Total Tax:</span>
                       <span
                         style={{
-                          fontWeight: "bold",
-                          color: "#013042"
+                          fontWeight: 'bold',
+                          color: '#013042',
                         }}
                       >
                         {provider && provider.tax}
                       </span>
                     </div>
                     <div>
-                      <span style={{ color: "#4E6F7B" }}>Total Fare:</span>
+                      <span style={{ color: '#4E6F7B' }}>Total Fare:</span>
                       <span
                         style={{
-                          fontWeight: "bold",
-                          color: "#013042"
+                          fontWeight: 'bold',
+                          color: '#013042',
                         }}
                       >
                         {provider &&
@@ -744,11 +752,11 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                       </span>
                     </div>
                     <div>
-                      <span style={{ color: "#4E6F7B" }}>Total discount:</span>{" "}
+                      <span style={{ color: '#4E6F7B' }}>Total discount:</span>{' '}
                       <span
                         style={{
-                          fontWeight: "bold",
-                          color: "#013042"
+                          fontWeight: 'bold',
+                          color: '#013042',
                         }}
                       >
                         {provider &&
@@ -759,27 +767,27 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                     </div>
 
                     <div>
-                      <span style={{ color: "#4E6F7B" }}>Promo code:</span>
+                      <span style={{ color: '#4E6F7B' }}>Promo code:</span>
                       <span
                         style={{
-                          fontWeight: "bold",
-                          color: "#013042"
+                          fontWeight: 'bold',
+                          color: '#013042',
                         }}
                       >
                         {provider.bestOffer && provider.bestOffer.promoCode
                           ? provider.bestOffer.promoCode
-                          : "No offer applicable"}
+                          : 'No offer applicable'}
                       </span>
                     </div>
                     <div>
-                      <span style={{ color: "#4E6F7B" }}>
-                        Total fare after discount:{" "}
+                      <span style={{ color: '#4E6F7B' }}>
+                        Total fare after discount:{' '}
                       </span>
                       <b>
                         <span
                           style={{
-                            fontWeight: "bold",
-                            color: "#013042"
+                            fontWeight: 'bold',
+                            color: '#013042',
                           }}
                         >
                           {provider.bestOffer &&
@@ -793,25 +801,25 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                     </div>
                   </>
                 ) : (
-                  <div style={{ fontWeight: "bold", color: "#013042" }}>
+                  <div style={{ fontWeight: 'bold', color: '#013042' }}>
                     Unlock Exclusive Deals by Logging In
                   </div>
                 )
               }
               title={
                 provider.bestOffer && (
-                  <Text style={{ fontWeight: "bold", color: "#013042" }}>
+                  <Text style={{ fontWeight: 'bold', color: '#013042' }}>
                     Price breakdown
                   </Text>
                 )
               }
-              trigger="hover"
+              trigger='hover'
             >
               <Button
-                shape="circle"
-                icon={<InfoOutlined style={{ color: "white" }} />}
-                size="small"
-                style={{ background: "#4E6F7B" }}
+                shape='circle'
+                icon={<InfoOutlined style={{ color: 'white' }} />}
+                size='small'
+                style={{ background: '#4E6F7B' }}
               />
             </Popover>
           </div>
@@ -819,16 +827,16 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           <></>
         )}
       </div>
-    )
-  }
+    );
+  };
 
   const providerList = (
     <div
       style={{
-        marginTop: ".8rem",
-        display: "flex",
-        gap: "1rem",
-        alignItems: "center"
+        marginTop: '.8rem',
+        display: 'flex',
+        gap: '1rem',
+        alignItems: 'center',
       }}
     >
       {providerWithOffers.length ? (
@@ -836,14 +844,14 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           return (
             <div
               style={{
-                display: "flex",
-                alignItems: "center"
+                display: 'flex',
+                alignItems: 'center',
               }}
               key={index}
             >
               {index > 0 && <SingleProviderFareDetail provider={_provider} />}
             </div>
-          )
+          );
         })
       ) : (
         <></>
@@ -851,43 +859,43 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
 
       {providerWithOffers2.length ? (
         <div
-          style={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
+          style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}
         >
           <Dropdown
             menu={{
               items: providerWithOffers2.map(
                 (_provider: any, index: number) => ({
                   key: index,
-                  label: <SingleProviderFareDetail provider={_provider} />
+                  label: <SingleProviderFareDetail provider={_provider} />,
                 })
-              )
+              ),
             }}
-            placement="top"
-            trigger={["click"]}
+            placement='top'
+            trigger={['click']}
           >
-            <Button type="text">More {">>"}</Button>
+            <Button type='text'>More {'>>'}</Button>
           </Dropdown>
         </div>
       ) : (
         <></>
       )}
     </div>
-  )
+  );
 
   const flightDetailsCard = (
     <>
-      <div className="flightBottomDetailCard">
+      <div className='flightBottomDetailCard'>
         <div
-          className="bottomCardContent"
-          style={{ width: "100%" }}
+          className='bottomCardContent'
+          style={{ width: '100%' }}
           ref={modalRef}
         >
-          <div style={{ width: "100%" }} ref={leftColRef}>
-            <div className="flightSummaryDetail">
-              <div>{detailsCard("depart", departFlight)}</div>
+          <div style={{ width: '100%' }} ref={leftColRef}>
+            <div className='flightSummaryDetail'>
+              <div>{detailsCard('depart', departFlight)}</div>
 
               {!_.isEmpty(returnFlight) && (
-                <div>{detailsCard("return", returnFlight)}</div>
+                <div>{detailsCard('return', returnFlight)}</div>
               )}
             </div>
 
@@ -895,16 +903,16 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               {providerList}
             </div> */}
           </div>
-          <div className="fareDetail" ref={rightColRef}>
+          <div className='fareDetail' ref={rightColRef}>
             <div>
               <div
                 style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: ".4rem"
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginBottom: '.4rem',
                 }}
               >
-                <h4 className="fareHeading">
+                <h4 className='fareHeading'>
                   Cheapest Fare: ₹
                   {providerWithOffers.length && (
                     <span>
@@ -920,33 +928,34 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                   )}
                 </h4>
               </div>
-              <p style={{ margin: 0, color: "#013042" }}>
+              <p style={{ margin: 0, color: '#013042' }}>
                 {providerWithOffers.length && providerWithOffers[0].provider}
               </p>
 
               <Text
-                type="secondary"
+                type='secondary'
                 style={{
-                  fontWeight: "bold",
-                  color: "#013042",
-                  marginLeft: ".4rem"
+                  fontWeight: 'bold',
+                  color: '#013042',
+                  marginLeft: '.4rem',
                 }}
               >
                 {providerWithOffers.length > 1
                   ? `+${providerWithOffers.length - 1} more providers`
-                  : ""}
+                  : ''}
               </Text>
             </div>
-            <div className="cardButtons">
-
+            <div className='cardButtons'>
               <button
                 onClick={() => {
                   //dispatch(updateFlightDetails(true))
-                  navigate("/flights/" +
-                  `${departFlight.from}-${departFlight.to}` +
-                  `-${departFlight.flightCode}-${departFlight.duration}-${departFlight.depTime}`)
+                  navigate(
+                    '/flights/' +
+                      `${departFlight.from}-${departFlight.to}` +
+                      `-${departFlight.flightCode}-${departFlight.duration}-${departFlight.depTime}`
+                  );
                 }}
-                className="headerButtons filled"
+                className='headerButtons filled'
               >
                 Select Deal
               </button>
@@ -955,7 +964,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         </div>
       </div>
     </>
-  )
+  );
 
   return (
     <>
@@ -998,7 +1007,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         <Tabs tabBarStyle={{ color: "#013042" }} items={flightInfoTabs} />
       </Drawer> */}
     </>
-  )
-}
+  );
+};
 
-export default FlightDetailCard
+export default FlightDetailCard;

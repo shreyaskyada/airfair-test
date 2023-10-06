@@ -16,6 +16,7 @@ import backendService from "../../services/api"
 import { AIRPORT_DATA } from "../../data/popularFlights"
 import { updateFlightType, updateInitialValues } from "../../redux/slices/searchFlights"
 import { notification } from "../Notification/customNotification"
+import { TripType } from "../../data/contants"
 
 interface DestinationFlight {
   flightTitle: string
@@ -96,7 +97,7 @@ const PopularFlightItem: React.FC<PopularFlightItemProps> = ({
         dispatch(updateDestinationFlights(res.returnJourneyCompareResponse))
         dispatch(updateDepartFlights(res.flightCompareResponse[0]))
         dispatch(updateReturnFlights({}))
-        dispatch(updateFlightType("ONE_WAY"))
+        dispatch(updateFlightType(TripType.ONE_WAY))
         dispatch(updateInitialValues(searchedData))
         dispatch(uploadIsLoading(false))
         navigate("/flights-listing")
