@@ -2,12 +2,16 @@ import DataCard from '../../widget/DataCard';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect, useState } from 'react';
 import { updateDepartFlights } from '../../redux/slices/flights';
+import { Stops } from '../../data/contants';
+import { categorizeTime } from '../../data/utils';
 
 const OriginFlight = (props: any) => {
   const dispatch = useAppDispatch();
   const { originFlights } = useAppSelector((state) => state.originFlight);
   const { departFlight } = useAppSelector((state) => state.flight);
-  const { airlines, providers } = useAppSelector((state) => state.filtersSlice);
+  const { airlines, providers, priceRange, stops, timeRange } = useAppSelector(
+    (state) => state.filtersSlice
+  );
 
   const { type, selectedKey, onSelectedFlightChange } = props;
 
@@ -39,6 +43,63 @@ const OriginFlight = (props: any) => {
       show &&= false;
     }
 
+    let maxPrice = -1;
+
+    Object.keys(el.compare).forEach((p) => {
+      maxPrice = Math.max(
+        maxPrice,
+        el.compare[p]?.fare?.totalFareAfterDiscount +
+          el.compare[p]?.fare?.convenienceFee
+      );
+    });
+
+    const minPrice = el.cheapestFare;
+
+    if (
+      !priceRange.length ||
+      (priceRange.length &&
+        minPrice >= priceRange[0] &&
+        minPrice <= priceRange[1]) ||
+      (priceRange.length &&
+        maxPrice >= priceRange[0] &&
+        maxPrice <= priceRange[1])
+    ) {
+      show &&= true;
+    } else {
+      show &&= false;
+    }
+
+    const transitFlight = el.transitFlight;
+    let stop = '';
+    if (transitFlight?.length > 1) {
+      stop = Stops.ONE_PLUS_STOP;
+    } else if (
+      !transitFlight?.length ||
+      (transitFlight?.length === 1 &&
+        (transitFlight[0].viaAirportCode === 'NON-STOP' ||
+          !transitFlight[0].viaAirportName ||
+          !transitFlight[0].viaCity))
+    ) {
+      stop = Stops.NON_STOP;
+    } else if (transitFlight?.length) {
+      stop = Stops.ONE_STOP;
+    }
+
+    if (!stops.length || (stops.length && stops.includes(stop))) {
+      show &&= true;
+    } else {
+      show &&= false;
+    }
+
+    if (
+      !timeRange.length ||
+      (timeRange.length && timeRange.includes(categorizeTime(el.depTime)))
+    ) {
+      show &&= true;
+    } else {
+      show &&= false;
+    }
+
     return show;
   });
 
@@ -46,7 +107,7 @@ const OriginFlight = (props: any) => {
     if (filteredData.length) {
       dispatch(updateDepartFlights(filteredData[0]));
     }
-  }, [providers, airlines]);
+  }, [providers, airlines, priceRange, timeRange, stops]);
 
   return (
     <>
