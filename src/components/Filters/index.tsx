@@ -1,19 +1,24 @@
-import _ from 'lodash';
-import { Col, Row, Select, Slider } from 'antd';
-import { airlineMapping } from '../../services/airports';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
-  updateAirlinesFilter,
-  updatePriceRangeFilter,
-  updateProvidersFilter,
-  updateReturnAirlinesFilter,
   updateStopsFilter,
+  updateAirlinesFilter,
+  updateProvidersFilter,
   updateTimeRangeFilter,
+  updatePriceRangeFilter,
+  updateReturnAirlinesFilter,
 } from '../../redux/slices/filters';
-import { Stops, TimeRangesEnum, TripType } from '../../data/contants';
+import './index.css';
+import { uniq } from 'lodash';
+import { Col, Row, Typography } from 'antd';
+import { TripType, stopsOptions, timeRangeOptions } from '../../data/contants';
+import SelectWithSlots from '../shared/SelectWithSlots';
+import { airlineMapping } from '../../services/airports';
+import SelectWithSlider from '../shared/SelectWithSlider';
+import SelectWithCheckbox from '../shared/SelectWithCheckbox';
 import { ISearchFlights } from '../../redux/slices/searchFlights';
-import CheckableTag from 'antd/es/tag/CheckableTag';
-import { useEffect, useRef, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useEffect } from 'react';
+
+const { Text } = Typography;
 
 const Filters = () => {
   const dispatch = useAppDispatch();
@@ -24,30 +29,8 @@ const Filters = () => {
   const { destinationFlights } = useAppSelector(
     (state) => state.destinationFlight
   );
-  const { airlines, providers, returnAirlines } = useAppSelector(
-    (state) => state.filtersSlice
-  );
-
-  const tagsData = [
-    { value: Stops.NON_STOP, label: 'Non Stop' },
-    { value: Stops.ONE_STOP, label: '1 Stop' },
-    { value: Stops.ONE_PLUS_STOP, label: '1+ Stop' },
-  ];
-
-  const timeRange = [
-    { value: TimeRangesEnum.EARLY_MORNING, label: 'Before 6 AM' },
-    { value: TimeRangesEnum.MORNING, label: '6AM - 12PM' },
-    { value: TimeRangesEnum.MID_DAY, label: '12PM - 6PM' },
-    { value: TimeRangesEnum.NIGHT, label: 'After 6PM' },
-  ];
-
-  const [selectedTags, setSelectedTags] = useState<string[]>(
-    tagsData.map((tag) => tag.value)
-  );
-
-  const [selectedTimeRanges, setSelectedTimeRanges] = useState<string[]>(
-    timeRange.map((timeRange) => timeRange.value)
-  );
+  const { airlines, providers, returnAirlines, timeRange, stops, priceRange } =
+    useAppSelector((state) => state.filtersSlice);
 
   let airlineOptions: string[] = [];
   let providersOptions: string[] = [];
@@ -57,7 +40,7 @@ const Filters = () => {
 
   originFlights.forEach((flight: any) => {
     airlineOptions = airlineOptions.concat(
-      _.uniq(
+      uniq(
         flight.flightCode
           ?.split('->')
           .map((item: string) => item.substring(0, 2))
@@ -81,7 +64,7 @@ const Filters = () => {
 
   destinationFlights.forEach((flight: any) => {
     returnAirlineOptions = returnAirlineOptions.concat(
-      _.uniq(
+      uniq(
         flight.flightCode
           ?.split('->')
           .map((item: string) => item.substring(0, 2))
@@ -89,130 +72,196 @@ const Filters = () => {
     );
   });
 
-  const [selectedPriceRange, setSelectedPriceRange] = useState<
-    [number, number]
-  >([minPrice, maxPrice]);
-
-  const handleChange = (tag: string, checked: boolean) => {
-    setSelectedTags((p) => {
-      if (checked) {
-        return [...p, tag];
-      }
-      return [...p].filter((t) => t !== tag);
-    });
+  const onApplyTimeRange = (oV: string[], rV: string[]) => {
+    dispatch(
+      updateTimeRangeFilter({
+        originFlights: oV,
+        returnFlights: rV,
+      })
+    );
   };
 
-  const handleTimeRangeChange = (tag: string, checked: boolean) => {
-    setSelectedTimeRanges((p) => {
-      if (checked) {
-        return [...p, tag];
-      }
-      return [...p].filter((t) => t !== tag);
-    });
+  const onApplyStops = (oV: string[], rV: string[]) => {
+    dispatch(
+      updateStopsFilter({
+        originFlights: oV,
+        returnFlights: rV,
+      })
+    );
   };
 
-  useEffect(() => {
-    dispatch(updateStopsFilter(selectedTags));
-  }, [selectedTags]);
-
-  useEffect(() => {
-    dispatch(updateTimeRangeFilter(selectedTimeRanges));
-  }, [selectedTimeRanges]);
-
-  const debouncedFilter = useRef(
-    _.debounce((t) => {
-      dispatch(updatePriceRangeFilter(t));
-    }, 200)
-  ).current;
-
-  useEffect(() => {
-    debouncedFilter(selectedPriceRange);
-  }, [selectedPriceRange]);
+  const hasReturnFlight = searchFlightData.flightType !== TripType.ONE_WAY;
 
   return (
-    <Row gutter={16} wrap>
-      <Col span={12} className='mb-2'>
-        <Select
-          placeholder='Select Airlines'
-          options={_.uniq(airlineOptions).map((el: string) => ({
-            value: el,
-            label: airlineMapping[el],
-          }))}
-          style={{ width: '100%' }}
-          mode='tags'
-          className='w-full'
-          value={airlines}
-          onChange={(t) => {
-            dispatch(updateAirlinesFilter(t));
-          }}
-        />
-      </Col>
+    <div
+      style={{
+        width: '100%',
+        overflowX: 'auto',
+      }}
+    >
+      <Row gutter={16} wrap={false}>
+        <Col span={4} className='mb-2 filters-column'>
+          <SelectWithCheckbox
+            selectedValues={providers}
+            mobilePlaceholder='Providers'
+            placeholder='Select Providers'
+            onApply={(t) => dispatch(updateProvidersFilter(t))}
+            options={uniq(providersOptions).map((el: string) => ({
+              value: el,
+              label: el,
+            }))}
+          />
+        </Col>
 
-      {searchFlightData.flightType !== TripType.ONE_WAY && (
-        <Col span={12} className='mb-2'>
-          <Select
-            placeholder='Select Return Airlines'
-            options={_.uniq(returnAirlineOptions).map((el: string) => ({
+        <Col span={4} className='mb-2 filters-column'>
+          <SelectWithSlider
+            min={minPrice}
+            max={maxPrice}
+            mobilePlaceholder='Prices'
+            selectedValues={priceRange}
+            placeholder='Select Price Range'
+            onChange={(t) => dispatch(updatePriceRangeFilter(t))}
+            selectLabel={
+              priceRange.length ? (
+                <>
+                  <Text>₹{priceRange[0]}</Text> - <Text>₹{priceRange[1]}</Text>
+                </>
+              ) : (
+                ''
+              )
+            }
+          />
+        </Col>
+
+        <Col span={4} className='mb-2 filters-column'>
+          <SelectWithSlots
+            options={stopsOptions}
+            onApply={onApplyStops}
+            selectedValues={stops}
+            mobilePlaceholder='Stops'
+            placeholder='Select Stops'
+            hasReturn={hasReturnFlight}
+            originLabel='Departure from Delhi'
+            returnLabel='Departure from Mumbai'
+            selectLabel={
+              stops.originFlights.length || stops.returnFlights.length ? (
+                <>
+                  <Text>
+                    {[0, 3].includes(stops.originFlights.length)
+                      ? 'Any Stop'
+                      : stops.originFlights
+                          .map(
+                            (val) =>
+                              stopsOptions.find((el) => el.value === val)?.label
+                          )
+                          .join(', ')}
+                  </Text>
+                  {hasReturnFlight && (
+                    <>
+                      {' -> '}
+                      <Text>
+                        {[0, 3].includes(stops.returnFlights.length)
+                          ? 'Any Stop'
+                          : stops.returnFlights
+                              .map(
+                                (val) =>
+                                  stopsOptions.find((el) => el.value === val)
+                                    ?.label
+                              )
+                              .join(', ')}
+                      </Text>
+                    </>
+                  )}
+                </>
+              ) : (
+                ''
+              )
+            }
+          />
+        </Col>
+
+        <Col span={4} className='mb-2 filters-column'>
+          <SelectWithSlots
+            mobilePlaceholder='Times'
+            options={timeRangeOptions}
+            onApply={onApplyTimeRange}
+            selectedValues={timeRange}
+            hasReturn={hasReturnFlight}
+            placeholder='Select Time Range'
+            originLabel='Departure from Delhi'
+            returnLabel='Departure from Mumbai'
+            selectLabel={
+              timeRange.originFlights.length ||
+              timeRange.returnFlights.length ? (
+                <>
+                  <Text>
+                    {[0, 4].includes(timeRange.originFlights.length)
+                      ? 'Any Time'
+                      : timeRange.originFlights
+                          .map(
+                            (val) =>
+                              timeRangeOptions.find((el) => el.value === val)
+                                ?.label
+                          )
+                          .join(', ')}
+                  </Text>
+                  {hasReturnFlight && (
+                    <>
+                      {' -> '}
+                      <Text>
+                        {[0, 4].includes(timeRange.returnFlights.length)
+                          ? 'Any Time'
+                          : timeRange.returnFlights
+                              .map(
+                                (val) =>
+                                  timeRangeOptions.find(
+                                    (el) => el.value === val
+                                  )?.label
+                              )
+                              .join(', ')}
+                      </Text>
+                    </>
+                  )}
+                </>
+              ) : (
+                ''
+              )
+            }
+          />
+        </Col>
+
+        <Col span={4} className='mb-2 filters-column'>
+          <SelectWithCheckbox
+            defaultValue={airlines}
+            selectedValues={airlines}
+            mobilePlaceholder='Airlines'
+            placeholder='Select Airlines'
+            onApply={(t) => {
+              dispatch(updateAirlinesFilter(t));
+            }}
+            options={uniq(airlineOptions).map((el: string) => ({
               value: el,
               label: airlineMapping[el],
             }))}
-            style={{ width: '100%' }}
-            mode='tags'
-            className='w-full'
-            value={returnAirlines}
-            onChange={(t) => dispatch(updateReturnAirlinesFilter(t))}
           />
         </Col>
-      )}
 
-      <Col span={12} className='mb-2'>
-        <Select
-          placeholder='Select Providers'
-          options={_.uniq(providersOptions).map((el: string) => ({
-            value: el,
-            label: el,
-          }))}
-          className='w-full'
-          mode='multiple'
-          onChange={(t) => dispatch(updateProvidersFilter(t))}
-          value={providers}
-        />
-      </Col>
-
-      <Col span={12} className='mb-2'>
-        <Slider
-          range={{ draggableTrack: true }}
-          min={minPrice}
-          max={maxPrice}
-          value={selectedPriceRange}
-          onChange={(t: [number, number]) => setSelectedPriceRange(t)}
-        />
-      </Col>
-
-      <Col span={12} className='mb-2'>
-        {tagsData.map((tag) => (
-          <CheckableTag
-            key={tag.value}
-            checked={selectedTags.includes(tag.value)}
-            onChange={(checked) => handleChange(tag.value, checked)}
-          >
-            {tag.label}
-          </CheckableTag>
-        ))}
-      </Col>
-
-      <Col span={24} className='mb-2'>
-        {timeRange.map((time) => (
-          <CheckableTag
-            key={time.value}
-            checked={selectedTimeRanges.includes(time.value)}
-            onChange={(checked) => handleTimeRangeChange(time.value, checked)}
-          >
-            {time.label}
-          </CheckableTag>
-        ))}
-      </Col>
-    </Row>
+        {hasReturnFlight && (
+          <Col span={4} className='mb-2 filters-column'>
+            <SelectWithCheckbox
+              mobilePlaceholder='Return'
+              selectedValues={returnAirlines}
+              placeholder='Select Return Airlines'
+              onApply={(t) => dispatch(updateReturnAirlinesFilter(t))}
+              options={uniq(returnAirlineOptions).map((el: string) => ({
+                value: el,
+                label: airlineMapping[el],
+              }))}
+            />
+          </Col>
+        )}
+      </Row>
+    </div>
   );
 };
 

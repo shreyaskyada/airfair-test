@@ -4,18 +4,18 @@ export interface IFilters {
   airlines: string[];
   returnAirlines: string[];
   providers: string[];
-  priceRange: [number, number];
-  stops: string[];
-  timeRange: string[];
+  priceRange: [number, number] | [];
+  stops: { originFlights: string[]; returnFlights: string[] };
+  timeRange: { originFlights: string[]; returnFlights: string[] };
 }
 
 const filterInitialState: IFilters = {
   airlines: [],
   providers: [],
   returnAirlines: [],
-  priceRange: [0, 0],
-  stops: [],
-  timeRange: [],
+  priceRange: [],
+  stops: { originFlights: [], returnFlights: [] },
+  timeRange: { originFlights: [], returnFlights: [] },
 };
 
 export const filtersSlice = createSlice({

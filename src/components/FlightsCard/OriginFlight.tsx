@@ -85,20 +85,20 @@ const OriginFlight = (props: any) => {
       stop = Stops.ONE_STOP;
     }
 
-    if (!stops.length || (stops.length && stops.includes(stop))) {
-      show &&= true;
-    } else {
-      show &&= false;
-    }
+    // if (!stops.length || (stops.length && stops.includes(stop))) {
+    //   show &&= true;
+    // } else {
+    //   show &&= false;
+    // }
 
-    if (
-      !timeRange.length ||
-      (timeRange.length && timeRange.includes(categorizeTime(el.depTime)))
-    ) {
-      show &&= true;
-    } else {
-      show &&= false;
-    }
+    // if (
+    //   !timeRange.length ||
+    //   (timeRange.length && timeRange.includes(categorizeTime(el.depTime)))
+    // ) {
+    //   show &&= true;
+    // } else {
+    //   show &&= false;
+    // }
 
     return show;
   });
