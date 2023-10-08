@@ -162,7 +162,6 @@ import LUFTHANSA from "./Lufthansa.png"
 import LUCKY_AIR from "./Lucky_Air.png"
 import LUFTHANSA_CITYLINE from "./Lufthansa_Cityline.png"
 import LUXAIR from "./Luxair.png"
-import LUFTTAXI from "./Lufttaxi.png"
 import MALAYSIA_AIRLINES from "./Malaysia_Airlines.png"
 import MAURITANIA from "./Fallback.png"
 import MEA from "./MiddleEastAirlines.png"
@@ -189,6 +188,21 @@ import QATAR from "./Qatar.png"
 import QANTAS from "./Qantas.png"
 import QAZAQ from "./Qazaq.png"
 import RAVN_ALASKA from "./Fallback.png"
+import ROSSIYA from "./Fallback.png"
+import ROYAL_AIR_MAROC from "./RoyalAirMaroc.png"
+import ROYAL_BRUNEI from "./Royal_Brunei.png"
+import ROYAL_JORDANIAN from "./Royal_Jordanian.png"
+import RUILI_AIRLINES from "./Ruili.png"
+import RUSLINE from "./Fallback.png"
+import RWANDAIR from "./Rwandair.png"
+import S7 from "./S7.png"
+import SAFAIR from "./Safair.png"
+import SALAMAIR from "./SalamAir.png"
+import SAS from "./SAS.png"
+import SATA_INTERNATIONAL from "./SataInternational.png"
+import SATA_AIR_ACORES from "./Fallback.png"
+import SAUDI_ARABIAN from "./Saudi_Arabian.png"
+import SCAT from "./SCAT.png"
 
 export {
   AIRINDIA,
@@ -355,7 +369,6 @@ export {
   LUCKY_AIR,
   LUFTHANSA_CITYLINE,
   LUXAIR,
-  LUFTTAXI,
   MALAYSIA_AIRLINES,
   MAURITANIA,
   MEA,
@@ -381,5 +394,20 @@ export {
   QATAR,
   QANTAS,
   QAZAQ,
-  RAVN_ALASKA
+  RAVN_ALASKA,
+  ROSSIYA,
+  ROYAL_AIR_MAROC,
+  ROYAL_BRUNEI,
+  ROYAL_JORDANIAN,
+  RUILI_AIRLINES,
+  RUSLINE,
+  RWANDAIR,
+  S7,
+  SAFAIR,
+  SALAMAIR,
+  SAS,
+  SATA_INTERNATIONAL,
+  SATA_AIR_ACORES,
+  SAUDI_ARABIAN,
+  SCAT
 }

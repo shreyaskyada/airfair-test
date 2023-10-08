@@ -188,9 +188,24 @@ import {
   PRECISION_AIR,
   QANTAS,
   QATAR,
-  LUFTTAXI,
   QAZAQ,
-  RAVN_ALASKA
+  RAVN_ALASKA,
+  ROSSIYA,
+  ROYAL_AIR_MAROC,
+  ROYAL_BRUNEI,
+  ROYAL_JORDANIAN,
+  RUILI_AIRLINES,
+  RUSLINE,
+  RWANDAIR,
+  S7,
+  SAFAIR,
+  SALAMAIR,
+  SAS,
+  SATA_INTERNATIONAL,
+  SATA_AIR_ACORES,
+  SAUDI_ARABIAN,
+  SCAT
+
 } from "../assets/images/popularAirlines"
 import { ISO_8601 } from "moment"
 
@@ -940,16 +955,72 @@ export const Airlines_Data = [
     image:QATAR
   },
   {
-    name:"Lufttaxi Fluggesellschaft",
-    image:LUFTTAXI
-  },
-  {
     name:"Qazaq Air",
     image:QAZAQ
   },
   {
     name:"Ravn Alaska",
     image:RAVN_ALASKA
+  },
+  {
+    name:"Rossiya Airlines",
+    image:ROSSIYA
+  },
+  {
+    name:"Royal Air Maroc",
+    image:ROYAL_AIR_MAROC
+  },
+  {
+    name:"Royal Brunei",
+    image:ROYAL_BRUNEI
+  },
+  {
+    name:"Royal Jordanian",
+    image:ROYAL_JORDANIAN
+  },
+  {
+    name:"Ruili Airlines",
+    image:RUILI_AIRLINES
+  },
+  {
+    name:"RusLine",
+    image:RUSLINE
+  },
+  {
+    name:"RwandAir",
+    image:RWANDAIR
+  },
+  {
+    name:"S7 Airlines",
+    image:S7
+  },
+  {
+    name:"Safair",
+    image:SAFAIR
+  },
+  {
+    name:"Salam Air",
+    image:SALAMAIR
+  },
+  {
+    name:"Scandinavian Airlines",
+    image:SAS
+  },
+  {
+    name:"SATA International",
+    image:SATA_INTERNATIONAL
+  },
+  {
+    name:"SATA Air Acores",
+    image:SATA_AIR_ACORES
+  },
+  {
+    name:"Saudi Arabian Airlines",
+    image:SAUDI_ARABIAN
+  },
+  {
+    name:"SCAT Airlines",
+    image:SCAT
   }
 ]
 
@@ -1144,7 +1215,21 @@ export const Airlines_Images:any = {
   "Precision Air":PRECISION_AIR,
   "Qantas":QANTAS,
   "Qatar Airways":QATAR,
-  "Lufttaxi Fluggesellschaft":LUFTTAXI,
   "Qazaq Air":QAZAQ,
-  "Ravn Alaska":RAVN_ALASKA
+  "Ravn Alaska":RAVN_ALASKA,
+  "Rossiya Airlines":ROSSIYA,
+  "Royal Air Maroc":ROYAL_AIR_MAROC,
+  "Royal Brunei":ROYAL_BRUNEI,
+  "Royal Jordanian":ROYAL_JORDANIAN,
+  "Ruili Airlines":RUILI_AIRLINES,
+  "RusLine":RUSLINE,
+  "RwandAir":RWANDAIR,
+  "S7 Airlines":S7,
+  "Safair":SAFAIR,
+  "Salam Air":SALAMAIR,
+  "Scandinavian Airlines":SAS,
+  "SATA International":SATA_INTERNATIONAL,
+  "SATA Air Acores":SATA_AIR_ACORES,
+  "Saudi Arabian Airlines":SAUDI_ARABIAN,
+  "SCAT Airlines":SCAT
 }
