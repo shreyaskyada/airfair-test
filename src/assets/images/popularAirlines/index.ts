@@ -203,6 +203,28 @@ import SATA_INTERNATIONAL from "./SataInternational.png"
 import SATA_AIR_ACORES from "./Fallback.png"
 import SAUDI_ARABIAN from "./Saudi_Arabian.png"
 import SCAT from "./SCAT.png"
+import SCOOT from "./FlyScoot.png"
+import SHANDONG from "./Shandong.png"
+import SHANGHAI from "./Shanghai.png"
+import SHENZHEN from "./Shenzhen.png"
+import SICHUAN from "./Sichuan.png"
+import SINGAPORE_AIRLINES from "./Singapore_Airlines.png"
+import SKY_AIRLINE from "./Sky_Airline.png"
+import SMARTAVIA from "./Fallback.png"
+import SMART_WINGS from "./SmartWings.png"
+import SOLOMON from "./Solomon.png"
+import SOMON from "./Somon.png"
+import SOUTH_AFRICAN from "./SouthAfricanAirways.png"
+import SRILANKAN_AIRWAYS from "./SriLankan.png"
+import SUNEXPRESS from "./SunExpress.png"
+import SUPARNA from "./Suparna.png"
+import SWISS from "./Swiss.png"
+import SYRIAN from "./Fallback.png"
+import TWAY from "./Tway.png"
+import TAAG from "./TaagAngola.png"
+import TAG_AIRLINES from "./TAG.png"
+import TAP from "./TAP.png"
+import TAROM from "./Tarom.png"
 
 export {
   AIRINDIA,
@@ -409,5 +431,27 @@ export {
   SATA_INTERNATIONAL,
   SATA_AIR_ACORES,
   SAUDI_ARABIAN,
-  SCAT
+  SCAT,
+  SCOOT,
+  SHANDONG,
+  SHANGHAI,
+  SHENZHEN,
+  SICHUAN,
+  SINGAPORE_AIRLINES,
+  SKY_AIRLINE,
+  SMARTAVIA,
+  SMART_WINGS,
+  SOLOMON,
+  SOMON,
+  SOUTH_AFRICAN,
+  SRILANKAN_AIRWAYS,
+  SUNEXPRESS,
+  SUPARNA,
+  SWISS,
+  SYRIAN,
+  TWAY,
+  TAAG,
+  TAG_AIRLINES,
+  TAP,
+  TAROM
 }

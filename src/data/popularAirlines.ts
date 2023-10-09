@@ -204,7 +204,29 @@ import {
   SATA_INTERNATIONAL,
   SATA_AIR_ACORES,
   SAUDI_ARABIAN,
-  SCAT
+  SCAT,
+  SCOOT,
+  SHANDONG,
+  SHANGHAI,
+  SHENZHEN,
+  SICHUAN,
+  SINGAPORE_AIRLINES,
+  SKY_AIRLINE,
+  SMARTAVIA,
+  SMART_WINGS,
+  SOLOMON,
+  SOMON,
+  SOUTH_AFRICAN,
+  SRILANKAN_AIRWAYS,
+  SUNEXPRESS,
+  SUPARNA,
+  SWISS,
+  SYRIAN,
+  TWAY,
+  TAAG,
+  TAG_AIRLINES,
+  TAP,
+  TAROM
 
 } from "../assets/images/popularAirlines"
 import { ISO_8601 } from "moment"
@@ -1021,6 +1043,94 @@ export const Airlines_Data = [
   {
     name:"SCAT Airlines",
     image:SCAT
+  },
+  {
+    name:"Fly Scoot",
+    image:SCOOT
+  },
+  {
+    name:"Shandong Airlines",
+    image:SHANDONG
+  },
+  {
+    name:"Shanghai Airlines",
+    image:SHANGHAI
+  },
+  {
+    name:"Shenzhen Airlines",
+    image:SHENZHEN
+  },
+  {
+    name:"Sichuan Airlines",
+    image:SICHUAN
+  },
+  {
+    name:"Singapore Airlines",
+    image:SINGAPORE_AIRLINES
+  },
+  {
+    name:"SKY AIRLINE",
+    image:SKY_AIRLINE
+  },
+  {
+    name:"Smartavia",
+    image:SMARTAVIA
+  },
+  {
+    name:"Smart Wings",
+    image:SMART_WINGS
+  },
+  {
+    name:"Solomon Airlines",
+    image:SOLOMON
+  },
+  {
+    name:"Somon Air",
+    image:SOMON
+  },
+  {
+    name:"South African Airways",
+    image:SOUTH_AFRICAN
+  },
+  {
+    name:"SriLankan Airlines",
+    image:SRILANKAN_AIRWAYS
+  },
+  {
+    name:"SUNEXPRESS",
+    image:SUNEXPRESS
+  },
+  {
+    name:"Suparna Airlines",
+    image:SUPARNA
+  },
+  {
+    name:"SWISS",
+    image:SWISS
+  },
+  {
+    name:"Syrian Air",
+    image:SYRIAN
+  },
+  {
+    name:"T'way Air",
+    image:TWAY
+  },
+  {
+    name:"TAAG Angola Airlines",
+    image:TAAG
+  },
+  {
+    name:"TAG Airlines",
+    image:TAG_AIRLINES
+  },
+  {
+    name:"TAP Air Portugal",
+    image:TAP
+  },
+  {
+    name:"TAROM",
+    image:TAROM
   }
 ]
 
@@ -1231,5 +1341,25 @@ export const Airlines_Images:any = {
   "SATA International":SATA_INTERNATIONAL,
   "SATA Air Acores":SATA_AIR_ACORES,
   "Saudi Arabian Airlines":SAUDI_ARABIAN,
-  "SCAT Airlines":SCAT
+  "SCAT Airlines":SCAT,
+  "Fly Scoot":SCOOT,
+  "Shandong Airlines":SHANDONG,
+  "Shanghai Airlines":SHANGHAI,
+  "Shenzhen Airlines":SHENZHEN,
+  "Sichuan Airlines":SICHUAN,
+  "Singapore Airlines":SINGAPORE_AIRLINES,
+  "Smartavia":SMARTAVIA,
+  "Smart Wings":SMART_WINGS,
+  "Solomon Airlines":SOLOMON,
+  "Somon Air":SOMON,
+  "South African Airways":SOUTH_AFRICAN,
+  "SriLankan Airlines":SRILANKAN_AIRWAYS,
+  "SUNEXPRESS":SUNEXPRESS,
+  "Suparna Airlines":SUPARNA,
+  "SWISS":SWISS,
+  "Syrian Air":SYRIAN,
+  "TAAG Angola Airlines":TAAG,
+  "TAG Airlines":TAG_AIRLINES,
+  "TAP Air Portugal":TAP,
+  "TAROM":TAROM
 }
