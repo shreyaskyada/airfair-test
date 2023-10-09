@@ -99,7 +99,7 @@ const Filters = () => {
         overflowX: 'auto',
       }}
     >
-      <Row gutter={16} wrap={false}>
+      <Row gutter={16} wrap={false} style={{ margin: 0 }}>
         <Col span={4} className='mb-2 filters-column'>
           <SelectWithCheckbox
             selectedValues={providers}

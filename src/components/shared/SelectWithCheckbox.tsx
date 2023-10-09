@@ -62,8 +62,8 @@ const SelectWithCheckbox: FC<SelectWithCheckboxProps> = ({
 
         return tags ? (
           <Tag
-            closable={closable}
-            onClose={onClose}
+            // closable={closable}
+            // onClose={onClose}
             style={{
               marginRight: 3,
               paddingTop: 1,

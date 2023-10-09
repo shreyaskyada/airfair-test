@@ -1,9 +1,15 @@
 import DataCard from '../../widget/DataCard';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { updateDepartFlights } from '../../redux/slices/flights';
 import { Stops } from '../../data/contants';
-import { categorizeTime } from '../../data/utils';
+import {
+  filterAirlines,
+  filterPrices,
+  filterProviders,
+  filterStops,
+  filterTimeRange,
+} from '../../data/utils';
 
 const OriginFlight = (props: any) => {
   const dispatch = useAppDispatch();
@@ -15,90 +21,28 @@ const OriginFlight = (props: any) => {
 
   const { type, selectedKey, onSelectedFlightChange } = props;
 
+  console.log('timeRange.originFlights: ', timeRange.originFlights);
+  console.log('airlines: ', airlines);
+  console.log('providers: ', providers);
+  console.log('priceRange: ', priceRange);
+  console.log('stops.originFlights: ', stops.originFlights);
+
   const filteredData = originFlights?.filter((el: any) => {
     let show = true;
 
-    if (
-      !airlines.length ||
-      (airlines.length &&
-        el.flightCode
-          ?.split('->')
-          .map((item: string) => item.substring(0, 2))
-          .some((item: string) => airlines.includes(item)))
-    ) {
-      show &&= true;
-    } else {
-      show &&= false;
-    }
+    show &&= filterAirlines(airlines, el.flightCode);
+    if (!show) return false;
 
-    if (
-      !providers.length ||
-      (providers.length &&
-        Object.keys(el.compare).some((item: string) =>
-          providers.includes(item)
-        ))
-    ) {
-      show &&= true;
-    } else {
-      show &&= false;
-    }
+    show &&= filterProviders(providers, el.compare);
+    if (!show) return false;
 
-    let maxPrice = -1;
+    show &&= filterPrices(priceRange, el.compare, el.cheapestFare);
+    if (!show) return false;
 
-    Object.keys(el.compare).forEach((p) => {
-      maxPrice = Math.max(
-        maxPrice,
-        el.compare[p]?.fare?.totalFareAfterDiscount +
-          el.compare[p]?.fare?.convenienceFee
-      );
-    });
+    show &&= filterStops(stops.originFlights, el.transitFlight);
+    if (!show) return false;
 
-    const minPrice = el.cheapestFare;
-
-    if (
-      !priceRange.length ||
-      (priceRange.length &&
-        minPrice >= priceRange[0] &&
-        minPrice <= priceRange[1]) ||
-      (priceRange.length &&
-        maxPrice >= priceRange[0] &&
-        maxPrice <= priceRange[1])
-    ) {
-      show &&= true;
-    } else {
-      show &&= false;
-    }
-
-    const transitFlight = el.transitFlight;
-    let stop = '';
-    if (transitFlight?.length > 1) {
-      stop = Stops.ONE_PLUS_STOP;
-    } else if (
-      !transitFlight?.length ||
-      (transitFlight?.length === 1 &&
-        (transitFlight[0].viaAirportCode === 'NON-STOP' ||
-          !transitFlight[0].viaAirportName ||
-          !transitFlight[0].viaCity))
-    ) {
-      stop = Stops.NON_STOP;
-    } else if (transitFlight?.length) {
-      stop = Stops.ONE_STOP;
-    }
-
-    // if (!stops.length || (stops.length && stops.includes(stop))) {
-    //   show &&= true;
-    // } else {
-    //   show &&= false;
-    // }
-
-    // if (
-    //   !timeRange.length ||
-    //   (timeRange.length && timeRange.includes(categorizeTime(el.depTime)))
-    // ) {
-    //   show &&= true;
-    // } else {
-    //   show &&= false;
-    // }
+    show &&= filterTimeRange(timeRange.originFlights, el.depTime);
 
     return show;
   });

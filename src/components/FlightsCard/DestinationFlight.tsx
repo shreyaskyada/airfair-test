@@ -2,15 +2,24 @@ import DataCard from '../../widget/DataCard';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect } from 'react';
 import { updateReturnFlights } from '../../redux/slices/flights';
+import {
+  filterAirlines,
+  filterProviders,
+  filterStops,
+  filterTimeRange,
+} from '../../data/utils';
 
 const DestinationFlight = (props: any) => {
   const dispatch = useAppDispatch();
   const { destinationFlights } = useAppSelector(
     (state) => state.destinationFlight
   );
-  const { providers, returnAirlines } = useAppSelector(
+  const { providers, returnAirlines, stops, timeRange } = useAppSelector(
     (state) => state.filtersSlice
   );
+
+  console.log('timeRange.returnFlights: ', timeRange.returnFlights);
+  console.log('stops.returnFlights: ', stops.returnFlights);
 
   const { returnFlight } = useAppSelector((state) => state.flight);
 
@@ -19,30 +28,16 @@ const DestinationFlight = (props: any) => {
   const filteredData = destinationFlights?.filter((el: any) => {
     let show = true;
 
-    if (
-      !returnAirlines.length ||
-      (returnAirlines.length &&
-        el.flightCode
-          ?.split('->')
-          .map((item: string) => item.substring(0, 2))
-          .some((item: string) => returnAirlines.includes(item)))
-    ) {
-      show &&= true;
-    } else {
-      show &&= false;
-    }
+    show &&= filterAirlines(returnAirlines, el.flightCode);
+    if (!show) return false;
 
-    if (
-      !providers.length ||
-      (providers.length &&
-        Object.keys(el.compare).some((item: string) =>
-          providers.includes(item)
-        ))
-    ) {
-      show &&= true;
-    } else {
-      show &&= false;
-    }
+    show &&= filterProviders(providers, el.compare);
+    if (!show) return false;
+
+    show &&= filterStops(stops.returnFlights, el.transitFlight);
+    if (!show) return false;
+
+    show &&= filterTimeRange(timeRange.returnFlights, el.depTime);
 
     return show;
   });

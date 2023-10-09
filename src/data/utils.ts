@@ -1,4 +1,4 @@
-import { TimeRangesEnum } from './contants';
+import { Stops, TimeRangesEnum } from './contants';
 
 export const categorizeTime = (time: string) => {
   const [hours] = time?.split(':')?.map(Number);
@@ -26,4 +26,96 @@ export const alignDropdownList = (windowWidth: number) => {
       dropdown.style.left = `${leftPos - offset - 10}px`;
     }
   }
+};
+
+export const filterAirlines = (airlines: string[], flightCode: string) => {
+  if (
+    !airlines.length ||
+    (airlines.length &&
+      flightCode
+        ?.split('->')
+        .map((item: string) => item.substring(0, 2))
+        .some((item: string) => airlines.includes(item)))
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export const filterProviders = (providers: string[], compare: object) => {
+  if (
+    !providers.length ||
+    (providers.length &&
+      Object.keys(compare).some((item: string) => providers.includes(item)))
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export const filterPrices = (
+  priceRange: [number, number] | [],
+  compare: { [key: string]: any },
+  cheapestFare: number
+) => {
+  let maxPrice = -1;
+
+  Object.keys(compare).forEach((p) => {
+    maxPrice = Math.max(
+      maxPrice,
+      compare[p]?.fare?.totalFareAfterDiscount +
+        compare[p]?.fare?.convenienceFee
+    );
+  });
+
+  const minPrice = cheapestFare;
+
+  if (
+    !priceRange.length ||
+    (priceRange.length &&
+      minPrice >= priceRange[0] &&
+      minPrice <= priceRange[1]) ||
+    (priceRange.length &&
+      maxPrice >= priceRange[0] &&
+      maxPrice <= priceRange[1])
+  ) {
+    return true;
+  }
+  return false;
+};
+
+export const filterStops = (
+  stops: string[],
+  transitFlight: { [key: string]: string }[]
+) => {
+  let stop = '';
+  if (transitFlight?.length > 1) {
+    stop = Stops.ONE_PLUS_STOP;
+  } else if (
+    !transitFlight?.length ||
+    (transitFlight?.length === 1 &&
+      (transitFlight[0].viaAirportCode === 'NON-STOP' ||
+        !transitFlight[0].viaAirportName ||
+        !transitFlight[0].viaCity))
+  ) {
+    stop = Stops.NON_STOP;
+  } else if (transitFlight?.length) {
+    stop = Stops.ONE_STOP;
+  }
+
+  if (!stops.length || (stops.length && stops.includes(stop))) {
+    return true;
+  }
+
+  return false;
+};
+
+export const filterTimeRange = (timeRange: string[], depTime: string) => {
+  if (
+    !timeRange.length ||
+    (timeRange.length && timeRange.includes(categorizeTime(depTime)))
+  ) {
+    return true;
+  }
+  return false;
 };

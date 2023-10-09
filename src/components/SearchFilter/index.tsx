@@ -47,6 +47,7 @@ import {
 import './searchFilterStyles.css';
 import { notification } from '../Notification/customNotification';
 import { TripType } from '../../data/contants';
+import { resetFilters } from '../../redux/slices/filters';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -214,6 +215,8 @@ const SearchFilter = ({
           //dispatch(uploadIsLoading(false))
 
           dispatch(uploadIsLoading(false));
+
+          dispatch(resetFilters())
 
           redirectRoute && navigate(redirectRoute);
         })

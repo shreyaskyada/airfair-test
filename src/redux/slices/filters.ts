@@ -40,10 +40,14 @@ export const filtersSlice = createSlice({
     updateTimeRangeFilter: (state, action: PayloadAction<any>) => {
       state.timeRange = action.payload;
     },
+    resetFilters: (state) => {
+      state = { ...filterInitialState };
+    },
   },
 });
 
 export const {
+  resetFilters,
   updateStopsFilter,
   updateAirlinesFilter,
   updateProvidersFilter,
