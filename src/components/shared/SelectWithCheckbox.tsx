@@ -52,11 +52,11 @@ const SelectWithCheckbox: FC<SelectWithCheckboxProps> = ({
       mode='multiple'
       showSearch={false}
       maxTagCount='responsive'
-      placeholder={width < 1000 ? mobilePlaceholder : placeholder}
       onChange={(t) => setValue(t)}
-      className={`rounded-select w-full ${placeholder?.split(' ')[1]} `}
       onDropdownVisibleChange={(t) => setIsOpen(t)}
       popupClassName={`filters-select ${isOpen ? 'open' : ''}`}
+      placeholder={width < 1000 ? mobilePlaceholder : placeholder}
+      className={`rounded-select w-full ${placeholder?.split(' ')[1]} `}
       tagRender={({ value, closable, onClose }) => {
         const tags = options.find((el) => el.value === value);
 

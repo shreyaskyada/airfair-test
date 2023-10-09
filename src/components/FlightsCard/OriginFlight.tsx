@@ -48,7 +48,7 @@ const OriginFlight = (props: any) => {
   });
 
   useEffect(() => {
-    if (filteredData.length) {
+    if (filteredData) {
       dispatch(updateDepartFlights(filteredData[0]));
     }
   }, [providers, airlines, priceRange, timeRange, stops]);
@@ -65,7 +65,7 @@ const OriginFlight = (props: any) => {
             console.log('data  :', data);
             onSelectedFlightChange(data, type, flight);
           }}
-          checked={departFlight.flightCode === flight.flightCode}
+          checked={departFlight?.flightCode === flight.flightCode}
           dataKey={index}
           tags={[]}
           flight={{

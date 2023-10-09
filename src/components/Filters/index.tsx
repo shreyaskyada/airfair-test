@@ -16,7 +16,6 @@ import SelectWithSlider from '../shared/SelectWithSlider';
 import SelectWithCheckbox from '../shared/SelectWithCheckbox';
 import { ISearchFlights } from '../../redux/slices/searchFlights';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { useEffect } from 'react';
 
 const { Text } = Typography;
 
@@ -92,6 +91,10 @@ const Filters = () => {
 
   const hasReturnFlight = searchFlightData.flightType !== TripType.ONE_WAY;
 
+  const getLabel = (label: string) => (
+    <Text style={{ margin: '12px' }}>{label}</Text>
+  );
+
   return (
     <div
       style={{
@@ -101,6 +104,7 @@ const Filters = () => {
     >
       <Row gutter={16} wrap={false} style={{ margin: 0 }}>
         <Col span={4} className='mb-2 filters-column'>
+          {getLabel('Providers')}
           <SelectWithCheckbox
             selectedValues={providers}
             mobilePlaceholder='Providers'
@@ -114,6 +118,7 @@ const Filters = () => {
         </Col>
 
         <Col span={4} className='mb-2 filters-column'>
+          {getLabel('Price Range')}
           <SelectWithSlider
             min={minPrice}
             max={maxPrice}
@@ -134,6 +139,7 @@ const Filters = () => {
         </Col>
 
         <Col span={4} className='mb-2 filters-column'>
+          {getLabel('Stops')}
           <SelectWithSlots
             options={stopsOptions}
             onApply={onApplyStops}
@@ -181,6 +187,7 @@ const Filters = () => {
         </Col>
 
         <Col span={4} className='mb-2 filters-column'>
+          {getLabel('Time Range')}
           <SelectWithSlots
             mobilePlaceholder='Times'
             options={timeRangeOptions}
@@ -231,6 +238,7 @@ const Filters = () => {
         </Col>
 
         <Col span={4} className='mb-2 filters-column'>
+          {getLabel('Airlines')}
           <SelectWithCheckbox
             defaultValue={airlines}
             selectedValues={airlines}
@@ -248,6 +256,7 @@ const Filters = () => {
 
         {hasReturnFlight && (
           <Col span={4} className='mb-2 filters-column'>
+            {getLabel('Return Airlines')}
             <SelectWithCheckbox
               mobilePlaceholder='Return'
               selectedValues={returnAirlines}

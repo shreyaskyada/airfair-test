@@ -1,4 +1,4 @@
-import { Divider, Select, Slider } from 'antd';
+import { Divider, Select, Slider, Typography } from 'antd';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import DropdownButtons from './DropdownButtons';
 import { alignDropdownList } from '../../data/utils';
@@ -13,6 +13,8 @@ interface SelectWithSliderProps {
   selectedValues: [number, number] | [];
   onChange: (t: [number, number] | []) => void;
 }
+
+const { Text } = Typography;
 
 const SelectWithSlider: FC<SelectWithSliderProps> = ({
   max,
@@ -86,6 +88,10 @@ const SelectWithSlider: FC<SelectWithSliderProps> = ({
                 value={value}
                 onChange={(t: [number, number]) => setValue(t)}
               />
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Text>₹{min}</Text>
+                <Text style={{ marginLeft: '-10px' }}>₹{max}</Text>
+              </div>
             </div>
             <Divider style={{ margin: '4px 0' }} />
             <DropdownButtons

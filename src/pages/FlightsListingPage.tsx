@@ -57,7 +57,7 @@ const FlightsListingPage = () => {
   }, [])
 
   useEffect(() => {
-    const departProviders = Object.keys(departFlight.compare || {})
+    const departProviders = Object.keys(departFlight?.compare || {})
     const flightsToFilter = flights.returnJourneyCompareResponse || []
 
     if (departFlight && flightsToFilter.length) {

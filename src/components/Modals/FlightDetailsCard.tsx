@@ -532,7 +532,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   const flightInfoCardCretor = (flight: Flight) => {
     return (
       <div>
-        {flight.stops === 0
+        {flight?.stops === 0
           ? flighInfoTabCard({
               airLine: flight.flightCode,
               fromTime: flight.depTime,
@@ -550,7 +550,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                 to: flight.toCity,
               },
             })
-          : flight.startTimeList?.map((ele, index) => (
+          : flight?.startTimeList?.map((ele, index) => (
               <React.Fragment key={index}>
                 {flighInfoTabCard({
                   airLine: flight.flightCode?.split('->')[index],

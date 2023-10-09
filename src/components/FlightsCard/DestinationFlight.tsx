@@ -43,10 +43,10 @@ const DestinationFlight = (props: any) => {
   });
 
   useEffect(() => {
-    if (filteredData.length) {
+    if (filteredData) {
       dispatch(updateReturnFlights(filteredData[0]));
     }
-  }, [providers, returnAirlines]);
+  }, [providers, returnAirlines, timeRange, stops]);
 
   return (
     <>
@@ -59,7 +59,7 @@ const DestinationFlight = (props: any) => {
           onSelectedFlightChange={(data: any) =>
             onSelectedFlightChange(data, type, flight)
           }
-          checked={returnFlight.flightCode === flight.flightCode}
+          checked={returnFlight?.flightCode === flight.flightCode}
           dataKey={index}
           tags={[]}
           flight={{
