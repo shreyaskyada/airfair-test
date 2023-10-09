@@ -914,7 +914,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               >
                 <h4 className='fareHeading'>
                   Cheapest Fare: ₹
-                  {providerWithOffers.length && (
+                  {departFlight?.cheapestFare! + returnFlight?.cheapestFare!}
+                  {/* {providerWithOffers.length && (
                     <span>
                       {providerWithOffers.length &&
                       providerWithOffers[0].bestOffer &&
@@ -925,7 +926,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                             .totalFareAfterDiscount
                         : providerWithOffers[0].totalFare}
                     </span>
-                  )}
+                  )} */}
                 </h4>
               </div>
               <p style={{ margin: 0, color: '#013042' }}>

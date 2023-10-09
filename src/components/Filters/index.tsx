@@ -238,7 +238,7 @@ const Filters = () => {
         </Col>
 
         <Col span={4} className='mb-2 filters-column'>
-          {getLabel('Airlines')}
+          {getLabel('Depart Airlines')}
           <SelectWithCheckbox
             defaultValue={airlines}
             selectedValues={airlines}
