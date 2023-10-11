@@ -171,7 +171,7 @@ const FlightsListingPage = () => {
           />
           <h1 className='notFoundHeading'>
             {checkIfFilterApplied(filtersSlice)
-              ? 'No Flights Found for this Filter, Please Change the Filter and Try Again'
+              ? 'No Flights Found as Per Filters, Kindly Reset Filters'
               : 'No Flights Found Please Search Again!'}
           </h1>
         </div>
