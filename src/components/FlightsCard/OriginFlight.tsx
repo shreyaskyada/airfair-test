@@ -1,8 +1,6 @@
 import DataCard from '../../widget/DataCard';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect } from 'react';
-import { updateDepartFlights } from '../../redux/slices/flights';
-import { Stops } from '../../data/contants';
 import {
   filterAirlines,
   filterPrices,
@@ -10,6 +8,7 @@ import {
   filterStops,
   filterTimeRange,
 } from '../../data/utils';
+import { updateFilteredOriginDataLength } from '../../redux/slices/filters';
 
 const OriginFlight = (props: any) => {
   const dispatch = useAppDispatch();
@@ -18,14 +17,9 @@ const OriginFlight = (props: any) => {
   const { airlines, providers, priceRange, stops, timeRange } = useAppSelector(
     (state) => state.filtersSlice
   );
+  const { filteredDataPresent } = useAppSelector((state) => state.filtersSlice);
 
   const { type, selectedKey, onSelectedFlightChange } = props;
-
-  console.log('timeRange.originFlights: ', timeRange.originFlights);
-  console.log('airlines: ', airlines);
-  console.log('providers: ', providers);
-  console.log('priceRange: ', priceRange);
-  console.log('stops.originFlights: ', stops.originFlights);
 
   const filteredData = originFlights?.filter((el: any) => {
     let show = true;
@@ -48,12 +42,22 @@ const OriginFlight = (props: any) => {
   });
 
   useEffect(() => {
-    if (filteredData) {
-      dispatch(updateDepartFlights(filteredData[0]));
-    }
+    // if (filteredData.length) {
+    onSelectedFlightChange(
+      {
+        target: {
+          value: 'depart-0',
+        },
+      },
+      type,
+      filteredData[0]
+    );
+    // }
+    dispatch(updateFilteredOriginDataLength(filteredData.length > 0));
   }, [providers, airlines, priceRange, timeRange, stops]);
 
-  return (
+  return filteredDataPresent.originFlights &&
+    filteredDataPresent.returnFlights ? (
     <>
       {filteredData?.map((flight: any, index: number) => (
         <DataCard
@@ -92,7 +96,7 @@ const OriginFlight = (props: any) => {
         />
       ))}
     </>
-  );
+  ) : null;
 };
 
 export default OriginFlight;

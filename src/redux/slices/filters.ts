@@ -7,6 +7,10 @@ export interface IFilters {
   priceRange: [number, number] | [];
   stops: { originFlights: string[]; returnFlights: string[] };
   timeRange: { originFlights: string[]; returnFlights: string[] };
+  filteredDataPresent: {
+    originFlights: boolean;
+    returnFlights: boolean;
+  };
 }
 
 const filterInitialState: IFilters = {
@@ -16,6 +20,10 @@ const filterInitialState: IFilters = {
   priceRange: [],
   stops: { originFlights: [], returnFlights: [] },
   timeRange: { originFlights: [], returnFlights: [] },
+  filteredDataPresent: {
+    originFlights: true,
+    returnFlights: true,
+  },
 };
 
 export const filtersSlice = createSlice({
@@ -40,9 +48,13 @@ export const filtersSlice = createSlice({
     updateTimeRangeFilter: (state, action: PayloadAction<any>) => {
       state.timeRange = action.payload;
     },
-    resetFilters: (state) => {
-      state = { ...filterInitialState };
+    updateFilteredOriginDataLength: (state, action: PayloadAction<boolean>) => {
+      state.filteredDataPresent.originFlights = action.payload;
     },
+    updateFilteredReturnDataLength: (state, action: PayloadAction<boolean>) => {
+      state.filteredDataPresent.returnFlights = action.payload;
+    },
+    resetFilters: () => ({ ...filterInitialState }),
   },
 });
 
@@ -54,5 +66,7 @@ export const {
   updateTimeRangeFilter,
   updatePriceRangeFilter,
   updateReturnAirlinesFilter,
+  updateFilteredOriginDataLength,
+  updateFilteredReturnDataLength,
 } = filtersSlice.actions;
 export default filtersSlice.reducer;

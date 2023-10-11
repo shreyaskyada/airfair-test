@@ -15,6 +15,7 @@ import { noResult } from "../assets/images"
 import { ISearchFlights } from "../redux/slices/searchFlights"
 import Filters from "../components/Filters"
 import { TripType } from "../data/contants"
+import { checkIfFilterApplied } from "../data/utils"
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -51,6 +52,9 @@ const FlightsListingPage = () => {
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
   )
+
+  const { filteredDataPresent } = useAppSelector((state) => state.filtersSlice);
+  const filtersSlice = useAppSelector((state) => state.filtersSlice);
 
   useEffect(() => {
     dispatch(toggleModal({ modal: "flightInfo", status: true }))
@@ -122,10 +126,10 @@ const FlightsListingPage = () => {
       ...prevDate,
       [type]: value.target.value
     }))
-    let compareData = Object.keys(flight.compare || {})
+    let compareData = Object.keys(flight?.compare || {})
     switch (type) {
       case "depart": {
-        dispatch(updateDepartFlights(flight))
+        dispatch(updateDepartFlights({...flight}))
         const data = filterFlightList(compareData, type)
         dispatch(updateDestinationFlights(data))
         dispatch(updateReturnFlights(data[0]))
@@ -156,15 +160,19 @@ const FlightsListingPage = () => {
         <SearchFilter redirectRoute="" />
       </div>
       {flights && Object.keys(flights).length > 0 && <Filters />}
-      {flights && Object.keys(flights).length <= 0 && (
-        <div className="notFoundContainer">
+      {(!filteredDataPresent.originFlights ||
+        !filteredDataPresent.returnFlights ||
+        (flights && Object.keys(flights).length <= 0)) && (
+        <div className='notFoundContainer'>
           <img
-            style={{ width: "100px" }}
+            style={{ width: '100px' }}
             src={noResult}
-            alt="search-not-found-icon"
+            alt='search-not-found-icon'
           />
-          <h1 className="notFoundHeading">
-            No Flights Found Please Search Again!
+          <h1 className='notFoundHeading'>
+            {checkIfFilterApplied(filtersSlice)
+              ? 'No Flights Found for this Filter, Please Change the Filter and Try Again'
+              : 'No Flights Found Please Search Again!'}
           </h1>
         </div>
       )}
@@ -195,8 +203,11 @@ const FlightsListingPage = () => {
           />
         </div>
       )}
-      {flights && searchFlightData.flightType !== TripType.ONE_WAY && (
-          <div className="detailCardContainer">{<FlightDetailCard />}</div>
+      {flights &&
+        filteredDataPresent.originFlights &&
+        filteredDataPresent.returnFlights &&
+        searchFlightData.flightType !== TripType.ONE_WAY && (
+          <div className='detailCardContainer'>{<FlightDetailCard />}</div>
         )}
     </div>
   )

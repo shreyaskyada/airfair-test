@@ -2,12 +2,9 @@ import DataCard from '../../widget/DataCard';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect } from 'react';
 import { updateReturnFlights } from '../../redux/slices/flights';
-import {
-  filterAirlines,
-  filterProviders,
-  filterStops,
-  filterTimeRange,
-} from '../../data/utils';
+import { filterAirlines, filterStops, filterTimeRange } from '../../data/utils';
+import { updateFilteredReturnDataLength } from '../../redux/slices/filters';
+import { uploadIsLoading } from '../../redux/slices/app';
 
 const DestinationFlight = (props: any) => {
   const dispatch = useAppDispatch();
@@ -18,10 +15,9 @@ const DestinationFlight = (props: any) => {
     (state) => state.filtersSlice
   );
 
-  console.log('timeRange.returnFlights: ', timeRange.returnFlights);
-  console.log('stops.returnFlights: ', stops.returnFlights);
-
   const { returnFlight } = useAppSelector((state) => state.flight);
+  const { filteredDataPresent } = useAppSelector((state) => state.filtersSlice);
+  const { isLoading } = useAppSelector((state) => state.app);
 
   const { type, selectedKey, onSelectedFlightChange } = props;
 
@@ -31,8 +27,8 @@ const DestinationFlight = (props: any) => {
     show &&= filterAirlines(returnAirlines, el.flightCode);
     if (!show) return false;
 
-    show &&= filterProviders(providers, el.compare);
-    if (!show) return false;
+    // show &&= filterProviders(providers, el.compare);
+    // if (!show) return false;
 
     show &&= filterStops(stops.returnFlights, el.transitFlight);
     if (!show) return false;
@@ -43,12 +39,17 @@ const DestinationFlight = (props: any) => {
   });
 
   useEffect(() => {
-    if (filteredData) {
-      dispatch(updateReturnFlights(filteredData[0]));
+    // if (filteredData.length) {
+    dispatch(updateReturnFlights({ ...filteredData[0] }));
+    // }
+    dispatch(updateFilteredReturnDataLength(filteredData.length > 0));
+    if (!filteredData.length && isLoading) {
+      dispatch(uploadIsLoading(false));
     }
-  }, [providers, returnAirlines, timeRange, stops]);
+  }, [providers, returnAirlines, timeRange, stops, destinationFlights]);
 
-  return (
+  return filteredDataPresent.originFlights &&
+    filteredDataPresent.returnFlights ? (
     <>
       {filteredData?.map((flight: any, index: number) => (
         <DataCard
@@ -86,7 +87,7 @@ const DestinationFlight = (props: any) => {
         />
       ))}
     </>
-  );
+  ) : null;
 };
 
 export default DestinationFlight;

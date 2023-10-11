@@ -1,3 +1,4 @@
+import { IFilters } from '../redux/slices/filters';
 import { Stops, TimeRangesEnum } from './contants';
 
 export const categorizeTime = (time: string) => {
@@ -117,5 +118,25 @@ export const filterTimeRange = (timeRange: string[], depTime: string) => {
   ) {
     return true;
   }
+  return false;
+};
+
+export const checkIfFilterApplied = (filtersSlice: IFilters) => {
+  const { airlines, priceRange, providers, returnAirlines, stops, timeRange } =
+    filtersSlice;
+
+  if (
+    airlines.length ||
+    providers.length ||
+    priceRange.length ||
+    returnAirlines.length ||
+    stops.originFlights.length ||
+    stops.returnFlights.length ||
+    timeRange.originFlights.length ||
+    timeRange.returnFlights.length
+  ) {
+    return true;
+  }
+
   return false;
 };
