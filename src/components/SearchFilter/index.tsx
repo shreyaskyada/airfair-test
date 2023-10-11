@@ -660,10 +660,12 @@ const SearchFilter = ({
                     }}
                   >
                     {showInput.return && (
+                    <>
                       <DatePicker
                         autoFocus
                         open
                         placeholder=''
+                        key={inputValues.departure?.toString()}
                         format='DD-MMM-YY'
                         showTime={false}
                         showToday={false}
@@ -689,6 +691,7 @@ const SearchFilter = ({
                           }))
                         }
                       />
+                      </>
                     )}
                   </Form.Item>
                 </div>

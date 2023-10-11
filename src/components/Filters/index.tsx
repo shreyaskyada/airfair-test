@@ -96,6 +96,8 @@ const Filters = () => {
     <Text style={{ margin: '12px' }}>{label}</Text>
   );
 
+  const colSpan = hasReturnFlight ? 4 : 5;
+
   return (
     <>
       <div
@@ -109,7 +111,7 @@ const Filters = () => {
           wrap={false}
           style={{ margin: 0, justifyContent: 'space-between' }}
         >
-          <Col span={4} className='filters-column mb-1'>
+          {/* <Col span={4} className='filters-column mb-1'>
             {getLabel('Providers')}
             <SelectWithCheckbox
               selectedValues={providers}
@@ -121,9 +123,9 @@ const Filters = () => {
                 label: el,
               }))}
             />
-          </Col>
+          </Col> */}
 
-          <Col span={4} className='filters-column mb-1'>
+          <Col span={colSpan} className='filters-column mb-1'>
             {getLabel('Price Range')}
             <SelectWithSlider
               min={minPrice}
@@ -145,7 +147,7 @@ const Filters = () => {
             />
           </Col>
 
-          <Col span={4} className='filters-column mb-1'>
+          <Col span={colSpan} className='filters-column mb-1'>
             {getLabel('Stops')}
             <SelectWithSlots
               options={stopsOptions}
@@ -194,7 +196,7 @@ const Filters = () => {
             />
           </Col>
 
-          <Col span={4} className='filters-column mb-1'>
+          <Col span={colSpan} className='filters-column mb-1'>
             {getLabel('Time Range')}
             <SelectWithSlots
               mobilePlaceholder='Times'
@@ -245,7 +247,7 @@ const Filters = () => {
             />
           </Col>
 
-          <Col span={4} className='filters-column mb-1'>
+          <Col span={colSpan} className='filters-column mb-1'>
             {getLabel('Depart Airlines')}
             <SelectWithCheckbox
               defaultValue={airlines}
@@ -263,7 +265,7 @@ const Filters = () => {
           </Col>
 
           {hasReturnFlight && (
-            <Col span={4} className='filters-column mb-1'>
+            <Col span={colSpan} className='filters-column mb-1'>
               {getLabel('Return Airlines')}
               <SelectWithCheckbox
                 mobilePlaceholder='Return'

@@ -28,7 +28,7 @@ const SelectWithCheckbox: FC<SelectWithCheckboxProps> = ({
 
   useEffect(() => {
     setValue(selectedValues);
-  }, [isOpen]);
+  }, [isOpen, selectedValues]);
 
   useEffect(() => {
     const windowWidth = window.innerWidth;
