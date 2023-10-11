@@ -340,6 +340,14 @@ const SearchFilter = ({
         origin === 'home' ? 'searchSection' : 'searchSectionFlightPage'
       }
     >
+      {origin === 'home' ? (
+        <div className='moving-text-container'>
+          <Title level={4} className='moving-text'>
+            Signup Now and Update Profile to get best deals on your Credit /
+            Debit Cards
+          </Title>
+        </div>
+      ) : null}
       <div
         className={
           origin === 'home'
@@ -571,6 +579,18 @@ const SearchFilter = ({
                             departure: value || dayjs(),
                           }));
                           dispatch(updateDepartureDate(value || dayjs()));
+                          const diff = value?.diff(inputValues.return);
+                          if (value && diff && diff > 0) {
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              return: value,
+                            }));
+                            dispatch(
+                              updateReturnDate(
+                                value || (inputValues && inputValues.departure)
+                              )
+                            );
+                          }
 
                           if (
                             inputValues &&

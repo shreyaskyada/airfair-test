@@ -2,7 +2,12 @@ import DataCard from '../../widget/DataCard';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useEffect } from 'react';
 import { updateReturnFlights } from '../../redux/slices/flights';
-import { filterAirlines, filterStops, filterTimeRange } from '../../data/utils';
+import {
+  filterAirlines,
+  filterPrices,
+  filterStops,
+  filterTimeRange,
+} from '../../data/utils';
 import { updateFilteredReturnDataLength } from '../../redux/slices/filters';
 import { uploadIsLoading } from '../../redux/slices/app';
 
@@ -11,9 +16,8 @@ const DestinationFlight = (props: any) => {
   const { destinationFlights } = useAppSelector(
     (state) => state.destinationFlight
   );
-  const { providers, returnAirlines, stops, timeRange } = useAppSelector(
-    (state) => state.filtersSlice
-  );
+  const { providers, returnAirlines, stops, timeRange, priceRange } =
+    useAppSelector((state) => state.filtersSlice);
 
   const { returnFlight } = useAppSelector((state) => state.flight);
   const { filteredDataPresent } = useAppSelector((state) => state.filtersSlice);
@@ -31,6 +35,9 @@ const DestinationFlight = (props: any) => {
     // if (!show) return false;
 
     show &&= filterStops(stops.returnFlights, el.transitFlight);
+    if (!show) return false;
+
+    show &&= filterPrices(priceRange, el.compare, el.cheapestFare);
     if (!show) return false;
 
     show &&= filterTimeRange(timeRange.returnFlights, el.depTime);

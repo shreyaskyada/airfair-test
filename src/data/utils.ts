@@ -59,15 +59,15 @@ export const filterPrices = (
   compare: { [key: string]: any },
   cheapestFare: number
 ) => {
-  let maxPrice = -1;
+  // let maxPrice = -1;
 
-  Object.keys(compare).forEach((p) => {
-    maxPrice = Math.max(
-      maxPrice,
-      compare[p]?.fare?.totalFareAfterDiscount +
-        compare[p]?.fare?.convenienceFee
-    );
-  });
+  // Object.keys(compare).forEach((p) => {
+  //   maxPrice = Math.max(
+  //     maxPrice,
+  //     compare[p]?.fare?.totalFareAfterDiscount +
+  //       compare[p]?.fare?.convenienceFee
+  //   );
+  // });
 
   const minPrice = cheapestFare;
 
@@ -75,10 +75,11 @@ export const filterPrices = (
     !priceRange.length ||
     (priceRange.length &&
       minPrice >= priceRange[0] &&
-      minPrice <= priceRange[1]) ||
-    (priceRange.length &&
-      maxPrice >= priceRange[0] &&
-      maxPrice <= priceRange[1])
+      minPrice <= priceRange[1])
+    //  ||
+    // (priceRange.length &&
+    //   maxPrice >= priceRange[0] &&
+    //   maxPrice <= priceRange[1])
   ) {
     return true;
   }
