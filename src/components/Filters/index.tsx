@@ -126,7 +126,7 @@ const Filters = () => {
           </Col> */}
 
           <Col span={colSpan} className='filters-column mb-1'>
-            {getLabel(!hasReturnFlight ? 'Price Range' : 'One Way Price Range')}
+            {getLabel(!hasReturnFlight ? 'Price Range' : 'One Way Price')}
             <SelectWithSlider
               min={minPrice}
               max={maxPrice}
