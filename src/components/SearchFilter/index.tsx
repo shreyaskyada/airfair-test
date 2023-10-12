@@ -559,6 +559,7 @@ const SearchFilter = ({
                       left: '0px',
                       width: '100%',
                       zIndex: !showInput.departure ? -1 : 1,
+                      backgroundColor: '#fff',
                     }}
                   >
                     {showInput.departure && (
@@ -677,6 +678,7 @@ const SearchFilter = ({
                       left: '0px',
                       width: '100%',
                       zIndex: !showInput.return ? -1 : 1,
+                      backgroundColor: '#fff',
                     }}
                   >
                     {showInput.return && (
