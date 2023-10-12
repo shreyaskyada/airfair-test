@@ -579,7 +579,7 @@ const FlightDetailPage = () => {
                         style={{ width: "100px" }}
                       >
                         <Link to={provideDetail.url} target="_blank">
-                          View Detail
+                          View Deal
                         </Link>
                       </button>
                     </div>

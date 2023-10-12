@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { ISearchFlights } from "../../redux/slices/searchFlights"
 import { updateDepartFlights } from "../../redux/slices/flights"
 import { useDispatch } from "react-redux"
+import { TripType } from "../../data/contants"
 
 interface Props {
   checked?: boolean
@@ -90,18 +91,18 @@ const DataCard = (props: Props) => {
   return (
     <div
       className={
-        searchFlightData && searchFlightData.flightType === "ONE_WAY"
+        searchFlightData && searchFlightData.flightType === TripType.ONE_WAY
           ? "detailCard"
           : "roundTripDetailCard"
       }
       style={
-        searchFlightData && searchFlightData.flightType === "ONE_WAY"
+        searchFlightData && searchFlightData.flightType === TripType.ONE_WAY
           ? { border: checked ? "1px solid #4E6F7B" : "" }
           : {}
       }
     >
       <div className="cardContainer">
-        {searchFlightData && searchFlightData.flightType !== "ONE_WAY" && (
+        {searchFlightData && searchFlightData.flightType !== TripType.ONE_WAY && (
           <div className="radioButtonContainer">
             <input
               ref={ref}
@@ -265,7 +266,7 @@ const DataCard = (props: Props) => {
                 </div>
               )}
             </div>
-            {searchFlightData && searchFlightData.flightType === "ONE_WAY" && (
+            {searchFlightData && searchFlightData.flightType === TripType.ONE_WAY && (
               <button
                 className="headerButtons filled"
                 style={{ marginTop: "0.5rem", height: "34px" }}
