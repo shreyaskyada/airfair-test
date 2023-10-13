@@ -700,8 +700,9 @@ const SearchFilter = ({
                           showTime={false}
                           showToday={false}
                           size='large'
-                          defaultValue={inputValues && inputValues.return}
+                          // defaultValue={inputValues && inputValues.return}
                           style={{ height: '78px', width: '100%' }}
+                          value={inputValues && inputValues.return}
                           disabledDate={disableReturnDates}
                           onChange={(value) => {
                             setInputValues((prevState: any) => ({
