@@ -216,7 +216,7 @@ const SearchFilter = ({
 
           dispatch(uploadIsLoading(false));
 
-          dispatch(resetFilters())
+          dispatch(resetFilters());
 
           redirectRoute && navigate(redirectRoute);
         })
@@ -582,15 +582,15 @@ const SearchFilter = ({
                           dispatch(updateDepartureDate(value || dayjs()));
                           const diff = value?.diff(inputValues.return);
                           if (value && diff && diff > 0) {
-                            setInputValues((prevState: any) => ({
-                              ...prevState,
-                              return: value,
-                            }));
                             dispatch(
                               updateReturnDate(
                                 value || (inputValues && inputValues.departure)
                               )
                             );
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              return: value,
+                            }));
                           }
 
                           if (
@@ -624,9 +624,17 @@ const SearchFilter = ({
                 bodyStyle={{ padding: '8px' }}
                 onClick={() => {
                   form.setFieldValue('type', 'round-trip');
+                  const diff = inputValues.departure?.diff(inputValues.return);
+                  console.log('DIFFere', diff);
+                  let returnDate = inputValues.return;
+                  if (inputValues.departure && diff && diff > 0) {
+                    returnDate = inputValues.departure;
+                    dispatch(updateReturnDate(returnDate));
+                  }
                   setInputValues((prevState: any) => ({
                     ...prevState,
                     type: 'round-trip',
+                    return: returnDate,
                   }));
                   setShowInput((prevState) => ({ ...prevState, return: true }));
                   dispatch(updateFlightType('round-trip'));
@@ -682,37 +690,37 @@ const SearchFilter = ({
                     }}
                   >
                     {showInput.return && (
-                    <>
-                      <DatePicker
-                        autoFocus
-                        open
-                        placeholder=''
-                        key={inputValues.departure?.toString()}
-                        format='DD-MMM-YY'
-                        showTime={false}
-                        showToday={false}
-                        size='large'
-                        defaultValue={inputValues && inputValues.return}
-                        style={{ height: '78px', width: '100%' }}
-                        disabledDate={disableReturnDates}
-                        onChange={(value) => {
-                          setInputValues((prevState: any) => ({
-                            ...prevState,
-                            return: value,
-                          }));
-                          dispatch(
-                            updateReturnDate(
-                              value || (inputValues && inputValues.departure)
-                            )
-                          );
-                        }}
-                        onBlur={() =>
-                          setShowInput((prevState: any) => ({
-                            ...prevState,
-                            return: false,
-                          }))
-                        }
-                      />
+                      <>
+                        <DatePicker
+                          autoFocus
+                          open
+                          placeholder=''
+                          key={inputValues.departure?.toString()}
+                          format='DD-MMM-YY'
+                          showTime={false}
+                          showToday={false}
+                          size='large'
+                          defaultValue={inputValues && inputValues.return}
+                          style={{ height: '78px', width: '100%' }}
+                          disabledDate={disableReturnDates}
+                          onChange={(value) => {
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              return: value,
+                            }));
+                            dispatch(
+                              updateReturnDate(
+                                value || (inputValues && inputValues.departure)
+                              )
+                            );
+                          }}
+                          onBlur={() =>
+                            setShowInput((prevState: any) => ({
+                              ...prevState,
+                              return: false,
+                            }))
+                          }
+                        />
                       </>
                     )}
                   </Form.Item>
