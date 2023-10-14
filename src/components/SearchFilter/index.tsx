@@ -560,6 +560,7 @@ const SearchFilter = ({
                       left: '0px',
                       width: '100%',
                       zIndex: !showInput.departure ? -1 : 1,
+                      backgroundColor: '#fff',
                     }}
                   >
                     {showInput.departure && (
@@ -582,15 +583,15 @@ const SearchFilter = ({
                           dispatch(updateDepartureDate(value || dayjs()));
                           const diff = value?.diff(inputValues.return);
                           if (value && diff && diff > 0) {
-                            setInputValues((prevState: any) => ({
-                              ...prevState,
-                              return: value,
-                            }));
                             dispatch(
                               updateReturnDate(
                                 value || (inputValues && inputValues.departure)
                               )
                             );
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              return: value,
+                            }));
                           }
 
                           if (
@@ -624,9 +625,17 @@ const SearchFilter = ({
                 bodyStyle={{ padding: '8px' }}
                 onClick={() => {
                   form.setFieldValue('type', 'round-trip');
+                  const diff = inputValues.departure?.diff(inputValues.return);
+                  console.log('DIFFere', diff);
+                  let returnDate = inputValues.return;
+                  if (inputValues.departure && diff && diff > 0) {
+                    returnDate = inputValues.departure;
+                    dispatch(updateReturnDate(returnDate));
+                  }
                   setInputValues((prevState: any) => ({
                     ...prevState,
                     type: 'round-trip',
+                    return: returnDate,
                   }));
                   setShowInput((prevState) => ({ ...prevState, return: true }));
                   dispatch(updateFlightType('round-trip'));
@@ -678,6 +687,7 @@ const SearchFilter = ({
                       left: '0px',
                       width: '100%',
                       zIndex: !showInput.return ? -1 : 1,
+                      backgroundColor: '#fff',
                     }}
                   >
                     {showInput.return && (
@@ -691,9 +701,42 @@ const SearchFilter = ({
                           showTime={false}
                           showToday={false}
                           size='large'
-                          defaultValue={inputValues && inputValues.return}
+                          // defaultValue={inputValues && inputValues.return}
                           style={{ height: '78px', width: '100%' }}
+                          value={inputValues && inputValues.return}
                           disabledDate={disableReturnDates}
+                          inputRender={(props) => {
+                            const inputDate = dayjs(
+                              props.value as string,
+                              'DD-MMM-YY'
+                            );
+                            console.log('props.value', props.value);
+                            console.log('inputDate', inputDate?.toString());
+                            console.log(
+                              'inputValues.return',
+                              inputValues.return?.toString()
+                            );
+
+                            let returnDate = (props.value as string)?.trim()
+                              ? inputDate
+                              : inputValues.return
+                              ? inputValues.return
+                              : inputValues.departure;
+                            const diff = inputValues.departure?.diff(returnDate);
+                            console.log('diff', diff);
+                            if (inputValues.departure && diff && diff > 0) {
+                              returnDate = inputValues.departure;
+                            }
+                            console.log('returnDate:', returnDate?.toString());
+
+                            return (
+                              <input
+                                {...props}
+                                value={returnDate?.format('DD-MMM-YY')}
+                                title={returnDate?.format('DD-MMM-YY')}
+                              />
+                            );
+                          }}
                           onChange={(value) => {
                             setInputValues((prevState: any) => ({
                               ...prevState,
