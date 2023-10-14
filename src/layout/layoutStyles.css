@@ -23,6 +23,13 @@
     background-color: var(--secondary-color);
 }
 
+.headerButtons.disabled {
+    background-color: var(--light-color);
+    border: 1px solid var(--dark-color);
+    cursor: default;
+    color: var(--bg-light-color);
+}
+
 .menuButton {
     display: none;
 }
