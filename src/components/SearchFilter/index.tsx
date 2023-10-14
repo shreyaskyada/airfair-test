@@ -48,6 +48,7 @@ import './searchFilterStyles.css';
 import { notification } from '../Notification/customNotification';
 import { TripType } from '../../data/contants';
 import { resetFilters } from '../../redux/slices/filters';
+import { compareProvidersAndFilter } from '../../data/utils';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -198,7 +199,7 @@ const SearchFilter = ({
 
           let data = flightsToFilter.filter((value: any) => {
             let providers = Object.keys(value.compare);
-            return compareArrays(departProviders, providers);
+            return compareProvidersAndFilter(departProviders, providers);
           });
 
           console.log('data', data);
@@ -216,7 +217,7 @@ const SearchFilter = ({
 
           dispatch(uploadIsLoading(false));
 
-          dispatch(resetFilters())
+          dispatch(resetFilters());
 
           redirectRoute && navigate(redirectRoute);
         })
@@ -680,37 +681,37 @@ const SearchFilter = ({
                     }}
                   >
                     {showInput.return && (
-                    <>
-                      <DatePicker
-                        autoFocus
-                        open
-                        placeholder=''
-                        key={inputValues.departure?.toString()}
-                        format='DD-MMM-YY'
-                        showTime={false}
-                        showToday={false}
-                        size='large'
-                        defaultValue={inputValues && inputValues.return}
-                        style={{ height: '78px', width: '100%' }}
-                        disabledDate={disableReturnDates}
-                        onChange={(value) => {
-                          setInputValues((prevState: any) => ({
-                            ...prevState,
-                            return: value,
-                          }));
-                          dispatch(
-                            updateReturnDate(
-                              value || (inputValues && inputValues.departure)
-                            )
-                          );
-                        }}
-                        onBlur={() =>
-                          setShowInput((prevState: any) => ({
-                            ...prevState,
-                            return: false,
-                          }))
-                        }
-                      />
+                      <>
+                        <DatePicker
+                          autoFocus
+                          open
+                          placeholder=''
+                          key={inputValues.departure?.toString()}
+                          format='DD-MMM-YY'
+                          showTime={false}
+                          showToday={false}
+                          size='large'
+                          defaultValue={inputValues && inputValues.return}
+                          style={{ height: '78px', width: '100%' }}
+                          disabledDate={disableReturnDates}
+                          onChange={(value) => {
+                            setInputValues((prevState: any) => ({
+                              ...prevState,
+                              return: value,
+                            }));
+                            dispatch(
+                              updateReturnDate(
+                                value || (inputValues && inputValues.departure)
+                              )
+                            );
+                          }}
+                          onBlur={() =>
+                            setShowInput((prevState: any) => ({
+                              ...prevState,
+                              return: false,
+                            }))
+                          }
+                        />
                       </>
                     )}
                   </Form.Item>

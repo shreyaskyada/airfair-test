@@ -141,3 +141,10 @@ export const checkIfFilterApplied = (filtersSlice: IFilters) => {
 
   return false;
 };
+
+export const compareProvidersAndFilter = (
+  array1: string[],
+  array2: string[]
+) => {
+  return array1.some((a) => array2.includes(a));
+};

@@ -15,7 +15,7 @@ import { noResult } from "../assets/images"
 import { ISearchFlights } from "../redux/slices/searchFlights"
 import Filters from "../components/Filters"
 import { TripType } from "../data/contants"
-import { checkIfFilterApplied } from "../data/utils"
+import { checkIfFilterApplied, compareProvidersAndFilter } from "../data/utils"
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -67,7 +67,7 @@ const FlightsListingPage = () => {
     if (departFlight && flightsToFilter.length) {
       let data = flightsToFilter.filter((value: any) => {
         let providers = Object.keys(value.compare)
-        return compareArrays(departProviders, providers)
+        return compareProvidersAndFilter(departProviders, providers)
       })
       console.log("data", data)
       data && data.length && updateDestinationFlights(data)
@@ -93,29 +93,30 @@ const FlightsListingPage = () => {
 
     let data = flightsListToFilter.filter((value: any) => {
       let providers = Object.keys(value.compare)
-      return compareArrays(selectedFlightProvider, providers)
+      const ret = compareProvidersAndFilter(selectedFlightProvider, providers)
+      return ret
     })
 
     let filteredFlights = data
-    if (selectedFlightProvider.length === 1) {
-      filteredFlights = []
-      for (let x of data) {
-        let temp = { ...x }
-        let comparedata = temp.compare[selectedFlightProvider[0]]
-        temp.compare = {
-          [selectedFlightProvider[0]]: comparedata
-        }
-        temp.cheapestFare = comparedata.fare.totalFareAfterDiscount
-        temp.cheapestProvider = {
-          providerCode: [selectedFlightProvider[0]],
-          cheapest: true,
-          providerName: null,
-          providerRank: 0,
-          fare: null
-        }
-        filteredFlights.push(temp)
-      }
-    }
+    // if (selectedFlightProvider.length === 1) {
+    //   filteredFlights = []
+    //   for (let x of data) {
+    //     let temp = { ...x }
+    //     let comparedata = temp.compare[selectedFlightProvider[0]]
+    //     temp.compare = {
+    //       [selectedFlightProvider[0]]: comparedata
+    //     }
+    //     temp.cheapestFare = comparedata.fare.totalFareAfterDiscount
+    //     temp.cheapestProvider = {
+    //       providerCode: [selectedFlightProvider[0]],
+    //       cheapest: true,
+    //       providerName: null,
+    //       providerRank: 0,
+    //       fare: null
+    //     }
+    //     filteredFlights.push(temp)
+    //   }
+    // }
     return filteredFlights
   }
 
