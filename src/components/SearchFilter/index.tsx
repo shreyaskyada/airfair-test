@@ -704,6 +704,38 @@ const SearchFilter = ({
                           style={{ height: '78px', width: '100%' }}
                           value={inputValues && inputValues.return}
                           disabledDate={disableReturnDates}
+                          inputRender={(props) => {
+                            const inputDate = dayjs(
+                              props.value as string,
+                              'DD-MMM-YY'
+                            );
+                            console.log('props.value', props.value);
+                            console.log('inputDate', inputDate?.toString());
+                            console.log(
+                              'inputValues.return',
+                              inputValues.return?.toString()
+                            );
+
+                            let returnDate = (props.value as string)?.trim()
+                              ? inputDate
+                              : inputValues.return
+                              ? inputValues.return
+                              : inputValues.departure;
+                            const diff = inputValues.departure?.diff(returnDate);
+                            console.log('diff', diff);
+                            if (inputValues.departure && diff && diff > 0) {
+                              returnDate = inputValues.departure;
+                            }
+                            console.log('returnDate:', returnDate?.toString());
+
+                            return (
+                              <input
+                                {...props}
+                                value={returnDate?.format('DD-MMM-YY')}
+                                title={returnDate?.format('DD-MMM-YY')}
+                              />
+                            );
+                          }}
                           onChange={(value) => {
                             setInputValues((prevState: any) => ({
                               ...prevState,
