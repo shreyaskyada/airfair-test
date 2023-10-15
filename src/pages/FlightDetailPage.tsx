@@ -507,7 +507,8 @@ const FlightDetailPage = () => {
     provideDetail: any,
     index: number,
     showCheapest: boolean = false,
-    disableViewBtn: boolean = false
+    disableViewBtn: boolean = false,
+    label?: string
   ) => {
     return (
       <div
@@ -516,6 +517,17 @@ const FlightDetailPage = () => {
       >
         <div className='leftCol'>
           <div>
+            {label && (
+              <p
+                style={{
+                  color: '#4E6F7B',
+                  fontSize: '0.8rem',
+                  marginBottom: '5px',
+                }}
+              >
+                {label}
+              </p>
+            )}
             <div
               style={{
                 display: 'flex',
@@ -731,28 +743,32 @@ const FlightDetailPage = () => {
                   style={{ width: '100%' }}
                 />
               )}
-              {!!departProviderWithOffers.length && (
-                <>
-                  <Divider plain>{`One Way Depart Flight${
-                    departProviderWithOffers.length > 1 ? 's' : ''
-                  }`}</Divider>
-                  {departProviderWithOffers.map(
-                    (provideDetail: any, index: number) =>
-                      renderProvider(provideDetail, index, false, true)
-                  )}
-                </>
-              )}
-              {!!returnProviderWithOffers.length && (
-                <>
-                  <Divider plain>{`One Way Return Flight${
-                    returnProviderWithOffers.length > 1 ? 's' : ''
-                  }`}</Divider>
-                  {returnProviderWithOffers.map(
-                    (provideDetail: any, index: number) =>
-                      renderProvider(provideDetail, index, false, true)
-                  )}
-                </>
-              )}
+              {!!departProviderWithOffers.length &&
+                departProviderWithOffers.map(
+                  (provideDetail: any, index: number) =>
+                    renderProvider(
+                      provideDetail,
+                      index,
+                      false,
+                      true,
+                      `This is one-way Flight from ${
+                        (searchFlightData.initialValues as any)?.from.city
+                      }`
+                    )
+                )}
+              {!!returnProviderWithOffers.length &&
+                returnProviderWithOffers.map(
+                  (provideDetail: any, index: number) =>
+                    renderProvider(
+                      provideDetail,
+                      index,
+                      false,
+                      true,
+                      `This is one-way Flight from ${
+                        (searchFlightData.initialValues as any)?.to.city
+                      }`
+                    )
+                )}
             </div>
           </div>
         </div>

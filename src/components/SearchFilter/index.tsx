@@ -388,11 +388,14 @@ const SearchFilter = ({
                       setInputValues((prevState: any) => ({
                         ...prevState,
                         type: 'round-trip',
-                        return: inputValues && inputValues.departure,
+                        return:
+                          inputValues && inputValues.departure?.add(1, 'day'),
                       }));
                       dispatch(updateFlightType('round-trip'));
                       dispatch(
-                        updateReturnDate(inputValues && inputValues.departure)
+                        updateReturnDate(
+                          inputValues && inputValues.departure?.add(1, 'day')
+                        )
                       );
                     }}
                     style={{ color: '#013042' }}
@@ -583,14 +586,14 @@ const SearchFilter = ({
                           dispatch(updateDepartureDate(value || dayjs()));
                           const diff = value?.diff(inputValues.return);
                           if (value && diff && diff > 0) {
-                            dispatch(
-                              updateReturnDate(
-                                value || (inputValues && inputValues.departure)
-                              )
-                            );
+                            const retDt = (
+                              value ||
+                              (inputValues && inputValues.departure)
+                            ).add(1, 'day');
+                            dispatch(updateReturnDate(retDt));
                             setInputValues((prevState: any) => ({
                               ...prevState,
-                              return: value,
+                              return: retDt,
                             }));
                           }
 
@@ -598,10 +601,11 @@ const SearchFilter = ({
                             inputValues &&
                             inputValues.type === 'round-trip'
                           ) {
-                            dispatch(updateReturnDate(value && value));
+                            const retDt = value?.add(1, 'day');
+                            dispatch(updateReturnDate(retDt));
                             setInputValues((prevState: any) => ({
                               ...prevState,
-                              return: value || dayjs(),
+                              return: retDt,
                             }));
                           }
                         }}
@@ -629,7 +633,7 @@ const SearchFilter = ({
                   console.log('DIFFere', diff);
                   let returnDate = inputValues.return;
                   if (inputValues.departure && diff && diff > 0) {
-                    returnDate = inputValues.departure;
+                    returnDate = inputValues.departure?.add(1, 'day');
                     dispatch(updateReturnDate(returnDate));
                   }
                   setInputValues((prevState: any) => ({
@@ -722,7 +726,8 @@ const SearchFilter = ({
                               : inputValues.return
                               ? inputValues.return
                               : inputValues.departure;
-                            const diff = inputValues.departure?.diff(returnDate);
+                            const diff =
+                              inputValues.departure?.diff(returnDate);
                             console.log('diff', diff);
                             if (inputValues.departure && diff && diff > 0) {
                               returnDate = inputValues.departure;
@@ -744,7 +749,9 @@ const SearchFilter = ({
                             }));
                             dispatch(
                               updateReturnDate(
-                                value || (inputValues && inputValues.departure)
+                                value ||
+                                  (inputValues &&
+                                    inputValues.departure?.add(1, 'day'))
                               )
                             );
                           }}
