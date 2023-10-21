@@ -28,6 +28,7 @@ import {
   updateInitialValues,
 } from '../redux/slices/searchFlights';
 import { notification } from '../components/Notification/customNotification';
+import { TripType } from '../data/contants';
 
 const { Title, Text } = Typography;
 const { Footer: FooterLayout } = Layout;
@@ -94,7 +95,7 @@ const Footer = () => {
         dispatch(updateOriginFlights(res.flightCompareResponse));
         dispatch(updateDestinationFlights(res.returnJourneyCompareResponse));
         dispatch(updateDepartFlights(res.flightCompareResponse[0]));
-        dispatch(updateFlightType('ONE_WAY'));
+        dispatch(updateFlightType(TripType.ONE_WAY));
         dispatch(updateReturnFlights({}));
         dispatch(updateInitialValues(searchedData));
         dispatch(uploadIsLoading(false));

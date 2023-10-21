@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-interface CompareFlightCompanyDetails {
+export interface CompareFlightCompanyDetails {
     fare?: {
         baseFare?: number
         tax?: number

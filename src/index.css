@@ -93,3 +93,12 @@ body {
 .go-to-id {
     text-decoration: underline;
 }
+
+
+.mb-1 {
+    margin-bottom: 1rem;
+}
+
+.w-full {
+    width: 100%;
+}

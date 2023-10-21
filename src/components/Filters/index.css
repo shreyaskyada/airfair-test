@@ -1,0 +1,27 @@
+.filters-select {
+    width: fit-content !important;
+    max-width: 400px !important;
+}
+
+.filters-column {
+    min-width: 175px;
+}
+
+.rounded-select .ant-select-selector {
+    border-radius: 1000px;
+    padding-left: 10px;
+}
+
+.filter-button:not([disabled]) {
+    background-color: var(--secondary-color);
+}
+
+.filter-button:not([disabled]):hover {
+    background-color: var(--secondary-color) !important;
+}
+
+@media only screen and (max-width: 600px) {
+    .rounded-select .ant-select-arrow {
+        display: none;
+    }
+}

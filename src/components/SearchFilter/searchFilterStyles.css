@@ -5,6 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .searchSectionFlightPage {
@@ -65,6 +66,12 @@
     font-weight: bold;
 }
 
+.moving-text-container {
+    width: 100%;
+    overflow: hidden;
+    padding-top: 10px;
+}
+
 .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
     border-color: #4E6F7B;
     background-color: #4E6F7B;
@@ -89,6 +96,10 @@
 @media only screen and (max-width: 860px) {
     .searchBarContainer {
         margin: 1.3rem .4rem;
+    }
+
+    .moving-text-container {
+        padding-top: 20px;
     }
 
     .searchSectionFlightPage, .searchSection {
@@ -288,5 +299,21 @@
         grid-column-end: 1;
         grid-row-start: 5;
         grid-row-end: 5;
+    }
+}
+
+.moving-text {
+    white-space: nowrap;
+    animation: moveBackAndForth 12s linear infinite;
+    color: red!important;
+}
+
+@keyframes moveBackAndForth {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-85%);
     }
 }
