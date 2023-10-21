@@ -578,7 +578,7 @@ export const Airlines_Data = [
   },
   {
     name:"CemAir",
-    iamge:CEM_AIR
+    image:CEM_AIR
   },
   {
     name:"Chalair",
@@ -670,7 +670,7 @@ export const Airlines_Data = [
   },
   {
     name:"EVA Air",
-    images:EVA_AIR
+    image:EVA_AIR
   },
   {
     name:"Finnair",
