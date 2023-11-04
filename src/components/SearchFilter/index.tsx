@@ -48,7 +48,11 @@ import './searchFilterStyles.css';
 import { notification } from '../Notification/customNotification';
 import { TripType } from '../../data/contants';
 import { resetFilters } from '../../redux/slices/filters';
-import { compareProvidersAndFilter } from '../../data/utils';
+import {
+  capitalizeFirstLetter,
+  compareProvidersAndFilter,
+} from '../../data/utils';
+import { airplaneIcon } from '../../assets/images';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -273,11 +277,49 @@ const SearchFilter = ({
     setShowInput((prevState) => ({ ...prevState, ...updatedValues }));
   };
 
+  const getDropdownLabel = (airport: any) => (
+    <div className='flex-center' style={{ paddingRight: '10px' }}>
+      <img
+        src={airplaneIcon}
+        alt='plane'
+        style={{ width: '20px', marginRight: '5px' }}
+      />
+      <div
+        style={{
+          flexGrow: 1,
+          flexWrap: 'wrap',
+          overflowWrap: 'break-word',
+        }}
+      >
+        <p className='fieldLabel' style={{ whiteSpace: 'normal' }}>
+          {airport.city}, {capitalizeFirstLetter(airport.country)}
+        </p>
+        <p
+          className='fieldSubTitle'
+          style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}
+        >
+          {airport.airportName}
+        </p>
+      </div>
+      <p
+        className='fieldSubTitle'
+        style={{
+          fontWeight: 'bold',
+          width: '25px',
+          marginLeft: '5px',
+        }}
+      >
+        {airport.airportCd}
+      </p>
+    </div>
+  );
+
   useEffect(() => {
     if (showInput.from) {
       getAirportsWrapper(inputValues.from.code)
         .then((data: any) => {
           const airports = data.airportList?.map((airport: any) => ({
+            label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
           }));
           setFromOptions(airports);
@@ -303,6 +345,7 @@ const SearchFilter = ({
       getAirportsWrapper(inputValues.to.code)
         .then((data: any) => {
           const airports = data.airportList?.map((airport: any) => ({
+            label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
           }));
           setToOptions(airports);

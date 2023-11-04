@@ -148,3 +148,17 @@ export const compareProvidersAndFilter = (
 ) => {
   return array1.some((a) => array2.includes(a));
 };
+
+export const capitalizeFirstLetter = (str: string) => {
+  return str
+    .split(' ')
+    .map((el) => el.trim())
+    .filter((el) => el)
+    .map((el) => {
+      if (el.length > 2) {
+        return el[0].toUpperCase() + el.substring(1).toLowerCase();
+      }
+      return el;
+    })
+    .join(' ');
+};
