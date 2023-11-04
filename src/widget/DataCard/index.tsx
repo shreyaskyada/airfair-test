@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
-import { Button, Card, Space, Tag } from "antd"
+import { Button, Card, Space, Tag, Modal } from "antd"
 import { DownOutlined, UpOutlined } from "@ant-design/icons"
 import * as _ from "lodash"
 import { airlineMapping } from "../../services/airports"
@@ -12,6 +12,7 @@ import { ISearchFlights } from "../../redux/slices/searchFlights"
 import { updateDepartFlights } from "../../redux/slices/flights"
 import { useDispatch } from "react-redux"
 import { TripType } from "../../data/contants"
+import SendEmailCard from "../../components/Modals/SendEmailCard"
 
 interface Props {
   checked?: boolean
@@ -68,6 +69,7 @@ const DataCard = (props: Props) => {
   const [flightNames, setFlightNames] = useState<string[]>([])
   const [flightImage, setFlightImage] = useState<any>(null)
   const ref = useRef(null)
+  const [showModal, setShowModal] = useState(false)
 
   const navigate = useNavigate()
 
@@ -272,6 +274,9 @@ const DataCard = (props: Props) => {
                 style={{ marginTop: "0.5rem", height: "34px" }}
                 onClick={() => {
                     dispatch(updateDepartFlights({}))
+                    if (searchFlightData.totalTravellers > 9) {
+                      setShowModal(true);
+                    } else {
                     onSelectedFlightChange(ref.current)
                     //setTimeout(()=>{
                       navigate(
@@ -279,6 +284,7 @@ const DataCard = (props: Props) => {
                           `${flight.route.from}-${flight.route.to}` +
                           `-${flight.company}-${flight.totalTime}-${flight.schedule.departure}`
                       )
+                    }
                     // },1100)
                 }}
               >
@@ -288,6 +294,17 @@ const DataCard = (props: Props) => {
           </div>
         </div>
       </div>
+      <Modal
+        open={showModal}
+        centered
+        footer={null}
+        closable={false}
+        zIndex={1003}
+        onCancel={()=>setShowModal(false)}
+        width="350px"
+      >
+        <SendEmailCard key={new Date().toString()} onCancel={() => setShowModal(false)} />
+      </Modal>
     </div>
   )
 }
