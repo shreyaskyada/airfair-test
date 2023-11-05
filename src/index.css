@@ -119,3 +119,7 @@ body {
 .input-number {
     -moz-appearance: textfield;
 }
+
+.mb-0{
+    margin-bottom: 0 !important;
+}

@@ -53,6 +53,7 @@ import {
   compareProvidersAndFilter,
 } from '../../data/utils';
 import { airplaneIcon } from '../../assets/images';
+import CustomAutoComplete from '../shared/CustomAutoComplete';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -543,24 +544,23 @@ const SearchFilter = ({
                     }}
                   >
                     {showInput.from && (
-                      <AutoComplete
-                        autoFocus
-                        allowClear
-                        style={{ width: '100%', height: 'calc(100% - 20px)' }}
-                        defaultValue=''
-                        placeholder='From field'
+                      <CustomAutoComplete
                         onSearch={_.debounce(fromLocationSearchHandler, 500)}
                         onSelect={fromLocationSearchHandler}
                         options={fromOptions}
-                        open
-                      >
-                        <TextArea
-                          onBlur={() => {
-                            textAreaClearHandler({ from: false });
-                          }}
-                          autoSize={{ minRows: 5, maxRows: 8 }}
-                        />
-                      </AutoComplete>
+                        onBlur={() => {
+                          textAreaClearHandler({ from: false });
+                        }}
+                        onOpen={() => {
+                          setFromOptions([
+                            popularCityLabel,
+                            ...popularFlightsArr.map((airport: any) => ({
+                              label: getDropdownLabel(airport),
+                              value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+                            })),
+                          ]);
+                        }}
+                      />
                     )}
                   </Form.Item>
                 </div>
@@ -598,24 +598,23 @@ const SearchFilter = ({
                     }}
                   >
                     {showInput.to && (
-                      <AutoComplete
-                        autoFocus
-                        allowClear
-                        style={{ width: '100%', height: 'calc(100% - 20px)' }}
-                        defaultValue=''
-                        placeholder='To field'
+                      <CustomAutoComplete
                         onSearch={_.debounce(toLocationSearchHandler, 500)}
                         onSelect={toLocationSearchHandler}
                         options={toOptions}
-                        open
-                      >
-                        <TextArea
-                          onBlur={() => {
-                            textAreaClearHandler({ to: false });
-                          }}
-                          autoSize={{ minRows: 5, maxRows: 8 }}
-                        />
-                      </AutoComplete>
+                        onBlur={() => {
+                          textAreaClearHandler({ to: false });
+                        }}
+                        onOpen={() => {
+                          setToOptions([
+                            popularCityLabel,
+                            ...popularFlightsArr.map((airport: any) => ({
+                              label: getDropdownLabel(airport),
+                              value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+                            })),
+                          ]);
+                        }}
+                      />
                     )}
                   </Form.Item>
                 </div>

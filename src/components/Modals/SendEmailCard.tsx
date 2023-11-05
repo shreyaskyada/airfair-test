@@ -1,6 +1,13 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Space } from 'antd';
+import { useAppSelector } from '../../redux/hooks';
+import { ISearchFlights } from '../../redux/slices/searchFlights';
 
 const SendEmailCard: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
+  const searchFlightData = useAppSelector(
+    (state: { searchFlights: ISearchFlights }) => state.searchFlights
+  );
+  const { userDetails } = useAppSelector((state) => state.app);
+
   const [form] = Form.useForm();
 
   const phoneValidator = (rule: any, value: any, callback: any) => {
@@ -52,7 +59,18 @@ const SendEmailCard: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
       </h4>
       <Form
         name='basic'
-        initialValues={{ remember: true }}
+        initialValues={{
+          name:
+            (userDetails.firstName + ' ' + userDetails.lastName).trim() || '',
+          email: userDetails.email?.trim() || '',
+          phone: userDetails.phoneNo?.trim() || '',
+          passenger: {
+            adult: (searchFlightData.initialValues as any)?.adult || '',
+            child: (searchFlightData.initialValues as any)?.child || '',
+            infant: (searchFlightData.initialValues as any)?.infant || '',
+          },
+          remark: '',
+        }}
         style={{
           width: '100%',
         }}
@@ -92,20 +110,61 @@ const SendEmailCard: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
           />
         </Form.Item>
 
-        <Form.Item
-          name='passengers'
-          rules={[
-            { required: true, message: 'Please enter passengers count!' },
-            {
-              validator: passengerValidator,
-            },
-          ]}
-        >
-          <Input
-            type='number'
-            className='input-number'
-            placeholder='Passengers Count'
-          />
+        <Form.Item className='mb-0'>
+          <Space.Compact>
+            <Form.Item
+              name={['passenger', 'adult']}
+              rules={[
+                { required: true, message: 'Please enter adult count!' },
+                {
+                  validator: passengerValidator,
+                },
+              ]}
+              style={{
+                flexGrow: 1,
+              }}
+            >
+              <Input
+                type='number'
+                className='input-number'
+                placeholder='Adult Count'
+              />
+            </Form.Item>
+            <Form.Item
+              name={['passenger', 'child']}
+              rules={[
+                {
+                  validator: passengerValidator,
+                },
+              ]}
+              style={{
+                flexGrow: 1,
+              }}
+            >
+              <Input
+                type='number'
+                className='input-number'
+                placeholder='Child Count'
+              />
+            </Form.Item>
+            <Form.Item
+              name={['passenger', 'infant']}
+              rules={[
+                {
+                  validator: passengerValidator,
+                },
+              ]}
+              style={{
+                flexGrow: 1,
+              }}
+            >
+              <Input
+                type='number'
+                className='input-number'
+                placeholder='Infant Count'
+              />
+            </Form.Item>
+          </Space.Compact>
         </Form.Item>
 
         <Form.Item name='remark'>
