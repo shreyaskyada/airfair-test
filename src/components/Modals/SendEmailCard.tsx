@@ -3,6 +3,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { ISearchFlights } from '../../redux/slices/searchFlights';
 import { groupBookingConfig } from '../../services/api/urlConstants';
 import backendService from '../../services/api';
+import { notification } from '../Notification/customNotification';
 
 const SendEmailCard: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
   const searchFlightData = useAppSelector(
@@ -49,10 +50,17 @@ const SendEmailCard: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
     return backendService
       .request(config)
       .then((res) => {
-        console.log('RESSSS:', res);
+        notification.success({
+          message:
+            'Group Booking Request Raised Successfully. Our Team will contact you within 24-48 hours.',
+        });
+        onCancel();
         return res;
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        notification.error({ message: err.data || 'Server Error' });
+      });
   };
 
   return (
