@@ -1,6 +1,8 @@
 import { Button, Form, Input, Space } from 'antd';
 import { useAppSelector } from '../../redux/hooks';
 import { ISearchFlights } from '../../redux/slices/searchFlights';
+import { groupBookingConfig } from '../../services/api/urlConstants';
+import backendService from '../../services/api';
 
 const SendEmailCard: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
   const searchFlightData = useAppSelector(
@@ -42,6 +44,15 @@ const SendEmailCard: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
 
   const onFinish = (values: any) => {
     console.log('VALUES', values);
+
+    const config = groupBookingConfig(values);
+    return backendService
+      .request(config)
+      .then((res) => {
+        console.log('RESSSS:', res);
+        return res;
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
