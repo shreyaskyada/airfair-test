@@ -46,9 +46,14 @@ import {
 } from '../../redux/slices/searchFlights';
 import './searchFilterStyles.css';
 import { notification } from '../Notification/customNotification';
-import { TripType } from '../../data/contants';
+import { TripType, popularFlightsArr } from '../../data/contants';
 import { resetFilters } from '../../redux/slices/filters';
-import { compareProvidersAndFilter } from '../../data/utils';
+import {
+  capitalizeFirstLetter,
+  compareProvidersAndFilter,
+} from '../../data/utils';
+import { airplaneIcon } from '../../assets/images';
+import CustomAutoComplete from '../shared/CustomAutoComplete';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -99,6 +104,58 @@ function compareArrays(array1: any, array2: any) {
   return true;
 }
 
+const getDropdownLabel = (airport: any) => (
+  <div className='flex-center' style={{ paddingRight: '10px' }}>
+    <img
+      src={airplaneIcon}
+      alt='plane'
+      style={{ width: '20px', marginRight: '5px' }}
+    />
+    <div
+      style={{
+        flexGrow: 1,
+        flexWrap: 'wrap',
+        overflowWrap: 'break-word',
+      }}
+    >
+      <p className='fieldLabel' style={{ whiteSpace: 'normal' }}>
+        {airport.city}, {capitalizeFirstLetter(airport.country)}
+      </p>
+      <p
+        className='fieldSubTitle'
+        style={{ wordWrap: 'break-word', whiteSpace: 'normal' }}
+      >
+        {airport.airportName}
+      </p>
+    </div>
+    <p
+      className='fieldSubTitle'
+      style={{
+        fontWeight: 'bold',
+        width: '25px',
+        marginLeft: '5px',
+      }}
+    >
+      {airport.airportCd}
+    </p>
+  </div>
+);
+
+const popularCityLabel = {
+  label: (
+    <p
+      className='fieldSubTitle'
+      style={{
+        fontWeight: 'bold',
+        marginLeft: '5px',
+      }}
+    >
+      Popular Cities
+    </p>
+  ),
+  value: '',
+};
+
 const SearchFilter = ({
   redirectRoute = '',
   origin,
@@ -114,8 +171,20 @@ const SearchFilter = ({
   );
   const [form] = Form.useForm();
   const [inputValues, setInputValues] = useState<any>(_initialValues);
-  const [fromOptions, setFromOptions] = useState([]);
-  const [toOptions, setToOptions] = useState([]);
+  const [fromOptions, setFromOptions] = useState([
+    popularCityLabel,
+    ...popularFlightsArr.map((airport: any) => ({
+      label: getDropdownLabel(airport),
+      value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+    })),
+  ]);
+  const [toOptions, setToOptions] = useState([
+    popularCityLabel,
+    ...popularFlightsArr.map((airport: any) => ({
+      label: getDropdownLabel(airport),
+      value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+    })),
+  ]);
   const [showInput, setShowInput] = useState({
     from: false,
     to: false,
@@ -232,41 +301,63 @@ const SearchFilter = ({
   };
 
   const fromLocationSearchHandler = (value: string) => {
-    const [airportCode, airportCity, airportName] = value.split('-');
-    dispatch(
-      updateFromSearchValues({
-        code: airportCode,
-        city: airportCity,
-        name: airportName,
-      })
-    );
-    setInputValues((prevState: any) => ({
-      ...prevState,
-      from: { code: airportCode, city: airportCity, name: airportName },
-    }));
-    setFormValues((prevState) => ({
-      ...prevState,
-      from: value,
-    }));
+    if (value) {
+      const [airportCode, airportCity, airportName] = value.split('-');
+      dispatch(
+        updateFromSearchValues({
+          code: airportCode,
+          city: airportCity,
+          name: airportName,
+        })
+      );
+      setInputValues((prevState: any) => ({
+        ...prevState,
+        from: { code: airportCode, city: airportCity, name: airportName },
+      }));
+      setFormValues((prevState) => ({
+        ...prevState,
+        from: value,
+      }));
+    } else {
+      textAreaClearHandler({ from: false });
+      setFromOptions([
+        popularCityLabel,
+        ...popularFlightsArr.map((airport: any) => ({
+          label: getDropdownLabel(airport),
+          value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+        })),
+      ]);
+    }
   };
 
   const toLocationSearchHandler = (value: string) => {
-    const [airportCode, airportCity, airportName] = value.split('-');
-    dispatch(
-      updateToSearchValues({
-        code: airportCode,
-        city: airportCity,
-        name: airportName,
-      })
-    );
-    setInputValues((prevState: any) => ({
-      ...prevState,
-      to: { code: airportCode, city: airportCity, name: airportName },
-    }));
-    setFormValues((prevState) => ({
-      ...prevState,
-      to: value,
-    }));
+    if (value) {
+      const [airportCode, airportCity, airportName] = value.split('-');
+      dispatch(
+        updateToSearchValues({
+          code: airportCode,
+          city: airportCity,
+          name: airportName,
+        })
+      );
+      setInputValues((prevState: any) => ({
+        ...prevState,
+        to: { code: airportCode, city: airportCity, name: airportName },
+      }));
+      setFormValues((prevState) => ({
+        ...prevState,
+        to: value,
+      }));
+    } else {
+      textAreaClearHandler({ to: false });
+      setToOptions([
+        popularCityLabel,
+        ...popularFlightsArr.map((airport: any) => ({
+          label: getDropdownLabel(airport),
+          value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+        })),
+      ]);
+    }
   };
 
   const textAreaClearHandler = (updatedValues: any) => {
@@ -277,9 +368,16 @@ const SearchFilter = ({
     if (showInput.from) {
       getAirportsWrapper(inputValues.from.code)
         .then((data: any) => {
-          const airports = data.airportList?.map((airport: any) => ({
+          const listData = data.airportList?.length
+            ? data.airportList
+            : popularFlightsArr;
+          const airports = listData?.map((airport: any) => ({
+            label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
           }));
+          if (!data.airportList?.length) {
+            airports.unshift(popularCityLabel);
+          }
           setFromOptions(airports);
         })
         .catch((err) => console.error(err));
@@ -302,9 +400,16 @@ const SearchFilter = ({
     if (showInput.to) {
       getAirportsWrapper(inputValues.to.code)
         .then((data: any) => {
-          const airports = data.airportList?.map((airport: any) => ({
+          const listData = data.airportList?.length
+            ? data.airportList
+            : popularFlightsArr;
+          const airports = listData?.map((airport: any) => ({
+            label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
           }));
+          if (!data.airportList?.length) {
+            airports.unshift(popularCityLabel);
+          }
           setToOptions(airports);
         })
         .catch((err) => console.error(err));
@@ -439,23 +544,23 @@ const SearchFilter = ({
                     }}
                   >
                     {showInput.from && (
-                      <AutoComplete
-                        autoFocus
-                        allowClear
-                        style={{ width: '100%', height: 'calc(100% - 20px)' }}
-                        defaultValue=''
-                        placeholder='From field'
+                      <CustomAutoComplete
                         onSearch={_.debounce(fromLocationSearchHandler, 500)}
                         onSelect={fromLocationSearchHandler}
                         options={fromOptions}
-                      >
-                        <TextArea
-                          onBlur={() => {
-                            textAreaClearHandler({ from: false });
-                          }}
-                          autoSize={{ minRows: 5, maxRows: 8 }}
-                        />
-                      </AutoComplete>
+                        onBlur={() => {
+                          textAreaClearHandler({ from: false });
+                        }}
+                        onOpen={() => {
+                          setFromOptions([
+                            popularCityLabel,
+                            ...popularFlightsArr.map((airport: any) => ({
+                              label: getDropdownLabel(airport),
+                              value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+                            })),
+                          ]);
+                        }}
+                      />
                     )}
                   </Form.Item>
                 </div>
@@ -493,23 +598,23 @@ const SearchFilter = ({
                     }}
                   >
                     {showInput.to && (
-                      <AutoComplete
-                        autoFocus
-                        allowClear
-                        style={{ width: '100%', height: 'calc(100% - 20px)' }}
-                        defaultValue=''
-                        placeholder='To field'
+                      <CustomAutoComplete
                         onSearch={_.debounce(toLocationSearchHandler, 500)}
                         onSelect={toLocationSearchHandler}
                         options={toOptions}
-                      >
-                        <TextArea
-                          onBlur={() => {
-                            textAreaClearHandler({ to: false });
-                          }}
-                          autoSize={{ minRows: 5, maxRows: 8 }}
-                        />
-                      </AutoComplete>
+                        onBlur={() => {
+                          textAreaClearHandler({ to: false });
+                        }}
+                        onOpen={() => {
+                          setToOptions([
+                            popularCityLabel,
+                            ...popularFlightsArr.map((airport: any) => ({
+                              label: getDropdownLabel(airport),
+                              value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+                            })),
+                          ]);
+                        }}
+                      />
                     )}
                   </Form.Item>
                 </div>

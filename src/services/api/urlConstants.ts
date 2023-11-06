@@ -238,3 +238,19 @@ export const sendOTPConfig = (
     },
   }
 }
+
+export const groupBookingConfig = (data: any) => {
+  return {
+    url: `email`,
+    method: 'POST',
+    baseURL: 'https://gateway.mytripsaver.in',
+    data: {
+      subject: 'New Group Booking Query',
+      to: 'info@tripsaverz.in',
+      text: data,
+    },
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+};

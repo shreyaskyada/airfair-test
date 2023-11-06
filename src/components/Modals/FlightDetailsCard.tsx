@@ -13,6 +13,7 @@ import {
   Grid,
   Dropdown,
   MenuProps,
+  Modal,
 } from 'antd';
 import * as _ from 'lodash';
 import dayjs from 'dayjs';
@@ -33,6 +34,7 @@ import { ISearchFlights } from '../../redux/slices/searchFlights';
 import { Airlines_Images } from '../../data/popularAirlines';
 import { useDimensions } from '../../hooks/useDimensions';
 import { TripType } from '../../data/contants';
+import SendEmailCard from './SendEmailCard';
 
 const { Text, Title } = Typography;
 const { Meta } = Card;
@@ -125,6 +127,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   const providerListRef = useRef<HTMLDivElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
   const rightColRef = useRef<HTMLDivElement>(null);
+  const [showModal, setShowModal] = useState(false);
 
   const { flightDetails, userDetails } = useAppSelector((state) => state.app);
 
@@ -950,6 +953,10 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               <button
                 onClick={() => {
                   //dispatch(updateFlightDetails(true))
+                  if (searchFlightData.totalTravellers > 9) {
+                    setShowModal(true);
+                    return;
+                  }
                   navigate(
                     '/flights/' +
                       `${departFlight.from}-${departFlight.to}` +
@@ -964,6 +971,20 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           </div>
         </div>
       </div>
+      <Modal
+        open={showModal}
+        centered
+        footer={null}
+        closable={false}
+        zIndex={1003}
+        onCancel={() => setShowModal(false)}
+        width='350px'
+      >
+        <SendEmailCard
+          key={new Date().toString()}
+          onCancel={() => setShowModal(false)}
+        />
+      </Modal>
     </>
   );
 
