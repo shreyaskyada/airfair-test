@@ -85,6 +85,8 @@ const DestinationFlight = (props: any) => {
             route: {
               from: flight.fromCity,
               to: flight.toCity,
+              toCode: flight.to,
+              fromCode: flight.from,
             },
             partners: Object.entries(flight.compare).map((item: any) => ({
               price: item[1].fare.totalFareAfterDiscount.toString(),

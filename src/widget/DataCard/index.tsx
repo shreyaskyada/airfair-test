@@ -43,6 +43,8 @@ interface Props {
     route: {
       from: string
       to: string
+      fromCode: string
+      toCode: string
     }
     partners: {
       price: string
@@ -180,9 +182,9 @@ const DataCard = (props: Props) => {
               </p> */}
 
               <div className="flightCity" style={{ fontWeight: "bold" }}>
-                <p>{flight.route.from}</p>
+                <p>{`${flight.route.fromCode}, ${flight.route.from}`}</p>
                 <p className="flightTotalTime">{flight.totalTime}</p>
-                <p>{flight.route.to}</p>
+                <p>{`${flight.route.toCode}, ${flight.route.to}`}</p>
               </div>
               {/* <p className="flightRoute">
                 {flight.route.from} - {flight.route.to}

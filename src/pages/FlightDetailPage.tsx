@@ -436,9 +436,9 @@ const FlightDetailPage = () => {
           </div>
         </div>
         <div className='flightCity' style={{ fontWeight: 'bold' }}>
-          <p>{city?.from}</p>
+          <p>{`${city?.fromCode}, ${city?.from}`}</p>
           <p>{duration}</p>
-          <p>{city?.to}</p>
+          <p>{`${city?.toCode}, ${city?.to}`}</p>
         </div>
         <div className='terminalContainer' style={{ fontWeight: 'bold' }}>
           <p>
@@ -791,7 +791,9 @@ const FlightDetailPage = () => {
                   flightCode: departFlight.flightCode,
                   city: {
                     from: departFlight.fromCity,
+                    fromCode: departFlight.from,
                     to: departFlight.toCity,
+                    toCode: departFlight.to,
                   },
                   stop: departFlight.stops,
                   seatingClass: departFlight.seatingClass,
@@ -845,6 +847,11 @@ const FlightDetailPage = () => {
                             ? departFlight.fromCity
                             : departFlight?.transitFlight &&
                               departFlight?.transitFlight[index - 1]?.viaCity,
+                        fromCode:
+                          index === 0
+                            ? departFlight.from
+                            : departFlight?.transitFlight &&
+                              departFlight?.transitFlight[index - 1]?.viaAirportCode,
                         to:
                           index !==
                           (departFlight.startTimeList &&
@@ -852,6 +859,13 @@ const FlightDetailPage = () => {
                             ? departFlight?.transitFlight &&
                               departFlight?.transitFlight[index]?.viaCity
                             : departFlight.toCity,
+                        toCode:
+                          index !==
+                          (departFlight.startTimeList &&
+                            departFlight.startTimeList.length - 1)
+                            ? departFlight?.transitFlight &&
+                              departFlight?.transitFlight[index]?.viaAirportCode
+                            : departFlight.to,
                       },
                       stop: departFlight.stops,
                       seatingClass: departFlight.seatingClass,
@@ -911,6 +925,8 @@ const FlightDetailPage = () => {
                     city: {
                       from: returnFlight.fromCity,
                       to: returnFlight.toCity,
+                      fromCode: returnFlight.from,
+                      toCode: returnFlight.to,
                     },
                     stop: returnFlight.stops,
                     seatingClass: departFlight.seatingClass,
@@ -965,6 +981,11 @@ const FlightDetailPage = () => {
                               ? returnFlight.fromCity
                               : returnFlight?.transitFlight &&
                                 returnFlight?.transitFlight[index - 1]?.viaCity,
+                          fromCode:
+                            index === 0
+                              ? returnFlight.from
+                              : returnFlight?.transitFlight &&
+                                returnFlight?.transitFlight[index - 1]?.viaAirportCode,
                           to:
                             index !==
                             (returnFlight.startTimeList &&
@@ -972,6 +993,13 @@ const FlightDetailPage = () => {
                               ? returnFlight?.transitFlight &&
                                 returnFlight?.transitFlight[index]?.viaCity
                               : returnFlight.toCity,
+                          toCode:
+                            index !==
+                            (returnFlight.startTimeList &&
+                              returnFlight.startTimeList.length - 1)
+                              ? returnFlight?.transitFlight &&
+                                returnFlight?.transitFlight[index]?.viaAirportCode
+                              : returnFlight.to,
                         },
                         stop: returnFlight.stops,
                         cabinBaggage:
