@@ -30,7 +30,7 @@ const FlightDetailPage = () => {
 
   const { userDetails } = useAppSelector((state) => state.app);
 
-  const { departFlight, returnFlight } = useAppSelector(
+  const { departFlight, returnFlight, internationalFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
   );
 
@@ -508,7 +508,7 @@ const FlightDetailPage = () => {
     index: number,
     showCheapest: boolean = false,
     disableViewBtn: boolean = false,
-    label?: string
+    label?: string | boolean
   ) => {
     return (
       <div
@@ -737,7 +737,7 @@ const FlightDetailPage = () => {
                   renderProvider(provideDetail, index, true)
                 )
               ) : (
-                <Skeleton.Input
+                !internationalFlight && <Skeleton.Input
                   active={true}
                   size='large'
                   style={{ width: '100%' }}
@@ -751,7 +751,7 @@ const FlightDetailPage = () => {
                       index,
                       false,
                       true,
-                      `This is one-way Flight from ${
+                      !internationalFlight && `This is one-way Flight from ${
                         (searchFlightData.initialValues as any)?.from.city
                       }`
                     )
@@ -764,7 +764,7 @@ const FlightDetailPage = () => {
                       index,
                       false,
                       true,
-                      `This is one-way Flight from ${
+                      !internationalFlight && `This is one-way Flight from ${
                         (searchFlightData.initialValues as any)?.to.city
                       }`
                     )

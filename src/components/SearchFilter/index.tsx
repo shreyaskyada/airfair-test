@@ -24,6 +24,7 @@ import backendService from '../../services/api';
 import {
   updateDepartFlights,
   updateFlights,
+  updateInternationalFlights,
   updateReturnFlights,
 } from '../../redux/slices/flights';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -258,37 +259,54 @@ const SearchFilter = ({
       backendService
         .request(config)
         .then((res: any) => {
-          dispatch(updateFlights(res));
-          dispatch(updateOriginFlights(res.flightCompareResponse));
+          console.log('RES', res);
+          if (res.internationalReturnJourneyCompareResponse) {
+            dispatch(
+              updateInternationalFlights(
+                res.internationalReturnJourneyCompareResponse
+              )
+            );
 
-          const departProviders = Object.keys(
-            res.flightCompareResponse[0].compare || {}
-          );
-          const flightsToFilter = res.returnJourneyCompareResponse || [];
+            dispatch(updateSaarchFlights(searchFlightData));
 
-          let data = flightsToFilter.filter((value: any) => {
-            let providers = Object.keys(value.compare);
-            return compareProvidersAndFilter(departProviders, providers);
-          });
+            dispatch(uploadIsLoading(false));
 
-          console.log('data', data);
+            dispatch(resetFilters());
 
-          dispatch(updateDestinationFlights(data));
+            redirectRoute && navigate(redirectRoute);
+          } else {
+            dispatch(updateFlights(res));
+            dispatch(updateOriginFlights(res.flightCompareResponse));
 
-          dispatch(updateDepartFlights(res.flightCompareResponse[0]));
+            const departProviders = Object.keys(
+              res.flightCompareResponse[0].compare || {}
+            );
+            const flightsToFilter = res.returnJourneyCompareResponse || [];
 
-          isRoundTrip
-            ? dispatch(updateReturnFlights(data[0]))
-            : dispatch(updateReturnFlights({}));
+            let data = flightsToFilter.filter((value: any) => {
+              let providers = Object.keys(value.compare);
+              return compareProvidersAndFilter(departProviders, providers);
+            });
 
-          dispatch(updateSaarchFlights(searchFlightData));
-          //dispatch(uploadIsLoading(false))
+            console.log('data', data);
 
-          dispatch(uploadIsLoading(false));
+            dispatch(updateDestinationFlights(data));
 
-          dispatch(resetFilters());
+            dispatch(updateDepartFlights(res.flightCompareResponse[0]));
 
-          redirectRoute && navigate(redirectRoute);
+            isRoundTrip
+              ? dispatch(updateReturnFlights(data[0]))
+              : dispatch(updateReturnFlights({}));
+
+            dispatch(updateSaarchFlights(searchFlightData));
+            //dispatch(uploadIsLoading(false))
+
+            dispatch(uploadIsLoading(false));
+
+            dispatch(resetFilters());
+
+            redirectRoute && navigate(redirectRoute);
+          }
         })
         .catch((err) => {
           console.error(err);
