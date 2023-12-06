@@ -167,10 +167,13 @@ const FlightsListingPage = () => {
       <div className='flightSearch'>
         <SearchFilter redirectRoute='' />
       </div>
-      {flights && Object.keys(flights).length > 0 && <Filters />}
+      {((flights && Object.keys(flights).length > 0) ||
+        internationalFlight) && <Filters />}
       {(!filteredDataPresent.originFlights ||
         !filteredDataPresent.returnFlights ||
-        (flights && Object.keys(flights).length <= 0)) && (
+        (flights &&
+          Object.keys(flights).length <= 0 &&
+          !internationalFlight)) && (
         <div className='notFoundContainer'>
           <img
             style={{ width: '100px' }}

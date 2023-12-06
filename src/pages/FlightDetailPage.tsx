@@ -929,7 +929,7 @@ const FlightDetailPage = () => {
                       toCode: returnFlight.to,
                     },
                     stop: returnFlight.stops,
-                    seatingClass: departFlight.seatingClass,
+                    seatingClass: returnFlight.seatingClass,
                     cabinBaggage:
                       returnFlight.cabinBaggage && returnFlight.cabinBaggage[0],
                     checkinBaggage:
@@ -975,6 +975,7 @@ const FlightDetailPage = () => {
                           returnFlight.arrivalTerminalList &&
                           returnFlight.arrivalTerminalList[index],
                         flightCode: returnFlight.flightCode,
+                        seatingClass: returnFlight.seatingClass,
                         city: {
                           from:
                             index === 0

@@ -64,7 +64,7 @@ const InternationDataCard = (props: any) => {
         .split('H')
         .join('H ')
         .toLocaleLowerCase();
-      return `${time} in ${cities[0].viaCity}`;
+      return `${time} in ${cities[0]?.viaCity}`;
     }
     return '';
   };

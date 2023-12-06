@@ -32,19 +32,28 @@ const Filters = () => {
   const { airlines, providers, returnAirlines, timeRange, stops, priceRange } =
     useAppSelector((state) => state.filtersSlice);
 
+  const {
+    internationalFlight,
+  }: {
+    internationalFlight: any;
+  } = useAppSelector((state) => state.flight);
+
   let airlineOptions: string[] = [];
   let providersOptions: string[] = [];
   let returnAirlineOptions: string[] = [];
   let minPrice = Number.MAX_SAFE_INTEGER;
   let maxPrice = -1;
 
-  originFlights.forEach((flight: any) => {
+  (originFlights && originFlights.length > 0
+    ? originFlights
+    : internationalFlight
+  ).forEach((flight: any) => {
+    let flightCode = flight.flightCode;
+    if (internationalFlight) {
+      flightCode = flightCode.split(':')[0] || '';
+    }
     airlineOptions = airlineOptions.concat(
-      uniq(
-        flight.flightCode
-          ?.split('->')
-          .map((item: string) => item.substring(0, 2))
-      )
+      uniq(flightCode?.split('->').map((item: string) => item.substring(0, 2)))
     );
 
     providersOptions = providersOptions.concat(Object.keys(flight.compare));
@@ -62,13 +71,16 @@ const Filters = () => {
     maxPrice = Math.max(maxPrice, ...allMaxPrices);
   });
 
-  destinationFlights.forEach((flight: any) => {
+  (destinationFlights && destinationFlights.length
+    ? destinationFlights
+    : internationalFlight
+  ).forEach((flight: any) => {
+    let flightCode = flight.flightCode;
+    if (internationalFlight) {
+      flightCode = flightCode.split(':')[1] || '';
+    }
     returnAirlineOptions = returnAirlineOptions.concat(
-      uniq(
-        flight.flightCode
-          ?.split('->')
-          .map((item: string) => item.substring(0, 2))
-      )
+      uniq(flightCode?.split('->').map((item: string) => item.substring(0, 2)))
     );
   });
 
@@ -156,8 +168,12 @@ const Filters = () => {
               mobilePlaceholder='Stops'
               placeholder='Select Stops'
               hasReturn={hasReturnFlight}
-              originLabel='Departure from Delhi'
-              returnLabel='Departure from Mumbai'
+              originLabel={`Departure from ${
+                (searchFlightData.initialValues as any)?.from.city
+              }`}
+              returnLabel={`Departure from ${
+                (searchFlightData.initialValues as any)?.to.city
+              } `}
               selectLabel={
                 stops.originFlights.length || stops.returnFlights.length ? (
                   <>
@@ -205,8 +221,12 @@ const Filters = () => {
               selectedValues={timeRange}
               hasReturn={hasReturnFlight}
               placeholder='Select Time Range'
-              originLabel='Departure from Delhi'
-              returnLabel='Departure from Mumbai'
+              originLabel={`Departure from ${
+                (searchFlightData.initialValues as any)?.from.city
+              }`}
+              returnLabel={`Departure from ${
+                (searchFlightData.initialValues as any)?.to.city
+              } `}
               selectLabel={
                 timeRange.originFlights.length ||
                 timeRange.returnFlights.length ? (
