@@ -50,7 +50,7 @@ const Filters = () => {
   ).forEach((flight: any) => {
     let flightCode = flight.flightCode;
     if (internationalFlight) {
-      flightCode = flightCode.split(':')[0] || '';
+      flightCode = flightCode?.split(':')[0] || '';
     }
     airlineOptions = airlineOptions.concat(
       uniq(flightCode?.split('->').map((item: string) => item.substring(0, 2)))
@@ -74,7 +74,7 @@ const Filters = () => {
   (destinationFlights && destinationFlights.length
     ? destinationFlights
     : internationalFlight
-  ).forEach((flight: any) => {
+  )?.forEach((flight: any) => {
     let flightCode = flight.flightCode;
     if (internationalFlight) {
       flightCode = flightCode.split(':')[1] || '';

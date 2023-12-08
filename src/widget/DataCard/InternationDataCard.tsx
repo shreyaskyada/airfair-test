@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { uniq } from 'lodash';
 import { Airlines_Images } from '../../data/popularAirlines';
 import { airlineMapping } from '../../services/airports';
-import { Modal, Tag } from 'antd';
+import { Col, Modal, Row, Tag } from 'antd';
 import { airplaneIcon } from '../../assets/images';
 import SendEmailCard from '../../components/Modals/SendEmailCard';
 import { ISearchFlights } from '../../redux/slices/searchFlights';
@@ -70,11 +70,14 @@ const InternationDataCard = (props: any) => {
   };
 
   return (
-    <div className='roundTripDetailCard'>
+    <div className='roundTripDetailCard' style={{ height: 'auto' }}>
       <div className='cardContainer'>
-        <div className='flightInfoSection'>
+        <div className='flightInfoSection' style={{ flex: '1 1 0' }}>
           <div className='flightNamesSection'>
-            <div className='flightImageSection' style={{ marginRight: '10px' }}>
+            <div
+              className='flightImageSection'
+              style={{ marginRight: '10px', marginBottom: '15px' }}
+            >
               <img
                 src={flightImage ? flightImage : ''}
                 style={{ width: '100%', height: '100%' }}
@@ -87,66 +90,198 @@ const InternationDataCard = (props: any) => {
                 </p>
               </div>
             </div>
-            <div className='flightDetailSection' style={{ marginLeft: '20px' }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}
+            <Row className='flightDetailSection' style={{ marginLeft: '20px' }}>
+              <Col
+                md={12}
+                xs={24}
+                className='flightTimeDetail'
+                style={{ margin: '0.5rem 0', padding: '0 10px' }}
               >
-                <div style={{ textAlign: 'left' }}>
-                  <div
-                    className='flightTimeDetail'
-                    style={{ margin: '0.5rem 0' }}
-                  >
-                    <div
-                      className='flightTime'
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        gap: '10px',
-                      }}
-                    >
-                      <h3>{outboundFlight.depTime}</h3>
-                      <span>-</span>
-                      <h3>{outboundFlight.arrTime}</h3>
-                    </div>
-                  </div>
-
+                <div
+                  className='flightTime'
+                  style={{
+                    gap: '10px',
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
                   <div
                     className='flightCity'
                     style={{
-                      fontWeight: 'bold',
-                      display: 'flex',
-                      justifyContent: 'center',
                       gap: '10px',
+                      display: 'flex',
+                      fontWeight: 'bold',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
                     }}
                   >
-                    <p>{`${outboundFlight.from}`}</p>
-                    <span>-</span>
-                    <p>{`${outboundFlight.to}`}</p>
+                    <h3>{outboundFlight.depTime}</h3>
+                    <div className='flightCity'>
+                      <p>{`${outboundFlight.from}`}</p>
+                    </div>
+                  </div>
+                  <div style={{ flex: '1 1 0' }}>
+                    <p
+                      className='flightTotalTime'
+                      style={{
+                        textAlign: 'center',
+                        marginBottom: '10px',
+                        justifyContent: 'center',
+                      }}
+                    >{`${outboundFlight.duration} ${
+                      outboundFlight.stops > 0
+                        ? getStops(outboundFlight.stops)
+                        : '(non-stop)'
+                    }`}</p>
+                    <div className='cityDivider'>
+                      <span
+                        className='circle circle1'
+                        //style={{ background: "#4E6F7B" }}
+                      ></span>
+                      <img
+                        src={airplaneIcon}
+                        alt='aeroplane'
+                        width={25}
+                        height={25}
+                        className='dividerIcon'
+                      />
+                      <div
+                        className='divider'
+                        style={{ borderBottom: '3px dotted #013042' }}
+                      ></div>
+                      <span
+                        className='circle circle2'
+                        //style={{ background: "#4E6F7B" }}
+                      ></span>
+                    </div>
+                    <p
+                      className='flightCity'
+                      style={{ justifyContent: 'center', marginTop: '7px' }}
+                    >
+                      {getLayoverDetails(
+                        outboundFlight.layoverDurationList,
+                        outboundFlight.transitFlight
+                      )}
+                    </p>
+                  </div>
+                  <div
+                    className='flightCity'
+                    style={{
+                      gap: '10px',
+                      display: 'flex',
+                      fontWeight: 'bold',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <h3>{outboundFlight.arrTime}</h3>
+                    <div className='flightCity'>
+                      <p>{`${outboundFlight.to}`}</p>
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <h3
-                    className='flightTotalTime'
-                    style={{ margin: '0.5rem 0' }}
-                  >{`${outboundFlight.duration} ${
-                    outboundFlight.stops > 0
-                      ? getStops(outboundFlight.stops)
-                      : '(non-stop)'
-                  }`}</h3>
-                  <p className='flightCity'>
-                    {getLayoverDetails(
-                      outboundFlight.layoverDurationList,
-                      outboundFlight.transitFlight
-                    )}
-                  </p>
-                </div>
-              </div>
+              </Col>
 
-              <div
+              <Col
+                md={12}
+                xs={24}
+                className='flightTimeDetail'
+                style={{ margin: '0.5rem 0', padding: '0 10px' }}
+              >
+                <div
+                  className='flightTime'
+                  style={{
+                    gap: '10px',
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <div
+                    className='flightCity'
+                    style={{
+                      gap: '10px',
+                      display: 'flex',
+                      fontWeight: 'bold',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <h3>{inboundFlight.depTime}</h3>
+                    <div className='flightCity'>
+                      <p>{`${inboundFlight.from}`}</p>
+                    </div>
+                  </div>
+                  <div style={{ flex: '1 1 0' }}>
+                    <p
+                      className='flightTotalTime'
+                      style={{
+                        textAlign: 'center',
+                        marginBottom: '10px',
+                        justifyContent: 'center',
+                      }}
+                    >{`${inboundFlight.duration} ${
+                      inboundFlight.stops > 0
+                        ? getStops(inboundFlight.stops)
+                        : '(non-stop)'
+                    }`}</p>
+                    <div className='cityDivider'>
+                      <span
+                        className='circle circle1'
+                        //style={{ background: "#4E6F7B" }}
+                      ></span>
+                      <img
+                        src={airplaneIcon}
+                        alt='aeroplane'
+                        width={25}
+                        height={25}
+                        className='dividerIcon'
+                      />
+                      <div
+                        className='divider'
+                        style={{ borderBottom: '3px dotted #013042' }}
+                      ></div>
+                      <span
+                        className='circle circle2'
+                        //style={{ background: "#4E6F7B" }}
+                      ></span>
+                    </div>
+                    <p
+                      className='flightCity'
+                      style={{ justifyContent: 'center', marginTop: '7px' }}
+                    >
+                      {getLayoverDetails(
+                        inboundFlight.layoverDurationList,
+                        inboundFlight.transitFlight
+                      )}
+                    </p>
+                  </div>
+                  <div
+                    className='flightCity'
+                    style={{
+                      gap: '10px',
+                      display: 'flex',
+                      fontWeight: 'bold',
+                      alignItems: 'center',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <h3>{inboundFlight.arrTime}</h3>
+                    <div className='flightCity'>
+                      <p>{`${inboundFlight.to}`}</p>
+                    </div>
+                  </div>
+                </div>
+              </Col>
+
+              {/* <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -202,8 +337,8 @@ const InternationDataCard = (props: any) => {
                     )}
                   </p>
                 </div>
-              </div>
-            </div>
+              </div> */}
+            </Row>
           </div>
         </div>
         <div className='flightPrice'>
