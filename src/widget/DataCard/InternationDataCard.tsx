@@ -12,6 +12,7 @@ import {
   updateDepartFlights,
   updateReturnFlights,
 } from '../../redux/slices/flights';
+import { getStopsLabel } from '../../data/utils';
 
 const InternationDataCard = (props: any) => {
   const {
@@ -57,10 +58,6 @@ const InternationDataCard = (props: any) => {
       );
     }
   }, [flight]);
-
-  const getStops = (s: number) => {
-    return `(${s} stop${s > 1 ? 's' : ''})`;
-  };
 
   const getLayoverDetails = (durationArr: string[], cities: any) => {
     if (durationArr?.length) {
@@ -139,11 +136,9 @@ const InternationDataCard = (props: any) => {
                         marginBottom: '10px',
                         justifyContent: 'center',
                       }}
-                    >{`${outboundFlight.duration} ${
-                      outboundFlight.stops > 0
-                        ? getStops(outboundFlight.stops)
-                        : '(non-stop)'
-                    }`}</p>
+                    >
+                      {getStopsLabel(outboundFlight.stops)}
+                    </p>
                     <div className='cityDivider'>
                       <span
                         className='circle circle1'
@@ -173,10 +168,7 @@ const InternationDataCard = (props: any) => {
                         textAlign: 'center',
                       }}
                     >
-                      {getLayoverDetails(
-                        outboundFlight.layoverDurationList,
-                        outboundFlight.transitFlight
-                      )}
+                      {outboundFlight.duration}
                     </p>
                   </div>
                   <div
@@ -238,11 +230,9 @@ const InternationDataCard = (props: any) => {
                         marginBottom: '10px',
                         justifyContent: 'center',
                       }}
-                    >{`${inboundFlight.duration} ${
-                      inboundFlight.stops > 0
-                        ? getStops(inboundFlight.stops)
-                        : '(non-stop)'
-                    }`}</p>
+                    >
+                      {getStopsLabel(inboundFlight.stops)}
+                    </p>
                     <div className='cityDivider'>
                       <span
                         className='circle circle1'
@@ -272,10 +262,7 @@ const InternationDataCard = (props: any) => {
                         textAlign: 'center',
                       }}
                     >
-                      {getLayoverDetails(
-                        inboundFlight.layoverDurationList,
-                        inboundFlight.transitFlight
-                      )}
+                      {inboundFlight.duration}
                     </p>
                   </div>
                   <div

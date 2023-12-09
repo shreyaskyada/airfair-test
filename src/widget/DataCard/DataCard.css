@@ -117,6 +117,9 @@ input[type='radio']:hover {
 .border-right{
     border-right: 1px solid #c6c6c6;
 }
+.margin-top{
+    margin-top: -19px;
+}
 
 .flightImageAndLabel {
     width: 75px;
@@ -190,6 +193,10 @@ input[type='radio']:hover {
 
     .border-right {
         border-right: 0px;
+    }
+
+    .margin-top{
+        margin-top: 0px
     }
 }
 

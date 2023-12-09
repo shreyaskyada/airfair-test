@@ -84,6 +84,7 @@ const OriginFlight = (props: any) => {
             companyImg: 'string',
             price: flight.cheapestFare.toString(),
             totalTime: flight.duration,
+            stops: flight.stops,
             schedule: {
               departure: flight.depTime,
               arrival: flight.arrTime,
