@@ -114,6 +114,14 @@ input[type='radio']:hover {
     padding-left: 0.5rem;
 }
 
+.border-right{
+    border-right: 1px solid #c6c6c6;
+}
+
+.flightImageAndLabel {
+    width: 75px;
+}
+
 
 @media only screen and (max-width: 1100px) {
     .flightInfoSection, .flightPrice {
@@ -171,6 +179,18 @@ input[type='radio']:hover {
     width: 100%;
 }
 
+.flightImageAndLabel {
+    width: 100%;
+    text-align: center;
+}
+
+}
+
+@media only screen and (max-width: 768px) {
+
+    .border-right {
+        border-right: 0px;
+    }
 }
 
 

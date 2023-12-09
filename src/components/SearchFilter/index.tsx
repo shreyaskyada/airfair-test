@@ -275,6 +275,8 @@ const SearchFilter = ({
 
             redirectRoute && navigate(redirectRoute);
           } else {
+            dispatch(updateInternationalFlights(null));
+
             dispatch(updateFlights(res));
             dispatch(updateOriginFlights(res.flightCompareResponse));
 

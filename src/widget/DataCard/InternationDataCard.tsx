@@ -38,18 +38,23 @@ const InternationDataCard = (props: any) => {
   );
 
   useEffect(() => {
+    const [departFlights, returnFlights] = flightCode.split(':');
+
     const _names = uniq(
-      flightCode
-        .split(':')[0]
+      [departFlights, returnFlights]
+        .join('->')
         ?.split('->')
         .map((item: string) => item.substring(0, 2))
     );
     setFlightNames(_names as string[]);
 
     if (_names.length > 1) {
-      setFlightImage(Airlines_Images[airlineMapping[_names[0] as string]]);
-    } else {
       setFlightImage(Airlines_Images['Multiple Airlines']);
+    } else {
+      setFlightImage(
+        Airlines_Images[airlineMapping[_names[0] as string]] ||
+          Airlines_Images['Multiple Airlines']
+      );
     }
   }, [flight]);
 
@@ -71,16 +76,19 @@ const InternationDataCard = (props: any) => {
 
   return (
     <div className='roundTripDetailCard' style={{ height: 'auto' }}>
-      <div className='cardContainer'>
-        <div className='flightInfoSection' style={{ flex: '1 1 0' }}>
+      <div className='cardContainer' style={{ height: 'auto' }}>
+        <div
+          className='flightInfoSection'
+          style={{ flex: '1 1 0', paddingRight: 0 }}
+        >
           <div className='flightNamesSection'>
             <div
-              className='flightImageSection'
-              style={{ marginRight: '10px', marginBottom: '15px' }}
+              className='flightImageAndLabel'
+              style={{ marginRight: '10px' }}
             >
               <img
                 src={flightImage ? flightImage : ''}
-                style={{ width: '100%', height: '100%' }}
+                className='flightImageSection'
               />
               <div className='nameTime' style={{ marginBottom: '0.5rem' }}>
                 <p className='flightName'>
@@ -90,11 +98,11 @@ const InternationDataCard = (props: any) => {
                 </p>
               </div>
             </div>
-            <Row className='flightDetailSection' style={{ marginLeft: '20px' }}>
+            <Row className='flightDetailSection' style={{ flex: '1 1 0' }}>
               <Col
                 md={12}
                 xs={24}
-                className='flightTimeDetail'
+                className='flightTimeDetail border-right'
                 style={{ margin: '0.5rem 0', padding: '0 10px' }}
               >
                 <div
@@ -125,7 +133,7 @@ const InternationDataCard = (props: any) => {
                   </div>
                   <div style={{ flex: '1 1 0' }}>
                     <p
-                      className='flightTotalTime'
+                      className='flightCity'
                       style={{
                         textAlign: 'center',
                         marginBottom: '10px',
@@ -159,7 +167,11 @@ const InternationDataCard = (props: any) => {
                     </div>
                     <p
                       className='flightCity'
-                      style={{ justifyContent: 'center', marginTop: '7px' }}
+                      style={{
+                        justifyContent: 'center',
+                        marginTop: '7px',
+                        textAlign: 'center',
+                      }}
                     >
                       {getLayoverDetails(
                         outboundFlight.layoverDurationList,
@@ -220,7 +232,7 @@ const InternationDataCard = (props: any) => {
                   </div>
                   <div style={{ flex: '1 1 0' }}>
                     <p
-                      className='flightTotalTime'
+                      className='flightCity'
                       style={{
                         textAlign: 'center',
                         marginBottom: '10px',
@@ -254,7 +266,11 @@ const InternationDataCard = (props: any) => {
                     </div>
                     <p
                       className='flightCity'
-                      style={{ justifyContent: 'center', marginTop: '7px' }}
+                      style={{
+                        justifyContent: 'center',
+                        marginTop: '7px',
+                        textAlign: 'center',
+                      }}
                     >
                       {getLayoverDetails(
                         inboundFlight.layoverDurationList,

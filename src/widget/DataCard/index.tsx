@@ -88,7 +88,10 @@ const DataCard = (props: Props) => {
     if (_names.length > 1) {
       setFlightImage(Airlines_Images["Multiple Airlines"])
     } else {
-      setFlightImage(Airlines_Images[airlineMapping[_names[0]]])
+      setFlightImage(
+        Airlines_Images[airlineMapping[_names[0]]] ||
+          Airlines_Images['Multiple Airlines']
+      );
     }
   }, [flight])
 

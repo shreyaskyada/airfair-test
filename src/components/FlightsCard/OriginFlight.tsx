@@ -24,6 +24,10 @@ const OriginFlight = (props: any) => {
   const filteredData = originFlights?.filter((el: any) => {
     let show = true;
 
+    if (!el.flightCode) {
+      return false;
+    }
+
     show &&= filterAirlines(airlines, el.flightCode);
     if (!show) return false;
 
