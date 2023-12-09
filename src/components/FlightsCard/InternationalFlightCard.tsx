@@ -26,6 +26,10 @@ const InternationalFlightCard = () => {
 
     const flightCode = el.flightCode.split(':');
 
+    if (flightCode[0] === 'null' || flightCode[1] === 'null') {
+      return false;
+    }
+
     if (flightCode[0]) {
       show &&= filterAirlines(airlines, flightCode[0]);
       if (!show) return false;

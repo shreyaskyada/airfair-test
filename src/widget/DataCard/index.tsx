@@ -144,9 +144,11 @@ const DataCard = (props: Props) => {
               </div>
               <div className='nameTime' style={{ marginBottom: '0.5rem' }}>
                 <p className='flightName'>
-                  {flightNames
-                    .map((name) => airlineMapping[name || 'AI'])
-                    .join(', ')}
+                  {flightNames.length > 1
+                    ? 'Multiple Airlines'
+                    : flightNames
+                        .map((name) => airlineMapping[name || 'AI'])
+                        .join(', ')}
                 </p>
                 {/* <p className="flightTime"> {flight.totalTime}</p> */}
               </div>
@@ -161,10 +163,7 @@ const DataCard = (props: Props) => {
                     flex: '1',
                   }}
                 >
-                  <p
-                    style={{ textAlign: 'center' }}
-                    className='flightTotalTime'
-                  >
+                  <p style={{ textAlign: 'center' }}>
                     {getStopsLabel(flight.stops)}
                   </p>
                   <div style={{ margin: '12px 0' }} className='cityDivider'>
@@ -188,12 +187,7 @@ const DataCard = (props: Props) => {
                       //style={{ background: "#4E6F7B" }}
                     ></span>
                   </div>
-                  <p
-                    style={{ textAlign: 'center' }}
-                    className='flightTotalTime'
-                  >
-                    {flight.totalTime}
-                  </p>
+                  <p style={{ textAlign: 'center' }}>{flight.totalTime}</p>
                 </div>
 
                 <div className='flightTime'>
@@ -206,9 +200,10 @@ const DataCard = (props: Props) => {
               </p> */}
 
               <div
-                className='flightCity margin-top'
+                className='flightCity'
                 style={{
                   fontWeight: 'bold',
+                  marginTop: '-19px',
                 }}
               >
                 <p>{`${flight.route.fromCode}, ${flight.route.from}`}</p>

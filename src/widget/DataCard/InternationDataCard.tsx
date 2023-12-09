@@ -89,9 +89,11 @@ const InternationDataCard = (props: any) => {
               />
               <div className='nameTime' style={{ marginBottom: '0.5rem' }}>
                 <p className='flightName'>
-                  {flightNames
-                    .map((name) => airlineMapping[name || 'AI'])
-                    .join(', ')}
+                  {flightNames.length > 1
+                    ? 'Multiple Airlines'
+                    : flightNames
+                        .map((name) => airlineMapping[name || 'AI'])
+                        .join(', ')}
                 </p>
               </div>
             </div>

@@ -361,11 +361,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         <>
           <h4 className='fareHeading'>
             {title === 'depart' ? 'Departure' : 'Return'} |{' '}
-            {_.uniq(
-              flighDetails?.flightCode
-                ?.split('->')
-                .map((item) => item.substring(0, 2))
-            ).map((name, index) => {
+            {_names.length > 1 ? "Multiple Airlines" : _names.map((name, index) => {
               const comma =
                 index !==
                 _.uniq(

@@ -400,7 +400,7 @@ const FlightDetailPage = () => {
           </Avatar> */}
           <div style={{ width: '30px', height: '30px' }}>
             <img
-              src={Airlines_Images[airlineMapping[airLine?.slice(0, 2)]]}
+              src={Airlines_Images[airlineMapping[airLine?.slice(0, 2)]] || Airlines_Images['Multiple Airlines']}
               style={{ width: '100%', height: '100%' }}
             />
           </div>
