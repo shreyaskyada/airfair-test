@@ -30,6 +30,11 @@
     color: var(--bg-light-color);
 }
 
+.headerButtons:hover{
+    border: 1px solid var(--secondary-color) !important;
+    color: var(--primary-color) !important;
+}
+
 .menuButton {
     display: none;
 }

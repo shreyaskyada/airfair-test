@@ -28,3 +28,62 @@ export const timeRangeOptions = [
   { value: TimeRangesEnum.MID_DAY, label: '12PM - 6PM' },
   { value: TimeRangesEnum.NIGHT, label: 'After 6PM' },
 ];
+
+export const popularFlightsArr = [
+  {
+    id: 44,
+    airportCd: 'BOM',
+    city: 'Mumbai',
+    airportName: 'C S M International Airport',
+    country: 'INDIA',
+  },
+  {
+    id: 48,
+    airportCd: 'DEL',
+    city: 'New Delhi',
+    airportName: 'Indira Gandhi International Airport',
+    country: 'INDIA',
+  },
+  {
+    id: 926,
+    airportCd: 'DMK',
+    city: 'Bangkok',
+    airportName: 'Don Mueang International Airport',
+    country: 'Thailand',
+  },
+  {
+    id: 8,
+    airportCd: 'BLR',
+    city: 'Bangalore',
+    airportName: 'Bangalore Airport',
+    country: 'INDIA',
+  },
+  {
+    id: 51,
+    airportCd: 'PNQ',
+    city: 'Pune',
+    airportName: 'Lohegaon Airport',
+    country: 'INDIA',
+  },
+  {
+    id: 92,
+    airportCd: 'MAA',
+    city: 'Chennai',
+    airportName: 'Chennai International Airport',
+    country: 'INDIA',
+  },
+  {
+    id: 13,
+    airportCd: 'CCU',
+    city: 'Kolkata',
+    airportName: 'Netaji S C Bose International Airport',
+    country: 'INDIA',
+  },
+  {
+    id: 24,
+    airportCd: 'GOI',
+    city: 'Goa',
+    airportName: 'Dabolim Airport',
+    country: 'INDIA',
+  },
+];

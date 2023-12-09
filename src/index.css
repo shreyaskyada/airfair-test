@@ -8,10 +8,10 @@
 :root {
     --primary-color: #013042;
     --secondary-color: #DBAE1E;
-    --light-color:#4E6F7B;
+    --light-color: #4E6F7B;
     --dark-color: #3C424D;
     --contrast-color: #ffff;
-    --bg-light-color:#f1f3f6;
+    --bg-light-color: #f1f3f6;
 }
 
 
@@ -101,4 +101,25 @@ body {
 
 .w-full {
     width: 100%;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-number::-webkit-outer-spin-button,
+.input-number::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.input-number {
+    -moz-appearance: textfield;
+}
+
+.mb-0{
+    margin-bottom: 0 !important;
 }
