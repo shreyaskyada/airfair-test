@@ -30,7 +30,7 @@ const FlightDetailPage = () => {
 
   const { userDetails } = useAppSelector((state) => state.app);
 
-  const { departFlight, returnFlight, internationalFlight } = useAppSelector(
+  const { departFlight, returnFlight, internationalFlight, flights } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
   );
 
@@ -510,6 +510,23 @@ const FlightDetailPage = () => {
     disableViewBtn: boolean = false,
     label?: string | boolean
   ) => {
+    const departCodes = departFlight?.flightCode
+      ?.split('->')
+      .map((el) => el.slice(0, 2) + '-' + el.slice(2))
+      .join('|');
+    const returnCodes = returnFlight?.flightCode
+      ?.split('->')
+      .map((el) => el.slice(0, 2) + '-' + el.slice(2))
+      .join('|');
+    let url = provideDetail.url as string;
+    if (
+      flights.journeyType === TripType.ROUND_TRIP &&
+      flights.flightType === 'DOMESTIC' &&
+      url.includes('http://www.easemytrip.com')
+    ) {
+      url = `${provideDetail.url}&fnumOut=${departCodes}&fnumIn=${returnCodes}`;
+    }
+
     return (
       <div
         className='providerDetail'
@@ -697,7 +714,7 @@ const FlightDetailPage = () => {
             {disableViewBtn ? (
               <>View Deal</>
             ) : (
-              <Link to={provideDetail.url} target='_blank'>
+              <Link to={url} target='_blank'>
                 View Deal
               </Link>
             )}
@@ -750,7 +767,7 @@ const FlightDetailPage = () => {
                       provideDetail,
                       index,
                       false,
-                      true,
+                      !internationalFlight && true,
                       !internationalFlight && `This is one-way Flight from ${
                         (searchFlightData.initialValues as any)?.from.city
                       }`
@@ -763,7 +780,7 @@ const FlightDetailPage = () => {
                       provideDetail,
                       index,
                       false,
-                      true,
+                      !internationalFlight && true,
                       !internationalFlight && `This is one-way Flight from ${
                         (searchFlightData.initialValues as any)?.to.city
                       }`
