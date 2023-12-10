@@ -522,7 +522,7 @@ const FlightDetailPage = () => {
     if (
       flights.journeyType === TripType.ROUND_TRIP &&
       flights.flightType === 'DOMESTIC' &&
-      url.includes('http://www.easemytrip.com')
+      url?.includes('http://www.easemytrip.com')
     ) {
       url = `${provideDetail.url}&fnumOut=${departCodes}&fnumIn=${returnCodes}`;
     }
