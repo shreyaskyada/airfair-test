@@ -30,7 +30,7 @@ const FlightDetailPage = () => {
 
   const { userDetails } = useAppSelector((state) => state.app);
 
-  const { departFlight, returnFlight } = useAppSelector(
+  const { departFlight, returnFlight, internationalFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
   );
 
@@ -400,7 +400,7 @@ const FlightDetailPage = () => {
           </Avatar> */}
           <div style={{ width: '30px', height: '30px' }}>
             <img
-              src={Airlines_Images[airlineMapping[airLine?.slice(0, 2)]]}
+              src={Airlines_Images[airlineMapping[airLine?.slice(0, 2)]] || Airlines_Images['Multiple Airlines']}
               style={{ width: '100%', height: '100%' }}
             />
           </div>
@@ -436,9 +436,9 @@ const FlightDetailPage = () => {
           </div>
         </div>
         <div className='flightCity' style={{ fontWeight: 'bold' }}>
-          <p>{city?.from}</p>
+          <p>{`${city?.fromCode}, ${city?.from}`}</p>
           <p>{duration}</p>
-          <p>{city?.to}</p>
+          <p>{`${city?.toCode}, ${city?.to}`}</p>
         </div>
         <div className='terminalContainer' style={{ fontWeight: 'bold' }}>
           <p>
@@ -508,7 +508,7 @@ const FlightDetailPage = () => {
     index: number,
     showCheapest: boolean = false,
     disableViewBtn: boolean = false,
-    label?: string
+    label?: string | boolean
   ) => {
     return (
       <div
@@ -737,7 +737,7 @@ const FlightDetailPage = () => {
                   renderProvider(provideDetail, index, true)
                 )
               ) : (
-                <Skeleton.Input
+                !internationalFlight && <Skeleton.Input
                   active={true}
                   size='large'
                   style={{ width: '100%' }}
@@ -751,7 +751,7 @@ const FlightDetailPage = () => {
                       index,
                       false,
                       true,
-                      `This is one-way Flight from ${
+                      !internationalFlight && `This is one-way Flight from ${
                         (searchFlightData.initialValues as any)?.from.city
                       }`
                     )
@@ -764,7 +764,7 @@ const FlightDetailPage = () => {
                       index,
                       false,
                       true,
-                      `This is one-way Flight from ${
+                      !internationalFlight && `This is one-way Flight from ${
                         (searchFlightData.initialValues as any)?.to.city
                       }`
                     )
@@ -791,7 +791,9 @@ const FlightDetailPage = () => {
                   flightCode: departFlight.flightCode,
                   city: {
                     from: departFlight.fromCity,
+                    fromCode: departFlight.from,
                     to: departFlight.toCity,
+                    toCode: departFlight.to,
                   },
                   stop: departFlight.stops,
                   seatingClass: departFlight.seatingClass,
@@ -845,6 +847,11 @@ const FlightDetailPage = () => {
                             ? departFlight.fromCity
                             : departFlight?.transitFlight &&
                               departFlight?.transitFlight[index - 1]?.viaCity,
+                        fromCode:
+                          index === 0
+                            ? departFlight.from
+                            : departFlight?.transitFlight &&
+                              departFlight?.transitFlight[index - 1]?.viaAirportCode,
                         to:
                           index !==
                           (departFlight.startTimeList &&
@@ -852,6 +859,13 @@ const FlightDetailPage = () => {
                             ? departFlight?.transitFlight &&
                               departFlight?.transitFlight[index]?.viaCity
                             : departFlight.toCity,
+                        toCode:
+                          index !==
+                          (departFlight.startTimeList &&
+                            departFlight.startTimeList.length - 1)
+                            ? departFlight?.transitFlight &&
+                              departFlight?.transitFlight[index]?.viaAirportCode
+                            : departFlight.to,
                       },
                       stop: departFlight.stops,
                       seatingClass: departFlight.seatingClass,
@@ -911,9 +925,11 @@ const FlightDetailPage = () => {
                     city: {
                       from: returnFlight.fromCity,
                       to: returnFlight.toCity,
+                      fromCode: returnFlight.from,
+                      toCode: returnFlight.to,
                     },
                     stop: returnFlight.stops,
-                    seatingClass: departFlight.seatingClass,
+                    seatingClass: returnFlight.seatingClass,
                     cabinBaggage:
                       returnFlight.cabinBaggage && returnFlight.cabinBaggage[0],
                     checkinBaggage:
@@ -959,12 +975,18 @@ const FlightDetailPage = () => {
                           returnFlight.arrivalTerminalList &&
                           returnFlight.arrivalTerminalList[index],
                         flightCode: returnFlight.flightCode,
+                        seatingClass: returnFlight.seatingClass,
                         city: {
                           from:
                             index === 0
                               ? returnFlight.fromCity
                               : returnFlight?.transitFlight &&
                                 returnFlight?.transitFlight[index - 1]?.viaCity,
+                          fromCode:
+                            index === 0
+                              ? returnFlight.from
+                              : returnFlight?.transitFlight &&
+                                returnFlight?.transitFlight[index - 1]?.viaAirportCode,
                           to:
                             index !==
                             (returnFlight.startTimeList &&
@@ -972,6 +994,13 @@ const FlightDetailPage = () => {
                               ? returnFlight?.transitFlight &&
                                 returnFlight?.transitFlight[index]?.viaCity
                               : returnFlight.toCity,
+                          toCode:
+                            index !==
+                            (returnFlight.startTimeList &&
+                              returnFlight.startTimeList.length - 1)
+                              ? returnFlight?.transitFlight &&
+                                returnFlight?.transitFlight[index]?.viaAirportCode
+                              : returnFlight.to,
                         },
                         stop: returnFlight.stops,
                         cabinBaggage:

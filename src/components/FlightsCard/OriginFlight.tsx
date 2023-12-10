@@ -24,6 +24,10 @@ const OriginFlight = (props: any) => {
   const filteredData = originFlights?.filter((el: any) => {
     let show = true;
 
+    if (!el.flightCode) {
+      return false;
+    }
+
     show &&= filterAirlines(airlines, el.flightCode);
     if (!show) return false;
 
@@ -80,6 +84,7 @@ const OriginFlight = (props: any) => {
             companyImg: 'string',
             price: flight.cheapestFare.toString(),
             totalTime: flight.duration,
+            stops: flight.stops,
             schedule: {
               departure: flight.depTime,
               arrival: flight.arrTime,
@@ -87,6 +92,8 @@ const OriginFlight = (props: any) => {
             route: {
               from: flight.fromCity,
               to: flight.toCity,
+              toCode: flight.to,
+              fromCode: flight.from,
             },
             partners: Object.entries(flight.compare).map((item: any) => ({
               price: item[1].fare.totalFareAfterDiscount.toString(),

@@ -162,3 +162,7 @@ export const capitalizeFirstLetter = (str: string) => {
     })
     .join(' ');
 };
+
+export const getStopsLabel = (s: number) => {
+  return s > 0 ? `${s} stop${s > 1 ? 's' : ''}` : 'non-stop';
+};
