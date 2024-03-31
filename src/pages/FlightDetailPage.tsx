@@ -16,6 +16,7 @@ import { Airlines_Images } from '../data/popularAirlines';
 import { Link } from 'react-router-dom';
 import { airplaneIcon } from '../assets/images';
 import { TripType } from '../data/contants';
+import {mergeToRoundTrip} from '../services/flight/flightUtils'
 
 const FlightDetailPage = () => {
   const dispatch = useAppDispatch();
@@ -205,8 +206,7 @@ const FlightDetailPage = () => {
   useEffect(() => {
     const makeProvideres = async () => {
       let providers: any = [];
-
-      if (!Loadash.isEmpty(departFlight) && !Loadash.isEmpty(returnFlight)) {
+      if (!Loadash.isEmpty(departFlight) && !Loadash.isEmpty(returnFlight)) {      
         const departProviders = Object.keys(departFlight.compare || {});
         const returnProviders = Object.keys(returnFlight.compare || {});
         const commonProviders = departProviders.filter((provider) =>
@@ -237,7 +237,7 @@ const FlightDetailPage = () => {
                 ? returnFlight.compare[key].fare?.totalFareAfterDiscount
                 : 0;
             let url =
-              departFlight.compare && departFlight.compare[key].redirecUrl;
+              departFlight.compare && returnFlight.compare && mergeToRoundTrip(departFlight.compare[key].redirecUrl,returnFlight.compare[key].redirecUrl);
             const totalFare =
               totalDepartFare && totalreturnFare
                 ? totalreturnFare + totalDepartFare
@@ -332,7 +332,6 @@ const FlightDetailPage = () => {
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalFareAfterDiscount
                 : 0;
-
             let url =
               departFlight.compare && departFlight.compare[key].redirecUrl;
 
