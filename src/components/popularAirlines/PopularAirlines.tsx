@@ -9,7 +9,7 @@ const PopularAirlines = () => {
       <div className="airlineContainer">
         <h1 className="airlineHeading">Popular Domestic Airlines</h1>
         <Row gutter={[12, 20]} justify="space-between">
-          {Airlines_Data.map((airline, index) => (
+          {Airlines_Data.slice(0, 10).map((airline, index) => (
             <Col key={index} md={2} sm={8} xs={12}>
               <PopularAirlinesItem name={airline.name} image={airline.image} />
             </Col>
