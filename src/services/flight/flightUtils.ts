@@ -181,11 +181,18 @@ function handleCleartripURL(onwardURI: any, returnURI: any): string {
             };
 
             // Construct round trip URI
-            const roundTripURI =
-                "https://www.cleartrip.com/flights/initiate-booking?" +
-                new URLSearchParams(roundTripParams).toString();
+            let paramsString = "";
+            for (const [key, value] of Object.entries(roundTripParams)) {
+                // Check if it's the first parameter to avoid adding an '&' at the start
+                if (paramsString.length > 0) {
+                    paramsString += "&";
+                }
+                paramsString += key + "=" + value;
+            }
 
-            return roundTripURI;
+    const roundTripURI = "https://www.cleartrip.com/flights/initiate-booking?" + paramsString;
+
+    return roundTripURI;
         } else {
             onwardURI =
                 onwardURI + "&return_date=" + returnParamsObj.depart_date;
