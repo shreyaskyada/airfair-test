@@ -142,63 +142,50 @@ function handleEaseMyTrip(onwardJourney: any, returnJourney: any): string {
     return roundTripURI;
 }
 
-function handleCleartripURL(onwardURI: any, returnURI: any): string {
+type QueryParams = {
+    [key: string]: string | undefined; // Use undefined for possible missing values
+};
+
+// Helper function to parse URI query strings
+const parseURI = (uri: string): QueryParams => {
+    const queryString = uri.split('?')[1];
+    if (!queryString) {
+        return {};
+    }
+    return queryString.split('&').reduce((acc: QueryParams, pair) => {
+        const [key, value] = pair.split('=');
+        acc[key] = value;
+        return acc;
+    }, {});
+};
+
+function handleCleartripURL(onwardURI: string, returnURI: string): string {
     if (onwardURI.includes("cleartrip")) {
-        // Parse URIs to extract parameters
-        const parseURI = (uri: string) =>
-            new URLSearchParams(uri.split("?")[1]);
         const onwardParams = parseURI(onwardURI);
         const returnParams = parseURI(returnURI);
 
-        // Extract relevant parameters for onward journey
-        const onwardParamsObj: { [key: string]: string } = {};
-        onwardParams.forEach((value, key) => {
-            onwardParamsObj[key] = value;
-        });
-
-        // Extract relevant parameters for return journey
-        const returnParamsObj: { [key: string]: string } = {};
-        returnParams.forEach((value, key) => {
-            returnParamsObj[key] = value;
-        });
-        // Construct round trip parameters
-        if (onwardParamsObj.intl == null) {
-            const roundTripParams: { [key: string]: string } = {
-                from: onwardParamsObj.from,
-                to: onwardParamsObj.to,
-                depart_date: onwardParamsObj.depart_date,
-                return_date: returnParamsObj.depart_date,
-                adults: onwardParamsObj.adults,
-                childs: onwardParamsObj.childs,
-                infants: onwardParamsObj.infants,
-                class: onwardParamsObj.class,
-                psid: onwardParamsObj.psid,
-                out_price: onwardParamsObj.out_price,
-                out_fare_key: onwardParamsObj.out_fare_key,
-                ret_price: returnParamsObj.out_price,
-                ret_fare_key: returnParamsObj.out_fare_key,
-                uid: onwardParamsObj.uid,
+        // Directly use parsed parameters without conversion to another object
+        if (onwardParams["intl"] == null) {
+            const roundTripParams: QueryParams = {
+                ...onwardParams, // Spread onwardParams to inherit all its properties
+                return_date: returnParams["depart_date"], // Override specific properties as needed
+                ret_price: returnParams["out_price"],
+                ret_fare_key: returnParams["out_fare_key"],
             };
 
-            // Construct round trip URI
-            let paramsString = "";
-            for (const [key, value] of Object.entries(roundTripParams)) {
-                // Check if it's the first parameter to avoid adding an '&' at the start
-                if (paramsString.length > 0) {
-                    paramsString += "&";
-                }
-                paramsString += key + "=" + value;
-            }
+            // Construct round trip URI by mapping and joining params
+            const paramsString = Object.entries(roundTripParams)
+                .map(([key, value]) => `${key}=${value}`)
+                .join('&');
 
-    const roundTripURI = "https://www.cleartrip.com/flights/initiate-booking?" + paramsString;
-
-    return roundTripURI;
+            const roundTripURI = `https://www.cleartrip.com/flights/initiate-booking?${paramsString}`;
+            return roundTripURI;
         } else {
-            onwardURI =
-                onwardURI + "&return_date=" + returnParamsObj.depart_date;
-            return onwardURI;
+            // If 'intl' is present, modify and return the onwardURI
+            return `${onwardURI}&return_date=${returnParams["depart_date"]}`;
         }
     } else {
-        return onwardURI; // Return original URI if it doesn't contain 'cleartrip'
+        // Return original URI if it doesn't contain 'cleartrip'
+        return onwardURI;
     }
 }
