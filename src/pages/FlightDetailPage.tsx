@@ -85,11 +85,11 @@ const FlightDetailPage = () => {
           ).valueOf()
         : moment(searchFlightData.dateOfDep).valueOf();
       const dob = moment(dayjs().toString()).valueOf();
-
+          
       const payloads: any = provider.map((_provider: any) => ({
         provider: _provider.provider,
         airlines: airlineNames.length ? airlineNames : ['ALL'],
-        flightType: 'DOMESTIC',
+        flightType: flights.flightType,
         journeyType: isOneWay ? TripType.ONE_WAY : searchFlightData.flightType,
         dateOfJourney: doj / 1000,
         dateOfBooking: dob / 1000,
@@ -104,7 +104,7 @@ const FlightDetailPage = () => {
       }));
 
       let payloadResponse: any = [];
-      for (const payload of payloads) {
+            for (const payload of payloads) {
         try {
           const res: any = await getBestOffer(payload);
 
