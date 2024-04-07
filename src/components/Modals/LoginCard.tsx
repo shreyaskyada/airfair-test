@@ -113,7 +113,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
             marginTop: "1rem"
           }}
         >
-          <Text>Don't have an Account with MTS?</Text>
+          <Text>Don't have an Account with Tripsaverz?</Text>
           <button
             className="headerButtons filled"
             style={{ width: "150px" }}
