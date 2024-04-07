@@ -324,7 +324,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
               <Input placeholder="Phone number" onChange={observeFormChange} />
             </Form.Item>
             <Title level={5}>
-              Discover the Best Flight Deals for Your Card. Select Your Card
+              Discover the Best Flight Deals for your card. Select your card
               Information Below and Save Big!
             </Title>
             <Form.List name="bankCards">
