@@ -128,8 +128,8 @@ const ProfileCard = ({ onFinishHandler }: any) => {
   const [bankDetails, setBankDetails] = useState({
     names: [],
     types: [
-      { value: "credit", label: "credit" },
-      { value: "debit", label: "debit" },
+      { value: "credit", label: "Credit" },
+      { value: "debit", label: "Debit" },
     ],
     cardNames: [],
     issuers: [
@@ -137,6 +137,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
       { value: "VISA", label: "VISA" },
       { value: "RUPAY", label: "RUPAY" },
       { value: "AMEX", label: "AMEX" },
+      { value: "DINERS", label: "DINERS" },
     ],
   });
 
