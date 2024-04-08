@@ -165,6 +165,7 @@ const SearchFilter = ({
   origin?: string;
 }) => {
   const navigate = useNavigate();
+  const [isFlightsLoading, setIsFlightsLoading] = useState(false);
 
   const { userDetails } = useAppSelector((state) => state.app);
   const { initialValues: _initialValues } = useAppSelector(
@@ -230,6 +231,7 @@ const SearchFilter = ({
 
   const onFinish = (params: any) => {
     dispatch(uploadIsLoading(true));
+    setIsFlightsLoading(true);
     const values: any = inputValues;
     if (values) {
       const isRoundTrip = values.type === 'round-trip';
@@ -316,7 +318,7 @@ const SearchFilter = ({
           notification.warning({
             message: 'No flights Found, Please try again',
           });
-        });
+        }).finally(() =>  setIsFlightsLoading(false));
     }
   };
 
@@ -1007,7 +1009,7 @@ const SearchFilter = ({
               }}
             >
               <Form.Item style={{ margin: '0px' }}>
-                <button type='submit' className='searchButton'>
+                <button type='submit' className='searchButton' disabled={isFlightsLoading}>
                   SEARCH
                 </button>
               </Form.Item>
