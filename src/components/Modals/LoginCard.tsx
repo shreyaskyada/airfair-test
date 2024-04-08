@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button, Card, Divider, Form, Input, Modal, Typography } from "antd"
 import Meta from "antd/es/card/Meta"
 import { loginBanner } from "../../assets/images"
@@ -10,20 +10,27 @@ import { notification } from "../Notification/customNotification"
 const { Text, Title } = Typography
 
 const LoginCard = ({ onFinishHandler }: any) => {
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useAppDispatch()
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    const dataParams = form.getFieldsValue()
-    loginUser(dataParams)
-      .then((res) => {
+    if (!isLoading) {
+      setIsLoading(true)
+      const dataParams = form.getFieldsValue()
+      loginUser(dataParams)
+        .then((res) => {
         onFinishHandler(true, { ...res, username: dataParams.username })
         notification.success({ message: "LoggedIn Successfully!!!" })
-      })
-      .catch((err) => {
-        onFinishHandler(false, err)
-        notification.error({ message: err.data.message || "Server Error" })
-      })
+        })
+        .catch((err) => {
+          onFinishHandler(false, err)
+          notification.error({ message: err.data.message || "Server Error" })
+        })
+        .finally(() => {
+          setIsLoading(false)
+        });
+    }
   }
 
   const onCancelHandler = () => {
@@ -97,7 +104,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
               <Input.Password placeholder="password" />
             </Form.Item>
             <Form.Item style={{ textAlign: "center" }}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={isLoading}>
                 Login
               </Button>
             </Form.Item>
@@ -113,7 +120,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
             marginTop: "1rem"
           }}
         >
-          <Text>Don't have an Account with MTS?</Text>
+          <Text>Don't have an Account with Tripsaverz?</Text>
           <button
             className="headerButtons filled"
             style={{ width: "150px" }}

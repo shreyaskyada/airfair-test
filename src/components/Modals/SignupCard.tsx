@@ -14,24 +14,27 @@ const { Text, Title } = Typography
 
 const SignupCard = ({ onFinishHandler }: any) => {
   const dispatch = useAppDispatch()
+  const isLoading = useAppSelector((state) => state.app.isLoading)
 
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    const dataParams = form.getFieldsValue()
-    dispatch(uploadIsLoading(true))
-    signupUser(dataParams)
-      .then((res) => {
-        onFinishHandler(true, dataParams)
-        dispatch(uploadIsLoading(false))
-      })
-      .catch((err) => {
-        const message = err.data.message || "Server Error"
-        notification.error({ message })
-
-        onFinishHandler(false, err)
-        dispatch(uploadIsLoading(false))
-      })
+    if(!isLoading) {
+      const dataParams = form.getFieldsValue()
+      dispatch(uploadIsLoading(true))
+      signupUser(dataParams)
+        .then((res) => {
+          onFinishHandler(true, dataParams)
+          dispatch(uploadIsLoading(false))
+        })
+        .catch((err) => {
+          const message = err.data.message || "Server Error"
+          notification.error({ message })
+  
+          onFinishHandler(false, err)
+          dispatch(uploadIsLoading(false))
+        })
+    }
   }
 
   const onCancelHandler = () => {
@@ -164,7 +167,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
               <Input placeholder="Phone number" />
             </Form.Item>
             <Form.Item style={{ textAlign: "center" }}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={isLoading}>
                 Submit
               </Button>
             </Form.Item>
