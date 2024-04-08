@@ -104,7 +104,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
               <Input.Password placeholder="password" />
             </Form.Item>
             <Form.Item style={{ textAlign: "center" }}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary" htmlType="submit" disabled={isLoading}>
                 Login
               </Button>
             </Form.Item>
