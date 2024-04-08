@@ -123,6 +123,10 @@
     row-gap: 1rem;
 }
 
+input, select:focus {
+    font-size: 16px;
+}
+
 /*===================================================================*/
 
 @media only screen and (max-width:1040px) {

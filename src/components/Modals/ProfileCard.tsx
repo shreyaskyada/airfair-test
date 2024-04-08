@@ -18,6 +18,7 @@ import useLocalStorage from "../../hooks/LocalStorage";
 import { notification } from "../Notification/customNotification";
 import { loginBanner } from "../../assets/images";
 import "./style.css";
+import { useWatch } from "antd/es/form/Form";
 
 const { Text, Title } = Typography;
 const { useBreakpoint } = Grid;
@@ -75,41 +76,50 @@ const walletOptions = {
 
 const CustomDropDown = (props: any) => {
   const [bankData, setBankData] = useState<any>([]);
+  const bankName = useWatch(["bankCards", props.name, "bankName"]);
+  const cardType = useWatch(["bankCards", props.name, "bankCardType"]);
 
   useEffect(() => {
     const getBankNamesFunc = async () => {
       try {
-        if (props.bankName && props.cardType) {
-          const bankNames = await getBankName(props.bankName, props.cardType);
-          setBankData(bankNames);
+        if (bankName && cardType) {
+          const bankNames: any = await getBankName(bankName, cardType);
+
+          setBankData(
+            bankNames.map((bankName: any) => {
+              return {
+                value: bankName.cardName,
+                label: bankName.cardName,
+              };
+            })
+          );
         }
       } catch (error) {
         console.log(error);
+        setBankData([]);
       }
     };
     getBankNamesFunc();
-  }, [props.bankName, props.cardType]);
+  }, [bankName, cardType]);
 
-  return bankData && bankData.length ? (
-    <div className="customDropdown">
-      {bankData.map((value: any) => (
-        <option
-          className="menuOptions"
-          value={value.cardName}
-          onClick={() => {
-            props.form.setFieldValue(
-              ["bankCards", props.name, "bankCardName"],
-              value.cardName
-            );
-            props.selectRef.current.blur();
-          }}
-        >
-          {value.cardName}
-        </option>
-      ))}
-    </div>
-  ) : (
-    <div>No Data</div>
+  return (
+    <Select
+      allowClear
+      defaultValue={props.form.getFieldValue([
+        "bankCards",
+        props.name,
+        "bankCardName",
+      ])}
+      onChange={(value) => {
+        props.form.setFieldValue(
+          ["bankCards", props.name, "bankCardName"],
+          value
+        );
+        props.observeFormChange();
+      }}
+      placeholder="Card Name"
+      options={bankData}
+    />
   );
 };
 
@@ -395,29 +405,10 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                           className="bankCardName"
                           noStyle
                         >
-                          <Select
-                            allowClear
-                            ref={selectRef}
-                            onChange={observeFormChange}
-                            dropdownRender={() => (
-                              <CustomDropDown
-                                bankName={form.getFieldValue([
-                                  "bankCards",
-                                  field.name,
-                                  "bankName",
-                                ])}
-                                cardType={form.getFieldValue([
-                                  "bankCards",
-                                  field.name,
-                                  "bankCardType",
-                                ])}
-                                name={field.name}
-                                selectRef={selectRef}
-                                form={form}
-                              />
-                            )}
-                            placeholder="Card Name"
-                            options={bankDetails.cardNames}
+                          <CustomDropDown
+                            observeFormChange={observeFormChange}
+                            name={field.name}
+                            form={form}
                           />
                         </Form.Item>
                         <Form.Item
