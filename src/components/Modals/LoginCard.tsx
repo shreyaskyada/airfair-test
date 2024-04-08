@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button, Card, Divider, Form, Input, Modal, Typography } from "antd"
 import Meta from "antd/es/card/Meta"
 import { loginBanner } from "../../assets/images"
@@ -10,20 +10,27 @@ import { notification } from "../Notification/customNotification"
 const { Text, Title } = Typography
 
 const LoginCard = ({ onFinishHandler }: any) => {
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useAppDispatch()
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-    const dataParams = form.getFieldsValue()
-    loginUser(dataParams)
-      .then((res) => {
+    if (!isLoading) {
+      setIsLoading(true)
+      const dataParams = form.getFieldsValue()
+      loginUser(dataParams)
+        .then((res) => {
         onFinishHandler(true, { ...res, username: dataParams.username })
         notification.success({ message: "LoggedIn Successfully!!!" })
-      })
-      .catch((err) => {
-        onFinishHandler(false, err)
-        notification.error({ message: err.data.message || "Server Error" })
-      })
+        })
+        .catch((err) => {
+          onFinishHandler(false, err)
+          notification.error({ message: err.data.message || "Server Error" })
+        })
+        .finally(() => {
+          setIsLoading(false)
+        });
+    }
   }
 
   const onCancelHandler = () => {
