@@ -215,6 +215,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
   };
 
   const onFinish = () => {
+    setDisableSubmit(true);
     const dataParams = form.getFieldsValue();
 
     updateProfileDetails(
@@ -235,6 +236,8 @@ const ProfileCard = ({ onFinishHandler }: any) => {
       .catch((err) => {
         const errorMessage = err.data.message || "";
         notification.error({ message: errorMessage });
+      }).finally(() => {
+        setDisableSubmit(false);
       });
   };
 
