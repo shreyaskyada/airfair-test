@@ -29,7 +29,7 @@ import {
   updateReturnFlights,
 } from '../../redux/slices/flights';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { UserDetailsType, flightListLoading, updateFlightListFetched, uploadIsLoading } from '../../redux/slices/app';
 import { resetOriginFlights, updateOriginFlights } from '../../redux/slices/originFlight';
 import { resetDestinationFlights, updateDestinationFlights } from '../../redux/slices/destinationFlight';
@@ -168,6 +168,8 @@ const SearchFilter = ({
   origin?: string;
 }) => {
   const navigate = useNavigate();
+  const params = useParams()["*"];
+
   const [isFlightsLoading, setIsFlightsLoading] = useState(false);
 
   const { userDetails } = useAppSelector((state) => state.app);
@@ -206,7 +208,6 @@ const SearchFilter = ({
 
   const [queryParams, setQueryParams]: any = useSearchParams();
 
-  // console.log("queryParams", serializeFormQuery(queryParams) );
 
   const getAirportByCode = async (cityCode: string) => {
     try {
@@ -469,7 +470,7 @@ const SearchFilter = ({
     if (value) {
       const [airportCode, airportCity, airportName] = value.split("-");
       if(reason === "select") {
-        setQueryParams({
+        params && setQueryParams({
           ...Object.fromEntries([...(queryParams as any)]),
           from: airportCode,
         });
@@ -504,7 +505,7 @@ const SearchFilter = ({
   const toLocationSearchHandler = (value: string, reason?: "select") => {
     if (value) {
       const [airportCode, airportCity, airportName] = value.split("-");
-      if(reason === "select") {
+      if(reason === "select" && params) {
         setQueryParams({
           ...Object.fromEntries([...(queryParams as any)]),
           to: airportCode,
@@ -659,7 +660,7 @@ const SearchFilter = ({
                         type: 'one-way',
                       }));
                       dispatch(updateFlightType("one-way"));
-                      setQueryParams({
+                      params && setQueryParams({
                         ...Object.fromEntries([...(queryParams as any)]),
                         type: "one-way",
                       });
@@ -686,7 +687,7 @@ const SearchFilter = ({
                           )
                         );
                       }
-                      setQueryParams({
+                      params && setQueryParams({
                         ...Object.fromEntries([...(queryParams as any)]),
                         type: "round-trip",
                       });
@@ -892,7 +893,7 @@ const SearchFilter = ({
                             ...prevState,
                             departure: value || dayjs(),
                           }));
-                          setQueryParams({
+                          params && setQueryParams({
                             ...Object.fromEntries([...(queryParams as any)]),
                             depDate: dayjs(value).unix(),
                           });
@@ -954,10 +955,12 @@ const SearchFilter = ({
                     type: 'round-trip',
                     return: returnDate,
                   }));
-                  setQueryParams({
-                    ...Object.fromEntries([...(queryParams as any)]),
-                    type: "round-trip",
-                  });
+                  if(params) {
+                    setQueryParams({
+                      ...Object.fromEntries([...(queryParams as any)]),
+                      type: "round-trip",
+                    });
+                  }
                   setShowInput((prevState) => ({ ...prevState, return: true }));
                   dispatch(updateFlightType('round-trip'));
                 }}
@@ -1013,7 +1016,7 @@ const SearchFilter = ({
                   >
                     {showInput.return && (
                       <>
-                        <DatePicker
+                      <DatePicker
                           autoFocus
                           open
                           placeholder=''
@@ -1064,10 +1067,12 @@ const SearchFilter = ({
                               ...prevState,
                               return: value,
                             }));
-                            setQueryParams({
-                              ...Object.fromEntries([...(queryParams as any)]),
-                              retDate: dayjs(value).unix(),
-                            });
+                            if(params) {
+                              setQueryParams({
+                                ...Object.fromEntries([...(queryParams as any)]),
+                                retDate: dayjs(value).unix(),
+                              });
+                            }
                             dispatch(
                               updateReturnDate(
                                 value ||
@@ -1117,7 +1122,7 @@ const SearchFilter = ({
                               ...prevState,
                               adult: Number(value),
                             }));
-                            setQueryParams({
+                            params && setQueryParams({
                               ...Object.fromEntries([...(queryParams as any)]),
                               adults: value,
                             });
@@ -1137,7 +1142,7 @@ const SearchFilter = ({
                                 ...prevState,
                                 child: Number(value),
                               }));
-                              setQueryParams({
+                              params && setQueryParams({
                                 ...Object.fromEntries([
                                   ...(queryParams as any),
                                 ]),
@@ -1158,7 +1163,7 @@ const SearchFilter = ({
                                 ...prevState,
                                 infant: Number(value),
                               }));
-                              setQueryParams({
+                              params && setQueryParams({
                                 ...Object.fromEntries([
                                   ...(queryParams as any),
                                 ]),
@@ -1177,7 +1182,7 @@ const SearchFilter = ({
                               ...prevState,
                               class: value.toString(),
                             }));
-                            setQueryParams({
+                            params && setQueryParams({
                               ...Object.fromEntries([...(queryParams as any)]),
                               class: value,
                             });
