@@ -23,6 +23,7 @@ export type NotificationUIType = (
 export interface AppState {
   isLoading: boolean;
   isFlightListLoading: boolean;
+  isFlightListFetched: boolean;
   flightDetails: boolean;
   isLoggedIn: boolean;
   notifcationModal: NotificationUIType | null;
@@ -41,6 +42,7 @@ export interface AppState {
 export const initialState: AppState = {
   isLoading: false,
   isFlightListLoading: false,
+  isFlightListFetched: false,
   isLoggedIn: false,
   flightDetails: false,
   notifcationModal: () => {},
@@ -91,6 +93,9 @@ const appSlice = createSlice({
     },
     flightListLoading: (state, action: PayloadAction<boolean>) => {
       state.isFlightListLoading = action.payload;
+    },
+    updateFlightListFetched: (state, action: PayloadAction<boolean>) => {
+      state.isFlightListFetched = action.payload;
     },
     updateFlightDetails: (state, action: PayloadAction<boolean>) => {
       state.flightDetails = action.payload;
@@ -171,6 +176,7 @@ export const {
   updateNotifcationModal,
   updateIsLoggedIn,
   toggleSidebar,
+  updateFlightListFetched
 } = appSlice.actions;
 
 export default appSlice.reducer;

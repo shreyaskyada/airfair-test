@@ -54,7 +54,7 @@ const FlightsListingPage = () => {
     internationalFlight: any;
   } = useAppSelector((state) => state.flight);
 
-  const isLoading = useAppSelector((state) => state.app.isFlightListLoading);
+  const {isLoading, isFlightListLoading, isFlightListFetched} = useAppSelector((state) => state.app);
 
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
@@ -173,11 +173,9 @@ const FlightsListingPage = () => {
       </div>
       {((flights && Object.keys(flights).length > 0) ||
         internationalFlight) && <Filters />}
-      {(!filteredDataPresent.originFlights ||
-        !filteredDataPresent.returnFlights ||
-        (flights &&
+      {isFlightListFetched && !isFlightListLoading && (((flights &&
           Object.keys(flights).length <= 0 &&
-          !internationalFlight)) && isLoading && (
+          !internationalFlight))) && (
           <div className='notFoundContainer'>
             <img
               style={{ width: '100px' }}

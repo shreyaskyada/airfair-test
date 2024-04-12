@@ -30,7 +30,7 @@ import {
 } from '../../redux/slices/flights';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useNavigate } from 'react-router';
-import { UserDetailsType, uploadIsLoading } from '../../redux/slices/app';
+import { UserDetailsType, flightListLoading, updateFlightListFetched, uploadIsLoading } from '../../redux/slices/app';
 import { resetOriginFlights, updateOriginFlights } from '../../redux/slices/originFlight';
 import { resetDestinationFlights, updateDestinationFlights } from '../../redux/slices/destinationFlight';
 import {
@@ -357,6 +357,7 @@ const SearchFilter = ({
 
   const onFinish = (newInputValues: any = undefined) => {
     dispatch(uploadIsLoading(true));
+    dispatch(flightListLoading(true));
     setIsFlightsLoading(true);
     const values: any = newInputValues || inputValues;
     if (values) {
@@ -460,17 +461,21 @@ const SearchFilter = ({
         .finally(() => {
           setIsFlightsLoading(false);
           dispatch(uploadIsLoading(false));
+          dispatch(flightListLoading(false));
+          dispatch(updateFlightListFetched(true));
         });
     }
   };
 
-  const fromLocationSearchHandler = (value: string) => {
+  const fromLocationSearchHandler = (value: string, reason?: "select") => {
     if (value) {
       const [airportCode, airportCity, airportName] = value.split("-");
-      setQueryParams({
-        ...Object.fromEntries([...(queryParams as any)]),
-        from: airportCode,
-      });
+      if(reason === "select") {
+        setQueryParams({
+          ...Object.fromEntries([...(queryParams as any)]),
+          from: airportCode,
+        });
+      }
       dispatch(
         updateFromSearchValues({
           code: airportCode,
@@ -498,13 +503,15 @@ const SearchFilter = ({
     }
   };
 
-  const toLocationSearchHandler = (value: string) => {
+  const toLocationSearchHandler = (value: string, reason?: "select") => {
     if (value) {
       const [airportCode, airportCity, airportName] = value.split("-");
-      setQueryParams({
-        ...Object.fromEntries([...(queryParams as any)]),
-        to: airportCode,
-      });
+      if(reason === "select") {
+        setQueryParams({
+          ...Object.fromEntries([...(queryParams as any)]),
+          to: airportCode,
+        });
+      }
       dispatch(
         updateToSearchValues({
           code: airportCode,
@@ -737,7 +744,7 @@ const SearchFilter = ({
                     {showInput.from && (
                       <CustomAutoComplete
                         onSearch={_.debounce(fromLocationSearchHandler, 500)}
-                        onSelect={fromLocationSearchHandler}
+                        onSelect={(value) => fromLocationSearchHandler(value, "select")}
                         options={fromOptions}
                         onBlur={() => {
                           textAreaClearHandler({ from: false });
@@ -799,7 +806,7 @@ const SearchFilter = ({
                     {showInput.to && (
                       <CustomAutoComplete
                         onSearch={_.debounce(toLocationSearchHandler, 500)}
-                        onSelect={toLocationSearchHandler}
+                        onSelect={(value) => toLocationSearchHandler(value, "select")}
                         options={toOptions}
                         onBlur={() => {
                           textAreaClearHandler({ to: false });
