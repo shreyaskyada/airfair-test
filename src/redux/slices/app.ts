@@ -1,5 +1,5 @@
 import { getProfileDetails } from "../../services/auth";
-import { createSlice, PayloadAction,createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 import { NotificationType } from "./../../layout/index";
 
@@ -22,6 +22,7 @@ export type NotificationUIType = (
 
 export interface AppState {
   isLoading: boolean;
+  isFlightListLoading: boolean;
   flightDetails: boolean;
   isLoggedIn: boolean;
   notifcationModal: NotificationUIType | null;
@@ -34,11 +35,12 @@ export interface AppState {
   };
   appName: string;
   userDetails: UserDetailsType;
-  showSidebar : boolean
+  showSidebar: boolean;
 }
 
 export const initialState: AppState = {
   isLoading: false,
+  isFlightListLoading: false,
   isLoggedIn: false,
   flightDetails: false,
   notifcationModal: () => {},
@@ -60,7 +62,7 @@ export const initialState: AppState = {
     bankList: [],
     walletList: [],
   },
-  showSidebar:false
+  showSidebar: false,
 };
 
 // const getUserProfile = createAsyncThunk(
@@ -68,7 +70,7 @@ export const initialState: AppState = {
 //   async ({ userId, token }: any, thunkApi) => {
 //     try {
 //       const res = await getProfileDetails(userId, token)
-      
+
 //       return (res as AxiosResponse<any, any>).data
 //     } catch (error: any) {
 //         throw error.response.data
@@ -76,7 +78,6 @@ export const initialState: AppState = {
 //     }
 //   }
 // )s
-
 
 const appSlice = createSlice({
   name: "app",
@@ -88,6 +89,9 @@ const appSlice = createSlice({
     uploadIsLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
+    flightListLoading: (state, action: PayloadAction<boolean>) => {
+      state.isFlightListLoading = action.payload;
+    },
     updateFlightDetails: (state, action: PayloadAction<boolean>) => {
       state.flightDetails = action.payload;
     },
@@ -98,7 +102,7 @@ const appSlice = createSlice({
       state.userDetails = { ...state.userDetails, ...action.payload };
     },
     toggleSidebar: (state) => {
-      state.showSidebar = !state.showSidebar
+      state.showSidebar = !state.showSidebar;
     },
     toggleModal: (
       state,
@@ -115,12 +119,11 @@ const appSlice = createSlice({
     ) => {
       state.notifcationModal = action.payload;
     },
-
   },
   // extraReducers: (builder) => {
   //   builder
   //     .addCase(getUserProfile.pending.type, (state, action) => {
-        
+
   //     })
   //     .addCase(
   //       getUserProfile.fulfilled.type,
@@ -152,7 +155,7 @@ const appSlice = createSlice({
   //       }
   //     )
   //     .addCase(getUserProfile.rejected.type, (state, action) => {
-        
+
   //     })
   //   }
 });
@@ -161,12 +164,13 @@ const appSlice = createSlice({
 export const {
   updateAppName,
   uploadIsLoading,
+  flightListLoading,
   updateFlightDetails,
   updateUserDetails,
   toggleModal,
   updateNotifcationModal,
   updateIsLoggedIn,
-  toggleSidebar
+  toggleSidebar,
 } = appSlice.actions;
 
 export default appSlice.reducer;

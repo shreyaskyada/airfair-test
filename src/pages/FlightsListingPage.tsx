@@ -5,7 +5,7 @@ import {
   updateDepartFlights,
   updateReturnFlights,
 } from '../redux/slices/flights';
-import { toggleModal, uploadIsLoading } from '../redux/slices/app';
+import { flightListLoading, toggleModal, uploadIsLoading } from '../redux/slices/app';
 import SearchFilter from '../components/SearchFilter';
 import OriginFlight from '../components/FlightsCard/OriginFlight';
 import { updateDestinationFlights } from '../redux/slices/destinationFlight';
@@ -126,7 +126,7 @@ const FlightsListingPage = () => {
   };
 
   const onSelectedFlightChange = (value: any, type: string, flight: Flight) => {
-    dispatch(uploadIsLoading(true));
+    dispatch(flightListLoading(true));
     setTimeout(() => {
       setSelectedFlight((prevDate) => ({
         ...prevDate,
@@ -141,7 +141,7 @@ const FlightsListingPage = () => {
           dispatch(updateReturnFlights(data[0]));
 
           searchFlightData.flightType === TripType.ONE_WAY &&
-            dispatch(uploadIsLoading(false));
+            dispatch(flightListLoading(false));
           break;
         }
         case 'return': {
@@ -154,10 +154,12 @@ const FlightsListingPage = () => {
           console.log(
             'onSelectedFlightChange :: Error occured white updating file'
           );
-          dispatch(uploadIsLoading(false));
+          dispatch(flightListLoading(false));
         }
       }
     }, 1000);
+
+    dispatch(flightListLoading(false));
   };
 
   console.log('flights', flights);
