@@ -237,8 +237,6 @@ const SearchFilter = ({
               .then((data: any) => {
                 const airportList = data?.airportList || [];
 
-                console.log("listData ===>", data);
-
                 const filteredAirport = airportList.filter(
                   (airport: any) =>
                     lowerCase(airport.city) === lowerCase(res.data?.city)
@@ -247,9 +245,9 @@ const SearchFilter = ({
                 setInputValues((prevState: any) => ({
                   ...prevState,
                   from: {
-                    code: filteredAirport[0].airportCd,
-                    city: filteredAirport[0].city,
-                    name: filteredAirport[0].airportName,
+                    code: filteredAirport[0]?.airportCd || "",
+                    city: filteredAirport[0]?.city || "",
+                    name: filteredAirport[0]?.airportName || "",
                   },
                 }));
               })
@@ -278,9 +276,9 @@ const SearchFilter = ({
             const fromAirportData = await getAirportByCode(fromCityCode);
             initValues = {
               from: {
-                code: fromAirportData.airportCd,
-                city: fromAirportData.city,
-                name: fromAirportData.airportName,
+                code: fromAirportData?.airportCd || "",
+                city: fromAirportData?.city || "",
+                name: fromAirportData?.airportName || "",
               },
             };
           }
@@ -289,9 +287,9 @@ const SearchFilter = ({
             initValues = {
               ...initValues,
               to: {
-                code: toAirportData.airportCd,
-                city: toAirportData.city,
-                name: toAirportData.airportName,
+                code: toAirportData?.airportCd || "",
+                city: toAirportData?.city || "",
+                name: toAirportData?.airportName ||"",
               },
             };
           }
