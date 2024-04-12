@@ -54,6 +54,8 @@ const FlightsListingPage = () => {
     internationalFlight: any;
   } = useAppSelector((state) => state.flight);
 
+  const isLoading = useAppSelector((state) => state.app.isFlightListLoading);
+
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
   );
@@ -175,20 +177,20 @@ const FlightsListingPage = () => {
         !filteredDataPresent.returnFlights ||
         (flights &&
           Object.keys(flights).length <= 0 &&
-          !internationalFlight)) && (
-        <div className='notFoundContainer'>
-          <img
-            style={{ width: '100px' }}
-            src={noResult}
-            alt='search-not-found-icon'
-          />
-          <h1 className='notFoundHeading'>
-            {checkIfFilterApplied(filtersSlice)
-              ? 'No Flights Found as Per Filters, Kindly Reset Filters'
-              : 'No Flights Found Please Search Again!'}
-          </h1>
-        </div>
-      )}
+          !internationalFlight)) && isLoading && (
+          <div className='notFoundContainer'>
+            <img
+              style={{ width: '100px' }}
+              src={noResult}
+              alt='search-not-found-icon'
+            />
+            <h1 className='notFoundHeading'>
+              {checkIfFilterApplied(filtersSlice)
+                ? 'No Flights Found as Per Filters, Kindly Reset Filters'
+                : 'No Flights Found Please Search Again!'}
+            </h1>
+          </div>
+        )}
 
       {internationalFlight && <InternationalFlightCard />}
 

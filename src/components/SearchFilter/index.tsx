@@ -22,6 +22,7 @@ import { getAirportsWrapper } from '../../services/airports';
 import { getFlightsConfig } from '../../services/api/urlConstants';
 import backendService from '../../services/api';
 import {
+  resetFlights,
   updateDepartFlights,
   updateFlights,
   updateInternationalFlights,
@@ -30,8 +31,8 @@ import {
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useNavigate } from 'react-router';
 import { UserDetailsType, uploadIsLoading } from '../../redux/slices/app';
-import { updateOriginFlights } from '../../redux/slices/originFlight';
-import { updateDestinationFlights } from '../../redux/slices/destinationFlight';
+import { resetOriginFlights, updateOriginFlights } from '../../redux/slices/originFlight';
+import { resetDestinationFlights, updateDestinationFlights } from '../../redux/slices/destinationFlight';
 import {
   ISearchFlights,
   updateAdults,
@@ -447,6 +448,10 @@ const SearchFilter = ({
         })
         .catch((err) => {
           console.error(err);
+
+          dispatch(resetFlights());
+          dispatch(resetDestinationFlights());
+          dispatch(resetOriginFlights());
           dispatch(uploadIsLoading(false));
           notification.warning({
             message: 'No flights Found, Please try again',
@@ -1212,8 +1217,12 @@ const SearchFilter = ({
                 top: '16px',
               }}
             >
-              <Form.Item style={{ margin: '0px' }}>
-                <button type='submit' className='searchButton' disabled={isFlightsLoading}>
+              <Form.Item style={{ margin: "0px" }}>
+                <button
+                  type="submit"
+                  className="searchButton"
+                  disabled={isFlightsLoading}
+                >
                   SEARCH
                 </button>
               </Form.Item>
