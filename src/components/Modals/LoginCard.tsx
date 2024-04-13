@@ -20,7 +20,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
       const dataParams = form.getFieldsValue()
       loginUser(dataParams)
         .then((res) => {
-        onFinishHandler(true, { ...res, username: dataParams.username })
+        onFinishHandler(true, { ...res })
         notification.success({ message: "LoggedIn Successfully!!!" })
         })
         .catch((err) => {
@@ -93,7 +93,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
                 { required: true, message: "Please input your username!" }
               ]}
             >
-              <Input placeholder="username" />
+              <Input placeholder="username or email" />
             </Form.Item>
             <Form.Item
               name="password"
