@@ -236,7 +236,8 @@ const ProfileCard = ({ onFinishHandler }: any) => {
       .catch((err) => {
         const errorMessage = err.data.message || "";
         notification.error({ message: errorMessage });
-      }).finally(() => {
+      })
+      .finally(() => {
         setDisableSubmit(false);
       });
   };
@@ -335,7 +336,11 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                 { required: true, message: "Please input your phone number!" },
               ]}
             >
-              <Input placeholder="Phone number" onChange={observeFormChange} />
+              <Input
+                disabled
+                placeholder="Phone number"
+                onChange={observeFormChange}
+              />
             </Form.Item>
             <Title level={5}>
               Discover the Best Flight Deals for your card. Select your card
