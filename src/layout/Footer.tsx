@@ -141,7 +141,7 @@ const Footer = () => {
             <div className='socialLinksSection'>
               <div className='socialLinkContainer'>
                 <a
-                  href='https://www.instagram.com/mytripsaver/'
+                  href='https://www.instagram.com/tripsaverz.in/'
                   className='linkUrl'
                   target='_blank'
                 >
@@ -157,7 +157,7 @@ const Footer = () => {
                   <LinkedinOutlined style={{ fontSize: 25, color: 'white' }} />
                 </a>
               </div>
-              <div className='socialLinkContainer'>
+              {/* <div className='socialLinkContainer'>
                 <a
                   href='https://twitter.com/mytripsaver?t=iR40aB6zc6DO-25z31dkdQ&s=09'
                   className='linkUrl'
@@ -174,7 +174,7 @@ const Footer = () => {
                 >
                   <YoutubeOutlined style={{ fontSize: 25, color: 'white' }} />
                 </a>
-              </div>
+              </div> */}
             </div>
           </Col>
           <Col

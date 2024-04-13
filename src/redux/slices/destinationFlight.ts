@@ -15,11 +15,15 @@ export const destinationFlightsSlice = createSlice({
     updateDestinationFlights: (state, action: PayloadAction<any>) => {
       state.destinationFlights = action.payload;
     },
+
+    resetDestinationFlights:(state)=>{
+      state.destinationFlights=[];
+    }
   },
 });
 
 // Action creators are generated for each case present in reducers object
-export const { updateDestinationFlights } =
+export const { updateDestinationFlights, resetDestinationFlights } =
   destinationFlightsSlice.actions;   
 
 

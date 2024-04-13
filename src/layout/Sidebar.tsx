@@ -2,7 +2,7 @@ import React from "react"
 import { Layout, Menu, Typography } from "antd"
 import type { MenuProps } from "antd"
 import { DatabaseOutlined, RightOutlined } from "@ant-design/icons"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { aboutUsIcon, hotelIcon, logoImage, planeIcon } from "../assets/images"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { toggleSidebar } from "../redux/slices/app"
@@ -98,10 +98,13 @@ const Sidebar = () => {
             alignItems: "center",
           }}
         >
+        <Link to="/">
           <img
             src={logoImage}
             style={{ height: "60px", marginLeft: "1.3rem", marginTop: "1rem" }}
+            alt="logoImage"
           />
+        </Link>
         </div>
       <Menu
         mode="inline"

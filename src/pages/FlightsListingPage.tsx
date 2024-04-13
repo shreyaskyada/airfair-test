@@ -5,7 +5,7 @@ import {
   updateDepartFlights,
   updateReturnFlights,
 } from '../redux/slices/flights';
-import { toggleModal, uploadIsLoading } from '../redux/slices/app';
+import { flightListLoading, toggleModal, uploadIsLoading } from '../redux/slices/app';
 import SearchFilter from '../components/SearchFilter';
 import OriginFlight from '../components/FlightsCard/OriginFlight';
 import { updateDestinationFlights } from '../redux/slices/destinationFlight';
@@ -53,6 +53,8 @@ const FlightsListingPage = () => {
     returnFlight: any;
     internationalFlight: any;
   } = useAppSelector((state) => state.flight);
+
+  const {isLoading, isFlightListLoading, isFlightListFetched} = useAppSelector((state) => state.app);
 
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
@@ -126,7 +128,7 @@ const FlightsListingPage = () => {
   };
 
   const onSelectedFlightChange = (value: any, type: string, flight: Flight) => {
-    dispatch(uploadIsLoading(true));
+    dispatch(flightListLoading(true));
     setTimeout(() => {
       setSelectedFlight((prevDate) => ({
         ...prevDate,
@@ -141,7 +143,7 @@ const FlightsListingPage = () => {
           dispatch(updateReturnFlights(data[0]));
 
           searchFlightData.flightType === TripType.ONE_WAY &&
-            dispatch(uploadIsLoading(false));
+            dispatch(flightListLoading(false));
           break;
         }
         case 'return': {
@@ -154,10 +156,12 @@ const FlightsListingPage = () => {
           console.log(
             'onSelectedFlightChange :: Error occured white updating file'
           );
-          dispatch(uploadIsLoading(false));
+          dispatch(flightListLoading(false));
         }
       }
     }, 1000);
+
+    dispatch(flightListLoading(false));
   };
 
   console.log('flights', flights);
@@ -169,24 +173,22 @@ const FlightsListingPage = () => {
       </div>
       {((flights && Object.keys(flights).length > 0) ||
         internationalFlight) && <Filters />}
-      {(!filteredDataPresent.originFlights ||
-        !filteredDataPresent.returnFlights ||
-        (flights &&
+      {isFlightListFetched && !isFlightListLoading && (((flights &&
           Object.keys(flights).length <= 0 &&
-          !internationalFlight)) && (
-        <div className='notFoundContainer'>
-          <img
-            style={{ width: '100px' }}
-            src={noResult}
-            alt='search-not-found-icon'
-          />
-          <h1 className='notFoundHeading'>
-            {checkIfFilterApplied(filtersSlice)
-              ? 'No Flights Found as Per Filters, Kindly Reset Filters'
-              : 'No Flights Found Please Search Again!'}
-          </h1>
-        </div>
-      )}
+          !internationalFlight))) && (
+          <div className='notFoundContainer'>
+            <img
+              style={{ width: '100px' }}
+              src={noResult}
+              alt='search-not-found-icon'
+            />
+            <h1 className='notFoundHeading'>
+              {checkIfFilterApplied(filtersSlice)
+                ? 'No Flights Found as Per Filters, Kindly Reset Filters'
+                : 'No Flights Found Please Search Again!'}
+            </h1>
+          </div>
+        )}
 
       {internationalFlight && <InternationalFlightCard />}
 
