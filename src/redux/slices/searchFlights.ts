@@ -15,11 +15,11 @@ const searchFlights: ISearchFlights = {
   dateOfDep: dayjs().toString(),
   initialValues: {
     from: {
-      code: "DEL",
-      city: "New Delhi",
-      name: "Indira Gandhi International Airport"
+      code: "",
+      city: "",
+      name: ""
     },
-    to: { code: "BOM", city: "Mumbai", name: "C S M International Airport" },
+    to: { code: "", city: "", name: "" },
     type: "one-way",
     departure: dayjs(),
     return: dayjs().add(1, "day"),

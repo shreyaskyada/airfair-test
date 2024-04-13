@@ -112,6 +112,12 @@ export const flightsSlice = createSlice({
     updateInternationalFlights: (state, action: PayloadAction<any>) => {
       state.internationalFlight = action.payload;
     },
+    resetFlights:(state)=>{
+      state.flights={};
+      state.departFlight={} as Flight;
+      state.returnFlight= {} as Flight;
+      state.internationalFlight= null;
+    }
   },
 });
 
@@ -121,6 +127,7 @@ export const {
   updateReturnFlights,
   updateDepartFlights,
   updateInternationalFlights,
+  resetFlights
 } = flightsSlice.actions;
 
 export default flightsSlice.reducer;

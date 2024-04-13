@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import _ from 'lodash';
+import _, { lowerCase } from 'lodash';
 import moment from 'moment';
 
 import {
@@ -22,16 +22,17 @@ import { getAirportsWrapper } from '../../services/airports';
 import { getFlightsConfig } from '../../services/api/urlConstants';
 import backendService from '../../services/api';
 import {
+  resetFlights,
   updateDepartFlights,
   updateFlights,
   updateInternationalFlights,
   updateReturnFlights,
 } from '../../redux/slices/flights';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { useNavigate } from 'react-router';
-import { UserDetailsType, uploadIsLoading } from '../../redux/slices/app';
-import { updateOriginFlights } from '../../redux/slices/originFlight';
-import { updateDestinationFlights } from '../../redux/slices/destinationFlight';
+import { useNavigate, useParams } from 'react-router';
+import { UserDetailsType, flightListLoading, updateFlightListFetched, uploadIsLoading } from '../../redux/slices/app';
+import { resetOriginFlights, updateOriginFlights } from '../../redux/slices/originFlight';
+import { resetDestinationFlights, updateDestinationFlights } from '../../redux/slices/destinationFlight';
 import {
   ISearchFlights,
   updateAdults,
@@ -55,6 +56,8 @@ import {
 } from '../../data/utils';
 import { airplaneIcon } from '../../assets/images';
 import CustomAutoComplete from '../shared/CustomAutoComplete';
+import axios from 'axios';
+import { useSearchParams } from 'react-router-dom';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -165,6 +168,8 @@ const SearchFilter = ({
   origin?: string;
 }) => {
   const navigate = useNavigate();
+  const params = useParams()["*"];
+
   const [isFlightsLoading, setIsFlightsLoading] = useState(false);
 
   const { userDetails } = useAppSelector((state) => state.app);
@@ -199,9 +204,129 @@ const SearchFilter = ({
     to: '',
   });
   const dispatch = useAppDispatch();
+  const { flights } = useAppSelector((state) => state.flight);
+
+  const [queryParams, setQueryParams]: any = useSearchParams();
+
+
+  const getAirportByCode = async (cityCode: string) => {
+    try {
+      const data: any = await getAirportsWrapper(cityCode);
+      const airportList = data?.airportList || [];
+      const filteredAirports = airportList.filter(
+        (airport: any) => airport.airportCd === cityCode
+      );
+
+      return filteredAirports[0];
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   useEffect(() => {
-    setInputValues(_initialValues);
-  }, [_initialValues]);
+    if (!queryParams.get("from")) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        axios
+          .get(
+            `https://api-bdc.net/data/reverse-geocode?latitude=${latitude}&longitude=${longitude}&localityLanguage=en&key=bdc_123c9922d59e439b854a182e252d731e`
+          )
+          .then((res) => {
+            getAirportsWrapper(res.data?.city)
+              .then((data: any) => {
+                const airportList = data?.airportList || [];
+
+                const filteredAirport = airportList.filter(
+                  (airport: any) =>
+                    lowerCase(airport.city) === lowerCase(res.data?.city)
+                );
+
+                setInputValues((prevState: any) => ({
+                  ...prevState,
+                  from: {
+                    code: filteredAirport[0]?.airportCd || "",
+                    city: filteredAirport[0]?.city || "",
+                    name: filteredAirport[0]?.airportName || "",
+                  },
+                }));
+              })
+              .catch((err) => console.error(err));
+          });
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (queryParams.get("from")) {
+        let initValues = {};
+        const fromCityCode = queryParams.get("from");
+        const toCityCode = queryParams.get("to");
+        const depDate = queryParams.get("depDate");
+        const retDate = queryParams.get("retDate");
+        const type = queryParams.get("type");
+        const adults = queryParams.get("adults");
+        const child = queryParams.get("child");
+        const infants = queryParams.get("infants");
+        const travelClass = queryParams.get("class");
+
+        try {
+          if (fromCityCode) {
+            const fromAirportData = await getAirportByCode(fromCityCode);
+            initValues = {
+              from: {
+                code: fromAirportData?.airportCd || "",
+                city: fromAirportData?.city || "",
+                name: fromAirportData?.airportName || "",
+              },
+            };
+          }
+          if (toCityCode) {
+            const toAirportData = await getAirportByCode(toCityCode);
+            initValues = {
+              ...initValues,
+              to: {
+                code: toAirportData?.airportCd || "",
+                city: toAirportData?.city || "",
+                name: toAirportData?.airportName ||"",
+              },
+            };
+          }
+
+          initValues = {
+            ...initValues,
+            ...(depDate && { departure: dayjs.unix(Number.parseInt(depDate)) }),
+            ...(retDate && { return: dayjs.unix(Number.parseInt(retDate)) }),
+            ...(type && { type: type }),
+            ...(adults && { adult: parseInt(adults) }),
+            ...(child && { child: parseInt(child) }),
+            ...(infants && { infant: parseInt(infants) }),
+            ...(travelClass && { class: travelClass }),
+          };
+          type && form.setFieldValue("type", type);
+          depDate &&
+            form.setFieldValue(
+              "departure",
+              dayjs.unix(Number.parseInt(depDate))
+            );
+          adults && form.setFieldValue("adult", parseInt(adults));
+          child && form.setFieldValue("child", parseInt(child));
+          infants && form.setFieldValue("infant", parseInt(infants));
+          travelClass && form.setFieldValue("class", travelClass);
+
+          !Object.keys(flights).length &&
+            onFinish({ ...inputValues, ...initValues });
+          setInputValues({ ...inputValues, ...initValues });
+        } catch (error) {
+          console.error("Error fetching airport data:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const disabledDate: RangePickerProps['disabledDate'] = (current) => {
     // Can not select days before today and today
@@ -229,10 +354,11 @@ const SearchFilter = ({
     .fill(0)
     .map((_, i) => ({ label: i, value: i }));
 
-  const onFinish = (params: any) => {
+  const onFinish = (newInputValues: any = undefined) => {
     dispatch(uploadIsLoading(true));
+    dispatch(flightListLoading(true));
     setIsFlightsLoading(true);
-    const values: any = inputValues;
+    const values: any = newInputValues || inputValues;
     if (values) {
       const isRoundTrip = values.type === 'round-trip';
       let data: any = {};
@@ -250,6 +376,14 @@ const SearchFilter = ({
       data.seatingClass = values.class;
       data.bankList = userDetails.bankList;
       data.walletList = userDetails.walletList;
+
+      const paramsString = `?from=${data.from}&to=${data.to}&depDate=${dayjs(
+        values.departure
+      ).unix()}&retDate=${dayjs(values.return).unix()}&type=${
+        values.type
+      }&adults=${data.adults}&child=${data.children}&infants=${
+        data.infants
+      }&class=${data.seatingClass}`;
 
       const searchFlightData: ISearchFlights = {
         totalTravellers: values.adult + values.child + values.infant,
@@ -275,7 +409,7 @@ const SearchFilter = ({
 
             dispatch(resetFilters());
 
-            redirectRoute && navigate(redirectRoute);
+            redirectRoute && navigate(`${redirectRoute}${paramsString}`);
           } else {
             dispatch(updateInternationalFlights(null));
 
@@ -309,22 +443,38 @@ const SearchFilter = ({
 
             dispatch(resetFilters());
 
-            redirectRoute && navigate(redirectRoute);
+            redirectRoute && navigate(`${redirectRoute}${paramsString}`);
           }
         })
         .catch((err) => {
           console.error(err);
+
+          dispatch(resetFlights());
+          dispatch(resetDestinationFlights());
+          dispatch(resetOriginFlights());
           dispatch(uploadIsLoading(false));
           notification.warning({
             message: 'No flights Found, Please try again',
           });
-        }).finally(() =>  setIsFlightsLoading(false));
+        })
+        .finally(() => {
+          setIsFlightsLoading(false);
+          dispatch(uploadIsLoading(false));
+          dispatch(flightListLoading(false));
+          dispatch(updateFlightListFetched(true));
+        });
     }
   };
 
-  const fromLocationSearchHandler = (value: string) => {
+  const fromLocationSearchHandler = (value: string, reason?: "select") => {
     if (value) {
-      const [airportCode, airportCity, airportName] = value.split('-');
+      const [airportCode, airportCity, airportName] = value.split("-");
+      if(reason === "select") {
+        params && setQueryParams({
+          ...Object.fromEntries([...(queryParams as any)]),
+          from: airportCode,
+        });
+      }
       dispatch(
         updateFromSearchValues({
           code: airportCode,
@@ -352,9 +502,15 @@ const SearchFilter = ({
     }
   };
 
-  const toLocationSearchHandler = (value: string) => {
+  const toLocationSearchHandler = (value: string, reason?: "select") => {
     if (value) {
-      const [airportCode, airportCity, airportName] = value.split('-');
+      const [airportCode, airportCity, airportName] = value.split("-");
+      if(reason === "select" && params) {
+        setQueryParams({
+          ...Object.fromEntries([...(queryParams as any)]),
+          to: airportCode,
+        });
+      }
       dispatch(
         updateToSearchValues({
           code: airportCode,
@@ -483,7 +639,7 @@ const SearchFilter = ({
             : 'searchBarContainerFlightPage'
         }
       >
-        <Form form={form} onFinish={onFinish} initialValues={_initialValues}>
+        <Form form={form} onFinish={() => onFinish()} initialValues={_initialValues}>
           <div
             style={{
               display: 'flex',
@@ -503,7 +659,11 @@ const SearchFilter = ({
                         ...prevState,
                         type: 'one-way',
                       }));
-                      dispatch(updateFlightType('one-way'));
+                      dispatch(updateFlightType("one-way"));
+                      params && setQueryParams({
+                        ...Object.fromEntries([...(queryParams as any)]),
+                        type: "one-way",
+                      });
                     }}
                     style={{ color: '#013042' }}
                   >
@@ -514,16 +674,23 @@ const SearchFilter = ({
                     onClick={() => {
                       setInputValues((prevState: any) => ({
                         ...prevState,
-                        type: 'round-trip',
-                        return:
-                          inputValues && inputValues.departure?.add(1, 'day'),
+                        type: "round-trip",
+                        ...(!queryParams.get("retDate") && {
+                          return: inputValues.departure?.add(1, "day"),
+                        }),
                       }));
-                      dispatch(updateFlightType('round-trip'));
-                      dispatch(
-                        updateReturnDate(
-                          inputValues && inputValues.departure?.add(1, 'day')
-                        )
-                      );
+                      dispatch(updateFlightType("round-trip"));
+                      if (!queryParams.get("retDate")) {
+                        dispatch(
+                          updateReturnDate(
+                            inputValues && inputValues.departure?.add(1, "day")
+                          )
+                        );
+                      }
+                      params && setQueryParams({
+                        ...Object.fromEntries([...(queryParams as any)]),
+                        type: "round-trip",
+                      });
                     }}
                     style={{ color: '#013042' }}
                   >
@@ -552,7 +719,15 @@ const SearchFilter = ({
                     <label className='fieldLabel'>From</label>
                     <h1 className='fieldTitle'>{inputValues.from.city}</h1>
                     <p className='fieldSubTitle'>
-                      {inputValues.from.code}, {inputValues.from.name}
+                      {inputValues.from.code && inputValues.from.name ? (
+                        <>
+                          {inputValues.from.code}{" "}
+                          {inputValues.from.code !== "" ? "," : null}{" "}
+                          {inputValues.from.name}
+                        </>
+                      ) : (
+                        <Text type="secondary">Enter city or airport</Text>
+                      )}
                     </p>
                   </div>
                   <Form.Item
@@ -568,7 +743,7 @@ const SearchFilter = ({
                     {showInput.from && (
                       <CustomAutoComplete
                         onSearch={_.debounce(fromLocationSearchHandler, 500)}
-                        onSelect={fromLocationSearchHandler}
+                        onSelect={(value) => fromLocationSearchHandler(value, "select")}
                         options={fromOptions}
                         onBlur={() => {
                           textAreaClearHandler({ from: false });
@@ -606,7 +781,15 @@ const SearchFilter = ({
                     <label className='fieldLabel'>To</label>
                     <h1 className='fieldTitle'>{inputValues.to.city}</h1>
                     <p className='fieldSubTitle'>
-                      {inputValues.to.code}, {inputValues.to.name}
+                      {inputValues.to.code && inputValues.to.name ? (
+                        <>
+                          {inputValues.to.code}{" "}
+                          {inputValues.to.code !== "" ? "," : null}{" "}
+                          {inputValues.to.name}
+                        </>
+                      ) : (
+                        <Text type="secondary">Enter city or airport</Text>
+                      )}
                     </p>
                   </div>
                   <Form.Item
@@ -622,7 +805,7 @@ const SearchFilter = ({
                     {showInput.to && (
                       <CustomAutoComplete
                         onSearch={_.debounce(toLocationSearchHandler, 500)}
-                        onSelect={toLocationSearchHandler}
+                        onSelect={(value) => toLocationSearchHandler(value, "select")}
                         options={toOptions}
                         onBlur={() => {
                           textAreaClearHandler({ to: false });
@@ -710,6 +893,10 @@ const SearchFilter = ({
                             ...prevState,
                             departure: value || dayjs(),
                           }));
+                          params && setQueryParams({
+                            ...Object.fromEntries([...(queryParams as any)]),
+                            depDate: dayjs(value).unix(),
+                          });
                           dispatch(updateDepartureDate(value || dayjs()));
                           const diff = value?.diff(inputValues.return);
                           if (value && diff && diff > 0) {
@@ -768,6 +955,12 @@ const SearchFilter = ({
                     type: 'round-trip',
                     return: returnDate,
                   }));
+                  if(params) {
+                    setQueryParams({
+                      ...Object.fromEntries([...(queryParams as any)]),
+                      type: "round-trip",
+                    });
+                  }
                   setShowInput((prevState) => ({ ...prevState, return: true }));
                   dispatch(updateFlightType('round-trip'));
                 }}
@@ -823,7 +1016,7 @@ const SearchFilter = ({
                   >
                     {showInput.return && (
                       <>
-                        <DatePicker
+                      <DatePicker
                           autoFocus
                           open
                           placeholder=''
@@ -874,6 +1067,12 @@ const SearchFilter = ({
                               ...prevState,
                               return: value,
                             }));
+                            if(params) {
+                              setQueryParams({
+                                ...Object.fromEntries([...(queryParams as any)]),
+                                retDate: dayjs(value).unix(),
+                              });
+                            }
                             dispatch(
                               updateReturnDate(
                                 value ||
@@ -923,6 +1122,10 @@ const SearchFilter = ({
                               ...prevState,
                               adult: Number(value),
                             }));
+                            params && setQueryParams({
+                              ...Object.fromEntries([...(queryParams as any)]),
+                              adults: value,
+                            });
                             dispatch(updateAdults(Number(value)));
                           }}
                         />
@@ -939,6 +1142,12 @@ const SearchFilter = ({
                                 ...prevState,
                                 child: Number(value),
                               }));
+                              params && setQueryParams({
+                                ...Object.fromEntries([
+                                  ...(queryParams as any),
+                                ]),
+                                child: value,
+                              });
                               dispatch(updateChild(Number(value)));
                             }}
                           />
@@ -954,6 +1163,12 @@ const SearchFilter = ({
                                 ...prevState,
                                 infant: Number(value),
                               }));
+                              params && setQueryParams({
+                                ...Object.fromEntries([
+                                  ...(queryParams as any),
+                                ]),
+                                infants: value,
+                              });
                               dispatch(updateInfant(Number(value)));
                             }}
                           />
@@ -967,6 +1182,10 @@ const SearchFilter = ({
                               ...prevState,
                               class: value.toString(),
                             }));
+                            params && setQueryParams({
+                              ...Object.fromEntries([...(queryParams as any)]),
+                              class: value,
+                            });
                             dispatch(updateClass(value.toString()));
                           }}
                         />
@@ -1008,8 +1227,12 @@ const SearchFilter = ({
                 top: '16px',
               }}
             >
-              <Form.Item style={{ margin: '0px' }}>
-                <button type='submit' className='searchButton' disabled={isFlightsLoading}>
+              <Form.Item style={{ margin: "0px" }}>
+                <button
+                  type="submit"
+                  className="searchButton"
+                  disabled={isFlightsLoading}
+                >
                   SEARCH
                 </button>
               </Form.Item>
