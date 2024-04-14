@@ -75,21 +75,25 @@ const seatTypes = [
   { label: 'First Class', value: 'FIRST_CLASS' },
 ];
 
-// const initialValues = {
-//   from: {
-//     code: "DEL",
-//     city: "New Delhi",
-//     name: "Indira Gandhi International Airport"
-//   },
-//   to: { code: "BOM", city: "Mumbai", name: "C S M International Airport" },
-//   type: "one-way",
-//   departure: dayjs(),
-//   return: dayjs(),
-//   adult: 1,
-//   child: 0,
-//   infant: 0,
-//   class: "ECONOMY"
-// }
+const initialValues = {
+  "from": {
+      "code": "",
+      "city": "",
+      "name": ""
+  },
+  "to": {
+      "code": "",
+      "city": "",
+      "name": ""
+  },
+  "type": "one-way",
+  "departure": dayjs(),
+  "return": dayjs().add(1, "day"),
+  "adult": 1,
+  "child": 0,
+  "infant": 0,
+  "class": "ECONOMY"
+}
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -172,7 +176,7 @@ const SearchFilter = ({
 
   const [isFlightsLoading, setIsFlightsLoading] = useState(false);
 
-  const { userDetails } = useAppSelector((state) => state.app);
+  const { userDetails, isLoggedIn } = useAppSelector((state) => state.app);
   const { initialValues: _initialValues } = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
   );
@@ -222,6 +226,13 @@ const SearchFilter = ({
       console.log("error", error);
     }
   };
+
+  useEffect(() => {
+    if(!params) {
+      setInputValues(initialValues)
+    }
+  }, [params]);
+  
 
   useEffect(() => {
     if (!queryParams.get("from")) {
@@ -395,7 +406,6 @@ const SearchFilter = ({
       backendService
         .request(config)
         .then((res: any) => {
-          console.log('RES', res);
           if (res.internationalReturnJourneyCompareResponse) {
             dispatch(
               updateInternationalFlights(
@@ -425,8 +435,6 @@ const SearchFilter = ({
               let providers = Object.keys(value.compare);
               return compareProvidersAndFilter(departProviders, providers);
             });
-
-            console.log('data', data);
 
             dispatch(updateDestinationFlights(data));
 
@@ -494,7 +502,7 @@ const SearchFilter = ({
       textAreaClearHandler({ from: false });
       setFromOptions([
         popularCityLabel,
-        ...popularFlightsArr.map((airport: any) => ({
+        ...popularFlightsArr.filter((airport) => airport.airportCd !== inputValues?.to?.code).map((airport: any) => ({
           label: getDropdownLabel(airport),
           value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
         })),
@@ -530,7 +538,7 @@ const SearchFilter = ({
       textAreaClearHandler({ to: false });
       setToOptions([
         popularCityLabel,
-        ...popularFlightsArr.map((airport: any) => ({
+        ...popularFlightsArr.filter((airport) => airport.airportCd !== inputValues?.from?.code).map((airport: any) => ({
           label: getDropdownLabel(airport),
           value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
         })),
@@ -546,14 +554,15 @@ const SearchFilter = ({
     if (showInput.from) {
       getAirportsWrapper(inputValues.from.code)
         .then((data: any) => {
-          const listData = data.airportList?.length
-            ? data.airportList
-            : popularFlightsArr;
+          const filteredAirports = data.airportList?.filter((airport: any) => inputValues?.to?.code !== airport.airportCd);
+          const listData = filteredAirports.length
+            ? filteredAirports
+            : popularFlightsArr.filter((airport: any) => inputValues?.to?.code !== airport.airportCd);
           const airports = listData?.map((airport: any) => ({
             label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
           }));
-          if (!data.airportList?.length) {
+          if (!filteredAirports.length) {
             airports.unshift(popularCityLabel);
           }
           setFromOptions(airports);
@@ -575,17 +584,20 @@ const SearchFilter = ({
   }, [inputValues]);
 
   useEffect(() => {
-    if (showInput.to) {
+        if (showInput.to) {
       getAirportsWrapper(inputValues.to.code)
         .then((data: any) => {
-          const listData = data.airportList?.length
-            ? data.airportList
-            : popularFlightsArr;
+          const filteredAirports = data.airportList?.filter((airport: any) => inputValues?.from?.code !== airport.airportCd);
+
+          const listData = filteredAirports.length
+            ? filteredAirports
+            : popularFlightsArr.filter((airport: any) => inputValues?.from?.code !== airport.airportCd);
+            
           const airports = listData?.map((airport: any) => ({
             label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
           }));
-          if (!data.airportList?.length) {
+          if (!filteredAirports?.length) {
             airports.unshift(popularCityLabel);
           }
           setToOptions(airports);
@@ -627,7 +639,7 @@ const SearchFilter = ({
       {origin === 'home' ? (
         <div className='moving-text-container'>
           <Title level={4} className='moving-text'>
-            Signup Now and Update Profile to get best deals on your Credit /
+            {!isLoggedIn && "Signup Now and"} Update Profile to get best deals on your Credit /
             Debit Cards
           </Title>
         </div>
@@ -751,7 +763,7 @@ const SearchFilter = ({
                         onOpen={() => {
                           setFromOptions([
                             popularCityLabel,
-                            ...popularFlightsArr.map((airport: any) => ({
+                            ...popularFlightsArr.filter((airport: any) => inputValues?.to?.code !== airport.airportCd).map((airport: any) => ({
                               label: getDropdownLabel(airport),
                               value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
                             })),
@@ -813,7 +825,7 @@ const SearchFilter = ({
                         onOpen={() => {
                           setToOptions([
                             popularCityLabel,
-                            ...popularFlightsArr.map((airport: any) => ({
+                            ...popularFlightsArr.filter((airport) => airport.airportCd !== inputValues.from.code).map((airport: any) => ({
                               label: getDropdownLabel(airport),
                               value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
                             })),
@@ -944,7 +956,6 @@ const SearchFilter = ({
                 onClick={() => {
                   form.setFieldValue('type', 'round-trip');
                   const diff = inputValues.departure?.diff(inputValues.return);
-                  console.log('DIFFere', diff);
                   let returnDate = inputValues.return;
                   if (inputValues.departure && diff && diff > 0) {
                     returnDate = inputValues.departure?.add(1, 'day');
@@ -1034,12 +1045,6 @@ const SearchFilter = ({
                               props.value as string,
                               'DD-MMM-YY'
                             );
-                            console.log('props.value', props.value);
-                            console.log('inputDate', inputDate?.toString());
-                            console.log(
-                              'inputValues.return',
-                              inputValues.return?.toString()
-                            );
 
                             let returnDate = (props.value as string)?.trim()
                               ? inputDate
@@ -1048,12 +1053,10 @@ const SearchFilter = ({
                               : inputValues.departure;
                             const diff =
                               inputValues.departure?.diff(returnDate);
-                            console.log('diff', diff);
+
                             if (inputValues.departure && diff && diff > 0) {
                               returnDate = inputValues.departure;
                             }
-                            console.log('returnDate:', returnDate?.toString());
-
                             return (
                               <input
                                 {...props}

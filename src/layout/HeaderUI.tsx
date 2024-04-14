@@ -54,7 +54,6 @@ const HeaderUI = () => {
         notification.success({ message: "LoggedOut successfully" })
       })
       .catch((err) => {
-        console.log(err)
         if (err?.response?.status === 400) {
           setIsLoggedIn(false)
           setUserId("")

@@ -104,6 +104,14 @@
   font-weight: bold;
 }
 
+.tooltipContentContainer {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .rightCol .tooltipContent {
   background-color: var(--dark-color);
   font-size: 1rem;
@@ -117,6 +125,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+}
+
+.rightCol .tooltipContentContainer > span {
+  position: absolute;
+  animation: ping 1s cubic-bezier(0,0,.2,1) infinite
+}
+
+.rightCol .tooltipContent {
+  position: relative;
+  background-color: #1677ff;
+}
+
+.ant-tooltip .ant-tooltip-inner {
+  width: fit-content;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
 }
 
 .flighCompleteDetail {
