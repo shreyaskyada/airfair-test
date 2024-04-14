@@ -70,7 +70,6 @@ const OriginFlight = (props: any) => {
           type={type}
           selectedKey={selectedKey}
           onSelectedFlightChange={(data: any) => {
-            console.log('data  :', data);
             onSelectedFlightChange(data, type, flight);
           }}
           checked={departFlight?.flightCode === flight.flightCode}

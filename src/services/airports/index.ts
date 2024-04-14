@@ -282,7 +282,6 @@ export const getAirportsWrapper = (query: string) => {
   return backendService
     .request(config)
     .then((res) => {
-      console.log(res)
       return res
     })
     .catch((err) => console.error(err))
@@ -307,7 +306,6 @@ export const searchFlights = (data: {
   return backendService
     .request(config)
     .then((res) => {
-      console.log(res)
       return res
     })
     .catch((err) => console.error(err))
@@ -318,7 +316,6 @@ export const getBankDetails = (status: string) => {
   return backendService
     .request(config)
     .then((res) => {
-      console.log(res)
       return res
     })
     .catch((err) => console.error(err))
@@ -329,7 +326,6 @@ export const getBankName = (bankName: string, bankType: string) => {
   return backendService
     .request(config)
     .then((res) => {
-      console.log(res)
       return res
     })
     .catch((err) => console.error(err))

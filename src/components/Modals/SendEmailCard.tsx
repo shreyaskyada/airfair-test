@@ -44,8 +44,6 @@ const SendEmailCard: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
   };
 
   const onFinish = (values: any) => {
-    console.log('VALUES', values);
-
     const config = groupBookingConfig(values);
     return backendService
       .request(config)
