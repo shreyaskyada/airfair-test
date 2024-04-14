@@ -76,7 +76,6 @@ const FlightsListingPage = () => {
         let providers = Object.keys(value.compare);
         return compareProvidersAndFilter(departProviders, providers);
       });
-      console.log('data', data);
       data && data.length && updateDestinationFlights(data);
     }
   }, [flights, departFlight]);
@@ -86,11 +85,7 @@ const FlightsListingPage = () => {
       type === 'depart'
         ? flights.returnJourneyCompareResponse || []
         : flights.flightCompareResponse || [];
-    console.log(
-      'Flights to filter : ',
-      flightsListToFilter,
-      selectedFlightProvider
-    );
+
     // let data = flightsListToFilter.filter(
     //   (x: any) =>
     //     Object.keys(x.compare).filter((value: any) =>
@@ -153,9 +148,6 @@ const FlightsListingPage = () => {
           break;
         }
         default: {
-          console.log(
-            'onSelectedFlightChange :: Error occured white updating file'
-          );
           dispatch(flightListLoading(false));
         }
       }
@@ -163,8 +155,6 @@ const FlightsListingPage = () => {
 
     dispatch(flightListLoading(false));
   };
-
-  console.log('flights', flights);
 
   return (
     <div className='fligtListingSection'>

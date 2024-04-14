@@ -49,7 +49,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
         centered
         footer={null}
         closable={true}
-        zIndex={1003}
+        zIndex={3003}
         onCancel={onCancelHandler}
         width="350px"
       >

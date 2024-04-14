@@ -39,18 +39,12 @@ const FlightDetailPage = () => {
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
   );
-  console.log('searchFlightData:', searchFlightData);
-
   const getDiscount = async (
     provider: [],
     setProviders: Dispatch<any>,
     isOneWay: boolean = false,
     isReturnFlight: boolean = false
   ) => {
-    console.log(
-      '🚀 ~ file: FlightDetailPage.tsx:32 ~ getDiscount ~ provider:',
-      provider
-    );
     try {
       if (!provider.length || !searchFlightData) {
         throw new Error('invalid inputs');
@@ -221,11 +215,6 @@ const FlightDetailPage = () => {
         const returnNotCommonProviders = returnProviders.filter(
           (provider) => !commonProviders.includes(provider)
         );
-
-        console.log('commonProviders', commonProviders);
-        console.log('departNotCommonProviders', departNotCommonProviders);
-        console.log('returnNotCommonProviders', returnNotCommonProviders);
-
         // const keys = Object.keys(departFlight.compare || {});
         commonProviders &&
           commonProviders.forEach((key: any) => {
@@ -369,9 +358,6 @@ const FlightDetailPage = () => {
     makeProvideres();
   }, [departFlight, returnFlight]);
 
-  console.log('departProviderWithOffers', departProviderWithOffers);
-  console.log('returnProviderWithOffers', returnProviderWithOffers);
-
   const flighInfoTabCard = ({
     fromTime,
     fromDate,
@@ -503,13 +489,14 @@ const FlightDetailPage = () => {
     );
   };
 
-  const renderProvider = (
-    provideDetail: any,
-    index: number,
-    showCheapest: boolean = false,
-    disableViewBtn: boolean = false,
-    label?: string | boolean
-  ) => {
+  const RenderProvider = ({
+    provideDetail,
+    index,
+    showCheapest,
+    disableViewBtn,
+    label
+  }: any) => {
+    const [isOpenTooltip, setIsOpenTooltip] = useState(true);
     const departCodes = departFlight?.flightCode
       ?.split('->')
       .map((el) => el.slice(0, 2) + '-' + el.slice(2))
@@ -574,6 +561,10 @@ const FlightDetailPage = () => {
         <div className='rightCol'>
           <Tooltip
             color='white'
+            onPopupAlign={() => {
+              console.log("SK: working heheh")
+            }}
+            onOpenChange={() => setIsOpenTooltip(!isOpenTooltip)}
             title={
               provideDetail.bestOffer ? (
                 <>
@@ -706,14 +697,12 @@ const FlightDetailPage = () => {
             }
             placement='top'
           >
-            <div className='tooltipContentContainer'>
-              {
-                !isLoggedIn && (
-                  <span className='tooltipContent ' style={{backgroundColor:"#38bdf8"}}></span>
-                )
-              }
-              <p className='tooltipContent'>i</p>
-            </div>
+            <Tooltip title="Hover Me!" open={isOpenTooltip}>
+              <div className='tooltipContentContainer'>
+                <span className='tooltipContent ' style={{backgroundColor:"#38bdf8"}}></span>
+                <p className='tooltipContent'>i</p>
+              </div>
+            </Tooltip>
           </Tooltip>
           <button
             disabled={disableViewBtn}
@@ -762,7 +751,7 @@ const FlightDetailPage = () => {
             <div className='providersSection'>
               {!!providerWithOffers.length ? (
                 providerWithOffers.map((provideDetail: any, index: number) =>
-                  renderProvider(provideDetail, index, true)
+                  <RenderProvider provideDetail={provideDetail} index={index} showCheapest={true} />
                 )
               ) : (
                 !internationalFlight && <Skeleton.Input
@@ -773,29 +762,29 @@ const FlightDetailPage = () => {
               )}
               {!!departProviderWithOffers.length &&
                 departProviderWithOffers.map(
-                  (provideDetail: any, index: number) =>
-                    renderProvider(
-                      provideDetail,
-                      index,
-                      false,
-                      !internationalFlight && true,
-                      !internationalFlight && `This is one-way Flight from ${
+                  (provideDetail: any, index: number) => 
+                    <RenderProvider
+                      provideDetail={provideDetail}
+                      index={index}
+                      showCheapest={false}
+                      disableViewBtn={!internationalFlight && true}
+                      label={!internationalFlight && `This is one-way Flight from ${
                         (searchFlightData.initialValues as any)?.from.city
-                      }`
-                    )
+                      }`}
+                   />
                 )}
               {!!returnProviderWithOffers.length &&
                 returnProviderWithOffers.map(
                   (provideDetail: any, index: number) =>
-                    renderProvider(
-                      provideDetail,
-                      index,
-                      false,
-                      !internationalFlight && true,
-                      !internationalFlight && `This is one-way Flight from ${
+                    <RenderProvider
+                      provideDetail={provideDetail}
+                      index={index}
+                      showCheapest={false}
+                      disableViewBtn={!internationalFlight && true}
+                      label={!internationalFlight && `This is one-way Flight from ${
                         (searchFlightData.initialValues as any)?.to.city
-                      }`
-                    )
+                      }`}
+                   />
                 )}
             </div>
           </div>

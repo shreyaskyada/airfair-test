@@ -75,21 +75,25 @@ const seatTypes = [
   { label: 'First Class', value: 'FIRST_CLASS' },
 ];
 
-// const initialValues = {
-//   from: {
-//     code: "DEL",
-//     city: "New Delhi",
-//     name: "Indira Gandhi International Airport"
-//   },
-//   to: { code: "BOM", city: "Mumbai", name: "C S M International Airport" },
-//   type: "one-way",
-//   departure: dayjs(),
-//   return: dayjs(),
-//   adult: 1,
-//   child: 0,
-//   infant: 0,
-//   class: "ECONOMY"
-// }
+const initialValues = {
+  "from": {
+      "code": "",
+      "city": "",
+      "name": ""
+  },
+  "to": {
+      "code": "",
+      "city": "",
+      "name": ""
+  },
+  "type": "one-way",
+  "departure": dayjs(),
+  "return": dayjs().add(1, "day"),
+  "adult": 1,
+  "child": 0,
+  "infant": 0,
+  "class": "ECONOMY"
+}
 
 function compareArrays(array1: any, array2: any) {
   if (array1.length !== array2.length) {
@@ -222,6 +226,13 @@ const SearchFilter = ({
       console.log("error", error);
     }
   };
+
+  useEffect(() => {
+    if(!params) {
+      setInputValues(initialValues)
+    }
+  }, [params]);
+  
 
   useEffect(() => {
     if (!queryParams.get("from")) {
@@ -395,7 +406,6 @@ const SearchFilter = ({
       backendService
         .request(config)
         .then((res: any) => {
-          console.log('RES', res);
           if (res.internationalReturnJourneyCompareResponse) {
             dispatch(
               updateInternationalFlights(
@@ -425,8 +435,6 @@ const SearchFilter = ({
               let providers = Object.keys(value.compare);
               return compareProvidersAndFilter(departProviders, providers);
             });
-
-            console.log('data', data);
 
             dispatch(updateDestinationFlights(data));
 
@@ -948,7 +956,6 @@ const SearchFilter = ({
                 onClick={() => {
                   form.setFieldValue('type', 'round-trip');
                   const diff = inputValues.departure?.diff(inputValues.return);
-                  console.log('DIFFere', diff);
                   let returnDate = inputValues.return;
                   if (inputValues.departure && diff && diff > 0) {
                     returnDate = inputValues.departure?.add(1, 'day');
@@ -1038,12 +1045,6 @@ const SearchFilter = ({
                               props.value as string,
                               'DD-MMM-YY'
                             );
-                            console.log('props.value', props.value);
-                            console.log('inputDate', inputDate?.toString());
-                            console.log(
-                              'inputValues.return',
-                              inputValues.return?.toString()
-                            );
 
                             let returnDate = (props.value as string)?.trim()
                               ? inputDate
@@ -1052,12 +1053,10 @@ const SearchFilter = ({
                               : inputValues.departure;
                             const diff =
                               inputValues.departure?.diff(returnDate);
-                            console.log('diff', diff);
+
                             if (inputValues.departure && diff && diff > 0) {
                               returnDate = inputValues.departure;
                             }
-                            console.log('returnDate:', returnDate?.toString());
-
                             return (
                               <input
                                 {...props}

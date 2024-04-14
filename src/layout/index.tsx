@@ -100,7 +100,6 @@ const LayoutUI = () => {
 
   const onSignupFinishHandler = (success: boolean, userDetails: any) => {
     if (success) {
-      console.log("User Detail 2 :", userDetails)
       dispatch(updateIsLoggedIn(true))
       //setIsLoggedIn(true)
       setUserId(userDetails.userName)
