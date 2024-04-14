@@ -172,7 +172,7 @@ const SearchFilter = ({
 
   const [isFlightsLoading, setIsFlightsLoading] = useState(false);
 
-  const { userDetails } = useAppSelector((state) => state.app);
+  const { userDetails, isLoggedIn } = useAppSelector((state) => state.app);
   const { initialValues: _initialValues } = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
   );
@@ -494,7 +494,7 @@ const SearchFilter = ({
       textAreaClearHandler({ from: false });
       setFromOptions([
         popularCityLabel,
-        ...popularFlightsArr.map((airport: any) => ({
+        ...popularFlightsArr.filter((airport) => airport.airportCd !== inputValues?.to?.code).map((airport: any) => ({
           label: getDropdownLabel(airport),
           value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
         })),
@@ -530,7 +530,7 @@ const SearchFilter = ({
       textAreaClearHandler({ to: false });
       setToOptions([
         popularCityLabel,
-        ...popularFlightsArr.map((airport: any) => ({
+        ...popularFlightsArr.filter((airport) => airport.airportCd !== inputValues?.from?.code).map((airport: any) => ({
           label: getDropdownLabel(airport),
           value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
         })),
@@ -546,14 +546,15 @@ const SearchFilter = ({
     if (showInput.from) {
       getAirportsWrapper(inputValues.from.code)
         .then((data: any) => {
-          const listData = data.airportList?.length
-            ? data.airportList
-            : popularFlightsArr;
+          const filteredAirports = data.airportList?.filter((airport: any) => inputValues?.to?.code !== airport.airportCd);
+          const listData = filteredAirports.length
+            ? filteredAirports
+            : popularFlightsArr.filter((airport: any) => inputValues?.to?.code !== airport.airportCd);
           const airports = listData?.map((airport: any) => ({
             label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
           }));
-          if (!data.airportList?.length) {
+          if (!filteredAirports.length) {
             airports.unshift(popularCityLabel);
           }
           setFromOptions(airports);
@@ -575,17 +576,20 @@ const SearchFilter = ({
   }, [inputValues]);
 
   useEffect(() => {
-    if (showInput.to) {
+        if (showInput.to) {
       getAirportsWrapper(inputValues.to.code)
         .then((data: any) => {
-          const listData = data.airportList?.length
-            ? data.airportList
-            : popularFlightsArr;
+          const filteredAirports = data.airportList?.filter((airport: any) => inputValues?.from?.code !== airport.airportCd);
+
+          const listData = filteredAirports.length
+            ? filteredAirports
+            : popularFlightsArr.filter((airport: any) => inputValues?.from?.code !== airport.airportCd);
+            
           const airports = listData?.map((airport: any) => ({
             label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
           }));
-          if (!data.airportList?.length) {
+          if (!filteredAirports?.length) {
             airports.unshift(popularCityLabel);
           }
           setToOptions(airports);
@@ -627,7 +631,7 @@ const SearchFilter = ({
       {origin === 'home' ? (
         <div className='moving-text-container'>
           <Title level={4} className='moving-text'>
-            Signup Now and Update Profile to get best deals on your Credit /
+            {!isLoggedIn && "Signup Now and"} Update Profile to get best deals on your Credit /
             Debit Cards
           </Title>
         </div>
@@ -751,7 +755,7 @@ const SearchFilter = ({
                         onOpen={() => {
                           setFromOptions([
                             popularCityLabel,
-                            ...popularFlightsArr.map((airport: any) => ({
+                            ...popularFlightsArr.filter((airport: any) => inputValues?.to?.code !== airport.airportCd).map((airport: any) => ({
                               label: getDropdownLabel(airport),
                               value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
                             })),
@@ -813,7 +817,7 @@ const SearchFilter = ({
                         onOpen={() => {
                           setToOptions([
                             popularCityLabel,
-                            ...popularFlightsArr.map((airport: any) => ({
+                            ...popularFlightsArr.filter((airport) => airport.airportCd !== inputValues.from.code).map((airport: any) => ({
                               label: getDropdownLabel(airport),
                               value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
                             })),

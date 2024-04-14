@@ -1,4 +1,4 @@
-import { Avatar, Skeleton, Divider, Tooltip, Tag } from 'antd';
+import { Avatar, Skeleton, Divider, Tooltip, Tag, Badge } from 'antd';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { useState, useEffect, Fragment, Dispatch } from 'react';
 import {
@@ -34,6 +34,7 @@ const FlightDetailPage = () => {
   const { departFlight, returnFlight, internationalFlight, flights } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
   );
+  const { isLoggedIn } = useAppSelector((state) => state.app);
 
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights
@@ -576,6 +577,10 @@ const FlightDetailPage = () => {
             title={
               provideDetail.bestOffer ? (
                 <>
+                  {
+                    !isLoggedIn &&
+                    <Tag style={{margin: "10px auto", fontSize: "13px"}} color="blue-inverse">Unlock Exclusive Deals by Logging In</Tag>
+                  }
                   <div>
                     <span style={{ color: '#4E6F7B' }}>Base Fare: </span>
                     <span
@@ -701,7 +706,14 @@ const FlightDetailPage = () => {
             }
             placement='top'
           >
-            <p className='tooltipContent'>i</p>
+            <div className='tooltipContentContainer'>
+              {
+                !isLoggedIn && (
+                  <span className='tooltipContent ' style={{backgroundColor:"#38bdf8"}}></span>
+                )
+              }
+              <p className='tooltipContent'>i</p>
+            </div>
           </Tooltip>
           <button
             disabled={disableViewBtn}
