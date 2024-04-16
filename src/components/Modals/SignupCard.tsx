@@ -16,8 +16,6 @@ import 'react-phone-input-2/lib/style.css'
 const { Text, Title } = Typography
 
 const SignupCard = ({ onFinishHandler }: any) => {
-
-  const [phoneNumber,setPhoneNumber] = useState("");
   const[countryCode,setCountryCode]= useState("");
   const [isFocused, setIsFocused] = useState(false);
   const dispatch = useAppDispatch() 
@@ -56,11 +54,11 @@ const SignupCard = ({ onFinishHandler }: any) => {
 
   const handlePhoneNumberChange = (value: string, data: { dialCode: string }) => {
     setCountryCode(data.dialCode);
-    setPhoneNumber(value);
+
+    form.setFieldValue("phoneNo",data.dialCode === countryCode ?  value : data.dialCode)
   };
 
   const phoneValidator = (rule:any, value:any, callback:any) => {
-
     if(!validator.isMobilePhone(`+${value}`)){
       callback("Enter a valid number")
     } else{
@@ -173,7 +171,6 @@ const SignupCard = ({ onFinishHandler }: any) => {
             </Form.Item>
             <Form.Item
               name="phoneNo"
-              
               rules={[
                 { required: true, message: "Please input your phone number!" },
                 {
@@ -182,8 +179,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
               ]}
             >
               <PhoneInput
-                country={"in"}
-                value={phoneNumber}
+                country={"in"}                
                 onChange={handlePhoneNumberChange}
                 inputStyle={{width:"100%",height:"31.6px",border: isFocused ? '1px solid #4096ff' : "" , boxShadow: isFocused ? "0 0 0 2px rgba(5, 145, 255, 0.1)" : ""}}
                 buttonStyle={{border: isFocused ? '1px solid #4096ff' : ""}}
