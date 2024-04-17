@@ -1,8 +1,6 @@
 import React, { useState } from "react"
-import { Button, Card, Form, Input, InputNumber, Modal, Select, Typography } from "antd"
+import { Button, Form, Input, Modal, Typography } from "antd"
 import { loginBanner } from "../../assets/images"
-import { getFlightsConfig } from "../../services/api/urlConstants"
-import backendService from "../../services/api"
 import { signupUser } from "../../services/auth"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { toggleModal } from "../../redux/slices/app"
@@ -13,7 +11,7 @@ import PhoneInput from 'react-phone-input-2'
 import validator from 'validator';
 import 'react-phone-input-2/lib/style.css'
 
-const { Text, Title } = Typography
+const { Title } = Typography
 
 const SignupCard = ({ onFinishHandler }: any) => {
   const[countryCode,setCountryCode]= useState("");
@@ -24,7 +22,6 @@ const SignupCard = ({ onFinishHandler }: any) => {
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
-
     const phone = form.getFieldsValue().phoneNo;
     const country_code = phone.substring(0,countryCode.length)
     const phone_number =  phone.substring(countryCode.length);
@@ -99,6 +96,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
             Sign up
           </Title>
           <Form
+           autoComplete="off"
             form={form}
             name="basic"
             initialValues={{ remember: true }}
@@ -106,7 +104,8 @@ const SignupCard = ({ onFinishHandler }: any) => {
               width: "100%"
             }}
             onFinish={onFinish}
-            autoComplete="off"
+           
+          
           >
             <Form.Item
               style={{ marginBottom: "10px" }}
@@ -134,7 +133,21 @@ const SignupCard = ({ onFinishHandler }: any) => {
                 { type: "email" }
               ]}
             >
-              <Input placeholder="Email" />
+              <Input placeholder="Email"/>
+            </Form.Item>
+            <Form.Item
+              style={{ marginBottom: "10px" }}
+              name="userName"
+              rules={[
+                { required: true, message: "Please input your username!" },
+              
+                {
+                  validator: usernameValidator,
+                },
+              
+              ]}
+            >
+              <Input placeholder="User name" />
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "10px" }}
@@ -143,7 +156,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
                 { required: true, message: "Please input your password!" }
               ]}
             >
-              <Input.Password placeholder="Password" />
+              <Input.Password placeholder="Password" autoComplete="new-password" />
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "10px" }}
@@ -155,19 +168,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
                 }
               ]}
             >
-              <Input.Password placeholder="Confirm password" />
-            </Form.Item>
-            <Form.Item
-              style={{ marginBottom: "10px" }}
-              name="userName"
-              rules={[
-                { required: true, message: "Please input your username!" },
-                {
-                  validator: usernameValidator,
-                },
-              ]}
-            >
-              <Input placeholder="User name" />
+              <Input.Password placeholder="Confirm password"/>
             </Form.Item>
             <Form.Item
               name="phoneNo"
@@ -187,7 +188,6 @@ const SignupCard = ({ onFinishHandler }: any) => {
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
                />
-              
             </Form.Item>
             <Form.Item style={{ textAlign: "center" }}>
               <Button type="primary" htmlType="submit" disabled={isLoading}>
