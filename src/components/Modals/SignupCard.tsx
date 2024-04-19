@@ -1,24 +1,32 @@
-import React from "react"
-import { Button, Card, Form, Input, InputNumber, Modal, Typography } from "antd"
+import React, { useState } from "react"
+import { Button, Form, Input, Modal, Typography } from "antd"
 import { loginBanner } from "../../assets/images"
-import { getFlightsConfig } from "../../services/api/urlConstants"
-import backendService from "../../services/api"
 import { signupUser } from "../../services/auth"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { toggleModal } from "../../redux/slices/app"
 import { uploadIsLoading } from "../../redux/slices/app"
 import { notification } from "../Notification/customNotification"
 import { Link } from "react-router-dom"
+import PhoneInput from 'react-phone-input-2'
+import validator from 'validator';
+import 'react-phone-input-2/lib/style.css'
 
-const { Text, Title } = Typography
+const { Title } = Typography
 
 const SignupCard = ({ onFinishHandler }: any) => {
-  const dispatch = useAppDispatch()
+  const[countryCode,setCountryCode]= useState("");
+  const [isFocused, setIsFocused] = useState(false);
+  const dispatch = useAppDispatch() 
   const isLoading = useAppSelector((state) => state.app.isLoading)
 
   const [form] = Form.useForm()
 
   const onFinish = (values: any) => {
+    const phone = form.getFieldsValue().phoneNo;
+    const country_code = phone.substring(0,countryCode.length)
+    const phone_number =  phone.substring(countryCode.length);
+    form.setFieldValue("phoneNo",`${country_code}-${phone_number}`);
+    
     if(!isLoading) {
       const dataParams = form.getFieldsValue()
       dispatch(uploadIsLoading(true))
@@ -41,13 +49,16 @@ const SignupCard = ({ onFinishHandler }: any) => {
     dispatch(toggleModal({ modal: "signup", status: false }))
   }
 
+  const handlePhoneNumberChange = (value: string, data: { dialCode: string }) => {
+    setCountryCode(data.dialCode);
+
+    form.setFieldValue("phoneNo",data.dialCode === countryCode ?  value : data.dialCode)
+  };
+
   const phoneValidator = (rule:any, value:any, callback:any) => {
-    if(value && value.length < 10){
-      callback('Phone number must be 10 digits');
-    }
-    if (value && !/^\d{10}$/.test(value)) {
-      callback('Phone number should only cotain numbers');
-    } else {
+    if(!validator.isMobilePhone(`+${value}`)){
+      callback("Enter a valid number")
+    } else{
       callback();
     }
   };
@@ -85,6 +96,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
             Sign up
           </Title>
           <Form
+           autoComplete="off"
             form={form}
             name="basic"
             initialValues={{ remember: true }}
@@ -92,7 +104,8 @@ const SignupCard = ({ onFinishHandler }: any) => {
               width: "100%"
             }}
             onFinish={onFinish}
-            autoComplete="off"
+           
+          
           >
             <Form.Item
               style={{ marginBottom: "10px" }}
@@ -120,7 +133,21 @@ const SignupCard = ({ onFinishHandler }: any) => {
                 { type: "email" }
               ]}
             >
-              <Input placeholder="Email" />
+              <Input placeholder="Email"/>
+            </Form.Item>
+            <Form.Item
+              style={{ marginBottom: "10px" }}
+              name="userName"
+              rules={[
+                { required: true, message: "Please input your username!" },
+              
+                {
+                  validator: usernameValidator,
+                },
+              
+              ]}
+            >
+              <Input placeholder="User name" />
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "10px" }}
@@ -129,7 +156,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
                 { required: true, message: "Please input your password!" }
               ]}
             >
-              <Input.Password placeholder="Password" />
+              <Input.Password placeholder="Password" autoComplete="new-password" />
             </Form.Item>
             <Form.Item
               style={{ marginBottom: "10px" }}
@@ -141,19 +168,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
                 }
               ]}
             >
-              <Input.Password placeholder="Confirm password" />
-            </Form.Item>
-            <Form.Item
-              style={{ marginBottom: "10px" }}
-              name="userName"
-              rules={[
-                { required: true, message: "Please input your username!" },
-                {
-                  validator: usernameValidator,
-                },
-              ]}
-            >
-              <Input placeholder="User name" />
+              <Input.Password placeholder="Confirm password"/>
             </Form.Item>
             <Form.Item
               name="phoneNo"
@@ -164,7 +179,15 @@ const SignupCard = ({ onFinishHandler }: any) => {
                 },
               ]}
             >
-              <Input placeholder="Phone number" />
+              <PhoneInput
+                country={"in"}                
+                onChange={handlePhoneNumberChange}
+                inputStyle={{width:"100%",height:"31.6px",border: isFocused ? '1px solid #4096ff' : "" , boxShadow: isFocused ? "0 0 0 2px rgba(5, 145, 255, 0.1)" : ""}}
+                buttonStyle={{border: isFocused ? '1px solid #4096ff' : ""}}
+                dropdownStyle={{bottom:"35px", width:"282px"}}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+               />
             </Form.Item>
             <Form.Item style={{ textAlign: "center" }}>
               <Button type="primary" htmlType="submit" disabled={isLoading}>
