@@ -58,6 +58,7 @@ import { airplaneIcon } from '../../assets/images';
 import CustomAutoComplete from '../shared/CustomAutoComplete';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
+import { SwapOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { Title, Text } = Typography;
@@ -550,6 +551,24 @@ const SearchFilter = ({
     setShowInput((prevState) => ({ ...prevState, ...updatedValues }));
   };
 
+  const onSwapClickHandler = (event: any) => {
+    event.stopPropagation();
+    setInputValues((prevState: any) => ({
+      ...prevState,
+      from: prevState.to,
+      to: prevState.from
+    }));
+
+    if(params) {
+      const oldQueryParams = Object.fromEntries([...(queryParams as any)]);
+      setQueryParams({
+        ...oldQueryParams,
+        from: oldQueryParams.to,
+        to: oldQueryParams.from,
+      });
+    }
+  }
+
   useEffect(() => {
     if (showInput.from) {
       getAirportsWrapper(inputValues.from.code)
@@ -718,7 +737,7 @@ const SearchFilter = ({
                 onClick={() => {
                   setShowInput((prevState) => ({ ...prevState, from: true }));
                 }}
-                className='departCity'
+                className='departCity relative pr-24'
               >
                 <div
                   style={{
@@ -749,7 +768,7 @@ const SearchFilter = ({
                       position: 'absolute',
                       top: '30px',
                       width: '100%',
-                      zIndex: !showInput.from ? -1 : 1,
+                      zIndex: !showInput.from ? -1 : 100,
                     }}
                   >
                     {showInput.from && (
@@ -773,6 +792,14 @@ const SearchFilter = ({
                     )}
                   </Form.Item>
                 </div>
+                <Button 
+                  type="primary" 
+                  shape="circle" 
+                  className='swapoutline-button' 
+                  onClick={onSwapClickHandler}
+                >
+                  <SwapOutlined />
+                </Button>
               </Card>
               <Card
                 className='returnCity'
@@ -789,7 +816,7 @@ const SearchFilter = ({
                     alignItems: 'flex-start',
                   }}
                 >
-                  <div className='field'>
+                  <div className='field pl-24'>
                     <label className='fieldLabel'>To</label>
                     <h1 className='fieldTitle'>{inputValues.to.city}</h1>
                     <p className='fieldSubTitle'>
@@ -811,7 +838,7 @@ const SearchFilter = ({
                       position: 'absolute',
                       top: '30px',
                       width: '100%',
-                      zIndex: !showInput.to ? -1 : 1,
+                      zIndex: !showInput.to ? -1 : 100,
                     }}
                   >
                     {showInput.to && (

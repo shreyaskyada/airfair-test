@@ -77,6 +77,32 @@
     background-color: #4E6F7B;
 }
 
+.relative {
+    position: relative;
+}
+
+.pl-24 {
+    padding-left: 24px;
+}
+.pr-24 {
+    padding-right: 24px;
+}
+
+.swapoutline-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    z-index: 99;
+    transform: translate(50%, -50%);
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+.swapoutline-button:hover {
+    background-color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
+}
+
 @media only screen and (max-width: 1100px) {
     .fieldTitle {
         font-size: 1.6rem;
@@ -253,6 +279,16 @@
 }
 
 @media only screen and (max-width: 460px) {
+    .swapoutline-button {
+        rotate: 90deg;
+        bottom: 0;
+        top: revert;
+        transform: translate(50%, -50%);
+    }
+    .pl-24 {
+        padding-left: 8px;
+        padding-right: 24px;
+    }
     .searchBarContainer {
         margin: 1rem .2rem;
     }
