@@ -1,6 +1,4 @@
-import React from "react"
-import ReactDOM from "react-dom"
-import { Button, notification as antdNotification } from "antd"
+import { notification as antdNotification } from "antd"
 import {
   CloseCircleFilled,
   InfoCircleFilled,

@@ -1,21 +1,20 @@
-/**
- * @description React router dom routes wrapper | Defining all routes with common layout to setup router based screen management
- * @returns RoutesWrapper | Routes wrapper consisting of all routes with their child routes used for screen management
- */
-
 import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAppSelector } from '../redux/hooks';
 import LayoutUI from '../layout';
 import Loader from '../components/Modals/Loader';
 import AboutUs from '../pages/AboutUs';
-import FlightDetailPage from '../pages/FlightDetailPage';
-import PrivacyPolicy from '../pages/PrivacyPolicy';
-import TermsAndConditions from '../pages/TermsAndConditions';
+// import FlightDetailPage from '../pages/FlightDetailPage';
+// import PrivacyPolicy from '../pages/PrivacyPolicy';
+// import TermsAndConditions from '../pages/TermsAndConditions';
 
+const FlightDetailPage = lazy(() => import('../pages/FlightDetailPage'));
+const PrivacyPolicy = lazy(() => import('../pages/PrivacyPolicy'));
+const TermsAndConditions = lazy(() => import('../pages/TermsAndConditions'));
 const HomeScreen = lazy(() => import('../pages/Homepage'));
+// const AboutUs = lazy(() => import('../pages/AboutUs'));
 const FlightsListingPage = lazy(() => import('../pages/FlightsListingPage'));
-
+  
 export interface RouteType {
   path?: string;
   component: JSX.Element;
@@ -23,40 +22,36 @@ export interface RouteType {
   childRoutes?: RouteType[];
 }
 
-interface ProtectedRoutesType {
-  allowedPermissions: any[];
-  children: JSX.Element;
-}
 
 const routes = [
-  {
-    path: '/*',
-    component: <LayoutUI />,
-    index: false,
-    childRoutes: [
-      {
-        path: 'flights-listing',
-        component: <FlightsListingPage />,
-        index: false,
-      },
-      {
-        path: 'flights/:flight',
-        component: <FlightDetailPage />,
-        index: false,
-      },
-      { component: <HomeScreen />, index: true },
-      { path: 'aboutUs', component: <AboutUs />, index: false },
-      { path: 'privacy-policy', component: <PrivacyPolicy />, index: false },
-      {
-        path: 'terms-and-conditions',
-        component: <TermsAndConditions />,
-        index: false,
-      },
-    ],
-  },
-];
+    {
+      path: '/*',
+      component: <LayoutUI />,
+      index: false,
+      childRoutes: [
+        {
+          path: 'flights-listing',
+          component: <FlightsListingPage />,
+          index: false,
+        },
+        {
+          path: 'flights/:flight',
+          component: <FlightDetailPage />,
+          index: false,
+        },
+        { component: <HomeScreen />, index: true },
+        { path: 'aboutUs', component: <AboutUs />, index: false },
+        { path: 'privacy-policy', component: <PrivacyPolicy />, index: false },
+        {
+          path: 'terms-and-conditions',
+          component: <TermsAndConditions />,
+          index: false,
+        },
+      ],
+    },
+  ];
 
-const RoutesWrapper = () => (
+  const RoutesWrapper = () => (
   <Suspense fallback={<Loader />}>
     <Routes>
       {routes.map((route, parentIndex) =>

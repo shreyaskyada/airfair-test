@@ -1,29 +1,20 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { InfoOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
   Card,
-  Form,
-  Avatar,
-  Tabs,
   Typography,
   Divider,
   Popover,
   Grid,
   Dropdown,
-  MenuProps,
   Modal,
 } from 'antd';
-import * as _ from 'lodash';
 import dayjs from 'dayjs';
-import useLocalStorage from '../../hooks/LocalStorage';
-import { Drawer } from 'antd';
 import type { TabsProps } from 'antd';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
-  toggleModal,
-  updateFlightDetails,
   uploadIsLoading,
 } from '../../redux/slices/app';
 import { Flight, FlightState } from '../../redux/slices/flights';
@@ -32,11 +23,11 @@ import { getBestOffer } from '../../services/airports';
 import moment from 'moment';
 import { ISearchFlights } from '../../redux/slices/searchFlights';
 import { Airlines_Images } from '../../data/popularAirlines';
-import { useDimensions } from '../../hooks/useDimensions';
 import { TripType } from '../../data/contants';
 import SendEmailCard from './SendEmailCard';
+import { isEmpty, uniq } from 'lodash';
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 const { Meta } = Card;
 const { useBreakpoint } = Grid;
 
@@ -124,12 +115,11 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   const [providerWithOffers2, setProviderWithOffers2] = useState<any>([]);
 
   const modalRef = useRef<HTMLDivElement>(null);
-  const providerListRef = useRef<HTMLDivElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
   const rightColRef = useRef<HTMLDivElement>(null);
   const [showModal, setShowModal] = useState(false);
 
-  const { flightDetails, userDetails } = useAppSelector((state) => state.app);
+  const { userDetails } = useAppSelector((state) => state.app);
 
   const { departFlight, returnFlight } = useAppSelector(
     (state: { flight: FlightState }) => state.flight
@@ -172,7 +162,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
       const returnAirlineNames =
         returnAirlinesCode?.map((code) => airlineMapping[code]) || [];
 
-      const airlineNames = _.uniq([
+      const airlineNames = uniq([
         ...departAirlineNames,
         ...returnAirlineNames,
       ]);
@@ -250,7 +240,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
       let providers: any = [];
       dispatch(uploadIsLoading(true));
 
-      if (!_.isEmpty(departFlight) && !_.isEmpty(returnFlight)) {
+      if (!isEmpty(departFlight) && !isEmpty(returnFlight)) {
         const keys = Object.keys(departFlight.compare || {});
         keys &&
           keys.forEach((key: any) => {
@@ -303,7 +293,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
           });
 
         await getDiscount(providers);
-      } else if (!_.isEmpty(departFlight) && _.isEmpty(returnFlight)) {
+      } else if (!isEmpty(departFlight) && isEmpty(returnFlight)) {
         const keys = Object.keys(departFlight.compare || {});
         keys &&
           keys.forEach((key: any) => {
@@ -344,7 +334,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
   }, [departFlight, returnFlight]);
 
   const detailsCard = (title: string, flighDetails: Flight) => {
-    const _names = _.uniq(
+    const _names = uniq(
       flighDetails?.flightCode?.split('->').map((item) => item.substring(0, 2))
     );
 
@@ -364,7 +354,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             {_names.length > 1 ? "Multiple Airlines" : _names.map((name, index) => {
               const comma =
                 index !==
-                _.uniq(
+                uniq(
                   flighDetails?.flightCode
                     ?.split('->')
                     .map((item) => item.substring(0, 2))
@@ -382,7 +372,9 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               border: 0,
               borderRadius: '5px',
             }}
-            bodyStyle={{ paddingLeft: '0' }}
+            styles={{
+              body: {paddingLeft: '0'}
+            }}
           >
             <Meta
               avatar={
@@ -656,7 +648,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
         <p className='summaryHeadings'>Departure Flights</p>
         {flightInfoCardCretor(departFlight)}
       </div>
-      {!_.isEmpty(returnFlight) && (
+      {!isEmpty(returnFlight) && (
         <div>
           <p className='summaryHeadings'>Return Flights</p>
           {flightInfoCardCretor(returnFlight)}
@@ -893,7 +885,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             <div className='flightSummaryDetail'>
               <div>{detailsCard('depart', departFlight)}</div>
 
-              {!_.isEmpty(returnFlight) && (
+              {!isEmpty(returnFlight) && (
                 <div>{detailsCard('return', returnFlight)}</div>
               )}
             </div>

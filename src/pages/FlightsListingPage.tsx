@@ -5,7 +5,7 @@ import {
   updateDepartFlights,
   updateReturnFlights,
 } from '../redux/slices/flights';
-import { flightListLoading, toggleModal, uploadIsLoading } from '../redux/slices/app';
+import { flightListLoading, toggleModal } from '../redux/slices/app';
 import SearchFilter from '../components/SearchFilter';
 import OriginFlight from '../components/FlightsCard/OriginFlight';
 import { updateDestinationFlights } from '../redux/slices/destinationFlight';
@@ -18,22 +18,23 @@ import { TripType } from '../data/contants';
 import { checkIfFilterApplied, compareProvidersAndFilter } from '../data/utils';
 import InternationalFlightCard from '../components/FlightsCard/InternationalFlightCard';
 
-function compareArrays(array1: any, array2: any) {
-  if (array1.length !== array2.length) {
-    return false;
-  }
 
-  const sortedArray1 = array1.slice().sort();
-  const sortedArray2 = array2.slice().sort();
+// function compareArrays(array1: any, array2: any) {
+//   if (array1.length !== array2.length) {
+//     return false;
+//   }
 
-  for (let i = 0; i < sortedArray1.length; i++) {
-    if (sortedArray1[i] !== sortedArray2[i]) {
-      return false;
-    }
-  }
+//   const sortedArray1 = array1.slice().sort();
+//   const sortedArray2 = array2.slice().sort();
 
-  return true;
-}
+//   for (let i = 0; i < sortedArray1.length; i++) {
+//     if (sortedArray1[i] !== sortedArray2[i]) {
+//       return false;
+//     }
+//   }
+
+//   return true;
+// }
 
 const FlightsListingPage = () => {
   const dispatch = useAppDispatch();
@@ -45,7 +46,6 @@ const FlightsListingPage = () => {
   const {
     flights,
     departFlight,
-    returnFlight,
     internationalFlight,
   }: {
     flights: any;
@@ -54,7 +54,7 @@ const FlightsListingPage = () => {
     internationalFlight: any;
   } = useAppSelector((state) => state.flight);
 
-  const {isLoading, isFlightListLoading, isFlightListFetched} = useAppSelector((state) => state.app);
+  const { isFlightListLoading, isFlightListFetched} = useAppSelector((state) => state.app);
 
   const searchFlightData = useAppSelector(
     (state: { searchFlights: ISearchFlights }) => state.searchFlights

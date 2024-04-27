@@ -4,8 +4,8 @@ import SearchFilter from "../components/SearchFilter"
 import PopularFlights from "../components/PopularFlights/PopularFlights"
 import { PopularAirlines } from "../components/popularAirlines"
 import { toggleModal } from "../redux/slices/app"
-import Carousel from "../components/carousel"
-import { Parteners } from "../components/parteners"
+// import Carousel from "../components/carousel"
+// import { Parteners } from "../components/parteners"
 
 const Homepage = () => {
   const dispatch = useAppDispatch()

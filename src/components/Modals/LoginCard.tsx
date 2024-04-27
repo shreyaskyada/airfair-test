@@ -1,13 +1,12 @@
-import React, { useState } from "react"
-import { Button, Card, Divider, Form, Input, Modal, Typography } from "antd"
-import Meta from "antd/es/card/Meta"
-import { loginBanner } from "../../assets/images"
+import { useState } from "react"
+import { Button, Divider, Form, Input, Modal, Typography } from "antd"
 import { toggleModal } from "../../redux/slices/app"
 import { useAppDispatch } from "../../redux/hooks"
 import { loginUser } from "../../services/auth"
 import { notification } from "../Notification/customNotification"
+import { loginBanner } from "../../assets/images"
 
-const { Text, Title } = Typography
+const { Text } = Typography
 
 const LoginCard = ({ onFinishHandler }: any) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -62,7 +61,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
             flexDirection: "column"
           }}
         >
-          <img src={loginBanner} alt="Login banner" />
+          <img src={loginBanner} alt="Login banner" loading="lazy" />
           <Text
             style={{
               font: "Robotto",

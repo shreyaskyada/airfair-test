@@ -97,7 +97,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
             flexDirection: "column",
           }}
         >
-          <img src={loginBanner} alt="Login banner" />
+          <img src={loginBanner} alt="Login banner" loading="lazy" />
           <Title level={3} style={{ font: "Robotto" }}>
             Sign up
           </Title>

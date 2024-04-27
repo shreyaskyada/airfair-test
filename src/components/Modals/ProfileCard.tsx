@@ -11,16 +11,16 @@ import {
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { updateProfileDetails, getProfileDetails } from "../../services/auth";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch } from "../../redux/hooks";
 import { toggleModal, updateUserDetails } from "../../redux/slices/app";
 import { getBankDetails, getBankName } from "../../services/airports";
 import useLocalStorage from "../../hooks/LocalStorage";
 import { notification } from "../Notification/customNotification";
-import { loginBanner } from "../../assets/images";
 import "./style.css";
 import { useWatch } from "antd/es/form/Form";
+import { loginBanner } from "../../assets/images";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 const { useBreakpoint } = Grid;
 
 function comapreProfileDetail(obj1: any, obj2: any) {
@@ -276,7 +276,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
         className="profileModal"
       >
         <div className="profileModalContent">
-          <img src={loginBanner} alt="Login banner" />
+          <img src={loginBanner} alt="Login banner" loading="lazy" />
           <Title level={3} style={{ font: "Robotto" }}>
             Complete your profile
           </Title>

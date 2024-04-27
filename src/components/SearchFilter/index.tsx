@@ -1,23 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import _, { lowerCase } from 'lodash';
+import { debounce, get, includes, lowerCase, map } from 'lodash';
 import moment from 'moment';
-
 import {
   Form,
-  Input,
   Radio,
   DatePicker,
   Typography,
   Space,
   Card,
   Segmented,
-  Row,
-  Col,
 } from 'antd';
 
 import { RangePickerProps } from 'antd/es/date-picker';
-import { AutoComplete, Popover, Button } from 'antd';
+import { Popover, Button } from 'antd';
 import { getAirportsWrapper } from '../../services/airports';
 import { getFlightsConfig } from '../../services/api/urlConstants';
 import backendService from '../../services/api';
@@ -30,7 +26,7 @@ import {
 } from '../../redux/slices/flights';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useNavigate, useParams } from 'react-router';
-import { UserDetailsType, flightListLoading, updateFlightListFetched, uploadIsLoading } from '../../redux/slices/app';
+import { flightListLoading, updateFlightListFetched, uploadIsLoading } from '../../redux/slices/app';
 import { resetOriginFlights, updateOriginFlights } from '../../redux/slices/originFlight';
 import { resetDestinationFlights, updateDestinationFlights } from '../../redux/slices/destinationFlight';
 import {
@@ -60,14 +56,7 @@ import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 import { SwapOutlined } from '@ant-design/icons';
 
-const { TextArea } = Input;
 const { Title, Text } = Typography;
-
-const options = [
-  { value: 'Burns Bay Road' },
-  { value: 'Downing Street' },
-  { value: 'Wall Street' },
-];
 
 const seatTypes = [
   { label: 'Economy', value: 'ECONOMY' },
@@ -94,23 +83,6 @@ const initialValues = {
   "child": 0,
   "infant": 0,
   "class": "ECONOMY"
-}
-
-function compareArrays(array1: any, array2: any) {
-  if (array1.length !== array2.length) {
-    return false;
-  }
-
-  const sortedArray1 = array1.slice().sort();
-  const sortedArray2 = array2.slice().sort();
-
-  for (let i = 0; i < sortedArray1.length; i++) {
-    if (sortedArray1[i] !== sortedArray2[i]) {
-      return false;
-    }
-  }
-
-  return true;
 }
 
 const getDropdownLabel = (airport: any) => (
@@ -174,6 +146,8 @@ const SearchFilter = ({
 }) => {
   const navigate = useNavigate();
   const params = useParams()["*"];
+  const departureDateRef = useRef<any>();
+  const returnDateRef = useRef<any>();
 
   const [isFlightsLoading, setIsFlightsLoading] = useState(false);
 
@@ -592,8 +566,8 @@ const SearchFilter = ({
 
   useEffect(() => {
     if (showInput.from) {
-      let check = _.includes(
-        _.map(fromOptions, (ele) => _.get(ele, 'value')),
+      let check = includes(
+        map(fromOptions, (ele) => get(ele, 'value')),
         formValues.from
       );
       if (check) {
@@ -627,8 +601,8 @@ const SearchFilter = ({
 
   useEffect(() => {
     if (showInput.to) {
-      let check = _.includes(
-        _.map(toOptions, (ele) => _.get(ele, 'value')),
+      let check = includes(
+        map(toOptions, (ele) => get(ele, 'value')),
         formValues.to
       );
       if (check) {
@@ -732,8 +706,12 @@ const SearchFilter = ({
             </div>
             <div className='departCityForm'>
               <Card
-                style={{ borderRadius: '0px', background: 'transparent' }}
-                bodyStyle={{ padding: 0 }}
+                styles={{
+                  body: {
+                    padding: 0
+                  }
+                }}
+                style={{ borderRadius: '0px', background: 'transparent', padding:0 }}
                 onClick={() => {
                   setShowInput((prevState) => ({ ...prevState, from: true }));
                 }}
@@ -771,25 +749,27 @@ const SearchFilter = ({
                       zIndex: !showInput.from ? -1 : 100,
                     }}
                   >
-                    {showInput.from && (
-                      <CustomAutoComplete
-                        onSearch={_.debounce(fromLocationSearchHandler, 500)}
-                        onSelect={(value) => fromLocationSearchHandler(value, "select")}
-                        options={fromOptions}
-                        onBlur={() => {
-                          textAreaClearHandler({ from: false });
-                        }}
-                        onOpen={() => {
-                          setFromOptions([
-                            popularCityLabel,
-                            ...popularFlightsArr.filter((airport: any) => inputValues?.to?.code !== airport.airportCd).map((airport: any) => ({
-                              label: getDropdownLabel(airport),
-                              value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
-                            })),
-                          ]);
-                        }}
-                      />
-                    )}
+                    <div>
+                      {showInput.from && (
+                        <CustomAutoComplete
+                          onSearch={debounce(fromLocationSearchHandler, 500)}
+                          onSelect={(value) => fromLocationSearchHandler(value, "select")}
+                          options={fromOptions}
+                          onBlur={() => {
+                            textAreaClearHandler({ from: false });
+                          }}
+                          onOpen={() => {
+                            setFromOptions([
+                              popularCityLabel,
+                              ...popularFlightsArr.filter((airport: any) => inputValues?.to?.code !== airport.airportCd).map((airport: any) => ({
+                                label: getDropdownLabel(airport),
+                                value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+                              })),
+                            ]);
+                          }}
+                        />
+                      )}
+                    </div>
                   </Form.Item>
                 </div>
                 <Button 
@@ -804,7 +784,11 @@ const SearchFilter = ({
               <Card
                 className='returnCity'
                 style={{ borderRadius: '0px' }}
-                bodyStyle={{ padding: 0 }}
+                styles={{
+                  body: {
+                    padding: 0,
+                  }
+                }}
                 onClick={() => {
                   setShowInput((prevState) => ({ ...prevState, to: true }));
                 }}
@@ -841,37 +825,44 @@ const SearchFilter = ({
                       zIndex: !showInput.to ? -1 : 100,
                     }}
                   >
-                    {showInput.to && (
-                      <CustomAutoComplete
-                        onSearch={_.debounce(toLocationSearchHandler, 500)}
-                        onSelect={(value) => toLocationSearchHandler(value, "select")}
-                        options={toOptions}
-                        onBlur={() => {
-                          textAreaClearHandler({ to: false });
-                        }}
-                        onOpen={() => {
-                          setToOptions([
-                            popularCityLabel,
-                            ...popularFlightsArr.filter((airport) => airport.airportCd !== inputValues.from.code).map((airport: any) => ({
-                              label: getDropdownLabel(airport),
-                              value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
-                            })),
-                          ]);
-                        }}
-                      />
-                    )}
+                    <div>
+                      {showInput.to && (
+                        <CustomAutoComplete
+                          onSearch={debounce(toLocationSearchHandler, 500)}
+                          onSelect={(value) => toLocationSearchHandler(value, "select")}
+                          options={toOptions}
+                          onBlur={() => {
+                            textAreaClearHandler({ to: false });
+                          }}
+                          onOpen={() => {
+                            setToOptions([
+                              popularCityLabel,
+                              ...popularFlightsArr.filter((airport) => airport.airportCd !== inputValues.from.code).map((airport: any) => ({
+                                label: getDropdownLabel(airport),
+                                value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
+                              })),
+                            ]);
+                          }}
+                        />
+                      )}
+                    </div>
                   </Form.Item>
                 </div>
               </Card>
               <Card
                 className='departDate'
                 style={{ borderRadius: '0px' }}
-                bodyStyle={{ padding: '8px' }}
+                styles={{
+                  body: {
+                    padding: "8px"
+                  }
+                }}
                 onClick={() => {
                   setShowInput((prevState) => ({
                     ...prevState,
                     departure: true,
                   }));
+                  departureDateRef.current.focus()
                 }}
               >
                 <div
@@ -915,16 +906,17 @@ const SearchFilter = ({
                       backgroundColor: '#fff',
                     }}
                   >
-                    {showInput.departure && (
                       <DatePicker
                         autoFocus
-                        open
+                        open={showInput.departure}
                         placeholder=''
                         showTime={false}
                         format='DD-MMM-YY'
-                        showToday={false}
-                        defaultValue={dayjs()}
+                        showNow={false}
+                        ref={departureDateRef}
+                        // defaultValue={dayjs()}
                         size='large'
+                        value={inputValues.departure}
                         style={{ height: '78px', width: '100%' }}
                         disabledDate={disabledDate}
                         onChange={(value) => {
@@ -969,7 +961,6 @@ const SearchFilter = ({
                           }))
                         }
                       />
-                    )}
                   </Form.Item>
                 </div>
               </Card>
@@ -979,7 +970,11 @@ const SearchFilter = ({
                   overflow: 'hidden',
                   borderRadius: '0px',
                 }}
-                bodyStyle={{ padding: '8px' }}
+                styles={{
+                  body: {
+                    padding: '8px'
+                  }
+                }}
                 onClick={() => {
                   form.setFieldValue('type', 'round-trip');
                   const diff = inputValues.departure?.diff(inputValues.return);
@@ -991,7 +986,6 @@ const SearchFilter = ({
                   setInputValues((prevState: any) => ({
                     ...prevState,
                     type: 'round-trip',
-                    return: returnDate,
                   }));
                   if(params) {
                     setQueryParams({
@@ -1000,7 +994,9 @@ const SearchFilter = ({
                     });
                   }
                   setShowInput((prevState) => ({ ...prevState, return: true }));
-                  dispatch(updateFlightType('round-trip'));
+                  if(!showInput.return)
+                  returnDateRef.current.focus();
+                  // dispatch(updateFlightType('round-trip'));
                 }}
               >
                 <div
@@ -1052,46 +1048,21 @@ const SearchFilter = ({
                       backgroundColor: '#fff',
                     }}
                   >
-                    {showInput.return && (
-                      <>
+                      
                       <DatePicker
                           autoFocus
-                          open
+                          open={showInput.return}
                           placeholder=''
-                          key={inputValues.departure?.toString()}
+                          // key={inputValues.departure?.toString()}
                           format='DD-MMM-YY'
                           showTime={false}
-                          showToday={false}
+                          showNow={false}
                           size='large'
                           // defaultValue={inputValues && inputValues.return}
                           style={{ height: '78px', width: '100%' }}
                           value={inputValues && inputValues.return}
                           disabledDate={disableReturnDates}
-                          inputRender={(props) => {
-                            const inputDate = dayjs(
-                              props.value as string,
-                              'DD-MMM-YY'
-                            );
-
-                            let returnDate = (props.value as string)?.trim()
-                              ? inputDate
-                              : inputValues.return
-                              ? inputValues.return
-                              : inputValues.departure;
-                            const diff =
-                              inputValues.departure?.diff(returnDate);
-
-                            if (inputValues.departure && diff && diff > 0) {
-                              returnDate = inputValues.departure;
-                            }
-                            return (
-                              <input
-                                {...props}
-                                value={returnDate?.format('DD-MMM-YY')}
-                                title={returnDate?.format('DD-MMM-YY')}
-                              />
-                            );
-                          }}
+                          ref={returnDateRef}
                           onChange={(value) => {
                             setInputValues((prevState: any) => ({
                               ...prevState,
@@ -1118,15 +1089,13 @@ const SearchFilter = ({
                             }))
                           }
                         />
-                      </>
-                    )}
                   </Form.Item>
                 </div>
               </Card>
               <Card
                 className='traveller'
                 style={{ borderRadius: '0px' }}
-                bodyStyle={{ padding: '8px' }}
+                styles={{body: {padding: '8px'}}}
                 onClick={() => {
                   setShowInput((prevState: any) => ({
                     ...prevState,

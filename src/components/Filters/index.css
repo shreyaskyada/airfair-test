@@ -1,8 +1,3 @@
-.filters-select {
-    width: fit-content !important;
-    max-width: 400px !important;
-}
-
 .filters-column {
     min-width: 175px;
 }

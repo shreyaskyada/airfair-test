@@ -1,13 +1,11 @@
-import React from "react"
-import { Layout, Menu, Typography } from "antd"
+import { Menu, Typography } from "antd"
 import type { MenuProps } from "antd"
-import { DatabaseOutlined, RightOutlined } from "@ant-design/icons"
+import { RightOutlined } from "@ant-design/icons"
 import { Link, useNavigate } from "react-router-dom"
 import { aboutUsIcon, hotelIcon, logoImage, planeIcon } from "../assets/images"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import { toggleSidebar } from "../redux/slices/app"
 
-const { Sider } = Layout
 const { Text } = Typography
 
 const menuItems = [
