@@ -80,12 +80,12 @@ const FlightDetailPage = () => {
           ).valueOf()
         : moment(searchFlightData.dateOfDep).valueOf();
       const dob = moment(dayjs().toString()).valueOf();
-          
+
       const payloads: any = provider.map((_provider: any) => ({
         provider: _provider.provider,
         airlines: airlineNames.length ? airlineNames : ['ALL'],
         flightType: flights.flightType,
-        journeyType: isOneWay ? TripType.ONE_WAY : searchFlightData.flightType,
+        journeyType: searchFlightData.flightType,
         dateOfJourney: doj / 1000,
         dateOfBooking: dob / 1000,
         bankList: bankList,
@@ -99,7 +99,7 @@ const FlightDetailPage = () => {
       }));
 
       let payloadResponse: any = [];
-            for (const payload of payloads) {
+      for (const payload of payloads) {
         try {
           const res: any = await getBestOffer(payload);
 
@@ -201,7 +201,7 @@ const FlightDetailPage = () => {
   useEffect(() => {
     const makeProvideres = async () => {
       let providers: any = [];
-      if (!Loadash.isEmpty(departFlight) && !Loadash.isEmpty(returnFlight)) {      
+      if (!Loadash.isEmpty(departFlight) && !Loadash.isEmpty(returnFlight)) {
         const departProviders = Object.keys(departFlight.compare || {});
         const returnProviders = Object.keys(returnFlight.compare || {});
         const commonProviders = departProviders.filter((provider) =>
@@ -752,14 +752,14 @@ const FlightDetailPage = () => {
               {!!providerWithOffers.length ? (
                 providerWithOffers.map((provideDetail: any, index: number) =>
                   <RenderProvider provideDetail={provideDetail} index={index} showCheapest={true} />
-                )
+                    )
               ) : (
                 !internationalFlight && <Skeleton.Input
-                  active={true}
+                      active={true}
                   size='large'
                   style={{ width: '100%' }}
-                />
-              )}
+                    />
+                  )}
               {!!departProviderWithOffers.length &&
                 departProviderWithOffers.map(
                   (provideDetail: any, index: number) => 
@@ -769,9 +769,9 @@ const FlightDetailPage = () => {
                       showCheapest={false}
                       disableViewBtn={!internationalFlight && true}
                       label={!internationalFlight && `This is one-way Flight from ${
-                        (searchFlightData.initialValues as any)?.from.city
+                          (searchFlightData.initialValues as any)?.from.city
                       }`}
-                   />
+                    />
                 )}
               {!!returnProviderWithOffers.length &&
                 returnProviderWithOffers.map(
@@ -782,9 +782,9 @@ const FlightDetailPage = () => {
                       showCheapest={false}
                       disableViewBtn={!internationalFlight && true}
                       label={!internationalFlight && `This is one-way Flight from ${
-                        (searchFlightData.initialValues as any)?.to.city
+                          (searchFlightData.initialValues as any)?.to.city
                       }`}
-                   />
+                    />
                 )}
             </div>
           </div>
