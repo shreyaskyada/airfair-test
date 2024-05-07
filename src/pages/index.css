@@ -2,6 +2,25 @@
   padding: .2rem .5rem;
 }
 
+/*================================Search Filter=================================*/
+
+.travelerPopOver{
+  width: 563px;
+  overflow: auto;
+}
+
+@media only screen and (max-width: 660px){
+  .travelerPopOver{
+    width:68vw;
+    overflow: auto;
+  }
+}
+
+@media only screen and (max-width: 585px){
+.popoverSegment{
+  margin-left: 10px;
+}
+}
 /*================================Flight Listing=================================*/
 .fligtListingSection {
   margin: 0 2rem;
@@ -308,8 +327,23 @@
   margin: 0.8rem auto;
 }
 
+@media only screen and (max-width: 430px){
+.rightCol{
+  display: flex;
+  flex-direction: column;
+}
 
+.headerButtons{
+  margin-top: -15px;
+  width: 80px;
+  height:30px
+}
 
+.providerDetail{
+  margin-top: 30px;
+}
+
+}
 
 
 /*=================================ABOUT_US=======================================*/
