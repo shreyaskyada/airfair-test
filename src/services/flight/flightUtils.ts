@@ -25,7 +25,11 @@ export function mergeToRoundTrip(onwardURI: any, returnURI: any): string {
     if (onwardURI.includes("cleartrip")) {
         // Handle cleartrip URL
         return handleCleartripURL(onwardURI, returnURI);
-    } else {
+    }
+    else if(onwardURI.includes("budgetticket")){
+        return returnURI;
+    }
+    else {
         // Handle other URLs
         return handleEaseMyTrip(onwardURI, returnURI);
     }
