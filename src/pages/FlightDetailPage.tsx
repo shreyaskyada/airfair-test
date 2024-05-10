@@ -567,6 +567,8 @@ const FlightDetailPage = () => {
         </div>
         <div className="rightCol">
           <Tooltip
+            overlayClassName="offerTooltip"
+            overlayStyle={{ zIndex: "1200" }}
             color="white"
             onPopupAlign={() => {}}
             onOpenChange={() => setIsOpenTooltip(!isOpenTooltip)}
