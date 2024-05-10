@@ -336,7 +336,7 @@ const SearchFilter = ({
         }
       }
     };
-
+   
     fetchData();
   }, []);
 
@@ -413,7 +413,7 @@ const SearchFilter = ({
                 res.internationalReturnJourneyCompareResponse
               )
             );
-
+            dispatch(updateFlights(res));
             dispatch(updateSaarchFlights(searchFlightData));
 
             dispatch(uploadIsLoading(false));
@@ -1140,9 +1140,10 @@ const SearchFilter = ({
                   arrow={false}
                   zIndex={11000}
                   content={
-                    <Space direction='vertical'>
-                      <Form.Item label='Adult' name='adult'>
+                    <Space direction='vertical' className='travelerPopOver'  >
+                      <Form.Item label='Adult :' name='adult' colon={false}>
                         <Segmented
+                          className='popoverSegment'
                           options={[
                             ...segmentAdultValues,
                             { label: '9+', value: 10 },
@@ -1161,8 +1162,10 @@ const SearchFilter = ({
                         />
                       </Form.Item>
                       <Space>
-                        <Form.Item label='Child' name='child'>
+                       <div style={{display:"flex", gap:"15px", flexWrap:"wrap"}}>
+                        <Form.Item label='Child :' name='child' colon={false}>
                           <Segmented
+                            className='popoverSegment'
                             options={[
                               ...segmentOtherValues,
                               { label: '6+', value: 7 },
@@ -1182,30 +1185,33 @@ const SearchFilter = ({
                             }}
                           />
                         </Form.Item>
-                        <Form.Item label='Infant' name='infant'>
-                          <Segmented
-                            options={[
-                              ...segmentOtherValues,
-                              { label: '6+', value: 7 },
-                            ]}
-                            onChange={(value) => {
-                              setInputValues((prevState: any) => ({
-                                ...prevState,
-                                infant: Number(value),
-                              }));
-                              params && setQueryParams({
-                                ...Object.fromEntries([
-                                  ...(queryParams as any),
-                                ]),
-                                infants: value,
-                              });
-                              dispatch(updateInfant(Number(value)));
-                            }}
-                          />
-                        </Form.Item>
+                        <Form.Item label='Infant :' name='infant' colon={false}>
+                      <Segmented
+                         className='popoverSegment'
+                         options={[
+                           ...segmentOtherValues,
+                           { label: '6+', value: 7 },
+                         ]}
+                         onChange={(value) => {
+                           setInputValues((prevState: any) => ({
+                             ...prevState,
+                             infant: Number(value),
+                           }));
+                           params && setQueryParams({
+                             ...Object.fromEntries([
+                               ...(queryParams as any),
+                             ]),
+                             infants: value,
+                           });
+                           dispatch(updateInfant(Number(value)));
+                         }}
+                       />
+                        </Form.Item>               
+                       </div>
                       </Space>
-                      <Form.Item label='Choose Travel Class' name='class'>
+                      <Form.Item label='Choose Travel Class :' name='class' colon={false}>
                         <Segmented
+                          className='popoverSegment'
                           options={seatTypes}
                           onChange={(value) => {
                             setInputValues((prevState: any) => ({

@@ -80,7 +80,7 @@ const SignupCard = ({ onFinishHandler }: any) => {
         closable={true}
         onCancel={onCancelHandler}
         width="350px"
-        zIndex={1003}
+        zIndex={3003}
       >
         <div
           style={{

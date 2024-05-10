@@ -695,9 +695,9 @@ const FlightDetailPage = () => {
                 </div>
               )
             }
-            placement='top'
+            placement='topRight'
           >
-            <Tooltip title="Hover Me!" open={isOpenTooltip}>
+            <Tooltip title="Hover Me!" open={isOpenTooltip} placement='top'>
               <div className='tooltipContentContainer'>
                 <span className='tooltipContent ' style={{backgroundColor:"#38bdf8"}}></span>
                 <p className='tooltipContent'>i</p>
@@ -709,7 +709,7 @@ const FlightDetailPage = () => {
             className={`headerButtons ${
               disableViewBtn ? 'disabled' : 'filled'
             }`}
-            style={{ width: '100px' }}
+          
           >
             {disableViewBtn ? (
               <>View Deal</>
