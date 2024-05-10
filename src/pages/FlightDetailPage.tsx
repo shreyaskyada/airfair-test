@@ -568,9 +568,7 @@ const FlightDetailPage = () => {
         <div className="rightCol">
           <Tooltip
             color="white"
-            onPopupAlign={() => {
-              console.log("SK: working heheh");
-            }}
+            onPopupAlign={() => {}}
             onOpenChange={() => setIsOpenTooltip(!isOpenTooltip)}
             title={
               provideDetail.bestOffer ? (
