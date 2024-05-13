@@ -22,17 +22,24 @@ interface ItineraryRequest {
 }
 
 export function mergeToRoundTrip(onwardURI: any, returnURI: any): string {
-    if (onwardURI.includes("cleartrip")) {
+    if (onwardURI.redirecUrl.includes("cleartrip")) {
         // Handle cleartrip URL
-        return handleCleartripURL(onwardURI, returnURI);
+        return handleCleartripURL(onwardURI.redirecUrl, returnURI.redirecUrl);
     }
-    else if(onwardURI.includes("budgetticket")){
-        return returnURI;
+    else if(onwardURI.redirecUrl.includes("budgetticket")){
+        // Handle BudgetTicket URL
+       return handleBudgetTicketURL(returnURI)
     }
     else {
         // Handle other URLs
-        return handleEaseMyTrip(onwardURI, returnURI);
+        return handleEaseMyTrip(onwardURI.redirecUrl, returnURI.redirecUrl);
     }
+}
+
+function handleBudgetTicketURL(returnJourney : any){
+    const updatedUrl = returnJourney.redirecUrl.replace(/(FlightId=[^,]+),([^&]+)/, `$1,${returnJourney.budgetReturnUrl}`);
+
+    return updatedUrl
 }
 
 function handleEaseMyTrip(onwardJourney: any, returnJourney: any): string {

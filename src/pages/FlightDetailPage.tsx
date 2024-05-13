@@ -227,7 +227,7 @@ const FlightDetailPage = () => {
                 ? returnFlight.compare[key].fare?.totalFareAfterDiscount
                 : 0;
             let url =
-              departFlight.compare && returnFlight.compare && mergeToRoundTrip(departFlight.compare[key].redirecUrl,returnFlight.compare[key].redirecUrl);
+              departFlight.compare && returnFlight.compare && mergeToRoundTrip(departFlight.compare[key],returnFlight.compare[key]);
             const totalFare =
               totalDepartFare && totalreturnFare
                 ? totalreturnFare + totalDepartFare
