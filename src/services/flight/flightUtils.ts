@@ -28,7 +28,7 @@ export function mergeToRoundTrip(onwardURI: any, returnURI: any): string {
     }
     else if(onwardURI.redirecUrl.includes("budgetticket")){
         // Handle BudgetTicket URL
-       return handleBudgetTicketURL(returnURI)
+       return handleBudgetTicketURL(onwardURI,returnURI)
     }
     else {
         // Handle other URLs
@@ -36,8 +36,9 @@ export function mergeToRoundTrip(onwardURI: any, returnURI: any): string {
     }
 }
 
-function handleBudgetTicketURL(returnJourney : any){
-    const updatedUrl = returnJourney.redirecUrl.replace(/(FlightId=[^,]+),([^&]+)/, `$1,${returnJourney.budgetReturnUrl}`);
+function handleBudgetTicketURL(onwardJourney:any,returnJourney : any){
+    const updatedUrl = returnJourney.redirecUrl.replace(/FlightId=\d+,\d+/g, "FlightId=" + 
+    onwardJourney.budgetDepartUrl + "," + returnJourney.budgetReturnUrl);
 
     return updatedUrl
 }
