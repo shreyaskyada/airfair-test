@@ -1,22 +1,22 @@
-import { Avatar, Skeleton, Divider, Tooltip, Tag, Badge } from 'antd';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { useState, useEffect, Fragment, Dispatch } from 'react';
+import { Avatar, Skeleton, Divider, Tooltip, Tag, Badge } from "antd";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { useState, useEffect, Fragment, Dispatch } from "react";
 import {
   CompareFlightCompanyDetails,
   FlightState,
-} from '../redux/slices/flights';
-import { ISearchFlights } from '../redux/slices/searchFlights';
-import Loadash from 'lodash';
-import moment from 'moment';
-import dayjs from 'dayjs';
-import { airlineMapping } from '../services/airports';
-import { getBestOffer } from '../services/airports';
-import { uploadIsLoading } from '../redux/slices/app';
-import { Airlines_Images } from '../data/popularAirlines';
-import { Link } from 'react-router-dom';
-import { airplaneIcon } from '../assets/images';
-import { TripType } from '../data/contants';
-import {mergeToRoundTrip} from '../services/flight/flightUtils'
+} from "../redux/slices/flights";
+import { ISearchFlights } from "../redux/slices/searchFlights";
+import Loadash from "lodash";
+import moment from "moment";
+import dayjs from "dayjs";
+import { airlineMapping } from "../services/airports";
+import { getBestOffer } from "../services/airports";
+import { uploadIsLoading } from "../redux/slices/app";
+import { Airlines_Images } from "../data/popularAirlines";
+import { Link } from "react-router-dom";
+import { airplaneIcon } from "../assets/images";
+import { TripType } from "../data/contants";
+import { mergeToRoundTrip } from "../services/flight/flightUtils";
 
 const FlightDetailPage = () => {
   const dispatch = useAppDispatch();
@@ -31,9 +31,8 @@ const FlightDetailPage = () => {
 
   const { userDetails } = useAppSelector((state) => state.app);
 
-  const { departFlight, returnFlight, internationalFlight, flights } = useAppSelector(
-    (state: { flight: FlightState }) => state.flight
-  );
+  const { departFlight, returnFlight, internationalFlight, flights } =
+    useAppSelector((state: { flight: FlightState }) => state.flight);
   const { isLoggedIn } = useAppSelector((state) => state.app);
 
   const searchFlightData = useAppSelector(
@@ -47,7 +46,7 @@ const FlightDetailPage = () => {
   ) => {
     try {
       if (!provider.length || !searchFlightData) {
-        throw new Error('invalid inputs');
+        throw new Error("invalid inputs");
       }
 
       setProviders([]);
@@ -58,7 +57,7 @@ const FlightDetailPage = () => {
 
       const bankList = userDetails.bankList.map((bank: any) => ({
         bankName: bank.bankName,
-        bankCards: [bank.bankCardType + '-' + bank.bankCardName],
+        bankCards: [bank.bankCardType + "-" + bank.bankCardName],
       }));
 
       const departAirlinesCode = (
@@ -66,7 +65,7 @@ const FlightDetailPage = () => {
           ? returnFlight && returnFlight.flightCode
           : departFlight && departFlight.flightCode
       )
-        ?.split('->')
+        ?.split("->")
         .map((item) => item.substring(0, 2));
 
       const departAirlineNames =
@@ -83,7 +82,7 @@ const FlightDetailPage = () => {
 
       const payloads: any = provider.map((_provider: any) => ({
         provider: _provider.provider,
-        airlines: airlineNames.length ? airlineNames : ['ALL'],
+        airlines: airlineNames.length ? airlineNames : ["ALL"],
         flightType: flights.flightType,
         journeyType: searchFlightData.flightType,
         dateOfJourney: doj / 1000,
@@ -227,7 +226,12 @@ const FlightDetailPage = () => {
                 ? returnFlight.compare[key].fare?.totalFareAfterDiscount
                 : 0;
             let url =
-              departFlight.compare && returnFlight.compare && mergeToRoundTrip(departFlight.compare[key],returnFlight.compare[key]);
+              departFlight.compare &&
+              returnFlight.compare &&
+              mergeToRoundTrip(
+                departFlight.compare[key].redirecUrl,
+                returnFlight.compare[key].redirecUrl
+              );
             const totalFare =
               totalDepartFare && totalreturnFare
                 ? totalreturnFare + totalDepartFare
@@ -376,110 +380,113 @@ const FlightDetailPage = () => {
     flipPlaneIcon = false,
   }: any) => {
     return (
-      <div className='flightDetailContent'>
-        <div className='flightNameContainer'>
+      <div className="flightDetailContent">
+        <div className="flightNameContainer">
           {/* <Avatar
             size={45}
             src={Airlines_Images[airlineMapping[airLine?.slice(0, 2)]]}
           >
             K
           </Avatar> */}
-          <div style={{ width: '30px', height: '30px' }}>
+          <div style={{ width: "30px", height: "30px" }}>
             <img
-              src={Airlines_Images[airlineMapping[airLine?.slice(0, 2)]] || Airlines_Images['Multiple Airlines']}
-              style={{ width: '100%', height: '100%' }}
+              src={
+                Airlines_Images[airlineMapping[airLine?.slice(0, 2)]] ||
+                Airlines_Images["Multiple Airlines"]
+              }
+              style={{ width: "100%", height: "100%" }}
             />
           </div>
-          <h1 className='flightName'>{`${
-            airlineMapping[airLine?.slice(0, 2) || 'AI']
+          <h1 className="flightName">{`${
+            airlineMapping[airLine?.slice(0, 2) || "AI"]
           } ${airLine}`}</h1>
         </div>
-        <div className='flightTimeDetail'>
-          <div className='flightTime'>
+        <div className="flightTimeDetail">
+          <div className="flightTime">
             <h3>{fromTime}</h3>
           </div>
 
-          <div className='cityDivider'>
-            <span className='circle circle1'></span>
+          <div className="cityDivider">
+            <span className="circle circle1"></span>
             <img
               src={airplaneIcon}
-              alt='aeroplane'
+              alt="aeroplane"
               width={25}
               height={25}
-              className='dividerIcon'
+              className="dividerIcon"
               // style={{
               //   transform: flipPlaneIcon
               //     ? "translateX(50%) rotateY(180deg)"
               //     : "translateX(50%) rotateY(0deg)"
               // }}
             />
-            <div className='divider'></div>
-            <span className='circle circle2'></span>
+            <div className="divider"></div>
+            <span className="circle circle2"></span>
           </div>
 
-          <div className='flightTime'>
+          <div className="flightTime">
             <h3>{toTime}</h3>
           </div>
         </div>
-        <div className='flightCity' style={{ fontWeight: 'bold' }}>
+        <div className="flightCity" style={{ fontWeight: "bold" }}>
           <p>{`${city?.fromCode}, ${city?.from}`}</p>
           <p>{duration}</p>
           <p>{`${city?.toCode}, ${city?.to}`}</p>
         </div>
-        <div className='terminalContainer' style={{ fontWeight: 'bold' }}>
+        <div className="terminalContainer" style={{ fontWeight: "bold" }}>
           <p>
             {`${
               fromAddress
-                ? fromAddress.includes('Terminal')
-                  ? ''
-                  : 'Terminal '
-                : 'Terminal '
-            } ${fromAddress || '--'}`}
+                ? fromAddress.includes("Terminal")
+                  ? ""
+                  : "Terminal "
+                : "Terminal "
+            } ${fromAddress || "--"}`}
           </p>
           <p>
             {`${
               toAddress
-                ? toAddress.includes('Terminal')
-                  ? ''
-                  : 'Terminal '
-                : 'Terminal '
-            } ${toAddress || '--'}`}
+                ? toAddress.includes("Terminal")
+                  ? ""
+                  : "Terminal "
+                : "Terminal "
+            } ${toAddress || "--"}`}
           </p>
         </div>
-        <div className='chipsSection'>
-          <div className='rowChip'>
-            <div className='chip'>
+        <div className="chipsSection">
+          <div className="rowChip">
+            <div className="chip">
               <p>
                 {(() => {
                   switch (seatingClass) {
-                    case 'B':
-                      return 'Business';
-                    case 'E':
-                      return 'Economy';
-                    case 'PE':
-                      return 'Premium Economy';
-                    case 'FC':
-                      return 'First Class';
+                    case "B":
+                      return "Business";
+                    case "E":
+                      return "Economy";
+                    case "PE":
+                      return "Premium Economy";
+                    case "FC":
+                      return "First Class";
                     default:
                       return seatingClass; // Default case if none of the above values match
                   }
                 })()}
               </p>
             </div>
-            <div className='chip'>
+            <div className="chip">
               <p>{fromDate}</p>
             </div>
           </div>
 
-          <div className='rowChip'>
+          <div className="rowChip">
             {cabinBaggage && (
-              <div className='chip'>
+              <div className="chip">
                 <p>{cabinBaggage}</p>
               </div>
             )}
 
             {checkinBaggage && (
-              <div className='chip'>
+              <div className="chip">
                 <p>{checkinBaggage}</p>
               </div>
             )}
@@ -494,39 +501,39 @@ const FlightDetailPage = () => {
     index,
     showCheapest,
     disableViewBtn,
-    label
+    label,
   }: any) => {
     const [isOpenTooltip, setIsOpenTooltip] = useState(true);
     const departCodes = departFlight?.flightCode
-      ?.split('->')
-      .map((el) => el.slice(0, 2) + '-' + el.slice(2))
-      .join('|');
+      ?.split("->")
+      .map((el) => el.slice(0, 2) + "-" + el.slice(2))
+      .join("|");
     const returnCodes = returnFlight?.flightCode
-      ?.split('->')
-      .map((el) => el.slice(0, 2) + '-' + el.slice(2))
-      .join('|');
+      ?.split("->")
+      .map((el) => el.slice(0, 2) + "-" + el.slice(2))
+      .join("|");
     let url = provideDetail.url as string;
     if (
       flights.journeyType === TripType.ROUND_TRIP &&
-      flights.flightType === 'DOMESTIC' &&
-      url?.includes('http://www.easemytrip.com')
+      flights.flightType === "DOMESTIC" &&
+      url?.includes("http://www.easemytrip.com")
     ) {
       url = `${provideDetail.url}&fnumOut=${departCodes}&fnumIn=${returnCodes}`;
     }
 
     return (
       <div
-        className='providerDetail'
+        className="providerDetail"
         key={provideDetail?.provider + provideDetail?.baseFare}
       >
-        <div className='leftCol'>
+        <div className="leftCol">
           <div>
             {label && (
               <p
                 style={{
-                  color: '#4E6F7B',
-                  fontSize: '0.8rem',
-                  marginBottom: '5px',
+                  color: "#4E6F7B",
+                  fontSize: "0.8rem",
+                  marginBottom: "5px",
                 }}
               >
                 {label}
@@ -534,19 +541,19 @@ const FlightDetailPage = () => {
             )}
             <div
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
               }}
             >
-              <p className='providerTitle'>{provideDetail.provider}</p>
+              <p className="providerTitle">{provideDetail.provider}</p>
               {showCheapest && index === 0 && providerWithOffers.length > 1 && (
-                <Tag color='#4E6F7B'> Cheapest</Tag>
+                <Tag color="#4E6F7B"> Cheapest</Tag>
               )}
             </div>
           </div>
-          <p className='ticketPrice'>
-            ₹{' '}
+          <p className="ticketPrice">
+            ₹{" "}
             {provideDetail.bestOffer &&
             provideDetail.bestOffer.fare &&
             provideDetail.bestOffer.fare.totalFareAfterDiscount
@@ -554,52 +561,56 @@ const FlightDetailPage = () => {
               : provideDetail.bestOffer.fare &&
                 provideDetail.bestOffer.fare.totalFare}
             <span
-              style={{ color: '#4E6F7B', fontSize: '0.7rem' }}
+              style={{ color: "#4E6F7B", fontSize: "0.7rem" }}
             >{` + ${provideDetail.convenienceFee} conv fee`}</span>
           </p>
         </div>
-        <div className='rightCol'>
+        <div className="rightCol">
           <Tooltip
-            color='white'
+            color="white"
             onPopupAlign={() => {
-              console.log("SK: working heheh")
+              console.log("SK: working heheh");
             }}
             onOpenChange={() => setIsOpenTooltip(!isOpenTooltip)}
             title={
               provideDetail.bestOffer ? (
                 <>
-                  {
-                    !isLoggedIn &&
-                    <Tag style={{margin: "10px auto", fontSize: "13px"}} color="blue-inverse">Unlock Exclusive Deals by Logging In</Tag>
-                  }
+                  {!isLoggedIn && (
+                    <Tag
+                      style={{ margin: "10px auto", fontSize: "13px" }}
+                      color="blue-inverse"
+                    >
+                      Unlock Exclusive Deals by Logging In
+                    </Tag>
+                  )}
                   <div>
-                    <span style={{ color: '#4E6F7B' }}>Base Fare: </span>
+                    <span style={{ color: "#4E6F7B" }}>Base Fare: </span>
                     <span
                       style={{
-                        fontWeight: 'bold',
-                        color: '#013042',
+                        fontWeight: "bold",
+                        color: "#013042",
                       }}
                     >
                       {provideDetail.baseFare}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: '#4E6F7B' }}>Total Tax: </span>
+                    <span style={{ color: "#4E6F7B" }}>Total Tax: </span>
                     <span
                       style={{
-                        fontWeight: 'bold',
-                        color: '#013042',
+                        fontWeight: "bold",
+                        color: "#013042",
                       }}
                     >
                       {provideDetail.tax}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: '#4E6F7B' }}>Total Fare: </span>
+                    <span style={{ color: "#4E6F7B" }}>Total Fare: </span>
                     <span
                       style={{
-                        fontWeight: 'bold',
-                        color: '#013042',
+                        fontWeight: "bold",
+                        color: "#013042",
                       }}
                     >
                       {provideDetail &&
@@ -609,11 +620,11 @@ const FlightDetailPage = () => {
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: '#4E6F7B' }}>Total Discount: </span>{' '}
+                    <span style={{ color: "#4E6F7B" }}>Total Discount: </span>{" "}
                     <span
                       style={{
-                        fontWeight: 'bold',
-                        color: '#013042',
+                        fontWeight: "bold",
+                        color: "#013042",
                       }}
                     >
                       {provideDetail &&
@@ -623,28 +634,28 @@ const FlightDetailPage = () => {
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: '#4E6F7B' }}>Promo Code: </span>
+                    <span style={{ color: "#4E6F7B" }}>Promo Code: </span>
                     <span
                       style={{
-                        fontWeight: 'bold',
-                        color: '#013042',
+                        fontWeight: "bold",
+                        color: "#013042",
                       }}
                     >
                       {provideDetail.bestOffer &&
                       provideDetail.bestOffer.promoCode
                         ? provideDetail.bestOffer.promoCode
-                        : 'No offer applicable'}
+                        : "No offer applicable"}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: '#4E6F7B' }}>
-                      Total Fare After Discount:{' '}
+                    <span style={{ color: "#4E6F7B" }}>
+                      Total Fare After Discount:{" "}
                     </span>
                     <b>
                       <span
                         style={{
-                          fontWeight: 'bold',
-                          color: '#013042',
+                          fontWeight: "bold",
+                          color: "#013042",
                         }}
                       >
                         {provideDetail.bestOffer &&
@@ -657,23 +668,23 @@ const FlightDetailPage = () => {
                     </b>
                   </div>
                   <div>
-                    <span style={{ color: '#4E6F7B' }}>Conv Fee : </span>
+                    <span style={{ color: "#4E6F7B" }}>Conv Fee : </span>
                     <span
                       style={{
-                        fontWeight: 'bold',
-                        color: '#013042',
+                        fontWeight: "bold",
+                        color: "#013042",
                       }}
                     >
                       {provideDetail.convenienceFee}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: '#4E6F7B' }}>Final Fare: </span>
+                    <span style={{ color: "#4E6F7B" }}>Final Fare: </span>
                     <b>
                       <span
                         style={{
-                          fontWeight: 'bold',
-                          color: '#013042',
+                          fontWeight: "bold",
+                          color: "#013042",
                         }}
                       >
                         {provideDetail.bestOffer &&
@@ -690,31 +701,40 @@ const FlightDetailPage = () => {
                   </div>
                 </>
               ) : (
-                <div style={{ fontWeight: 'bold', color: '#013042' }}>
+                <div style={{ fontWeight: "bold", color: "#013042" }}>
                   Unlock Exclusive Deals by Logging In
                 </div>
               )
             }
-            placement='topRight'
+            placement="topRight"
           >
-            <Tooltip title="Hover Me!" open={isOpenTooltip} placement='top'>
-              <div className='tooltipContentContainer'>
-                <span className='tooltipContent ' style={{backgroundColor:"#38bdf8"}}></span>
-                <p className='tooltipContent'>i</p>
+            <Tooltip
+              title="Hover Me!"
+              open={isOpenTooltip}
+              placement="top"
+              overlayStyle={{
+                zIndex: 99,
+              }}
+            >
+              <div className="tooltipContentContainer">
+                <span
+                  className="tooltipContent "
+                  style={{ backgroundColor: "#38bdf8" }}
+                ></span>
+                <p className="tooltipContent">i</p>
               </div>
             </Tooltip>
           </Tooltip>
           <button
             disabled={disableViewBtn}
             className={`headerButtons ${
-              disableViewBtn ? 'disabled' : 'filled'
+              disableViewBtn ? "disabled" : "filled"
             }`}
-          
           >
             {disableViewBtn ? (
               <>View Deal</>
             ) : (
-              <Link to={url} target='_blank'>
+              <Link to={url} target="_blank">
                 View Deal
               </Link>
             )}
@@ -725,72 +745,86 @@ const FlightDetailPage = () => {
   };
 
   return (
-    <div style={{ margin: '1rem 1.5rem' }}>
-      <div style={{ padding: '2rem 0' }}>
-        <div className='headerCard'>
-          <div className='cardContent'>
-            <div className='flightStats'>
+    <div style={{ margin: "1rem 1.5rem" }}>
+      <div style={{ padding: "2rem 0" }}>
+        <div className="headerCard">
+          <div className="cardContent">
+            <div className="flightStats">
               <Avatar.Group>
                 <Avatar size={64}>{departFlight && departFlight.from}</Avatar>
                 <Avatar size={64}>{departFlight && departFlight.to}</Avatar>
               </Avatar.Group>
 
-              <h2 className='heading'>
+              <h2 className="heading">
                 {departFlight && departFlight.from}-
                 {departFlight && departFlight.to}
               </h2>
-              <p className='date'>
+              <p className="date">
                 {departFlight &&
-                  `${moment(departFlight.depDate).format('D MMM')}`}
+                  `${moment(departFlight.depDate).format("D MMM")}`}
               </p>
-              <p className='passengers'>
+              <p className="passengers">
                 {searchFlightData && searchFlightData.totalTravellers} Traveller
               </p>
             </div>
             <Divider />
-            <div className='providersSection'>
-              {!!providerWithOffers.length ? (
-                providerWithOffers.map((provideDetail: any, index: number) =>
-                  <RenderProvider provideDetail={provideDetail} index={index} showCheapest={true} />
+            <div className="providersSection">
+              {!!providerWithOffers.length
+                ? providerWithOffers.map(
+                    (provideDetail: any, index: number) => (
+                      <RenderProvider
+                        provideDetail={provideDetail}
+                        index={index}
+                        showCheapest={true}
+                      />
                     )
-              ) : (
-                !internationalFlight && <Skeleton.Input
+                  )
+                : !internationalFlight && (
+                    <Skeleton.Input
                       active={true}
-                  size='large'
-                  style={{ width: '100%' }}
+                      size="large"
+                      style={{ width: "100%" }}
                     />
                   )}
               {!!departProviderWithOffers.length &&
                 departProviderWithOffers.map(
-                  (provideDetail: any, index: number) => 
+                  (provideDetail: any, index: number) => (
                     <RenderProvider
                       provideDetail={provideDetail}
                       index={index}
                       showCheapest={false}
                       disableViewBtn={!internationalFlight && true}
-                      label={!internationalFlight && `This is one-way Flight from ${
+                      label={
+                        !internationalFlight &&
+                        `This is one-way Flight from ${
                           (searchFlightData.initialValues as any)?.from.city
-                      }`}
+                        }`
+                      }
                     />
+                  )
                 )}
               {!!returnProviderWithOffers.length &&
                 returnProviderWithOffers.map(
-                  (provideDetail: any, index: number) =>
+                  (provideDetail: any, index: number) => (
                     <RenderProvider
                       provideDetail={provideDetail}
                       index={index}
                       showCheapest={false}
                       disableViewBtn={!internationalFlight && true}
-                      label={!internationalFlight && `This is one-way Flight from ${
+                      label={
+                        !internationalFlight &&
+                        `This is one-way Flight from ${
                           (searchFlightData.initialValues as any)?.to.city
-                      }`}
+                        }`
+                      }
                     />
+                  )
                 )}
             </div>
           </div>
         </div>
-        <div className='headerCard' style={{ margin: '2rem 0' }}>
-          <div className='flighCompleteDetail'>
+        <div className="headerCard" style={{ margin: "2rem 0" }}>
+          <div className="flighCompleteDetail">
             {departFlight && departFlight.stops === 0
               ? flighInfoTabCard({
                   airLine: departFlight.flightCode,
@@ -824,17 +858,17 @@ const FlightDetailPage = () => {
                 departFlight.startTimeList?.map((ele, index) => (
                   <Fragment key={index}>
                     {flighInfoTabCard({
-                      airLine: departFlight.flightCode?.split('->')[index],
+                      airLine: departFlight.flightCode?.split("->")[index],
                       fromTime: moment(
                         departFlight?.startTimeList
                           ? departFlight?.startTimeList[index]
                           : new Date()
-                      ).format('HH:mm'),
+                      ).format("HH:mm"),
                       fromDate: moment(
                         departFlight?.startTimeList
                           ? departFlight?.startTimeList[index]
                           : new Date()
-                      ).format('DD/MM/YYYY'),
+                      ).format("DD/MM/YYYY"),
                       fromAddress:
                         departFlight.departureTerminalList &&
                         departFlight.departureTerminalList[index],
@@ -842,12 +876,12 @@ const FlightDetailPage = () => {
                         departFlight?.endTimeList
                           ? departFlight?.endTimeList[index]
                           : new Date()
-                      ).format('HH:mm'),
+                      ).format("HH:mm"),
                       toDate: moment(
                         departFlight?.endTimeList
                           ? departFlight?.endTimeList[index]
                           : new Date()
-                      ).format('DD/MM/YYYY'),
+                      ).format("DD/MM/YYYY"),
                       duration:
                         departFlight.durationsList &&
                         departFlight.durationsList[index].substring(
@@ -868,7 +902,8 @@ const FlightDetailPage = () => {
                           index === 0
                             ? departFlight.from
                             : departFlight?.transitFlight &&
-                              departFlight?.transitFlight[index - 1]?.viaAirportCode,
+                              departFlight?.transitFlight[index - 1]
+                                ?.viaAirportCode,
                         to:
                           index !==
                           (departFlight.startTimeList &&
@@ -894,7 +929,7 @@ const FlightDetailPage = () => {
                         departFlight.checkinBaggage[index],
                     })}
                     {departFlight.stops && index < departFlight.stops ? (
-                      <div className='layovers'>
+                      <div className="layovers">
                         <p>
                           {departFlight.layoverDurationList &&
                             departFlight.layoverDurationList[index] &&
@@ -905,7 +940,7 @@ const FlightDetailPage = () => {
                         </p>
                         <p> - Change of planes in</p>
                         <p>
-                          {departFlight.via?.split('-')[index] ||
+                          {departFlight.via?.split("-")[index] ||
                             (departFlight?.transitFlight &&
                               departFlight?.transitFlight[index]?.viaCity)}
                         </p>
@@ -915,10 +950,10 @@ const FlightDetailPage = () => {
                 ))}
 
             {returnFlight && (
-              <div className='mainDivider'>
-                <span className='circle circle1'></span>
-                <div className='divider'></div>
-                <span className='circle circle2'></span>
+              <div className="mainDivider">
+                <span className="circle circle1"></span>
+                <div className="divider"></div>
+                <span className="circle circle2"></span>
               </div>
             )}
 
@@ -958,17 +993,17 @@ const FlightDetailPage = () => {
                     <Fragment key={index}>
                       {flighInfoTabCard({
                         flipPlaneIcon: true,
-                        airLine: returnFlight.flightCode?.split('->')[index],
+                        airLine: returnFlight.flightCode?.split("->")[index],
                         fromTime: moment(
                           returnFlight?.startTimeList
                             ? returnFlight?.startTimeList[index]
                             : new Date()
-                        ).format('HH:mm'),
+                        ).format("HH:mm"),
                         fromDate: moment(
                           returnFlight?.startTimeList
                             ? returnFlight?.startTimeList[index]
                             : new Date()
-                        ).format('DD/MM/YYYY'),
+                        ).format("DD/MM/YYYY"),
                         fromAddress:
                           returnFlight.departureTerminalList &&
                           returnFlight.departureTerminalList[index],
@@ -976,12 +1011,12 @@ const FlightDetailPage = () => {
                           returnFlight?.endTimeList
                             ? returnFlight?.endTimeList[index]
                             : new Date()
-                        ).format('HH:mm'),
+                        ).format("HH:mm"),
                         toDate: moment(
                           returnFlight?.endTimeList
                             ? returnFlight?.endTimeList[index]
                             : new Date()
-                        ).format('DD/MM/YYYY'),
+                        ).format("DD/MM/YYYY"),
                         duration:
                           returnFlight.durationsList &&
                           returnFlight.durationsList[index].substring(
@@ -1003,7 +1038,8 @@ const FlightDetailPage = () => {
                             index === 0
                               ? returnFlight.from
                               : returnFlight?.transitFlight &&
-                                returnFlight?.transitFlight[index - 1]?.viaAirportCode,
+                                returnFlight?.transitFlight[index - 1]
+                                  ?.viaAirportCode,
                           to:
                             index !==
                             (returnFlight.startTimeList &&
@@ -1016,7 +1052,8 @@ const FlightDetailPage = () => {
                             (returnFlight.startTimeList &&
                               returnFlight.startTimeList.length - 1)
                               ? returnFlight?.transitFlight &&
-                                returnFlight?.transitFlight[index]?.viaAirportCode
+                                returnFlight?.transitFlight[index]
+                                  ?.viaAirportCode
                               : returnFlight.to,
                         },
                         stop: returnFlight.stops,
@@ -1028,7 +1065,7 @@ const FlightDetailPage = () => {
                           returnFlight.checkinBaggage[index],
                       })}
                       {returnFlight.stops && index < returnFlight.stops ? (
-                        <div className='layovers'>
+                        <div className="layovers">
                           <p>
                             {returnFlight.layoverDurationList &&
                               returnFlight.layoverDurationList[index] &&
@@ -1039,7 +1076,7 @@ const FlightDetailPage = () => {
                           </p>
                           <p> - Change of planes in</p>
                           <p>
-                            {returnFlight.via?.split('-')[index] ||
+                            {returnFlight.via?.split("-")[index] ||
                               (returnFlight?.transitFlight &&
                                 returnFlight?.transitFlight[index]?.viaCity)}
                           </p>
