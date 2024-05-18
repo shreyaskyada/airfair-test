@@ -271,7 +271,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
         width={screen.lg ? 800 : "100%"}
         footer={null}
         closable={true}
-        zIndex={3003}
+        zIndex={1003}
         onCancel={onCancelHandler}
         className="profileModal"
       >
