@@ -499,6 +499,8 @@ const FlightDetailPage = () => {
   };
 
   const FlightRefundableMessage = ({ refundable }: any) => {
+    if (refundable === undefined) return null;
+
     return refundable ? (
       <div style={{ padding: "16px" }}>
         <Alert message="Partially Refundable" type="warning" showIcon />
@@ -847,8 +849,10 @@ const FlightDetailPage = () => {
         </div>
         <div className="headerCard" style={{ margin: "2rem 0" }}>
           <div className="flighCompleteDetail">
-            {departFlight && departFlight.stops === 0
-              ? flighInfoTabCard({
+            {departFlight && departFlight.stops === 0 ? (
+              <>
+                <FlightRefundableMessage refundable={departFlight.refundable} />
+                {flighInfoTabCard({
                   airLine: departFlight.flightCode,
                   fromTime: departFlight.depTime,
                   fromDate: departFlight.depDate,
@@ -876,112 +880,112 @@ const FlightDetailPage = () => {
                     departFlight.checkinBaggage &&
                     departFlight.checkinBaggage[0],
                   refundable: departFlight.refundable,
-                })
-              : departFlight && (
-                  <>
-                    <FlightRefundableMessage
-                      refundable={departFlight.refundable}
-                    />
-                    {departFlight.startTimeList?.map((ele, index) => (
-                      <Fragment key={index}>
-                        {flighInfoTabCard({
-                          airLine: departFlight.flightCode?.split("->")[index],
-                          fromTime: moment(
-                            departFlight?.startTimeList
-                              ? departFlight?.startTimeList[index]
-                              : new Date()
-                          ).format("HH:mm"),
-                          fromDate: moment(
-                            departFlight?.startTimeList
-                              ? departFlight?.startTimeList[index]
-                              : new Date()
-                          ).format("DD/MM/YYYY"),
-                          fromAddress:
-                            departFlight.departureTerminalList &&
-                            departFlight.departureTerminalList[index],
-                          toTime: moment(
-                            departFlight?.endTimeList
-                              ? departFlight?.endTimeList[index]
-                              : new Date()
-                          ).format("HH:mm"),
-                          toDate: moment(
-                            departFlight?.endTimeList
-                              ? departFlight?.endTimeList[index]
-                              : new Date()
-                          ).format("DD/MM/YYYY"),
-                          duration:
-                            departFlight.durationsList &&
-                            departFlight.durationsList[index].substring(
-                              2,
-                              departFlight.durationsList[index].length
-                            ),
-                          toAddress:
-                            departFlight.arrivalTerminalList &&
-                            departFlight.arrivalTerminalList[index],
-                          flightCode: departFlight.flightCode,
-                          city: {
-                            from:
-                              index === 0
-                                ? departFlight.fromCity
-                                : departFlight?.transitFlight &&
-                                  departFlight?.transitFlight[index - 1]
-                                    ?.viaCity,
-                            fromCode:
-                              index === 0
-                                ? departFlight.from
-                                : departFlight?.transitFlight &&
-                                  departFlight?.transitFlight[index - 1]
-                                    ?.viaAirportCode,
-                            to:
-                              index !==
-                              (departFlight.startTimeList &&
-                                departFlight.startTimeList.length - 1)
-                                ? departFlight?.transitFlight &&
-                                  departFlight?.transitFlight[index]?.viaCity
-                                : departFlight.toCity,
-                            toCode:
-                              index !==
-                              (departFlight.startTimeList &&
-                                departFlight.startTimeList.length - 1)
-                                ? departFlight?.transitFlight &&
-                                  departFlight?.transitFlight[index]
-                                    ?.viaAirportCode
-                                : departFlight.to,
-                          },
-                          stop: departFlight.stops,
-                          seatingClass: departFlight.seatingClass,
-                          cabinBaggage:
-                            departFlight.cabinBaggage &&
-                            departFlight.cabinBaggage[index],
-                          checkinBaggage:
-                            departFlight.checkinBaggage &&
-                            departFlight.checkinBaggage[index],
-                          refundable: departFlight.refundable,
-                        })}
-                        {departFlight.stops && index < departFlight.stops ? (
-                          <div className="layovers">
-                            <p>
-                              {departFlight.layoverDurationList &&
-                                departFlight.layoverDurationList[index] &&
-                                departFlight.layoverDurationList[
-                                  index
-                                ].substring(
-                                  2,
-                                  departFlight.layoverDurationList[index].length
-                                )}
-                            </p>
-                            <p> - Change of planes in</p>
-                            <p>
-                              {departFlight.via?.split("-")[index] ||
-                                (departFlight?.transitFlight &&
-                                  departFlight?.transitFlight[index]?.viaCity)}
-                            </p>
-                          </div>
-                        ) : null}
-                      </Fragment>
-                    ))}
-                  </>
-                )}
+                })}
+              </>
+            ) : (
+              departFlight && (
+                <>
+                  <FlightRefundableMessage
+                    refundable={departFlight.refundable}
+                  />
+                  {departFlight.startTimeList?.map((ele, index) => (
+                    <Fragment key={index}>
+                      {flighInfoTabCard({
+                        airLine: departFlight.flightCode?.split("->")[index],
+                        fromTime: moment(
+                          departFlight?.startTimeList
+                            ? departFlight?.startTimeList[index]
+                            : new Date()
+                        ).format("HH:mm"),
+                        fromDate: moment(
+                          departFlight?.startTimeList
+                            ? departFlight?.startTimeList[index]
+                            : new Date()
+                        ).format("DD/MM/YYYY"),
+                        fromAddress:
+                          departFlight.departureTerminalList &&
+                          departFlight.departureTerminalList[index],
+                        toTime: moment(
+                          departFlight?.endTimeList
+                            ? departFlight?.endTimeList[index]
+                            : new Date()
+                        ).format("HH:mm"),
+                        toDate: moment(
+                          departFlight?.endTimeList
+                            ? departFlight?.endTimeList[index]
+                            : new Date()
+                        ).format("DD/MM/YYYY"),
+                        duration:
+                          departFlight.durationsList &&
+                          departFlight.durationsList[index].substring(
+                            2,
+                            departFlight.durationsList[index].length
+                          ),
+                        toAddress:
+                          departFlight.arrivalTerminalList &&
+                          departFlight.arrivalTerminalList[index],
+                        flightCode: departFlight.flightCode,
+                        city: {
+                          from:
+                            index === 0
+                              ? departFlight.fromCity
+                              : departFlight?.transitFlight &&
+                                departFlight?.transitFlight[index - 1]?.viaCity,
+                          fromCode:
+                            index === 0
+                              ? departFlight.from
+                              : departFlight?.transitFlight &&
+                                departFlight?.transitFlight[index - 1]
+                                  ?.viaAirportCode,
+                          to:
+                            index !==
+                            (departFlight.startTimeList &&
+                              departFlight.startTimeList.length - 1)
+                              ? departFlight?.transitFlight &&
+                                departFlight?.transitFlight[index]?.viaCity
+                              : departFlight.toCity,
+                          toCode:
+                            index !==
+                            (departFlight.startTimeList &&
+                              departFlight.startTimeList.length - 1)
+                              ? departFlight?.transitFlight &&
+                                departFlight?.transitFlight[index]
+                                  ?.viaAirportCode
+                              : departFlight.to,
+                        },
+                        stop: departFlight.stops,
+                        seatingClass: departFlight.seatingClass,
+                        cabinBaggage:
+                          departFlight.cabinBaggage &&
+                          departFlight.cabinBaggage[index],
+                        checkinBaggage:
+                          departFlight.checkinBaggage &&
+                          departFlight.checkinBaggage[index],
+                        refundable: departFlight.refundable,
+                      })}
+                      {departFlight.stops && index < departFlight.stops ? (
+                        <div className="layovers">
+                          <p>
+                            {departFlight.layoverDurationList &&
+                              departFlight.layoverDurationList[index] &&
+                              departFlight.layoverDurationList[index].substring(
+                                2,
+                                departFlight.layoverDurationList[index].length
+                              )}
+                          </p>
+                          <p> - Change of planes in</p>
+                          <p>
+                            {departFlight.via?.split("-")[index] ||
+                              (departFlight?.transitFlight &&
+                                departFlight?.transitFlight[index]?.viaCity)}
+                          </p>
+                        </div>
+                      ) : null}
+                    </Fragment>
+                  ))}
+                </>
+              )
+            )}
 
             {returnFlight && (
               <div className="mainDivider">
