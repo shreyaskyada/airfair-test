@@ -907,6 +907,7 @@ const SearchFilter = ({
                     <DatePicker
                       autoFocus
                       open={showInput.departure}
+                      popupStyle={{position:'absolute', top:'370px'}}
                       placeholder=''
                       showTime={false}
                       format='DD-MMM-YY'
@@ -965,7 +966,6 @@ const SearchFilter = ({
               <Card
                 className='returnDate'
                 style={{
-                  overflow: 'hidden',
                   borderRadius: '0px',
                 }}
                 styles={{
@@ -1049,6 +1049,7 @@ const SearchFilter = ({
                     <DatePicker
                       autoFocus
                       open={showInput.return}
+                      popupStyle={{position:'absolute', top:'370px'}}
                       placeholder=''
                       // key={inputValues.departure?.toString()}
                       format='DD-MMM-YY'
