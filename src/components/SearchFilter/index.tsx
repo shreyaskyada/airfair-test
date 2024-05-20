@@ -67,14 +67,14 @@ const seatTypes = [
 
 const initialValues = {
   "from": {
-      "code": "",
-      "city": "",
-      "name": ""
+    "code": "",
+    "city": "",
+    "name": ""
   },
   "to": {
-      "code": "",
-      "city": "",
-      "name": ""
+    "code": "",
+    "city": "",
+    "name": ""
   },
   "type": "one-way",
   "departure": dayjs(),
@@ -203,11 +203,11 @@ const SearchFilter = ({
   };
 
   useEffect(() => {
-    if(!params) {
+    if (!params) {
       setInputValues(initialValues)
     }
   }, [params]);
-  
+
 
   useEffect(() => {
     if (!queryParams.get("from")) {
@@ -276,7 +276,7 @@ const SearchFilter = ({
               to: {
                 code: toAirportData?.airportCd || "",
                 city: toAirportData?.city || "",
-                name: toAirportData?.airportName ||"",
+                name: toAirportData?.airportName || "",
               },
             };
           }
@@ -310,7 +310,7 @@ const SearchFilter = ({
         }
       }
     };
-   
+
     fetchData();
   }, []);
 
@@ -365,11 +365,9 @@ const SearchFilter = ({
 
       const paramsString = `?from=${data.from}&to=${data.to}&depDate=${dayjs(
         values.departure
-      ).unix()}&retDate=${dayjs(values.return).unix()}&type=${
-        values.type
-      }&adults=${data.adults}&child=${data.children}&infants=${
-        data.infants
-      }&class=${data.seatingClass}`;
+      ).unix()}&retDate=${dayjs(values.return).unix()}&type=${values.type
+        }&adults=${data.adults}&child=${data.children}&infants=${data.infants
+        }&class=${data.seatingClass}`;
 
       const searchFlightData: ISearchFlights = {
         totalTravellers: values.adult + values.child + values.infant,
@@ -452,7 +450,7 @@ const SearchFilter = ({
   const fromLocationSearchHandler = (value: string, reason?: "select") => {
     if (value) {
       const [airportCode, airportCity, airportName] = value.split("-");
-      if(reason === "select") {
+      if (reason === "select") {
         params && setQueryParams({
           ...Object.fromEntries([...(queryParams as any)]),
           from: airportCode,
@@ -488,7 +486,7 @@ const SearchFilter = ({
   const toLocationSearchHandler = (value: string, reason?: "select") => {
     if (value) {
       const [airportCode, airportCity, airportName] = value.split("-");
-      if(reason === "select" && params) {
+      if (reason === "select" && params) {
         setQueryParams({
           ...Object.fromEntries([...(queryParams as any)]),
           to: airportCode,
@@ -533,7 +531,7 @@ const SearchFilter = ({
       to: prevState.from
     }));
 
-    if(params) {
+    if (params) {
       const oldQueryParams = Object.fromEntries([...(queryParams as any)]);
       setQueryParams({
         ...oldQueryParams,
@@ -577,7 +575,7 @@ const SearchFilter = ({
   }, [inputValues]);
 
   useEffect(() => {
-        if (showInput.to) {
+    if (showInput.to) {
       getAirportsWrapper(inputValues.to.code)
         .then((data: any) => {
           const filteredAirports = data.airportList?.filter((airport: any) => inputValues?.from?.code !== airport.airportCd);
@@ -585,7 +583,7 @@ const SearchFilter = ({
           const listData = filteredAirports.length
             ? filteredAirports
             : popularFlightsArr.filter((airport: any) => inputValues?.from?.code !== airport.airportCd);
-            
+
           const airports = listData?.map((airport: any) => ({
             label: getDropdownLabel(airport),
             value: `${airport.airportCd}-${airport.city}-${airport.airportName}`,
@@ -711,7 +709,7 @@ const SearchFilter = ({
                     padding: 0
                   }
                 }}
-                style={{ borderRadius: '0px', background: 'transparent', padding:0 }}
+                style={{ borderRadius: '0px', background: 'transparent', padding: 0 }}
                 onClick={() => {
                   setShowInput((prevState) => ({ ...prevState, from: true }));
                 }}
@@ -772,10 +770,10 @@ const SearchFilter = ({
                     </div>
                   </Form.Item>
                 </div>
-                <Button 
-                  type="primary" 
-                  shape="circle" 
-                  className='swapoutline-button' 
+                <Button
+                  type="primary"
+                  shape="circle"
+                  className='swapoutline-button'
                   onClick={onSwapClickHandler}
                 >
                   <SwapOutlined />
@@ -854,46 +852,46 @@ const SearchFilter = ({
                 style={{ borderRadius: '0px' }}
                 styles={{
                   body: {
-                    padding: "8px"
+                    padding: 0
                   }
                 }}
-                onClick={() => {
-                  setShowInput((prevState) => ({
-                    ...prevState,
-                    departure: true,
-                  }));
-                  departureDateRef.current.focus()
-                }}
               >
-                <div
+                <div>
+                  <div 
                   style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'flex-start',
+                    padding: '8px',
                   }}
-                >
-                  <label className='fieldLabel'>Departure</label>
-                  <h1 className='fieldTitle'>
-                    {inputValues &&
-                      inputValues?.departure &&
-                      inputValues.departure.format('DD')}{' '}
-                    {
-                      <Text style={{ color: '#4E6F7B' }}>{`${
-                        inputValues &&
+                  onClick={() => {
+                    setShowInput((prevState) => ({
+                      ...prevState,
+                      departure: true,
+                    }));
+                    departureDateRef.current.focus()
+                  }}>
+                    <label className='fieldLabel'>Departure</label>
+                    <h1 className='fieldTitle'>
+                      {inputValues &&
                         inputValues?.departure &&
-                        inputValues.departure.format('MMM')
-                      }'${
-                        inputValues &&
+                        inputValues.departure.format('DD')}{' '}
+                      {
+                        <Text style={{ color: '#4E6F7B' }}>{`${inputValues &&
+                          inputValues?.departure &&
+                          inputValues.departure.format('MMM')
+                          }'${inputValues &&
+                          inputValues?.departure &&
+                          inputValues.departure.format('YY')
+                          }`}</Text>
+                      }
+                    </h1>
+                    <p className='fieldSubTitle'>
+                      {inputValues &&
                         inputValues?.departure &&
-                        inputValues.departure.format('YY')
-                      }`}</Text>
-                    }
-                  </h1>
-                  <p className='fieldSubTitle'>
-                    {inputValues &&
-                      inputValues?.departure &&
-                      inputValues.departure.format('dddd')}
-                  </p>
+                        inputValues.departure.format('dddd')}
+                    </p>
+                  </div>
                   <Form.Item
                     name='departure'
                     style={{
@@ -906,61 +904,61 @@ const SearchFilter = ({
                       backgroundColor: '#fff',
                     }}
                   >
-                      <DatePicker
-                        autoFocus
-                        open={showInput.departure}
-                        placeholder=''
-                        showTime={false}
-                        format='DD-MMM-YY'
-                        showNow={false}
-                        ref={departureDateRef}
-                        // defaultValue={dayjs()}
-                        size='large'
-                        value={inputValues.departure}
-                        style={{ height: '78px', width: '100%' }}
-                        disabledDate={disabledDate}
-                        onChange={(value) => {
+                    <DatePicker
+                      autoFocus
+                      open={showInput.departure}
+                      placeholder=''
+                      showTime={false}
+                      format='DD-MMM-YY'
+                      showNow={false}
+                      ref={departureDateRef}
+                      // defaultValue={dayjs()}
+                      size='large'
+                      value={inputValues.departure}
+                      style={{ height: '78px', width: '100%' }}
+                      disabledDate={disabledDate}
+                      onChange={(value) => {
+                        setInputValues((prevState: any) => ({
+                          ...prevState,
+                          departure: value || dayjs(),
+                        }));
+                        params && setQueryParams({
+                          ...Object.fromEntries([...(queryParams as any)]),
+                          depDate: dayjs(value).unix(),
+                        });
+                        dispatch(updateDepartureDate(value || dayjs()));
+                        const diff = value?.diff(inputValues.return);
+                        if (value && diff && diff > 0) {
+                          const retDt = (
+                            value ||
+                            (inputValues && inputValues.departure)
+                          ).add(1, 'day');
+                          dispatch(updateReturnDate(retDt));
                           setInputValues((prevState: any) => ({
                             ...prevState,
-                            departure: value || dayjs(),
+                            return: retDt,
                           }));
-                          params && setQueryParams({
-                            ...Object.fromEntries([...(queryParams as any)]),
-                            depDate: dayjs(value).unix(),
-                          });
-                          dispatch(updateDepartureDate(value || dayjs()));
-                          const diff = value?.diff(inputValues.return);
-                          if (value && diff && diff > 0) {
-                            const retDt = (
-                              value ||
-                              (inputValues && inputValues.departure)
-                            ).add(1, 'day');
-                            dispatch(updateReturnDate(retDt));
-                            setInputValues((prevState: any) => ({
-                              ...prevState,
-                              return: retDt,
-                            }));
-                          }
-
-                          if (
-                            inputValues &&
-                            inputValues.type === 'round-trip'
-                          ) {
-                            const retDt = value?.add(1, 'day');
-                            dispatch(updateReturnDate(retDt));
-                            setInputValues((prevState: any) => ({
-                              ...prevState,
-                              return: retDt,
-                            }));
-                          }
-                        }}
-                        onBlur={() =>
-                          setShowInput((prevState) => ({
-                            ...prevState,
-                            departure: false,
-                          }))
                         }
-                      />
+
+                        if (
+                          inputValues &&
+                          inputValues.type === 'round-trip'
+                        ) {
+                          const retDt = value?.add(1, 'day');
+                          dispatch(updateReturnDate(retDt));
+                          setInputValues((prevState: any) => ({
+                            ...prevState,
+                            return: retDt,
+                          }));
+                        }
+                      }}
+                      onOpenChange={() => {
+                        setShowInput((prevState) => ({
+                          ...prevState,
+                          departure: false,
+                        }));
+                      }}
+                    />
                   </Form.Item>
                 </div>
               </Card>
@@ -972,70 +970,69 @@ const SearchFilter = ({
                 }}
                 styles={{
                   body: {
-                    padding: '8px'
+                    padding:0  
                   }
-                }}
-                onClick={() => {
-                  form.setFieldValue('type', 'round-trip');
-                  const diff = inputValues.departure?.diff(inputValues.return);
-                  let returnDate = inputValues.return;
-                  if (inputValues.departure && diff && diff > 0) {
-                    returnDate = inputValues.departure?.add(1, 'day');
-                    dispatch(updateReturnDate(returnDate));
-                  }
-                  setInputValues((prevState: any) => ({
-                    ...prevState,
-                    type: 'round-trip',
-                  }));
-                  if(params) {
-                    setQueryParams({
-                      ...Object.fromEntries([...(queryParams as any)]),
-                      type: "round-trip",
-                    });
-                  }
-                  setShowInput((prevState) => ({ ...prevState, return: true }));
-                  if(!showInput.return)
-                  returnDateRef.current.focus();
-                  // dispatch(updateFlightType('round-trip'));
                 }}
               >
-                <div
-                  style={{
+                <div>
+                  <div style={{
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'flex-start',
-                  }}
-                >
-                  <label className='fieldLabel'>Return</label>
-                  {inputValues.type === 'one-way' ? (
-                    <Text type='secondary'>
-                      Tap to add a return date for bigger discounts
-                    </Text>
-                  ) : (
-                    <>
-                      <h1 className='fieldTitle'>
-                        {inputValues &&
-                          inputValues?.return &&
-                          inputValues.return.format('DD')}{' '}
-                        {
-                          <Text style={{ color: '#4E6F7B' }}>{`${
-                            inputValues &&
+                    height: '100%',
+                    padding: '8px'
+                  }} onClick={() => {
+                    form.setFieldValue('type', 'round-trip');
+                    const diff = inputValues.departure?.diff(inputValues.return);
+                    let returnDate = inputValues.return;
+                    if (inputValues.departure && diff && diff > 0) {
+                      returnDate = inputValues.departure?.add(1, 'day');
+                      dispatch(updateReturnDate(returnDate));
+                    }
+                    setInputValues((prevState: any) => ({
+                      ...prevState,
+                      type: 'round-trip',
+                    }));
+                    if (params) {
+                      setQueryParams({
+                        ...Object.fromEntries([...(queryParams as any)]),
+                        type: "round-trip",
+                      });
+                    }
+                    setShowInput((prevState) => ({ ...prevState, return: true }));
+                    if (!showInput.return)
+                      returnDateRef.current.focus();
+                    // dispatch(updateFlightType('round-trip'));
+                  }}>
+                    <label className='fieldLabel'>Return</label>
+                    {inputValues.type === 'one-way' ? (
+                      <Text type='secondary'>
+                        Tap to add a return date for bigger discounts
+                      </Text>
+                    ) : (
+                      <>
+                        <h1 className='fieldTitle'>
+                          {inputValues &&
                             inputValues?.return &&
-                            inputValues.return.format('MMM')
-                          }'${
-                            inputValues &&
+                            inputValues.return.format('DD')}{' '}
+                          {
+                            <Text style={{ color: '#4E6F7B' }}>{`${inputValues &&
+                              inputValues?.return &&
+                              inputValues.return.format('MMM')
+                              }'${inputValues &&
+                              inputValues?.return &&
+                              inputValues.return.format('YY')
+                              }`}</Text>
+                          }
+                        </h1>
+                        <p className='fieldSubTitle'>
+                          {inputValues &&
                             inputValues?.return &&
-                            inputValues.return.format('YY')
-                          }`}</Text>
-                        }
-                      </h1>
-                      <p className='fieldSubTitle'>
-                        {inputValues &&
-                          inputValues?.return &&
-                          inputValues.return.format('dddd')}
-                      </p>
-                    </>
-                  )}
+                            inputValues.return.format('dddd')}
+                        </p>
+                      </>
+                    )}
+                  </div>
                   <Form.Item
                     name='return'
                     style={{
@@ -1048,54 +1045,54 @@ const SearchFilter = ({
                       backgroundColor: '#fff',
                     }}
                   >
-                      
-                      <DatePicker
-                          autoFocus
-                          open={showInput.return}
-                          placeholder=''
-                          // key={inputValues.departure?.toString()}
-                          format='DD-MMM-YY'
-                          showTime={false}
-                          showNow={false}
-                          size='large'
-                          // defaultValue={inputValues && inputValues.return}
-                          style={{ height: '78px', width: '100%' }}
-                          value={inputValues && inputValues.return}
-                          disabledDate={disableReturnDates}
-                          ref={returnDateRef}
-                          onChange={(value) => {
-                            setInputValues((prevState: any) => ({
-                              ...prevState,
-                              return: value,
-                            }));
-                            if(params) {
-                              setQueryParams({
-                                ...Object.fromEntries([...(queryParams as any)]),
-                                retDate: dayjs(value).unix(),
-                              });
-                            }
-                            dispatch(
-                              updateReturnDate(
-                                value ||
-                                  (inputValues &&
-                                    inputValues.departure?.add(1, 'day'))
-                              )
-                            );
-                          }}
-                          onBlur={() =>
-                            setShowInput((prevState: any) => ({
-                              ...prevState,
-                              return: false,
-                            }))
-                          }
-                        />
+
+                    <DatePicker
+                      autoFocus
+                      open={showInput.return}
+                      placeholder=''
+                      // key={inputValues.departure?.toString()}
+                      format='DD-MMM-YY'
+                      showTime={false}
+                      showNow={false}
+                      size='large'
+                      // defaultValue={inputValues && inputValues.return}
+                      style={{ height: '78px', width: '100%' }}
+                      value={inputValues && inputValues.return}
+                      disabledDate={disableReturnDates}
+                      ref={returnDateRef}
+                      onChange={(value) => {
+                        setInputValues((prevState: any) => ({
+                          ...prevState,
+                          return: value,
+                        }));
+                        if (params) {
+                          setQueryParams({
+                            ...Object.fromEntries([...(queryParams as any)]),
+                            retDate: dayjs(value).unix(),
+                          });
+                        }
+                        dispatch(
+                          updateReturnDate(
+                            value ||
+                            (inputValues &&
+                              inputValues.departure?.add(1, 'day'))
+                          )
+                        );
+                      }}
+                      onOpenChange={() =>
+                        setShowInput((prevState: any) => ({
+                          ...prevState,
+                          return: false,
+                        }))
+                      }
+                    />
                   </Form.Item>
                 </div>
               </Card>
               <Card
                 className='traveller'
                 style={{ borderRadius: '0px' }}
-                styles={{body: {padding: '8px'}}}
+                styles={{ body: { padding: '8px' } }}
                 onClick={() => {
                   setShowInput((prevState: any) => ({
                     ...prevState,
@@ -1131,52 +1128,52 @@ const SearchFilter = ({
                         />
                       </Form.Item>
                       <Space>
-                       <div style={{display:"flex", gap:"15px", flexWrap:"wrap"}}>
-                        <Form.Item label='Child :' name='child' colon={false}>
-                          <Segmented
-                            className='popoverSegment'
-                            options={[
-                              ...segmentOtherValues,
-                              { label: '6+', value: 7 },
-                            ]}
-                            onChange={(value) => {
-                              setInputValues((prevState: any) => ({
-                                ...prevState,
-                                child: Number(value),
-                              }));
-                              params && setQueryParams({
-                                ...Object.fromEntries([
-                                  ...(queryParams as any),
-                                ]),
-                                child: value,
-                              });
-                              dispatch(updateChild(Number(value)));
-                            }}
-                          />
-                        </Form.Item>
-                        <Form.Item label='Infant :' name='infant' colon={false}>
-                      <Segmented
-                         className='popoverSegment'
-                         options={[
-                           ...segmentOtherValues,
-                           { label: '6+', value: 7 },
-                         ]}
-                         onChange={(value) => {
-                           setInputValues((prevState: any) => ({
-                             ...prevState,
-                             infant: Number(value),
-                           }));
-                           params && setQueryParams({
-                             ...Object.fromEntries([
-                               ...(queryParams as any),
-                             ]),
-                             infants: value,
-                           });
-                           dispatch(updateInfant(Number(value)));
-                         }}
-                       />
-                        </Form.Item>               
-                       </div>
+                        <div style={{ display: "flex", gap: "15px", flexWrap: "wrap" }}>
+                          <Form.Item label='Child :' name='child' colon={false}>
+                            <Segmented
+                              className='popoverSegment'
+                              options={[
+                                ...segmentOtherValues,
+                                { label: '6+', value: 7 },
+                              ]}
+                              onChange={(value) => {
+                                setInputValues((prevState: any) => ({
+                                  ...prevState,
+                                  child: Number(value),
+                                }));
+                                params && setQueryParams({
+                                  ...Object.fromEntries([
+                                    ...(queryParams as any),
+                                  ]),
+                                  child: value,
+                                });
+                                dispatch(updateChild(Number(value)));
+                              }}
+                            />
+                          </Form.Item>
+                          <Form.Item label='Infant :' name='infant' colon={false}>
+                            <Segmented
+                              className='popoverSegment'
+                              options={[
+                                ...segmentOtherValues,
+                                { label: '6+', value: 7 },
+                              ]}
+                              onChange={(value) => {
+                                setInputValues((prevState: any) => ({
+                                  ...prevState,
+                                  infant: Number(value),
+                                }));
+                                params && setQueryParams({
+                                  ...Object.fromEntries([
+                                    ...(queryParams as any),
+                                  ]),
+                                  infants: value,
+                                });
+                                dispatch(updateInfant(Number(value)));
+                              }}
+                            />
+                          </Form.Item>
+                        </div>
                       </Space>
                       <Form.Item label='Choose Travel Class :' name='class' colon={false}>
                         <Segmented

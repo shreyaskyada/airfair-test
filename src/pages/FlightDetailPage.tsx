@@ -502,11 +502,11 @@ const FlightDetailPage = () => {
     if (refundable === undefined) return null;
 
     return refundable ? (
-      <div style={{ padding: "16px" }}>
+      <div style={{ padding: "16px", maxWidth: '400px' }}>
         <Alert message="Partially Refundable" type="warning" showIcon />
       </div>
     ) : (
-      <div style={{ padding: "16px" }}>
+      <div style={{ padding: "16px", maxWidth: '400px' }}>
         <Alert
           message="Non-refundable"
           type="info"
