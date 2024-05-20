@@ -477,7 +477,6 @@ const ProfileCard = ({ onFinishHandler }: any) => {
               {(fields, { add, remove }, { errors }) => (
                 <>
                   {fields.map((field, index) => (
-                    <>
                       <Space.Compact
                         key={(Math.random() + 1).toString(36).substring(2)}
                         style={{
@@ -488,6 +487,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                       >
                         <Form.Item
                           {...field}
+                          key={(Math.random() + 1).toString(36).substring(2)}
                           validateTrigger={["onChange", "onBlur"]}
                           rules={[
                             {
@@ -515,6 +515,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                         </Form.Item>
                         <Form.Item
                           {...field}
+                          key={(Math.random() + 1).toString(36).substring(2)}
                           validateTrigger={["onChange", "onBlur"]}
                           name={[field.name, "walletType"]}
                           rules={[
@@ -548,7 +549,6 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                           }}
                         />
                       </Space.Compact>
-                    </>
                   ))}
 
                   <Form.Item>
