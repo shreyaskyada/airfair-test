@@ -710,6 +710,7 @@ const FlightDetailPage = () => {
             }
             placement="topRight"
           >
+            <div>
             <Tooltip
               title="Hover Me!"
               open={isOpenTooltip}
@@ -726,6 +727,7 @@ const FlightDetailPage = () => {
                 <p className="tooltipContent">i</p>
               </div>
             </Tooltip>
+            </div>   
           </Tooltip>
           <button
             disabled={disableViewBtn}

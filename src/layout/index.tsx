@@ -119,7 +119,7 @@ const LayoutUI = () => {
       const {token,...filteredUser} = userDetails
       dispatch(updateUserDetails(filteredUser))
       dispatch(toggleModal({ modal: "login", status: false }))
-      openNotificationWithIcon("success", "Logged in successfully")
+      // openNotificationWithIcon("success", "Logged in successfully")
       getUserInfo(dispatch, userDetails.username, userDetails.token)
     } else {
       dispatch(updateIsLoggedIn(false))
