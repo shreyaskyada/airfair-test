@@ -481,38 +481,19 @@ const FlightDetailPage = () => {
           </div>
 
           <div className="rowChip">
-            {cabinBaggage && (
+            {cabinBaggage && cabinBaggage !== " " && (
               <div className="chip">
                 <p>{cabinBaggage}</p>
               </div>
             )}
 
-            {checkinBaggage && (
+            {checkinBaggage && checkinBaggage !== " " && (
               <div className="chip">
                 <p>{checkinBaggage}</p>
               </div>
             )}
           </div>
         </div>
-      </div>
-    );
-  };
-
-  const FlightRefundableMessage = ({ refundable }: any) => {
-    if (refundable === undefined) return null;
-
-    return refundable ? (
-      <div style={{ padding: "16px", width: 'fit-content' }}>
-        <Alert message="Partially Refundable" type="warning" showIcon />
-      </div>
-    ) : (
-      <div style={{ padding: "16px", width: 'fit-content' }}>
-        <Alert
-          message="Non-refundable"
-          type="info"
-          showIcon
-          className="flight-details-error-alert"
-        />
       </div>
     );
   };
@@ -581,9 +562,9 @@ const FlightDetailPage = () => {
               ? provideDetail.bestOffer.fare.totalFareAfterDiscount
               : provideDetail.bestOffer.fare &&
                 provideDetail.bestOffer.fare.totalFare}
-            <span
+            {/* <span
               style={{ color: "#4E6F7B", fontSize: "0.7rem" }}
-            >{` + ${provideDetail.convenienceFee} conv fee`}</span>
+            >{` + ${provideDetail.convenienceFee} conv fee`}</span> */}
           </p>
         </div>
         <div className="rightCol">
@@ -604,7 +585,7 @@ const FlightDetailPage = () => {
                       Unlock Exclusive Deals by Logging In
                     </Tag>
                   )}
-                  <div>
+                  {/* <div>
                     <span style={{ color: "#4E6F7B" }}>Base Fare: </span>
                     <span
                       style={{
@@ -614,8 +595,8 @@ const FlightDetailPage = () => {
                     >
                       {provideDetail.baseFare}
                     </span>
-                  </div>
-                  <div>
+                  </div> */}
+                  {/* <div>
                     <span style={{ color: "#4E6F7B" }}>Total Tax: </span>
                     <span
                       style={{
@@ -625,7 +606,7 @@ const FlightDetailPage = () => {
                     >
                       {provideDetail.tax}
                     </span>
-                  </div>
+                  </div> */}
                   <div>
                     <span style={{ color: "#4E6F7B" }}>Total Fare: </span>
                     <span
@@ -688,7 +669,7 @@ const FlightDetailPage = () => {
                       </span>
                     </b>
                   </div>
-                  <div>
+                  {/* <div>
                     <span style={{ color: "#4E6F7B" }}>Conv Fee : </span>
                     <span
                       style={{
@@ -698,7 +679,7 @@ const FlightDetailPage = () => {
                     >
                       {provideDetail.convenienceFee}
                     </span>
-                  </div>
+                  </div> */}
                   <div>
                     <span style={{ color: "#4E6F7B" }}>Final Fare: </span>
                     <b>
@@ -851,7 +832,6 @@ const FlightDetailPage = () => {
           <div className="flighCompleteDetail">
             {departFlight && departFlight.stops === 0 ? (
               <>
-                <FlightRefundableMessage refundable={departFlight.refundable} />
                 {flighInfoTabCard({
                   airLine: departFlight.flightCode,
                   fromTime: departFlight.depTime,
@@ -885,9 +865,6 @@ const FlightDetailPage = () => {
             ) : (
               departFlight && (
                 <>
-                  <FlightRefundableMessage
-                    refundable={departFlight.refundable}
-                  />
                   {departFlight.startTimeList?.map((ele, index) => (
                     <Fragment key={index}>
                       {flighInfoTabCard({
@@ -998,9 +975,6 @@ const FlightDetailPage = () => {
             <div>
               {returnFlight && returnFlight.stops === 0 ? (
                 <>
-                  <FlightRefundableMessage
-                    refundable={returnFlight.refundable}
-                  />
                   {flighInfoTabCard({
                     flipPlaneIcon: true,
                     airLine: returnFlight.flightCode,
@@ -1035,9 +1009,6 @@ const FlightDetailPage = () => {
               ) : (
                 returnFlight && (
                   <>
-                    <FlightRefundableMessage
-                      refundable={returnFlight.refundable}
-                    />
                     {returnFlight.startTimeList?.map((ele, index) => (
                       <Fragment key={index}>
                         {flighInfoTabCard({
