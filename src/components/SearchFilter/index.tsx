@@ -297,6 +297,11 @@ const SearchFilter = ({
               "departure",
               dayjs.unix(Number.parseInt(depDate))
             );
+            retDate &&
+            form.setFieldValue(
+              "return",
+              dayjs.unix(Number.parseInt(retDate))
+            );
           adults && form.setFieldValue("adult", parseInt(adults));
           child && form.setFieldValue("child", parseInt(child));
           infants && form.setFieldValue("infant", parseInt(infants));
@@ -642,7 +647,7 @@ const SearchFilter = ({
             : 'searchBarContainerFlightPage'
         }
       >
-        <Form form={form} onFinish={() => onFinish()} initialValues={_initialValues}>
+        <Form form={form} onFinish={() => onFinish()} initialValues={initialValues}>
           <div
             style={{
               display: 'flex',
@@ -934,6 +939,7 @@ const SearchFilter = ({
                             value ||
                             (inputValues && inputValues.departure)
                           ).add(1, 'day');
+                          form.setFieldValue("return",retDt);
                           dispatch(updateReturnDate(retDt));
                           setInputValues((prevState: any) => ({
                             ...prevState,
@@ -945,7 +951,11 @@ const SearchFilter = ({
                           inputValues &&
                           inputValues.type === 'round-trip'
                         ) {
-                          const retDt = value?.add(1, 'day');
+                          const retDt = (
+                            value ||
+                            (inputValues && inputValues.departure)
+                          ).add(1, 'day');
+                          form.setFieldValue("return",retDt);
                           dispatch(updateReturnDate(retDt));
                           setInputValues((prevState: any) => ({
                             ...prevState,
