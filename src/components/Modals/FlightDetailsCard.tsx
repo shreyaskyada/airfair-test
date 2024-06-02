@@ -261,12 +261,12 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             let totalDepartTax =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalTax ||
-                  departFlight.compare[key].fare?.tax
+                departFlight.compare[key].fare?.tax
                 : 0;
             let totalReturnTax =
               returnFlight.compare && returnFlight.compare[key]
                 ? returnFlight.compare[key].fare?.totalTax ||
-                  returnFlight.compare[key].fare?.tax
+                returnFlight.compare[key].fare?.tax
                 : 0;
 
             let totalTax = (totalDepartTax || 0) + (totalReturnTax || 0);
@@ -274,12 +274,12 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             let baseFareDepart =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalBaseFare ||
-                  departFlight.compare[key].fare?.baseFare
+                departFlight.compare[key].fare?.baseFare
                 : 0;
             let baseFareReturn =
               returnFlight.compare && returnFlight.compare[key]
                 ? returnFlight.compare[key].fare?.totalBaseFare ||
-                  returnFlight.compare[key].fare?.baseFare
+                returnFlight.compare[key].fare?.baseFare
                 : 0;
             let baseFare = (baseFareDepart || 0) + (baseFareReturn || 0);
 
@@ -308,13 +308,13 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             let totalTax =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalTax ||
-                  departFlight.compare[key].fare?.tax
+                departFlight.compare[key].fare?.tax
                 : 0;
 
             let baseFare =
               departFlight.compare && departFlight.compare[key]
                 ? departFlight.compare[key].fare?.totalBaseFare ||
-                  departFlight.compare[key].fare?.baseFare
+                departFlight.compare[key].fare?.baseFare
                 : 0;
 
             providers.push({
@@ -354,11 +354,11 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
             {_names.length > 1 ? "Multiple Airlines" : _names.map((name, index) => {
               const comma =
                 index !==
-                uniq(
-                  flighDetails?.flightCode
-                    ?.split('->')
-                    .map((item) => item.substring(0, 2))
-                ).length -
+                  uniq(
+                    flighDetails?.flightCode
+                      ?.split('->')
+                      .map((item) => item.substring(0, 2))
+                  ).length -
                   1
                   ? ','
                   : '';
@@ -373,7 +373,7 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               borderRadius: '5px',
             }}
             styles={{
-              body: {paddingLeft: '0'}
+              body: { paddingLeft: '0' }
             }}
           >
             <Meta
@@ -459,13 +459,12 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                 <br />
                 <span className='terminal' style={{ color: '#4E6F7B' }}>
                   {' '}
-                  {`${
-                    fromAddress
+                  {`${fromAddress
                       ? fromAddress.includes('Terminal')
                         ? ''
                         : 'Terminal '
                       : 'Terminal '
-                  } ${fromAddress || '--'}`}
+                    } ${fromAddress || '--'}`}
                 </span>
               </div>
             }
@@ -504,13 +503,12 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                 </span>
                 <span className='terminal' style={{ color: '#4E6F7B' }}>
                   {' '}
-                  {`${
-                    toAddress
+                  {`${toAddress
                       ? toAddress.includes('Terminal')
                         ? ''
                         : 'Terminal '
                       : 'Terminal '
-                  } ${toAddress || '--'}`}
+                    } ${toAddress || '--'}`}
                 </span>
               </div>
             }
@@ -525,113 +523,113 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
       <div>
         {flight?.stops === 0
           ? flighInfoTabCard({
-              airLine: flight.flightCode,
-              fromTime: flight.depTime,
-              fromDate: flight.depDate,
-              fromAddress:
-                flight.departureTerminalList && flight.departureTerminalList[0],
-              toTime: flight.arrTime,
-              toDate: flight.arrDate,
-              duration: flight.duration,
-              toAddress:
-                flight.arrivalTerminalList && flight.arrivalTerminalList[0],
-              flightCode: flight.flightCode,
-              city: {
-                from: flight.fromCity,
-                to: flight.toCity,
-              },
-            })
+            airLine: flight.flightCode,
+            fromTime: flight.depTime,
+            fromDate: flight.depDate,
+            fromAddress:
+              flight.departureTerminalList && flight.departureTerminalList[0],
+            toTime: flight.arrTime,
+            toDate: flight.arrDate,
+            duration: flight.duration,
+            toAddress:
+              flight.arrivalTerminalList && flight.arrivalTerminalList[0],
+            flightCode: flight.flightCode,
+            city: {
+              from: flight.fromCity,
+              to: flight.toCity,
+            },
+          })
           : flight?.startTimeList?.map((ele, index) => (
-              <React.Fragment key={index}>
-                {flighInfoTabCard({
-                  airLine: flight.flightCode?.split('->')[index],
-                  fromTime: moment(
-                    flight?.startTimeList
-                      ? flight?.startTimeList[index]
-                      : new Date()
-                  ).format('HH:mm'),
-                  fromDate: moment(
-                    flight?.startTimeList
-                      ? flight?.startTimeList[index]
-                      : new Date()
-                  ).format('DD/MM/YYYY'),
-                  fromAddress:
-                    flight.departureTerminalList &&
-                    flight.departureTerminalList[index],
-                  toTime: moment(
-                    flight?.endTimeList
-                      ? flight?.endTimeList[index]
-                      : new Date()
-                  ).format('HH:mm'),
-                  toDate: moment(
-                    flight?.endTimeList
-                      ? flight?.endTimeList[index]
-                      : new Date()
-                  ).format('DD/MM/YYYY'),
-                  duration:
-                    flight.durationsList &&
-                    flight.durationsList[index].substring(
-                      2,
-                      flight.durationsList[index].length
-                    ),
-                  toAddress:
-                    flight.arrivalTerminalList &&
-                    flight.arrivalTerminalList[index],
-                  flightCode: flight.flightCode,
-                  city: {
-                    from:
-                      index === 0
-                        ? flight.fromCity
-                        : flight?.transitFlight &&
-                          flight?.transitFlight[index - 1]?.viaCity,
-                    to:
-                      index !==
+            <React.Fragment key={index}>
+              {flighInfoTabCard({
+                airLine: flight.flightCode?.split('->')[index],
+                fromTime: moment(
+                  flight?.startTimeList
+                    ? flight?.startTimeList[index]
+                    : new Date()
+                ).format('HH:mm'),
+                fromDate: moment(
+                  flight?.startTimeList
+                    ? flight?.startTimeList[index]
+                    : new Date()
+                ).format('DD/MM/YYYY'),
+                fromAddress:
+                  flight.departureTerminalList &&
+                  flight.departureTerminalList[index],
+                toTime: moment(
+                  flight?.endTimeList
+                    ? flight?.endTimeList[index]
+                    : new Date()
+                ).format('HH:mm'),
+                toDate: moment(
+                  flight?.endTimeList
+                    ? flight?.endTimeList[index]
+                    : new Date()
+                ).format('DD/MM/YYYY'),
+                duration:
+                  flight.durationsList &&
+                  flight.durationsList[index].substring(
+                    2,
+                    flight.durationsList[index].length
+                  ),
+                toAddress:
+                  flight.arrivalTerminalList &&
+                  flight.arrivalTerminalList[index],
+                flightCode: flight.flightCode,
+                city: {
+                  from:
+                    index === 0
+                      ? flight.fromCity
+                      : flight?.transitFlight &&
+                      flight?.transitFlight[index - 1]?.viaCity,
+                  to:
+                    index !==
                       (flight.startTimeList && flight.startTimeList.length - 1)
-                        ? flight?.transitFlight &&
-                          flight?.transitFlight[index]?.viaCity
-                        : flight.toCity,
-                  },
-                })}
-                {flight.stops && index < flight.stops ? (
-                  screen.xs ? (
-                    <p
-                      style={{
-                        color: '#4E6F7B',
-                        width: '100%',
-                        textAlign: 'center',
-                        margin: '.5rem 0',
-                      }}
-                    >
-                      Change of planes |{' '}
-                      {flight.layoverDurationList &&
-                        flight.layoverDurationList[index] &&
-                        flight.layoverDurationList[index].substring(
-                          2,
-                          flight.layoverDurationList[index].length
-                        )}{' '}
-                      | via{' '}
-                      {flight.via?.split('-')[index] ||
-                        (flight?.transitFlight &&
-                          flight?.transitFlight[index]?.viaAirportCode)}
-                    </p>
-                  ) : (
-                    <Divider plain style={{ color: '#4E6F7B' }}>
-                      Change of planes |{' '}
-                      {flight.layoverDurationList &&
-                        flight.layoverDurationList[index] &&
-                        flight.layoverDurationList[index].substring(
-                          2,
-                          flight.layoverDurationList[index].length
-                        )}{' '}
-                      | via{' '}
-                      {flight.via?.split('-')[index] ||
-                        (flight?.transitFlight &&
-                          flight?.transitFlight[index]?.viaAirportCode)}
-                    </Divider>
-                  )
-                ) : null}
-              </React.Fragment>
-            ))}
+                      ? flight?.transitFlight &&
+                      flight?.transitFlight[index]?.viaCity
+                      : flight.toCity,
+                },
+              })}
+              {flight.stops && index < flight.stops ? (
+                screen.xs ? (
+                  <p
+                    style={{
+                      color: '#4E6F7B',
+                      width: '100%',
+                      textAlign: 'center',
+                      margin: '.5rem 0',
+                    }}
+                  >
+                    Change of planes |{' '}
+                    {flight.layoverDurationList &&
+                      flight.layoverDurationList[index] &&
+                      flight.layoverDurationList[index].substring(
+                        2,
+                        flight.layoverDurationList[index].length
+                      )}{' '}
+                    | via{' '}
+                    {flight.via?.split('-')[index] ||
+                      (flight?.transitFlight &&
+                        flight?.transitFlight[index]?.viaAirportCode)}
+                  </p>
+                ) : (
+                  <Divider plain style={{ color: '#4E6F7B' }}>
+                    Change of planes |{' '}
+                    {flight.layoverDurationList &&
+                      flight.layoverDurationList[index] &&
+                      flight.layoverDurationList[index].substring(
+                        2,
+                        flight.layoverDurationList[index].length
+                      )}{' '}
+                    | via{' '}
+                    {flight.via?.split('-')[index] ||
+                      (flight?.transitFlight &&
+                        flight?.transitFlight[index]?.viaAirportCode)}
+                  </Divider>
+                )
+              ) : null}
+            </React.Fragment>
+          ))}
       </div>
     );
   };
@@ -694,8 +692,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               ₹
               <Link to={provider.url} target='_blank'>
                 {provider.bestOffer &&
-                provider.bestOffer.fare &&
-                provider.bestOffer.fare.totalFareAfterDiscount
+                  provider.bestOffer.fare &&
+                  provider.bestOffer.fare.totalFareAfterDiscount
                   ? provider.bestOffer.fare.totalFareAfterDiscount
                   : provider.totalFare}
                 {'-' + provider.provider}
@@ -782,11 +780,11 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                           }}
                         >
                           {provider.bestOffer &&
-                          provider.bestOffer.fare &&
-                          provider.bestOffer.fare.totalFareAfterDiscount
+                            provider.bestOffer.fare &&
+                            provider.bestOffer.fare.totalFareAfterDiscount
                             ? provider.bestOffer.fare.totalFareAfterDiscount
                             : provider.bestOffer.fare &&
-                              provider.bestOffer.fare.totalFare}
+                            provider.bestOffer.fare.totalFare}
                         </span>
                       </b>
                     </div>
@@ -923,19 +921,19 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
               <p style={{ margin: 0, color: '#013042' }}>
                 {providerWithOffers.length && providerWithOffers[0].provider}
               </p>
-
-              <Text
-                type='secondary'
-                style={{
-                  fontWeight: 'bold',
-                  color: '#013042',
-                  marginLeft: '.4rem',
-                }}
-              >
-                {providerWithOffers.length > 1
-                  ? `+${providerWithOffers.length - 1} more providers`
-                  : ''}
-              </Text>
+              {
+                providerWithOffers.length > 1 ?
+                  <Text
+                    type='secondary'
+                    style={{
+                      fontWeight: 'bold',
+                      color: '#013042',
+                      marginLeft: '.4rem',
+                    }}
+                  >
+                    {`+${providerWithOffers.length - 1} more providers`}
+                  </Text> : null
+              }
             </div>
             <div className='cardButtons'>
               <button
@@ -947,8 +945,8 @@ const FlightDetailCard = ({ onFinishHandler }: any) => {
                   }
                   navigate(
                     '/flights/' +
-                      `${departFlight.from}-${departFlight.to}` +
-                      `-${departFlight.flightCode}-${departFlight.duration}-${departFlight.depTime}`
+                    `${departFlight.from}-${departFlight.to}` +
+                    `-${departFlight.flightCode}-${departFlight.duration}-${departFlight.depTime}`
                   );
                 }}
                 className='headerButtons filled'
