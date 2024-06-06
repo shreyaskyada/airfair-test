@@ -112,7 +112,7 @@ const PopularFlightItem: React.FC<PopularFlightItemProps> = ({
   return (
     <div className="singleFlightSection">
       <div className="imageContainer">
-        <img className="image" src={departureFlightImage} />
+        <img className="image" src={departureFlightImage} alt="departureFlightImage" />
       </div>
       <div>
         <div className="flightTitle">{departureFlightTitle}</div>

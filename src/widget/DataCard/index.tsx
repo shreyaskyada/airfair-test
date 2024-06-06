@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Button, Card, Space, Tag, Modal } from 'antd';
-import { DownOutlined, UpOutlined } from '@ant-design/icons';
-import * as _ from 'lodash';
+import { useState, useEffect, useRef } from 'react';
+import { Tag, Modal } from 'antd';
 import { airlineMapping } from '../../services/airports';
 import { Airlines_Images } from '../../data/popularAirlines';
 import './DataCard.css';
@@ -10,10 +8,10 @@ import { airplaneIcon } from '../../assets/images';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { ISearchFlights } from '../../redux/slices/searchFlights';
 import { updateDepartFlights } from '../../redux/slices/flights';
-import { useDispatch } from 'react-redux';
 import { TripType } from '../../data/contants';
 import SendEmailCard from '../../components/Modals/SendEmailCard';
 import { getStopsLabel } from '../../data/utils';
+import { uniq } from 'lodash';
 
 interface Props {
   checked?: boolean;
@@ -37,7 +35,7 @@ interface Props {
     companyImg: string;
     price: string;
     totalTime: string;
-    stops: number;
+    stops: string[];
     schedule: {
       departure: string;
       arrival: string;
@@ -65,11 +63,9 @@ const DataCard = (props: Props) => {
     dataKey,
     onSelectedFlightChange,
     checked,
-    currentCode,
-    departCode,
   } = props;
   const dispatch = useAppDispatch();
-  const [details, setDetails] = useState(false);
+  const [details] = useState(false);
   const [flightNames, setFlightNames] = useState<string[]>([]);
   const [flightImage, setFlightImage] = useState<any>(null);
   const ref = useRef(null);
@@ -82,7 +78,7 @@ const DataCard = (props: Props) => {
   );
 
   useEffect(() => {
-    const _names = _.uniq(
+    const _names = uniq(
       flight.company?.split('->').map((item) => item.substring(0, 2))
     );
     setFlightNames(_names);
@@ -153,7 +149,11 @@ const DataCard = (props: Props) => {
                 {/* <p className="flightTime"> {flight.totalTime}</p> */}
               </div>
 
-              <div className='flightTimeDetail' style={{ margin: '0' }}>
+              <div className='flightTimeDetail1' style={{ margin: '0' }}>
+                <p style={{ textAlign: 'center' }}>
+                    {getStopsLabel(flight.stops)}
+                  </p>
+                <div className='flightTimeDetail'>
                 <div className='flightTime'>
                   <h3>{flight.schedule.departure}</h3>
                 </div>
@@ -163,9 +163,6 @@ const DataCard = (props: Props) => {
                     flex: '1',
                   }}
                 >
-                  <p style={{ textAlign: 'center' }}>
-                    {getStopsLabel(flight.stops)}
-                  </p>
                   <div style={{ margin: '12px 0' }} className='cityDivider'>
                     <span
                       className='circle circle1'
@@ -193,6 +190,7 @@ const DataCard = (props: Props) => {
                 <div className='flightTime'>
                   <h3>{flight.schedule.arrival}</h3>
                 </div>
+                </div>
               </div>
 
               {/* <p className="flightScheduled">
@@ -203,7 +201,7 @@ const DataCard = (props: Props) => {
                 className='flightCity'
                 style={{
                   fontWeight: 'bold',
-                  marginTop: '-19px',
+                  marginTop: '-10px',
                 }}
               >
                 <p>{`${flight.route.fromCode}, ${flight.route.from}`}</p>

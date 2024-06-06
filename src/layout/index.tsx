@@ -1,12 +1,9 @@
-import React, { useEffect, useRef } from "react"
-import { useLocation } from "react-router-dom"
-import { Layout, notification,Grid } from "antd"
+import { useEffect } from "react"
+import { Layout, notification } from "antd"
 import Sidebar from "./Sidebar"
 import HeaderUI from "./HeaderUI"
 import { Outlet } from "react-router"
-import { Content } from "antd/es/layout/layout"
 import Loader from "../components/Modals/Loader"
-import FlightDetailsCard from "../components/Modals/FlightDetailsCard"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import SignupCard from "../components/Modals/SignupCard"
 import VerifyTokenCard from "../components/Modals/VerifyTokenCard"
@@ -76,7 +73,6 @@ const getUserInfo = (
 
 const LayoutUI = () => {
   const dispatch = useAppDispatch()
-  const location = useLocation()
 
   const { modal, notifcationModal, showSidebar } = useAppSelector((state) => state.app)
 
@@ -84,8 +80,7 @@ const LayoutUI = () => {
   const [isLoggedIn, setIsLoggedIn] = useLocalStorage("isLoggedIn", "")
   const [authToken, setAuthToken] = useLocalStorage("authToken", "")
 
-  const [api, contextHolder] = notification.useNotification()
-  const ref = useRef<any>()
+  const [api] = notification.useNotification()
 
   const openNotificationWithIcon = (
     type: NotificationType,
@@ -124,7 +119,7 @@ const LayoutUI = () => {
       const {token,...filteredUser} = userDetails
       dispatch(updateUserDetails(filteredUser))
       dispatch(toggleModal({ modal: "login", status: false }))
-      openNotificationWithIcon("success", "Logged in successfully")
+      // openNotificationWithIcon("success", "Logged in successfully")
       getUserInfo(dispatch, userDetails.username, userDetails.token)
     } else {
       dispatch(updateIsLoggedIn(false))

@@ -11,16 +11,16 @@ import {
 } from "antd";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { updateProfileDetails, getProfileDetails } from "../../services/auth";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useAppDispatch } from "../../redux/hooks";
 import { toggleModal, updateUserDetails } from "../../redux/slices/app";
 import { getBankDetails, getBankName } from "../../services/airports";
 import useLocalStorage from "../../hooks/LocalStorage";
 import { notification } from "../Notification/customNotification";
-import { loginBanner } from "../../assets/images";
 import "./style.css";
 import { useWatch } from "antd/es/form/Form";
+import { loginBanner } from "../../assets/images";
 
-const { Text, Title } = Typography;
+const { Title } = Typography;
 const { useBreakpoint } = Grid;
 
 function comapreProfileDetail(obj1: any, obj2: any) {
@@ -276,7 +276,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
         className="profileModal"
       >
         <div className="profileModalContent">
-          <img src={loginBanner} alt="Login banner" />
+          <img src={loginBanner} alt="Login banner" loading="lazy" />
           <Title level={3} style={{ font: "Robotto" }}>
             Complete your profile
           </Title>
@@ -477,7 +477,6 @@ const ProfileCard = ({ onFinishHandler }: any) => {
               {(fields, { add, remove }, { errors }) => (
                 <>
                   {fields.map((field, index) => (
-                    <>
                       <Space.Compact
                         key={(Math.random() + 1).toString(36).substring(2)}
                         style={{
@@ -488,6 +487,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                       >
                         <Form.Item
                           {...field}
+                          key={(Math.random() + 1).toString(36).substring(2)}
                           validateTrigger={["onChange", "onBlur"]}
                           rules={[
                             {
@@ -515,6 +515,7 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                         </Form.Item>
                         <Form.Item
                           {...field}
+                          key={(Math.random() + 1).toString(36).substring(2)}
                           validateTrigger={["onChange", "onBlur"]}
                           name={[field.name, "walletType"]}
                           rules={[
@@ -548,7 +549,6 @@ const ProfileCard = ({ onFinishHandler }: any) => {
                           }}
                         />
                       </Space.Compact>
-                    </>
                   ))}
 
                   <Form.Item>

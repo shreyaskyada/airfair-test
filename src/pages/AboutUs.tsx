@@ -1,8 +1,5 @@
-import { Typography } from 'antd';
 import { aboutUs } from '../assets/images';
 import './index.css';
-
-const { Title } = Typography;
 
 function AboutUs() {
   return (

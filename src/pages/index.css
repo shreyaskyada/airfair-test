@@ -333,6 +333,10 @@
   flex-direction: column;
 }
 
+.offerTooltip{
+  padding-right: 10px;
+}
+
 .headerButtons{
   margin-top: -15px;
   width: 80px;

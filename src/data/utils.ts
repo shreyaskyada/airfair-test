@@ -1,8 +1,8 @@
-import { IFilters } from '../redux/slices/filters';
-import { Stops, TimeRangesEnum } from './contants';
+import { IFilters } from "../redux/slices/filters";
+import { Stops, TimeRangesEnum } from "./contants";
 
 export const categorizeTime = (time: string) => {
-  const [hours] = time?.split(':')?.map(Number);
+  const [hours] = time?.split(":")?.map(Number);
 
   if (hours < 6) {
     return TimeRangesEnum.EARLY_MORNING;
@@ -16,7 +16,7 @@ export const categorizeTime = (time: string) => {
 };
 
 export const alignDropdownList = (windowWidth: number) => {
-  const dropdowns = document.getElementsByClassName('filters-select open');
+  const dropdowns = document.getElementsByClassName("filters-select open");
   const dropdown = dropdowns[0] as HTMLDivElement;
 
   if (dropdown && windowWidth < 1200) {
@@ -34,7 +34,7 @@ export const filterAirlines = (airlines: string[], flightCode: string) => {
     !airlines.length ||
     (airlines.length &&
       flightCode
-        ?.split('->')
+        ?.split("->")
         .map((item: string) => item.substring(0, 2))
         .some((item: string) => airlines.includes(item)))
   ) {
@@ -90,13 +90,13 @@ export const filterStops = (
   stops: string[],
   transitFlight: { [key: string]: string }[]
 ) => {
-  let stop = '';
+  let stop = "";
   if (transitFlight?.length > 1) {
     stop = Stops.ONE_PLUS_STOP;
   } else if (
     !transitFlight?.length ||
     (transitFlight?.length === 1 &&
-      (transitFlight[0].viaAirportCode === 'NON-STOP' ||
+      (transitFlight[0].viaAirportCode === "NON-STOP" ||
         !transitFlight[0].viaAirportName ||
         !transitFlight[0].viaCity))
   ) {
@@ -151,7 +151,7 @@ export const compareProvidersAndFilter = (
 
 export const capitalizeFirstLetter = (str: string) => {
   return str
-    .split(' ')
+    .split(" ")
     .map((el) => el.trim())
     .filter((el) => el)
     .map((el) => {
@@ -160,9 +160,16 @@ export const capitalizeFirstLetter = (str: string) => {
       }
       return el;
     })
-    .join(' ');
+    .join(" ");
 };
 
-export const getStopsLabel = (s: number) => {
-  return s > 0 ? `${s} stop${s > 1 ? 's' : ''}` : 'non-stop';
+export const getStopsLabel = (s: string[]) => {
+  if (s.length) {
+    let label = s.join(", ");
+    label = label.replace(/, $/, "");
+    return label;
+  } else {
+    return "non-stop";
+  }
+  // return s > 0 ? `${s} stop${s > 1 ? 's' : ''}` : 'non-stop';
 };

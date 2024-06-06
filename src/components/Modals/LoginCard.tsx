@@ -1,46 +1,45 @@
-import React, { useState } from "react"
-import { Button, Card, Divider, Form, Input, Modal, Typography } from "antd"
-import Meta from "antd/es/card/Meta"
-import { loginBanner } from "../../assets/images"
-import { toggleModal } from "../../redux/slices/app"
-import { useAppDispatch } from "../../redux/hooks"
-import { loginUser } from "../../services/auth"
-import { notification } from "../Notification/customNotification"
+import { useState } from "react";
+import { Button, Divider, Form, Input, Modal, Typography } from "antd";
+import { toggleModal } from "../../redux/slices/app";
+import { useAppDispatch } from "../../redux/hooks";
+import { loginUser } from "../../services/auth";
+import { notification } from "../Notification/customNotification";
+import { loginBanner } from "../../assets/images";
 
-const { Text, Title } = Typography
+const { Text } = Typography;
 
 const LoginCard = ({ onFinishHandler }: any) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const dispatch = useAppDispatch()
-  const [form] = Form.useForm()
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const [form] = Form.useForm();
 
   const onFinish = (values: any) => {
     if (!isLoading) {
-      setIsLoading(true)
-      const dataParams = form.getFieldsValue()
+      setIsLoading(true);
+      const dataParams = form.getFieldsValue();
       loginUser(dataParams)
         .then((res) => {
-        onFinishHandler(true, { ...res })
-        notification.success({ message: "LoggedIn Successfully!!!" })
+          onFinishHandler(true, { ...res });
+          notification.success({ message: "LoggedIn Successfully!!!" });
         })
         .catch((err) => {
-          onFinishHandler(false, err)
-          notification.error({ message: err.data.message || "Server Error" })
+          onFinishHandler(false, err);
+          notification.error({ message: err.data.message || "Server Error" });
         })
         .finally(() => {
-          setIsLoading(false)
+          setIsLoading(false);
         });
     }
-  }
+  };
 
   const onCancelHandler = () => {
-    dispatch(toggleModal({ modal: "login", status: false }))
-  }
+    dispatch(toggleModal({ modal: "login", status: false }));
+  };
 
   const handleSignupModal = () => {
-    dispatch(toggleModal({ modal: "signup", status: true }))
-    dispatch(toggleModal({ modal: "login", status: false }))
-  }
+    dispatch(toggleModal({ modal: "signup", status: true }));
+    dispatch(toggleModal({ modal: "login", status: false }));
+  };
 
   return (
     <div>
@@ -59,10 +58,10 @@ const LoginCard = ({ onFinishHandler }: any) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            flexDirection: "column"
+            flexDirection: "column",
           }}
         >
-          <img src={loginBanner} alt="Login banner" />
+          <img src={loginBanner} alt="Login banner" loading="lazy" />
           <Text
             style={{
               font: "Robotto",
@@ -70,7 +69,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
               margin: "1rem 0",
               fontWeight: 600,
               fontSize: "1rem",
-              color: "#013042"
+              color: "#013042",
             }}
           >
             Unlock exclusive deals tailored to you! Log in to access
@@ -81,7 +80,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
             name="basic"
             initialValues={{ remember: true }}
             style={{
-              width: "100%"
+              width: "100%",
             }}
             form={form}
             onFinish={onFinish}
@@ -90,7 +89,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
             <Form.Item
               name="username"
               rules={[
-                { required: true, message: "Please input your username!" }
+                { required: true, message: "Please input your username!" },
               ]}
             >
               <Input placeholder="username or email" />
@@ -98,10 +97,13 @@ const LoginCard = ({ onFinishHandler }: any) => {
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: "Please input your password!" }
+                { required: true, message: "Please input your password!" },
               ]}
             >
-              <Input.Password placeholder="password" />
+              <Input.Password
+                placeholder="password"
+                autoComplete="current-password1"
+              />
             </Form.Item>
             <Form.Item style={{ textAlign: "center" }}>
               <Button type="primary" htmlType="submit" disabled={isLoading}>
@@ -117,7 +119,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
             flexDirection: "column",
             alignItems: "center",
             gap: ".8rem",
-            marginTop: "1rem"
+            marginTop: "1rem",
           }}
         >
           <Text>Don't have an Account with Tripsaverz?</Text>
@@ -131,7 +133,7 @@ const LoginCard = ({ onFinishHandler }: any) => {
         </div>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default LoginCard
+export default LoginCard;

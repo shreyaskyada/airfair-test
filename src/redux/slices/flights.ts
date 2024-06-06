@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CompareFlightCompanyDetails {
   fare?: {
@@ -58,8 +58,8 @@ export interface Flight {
   arrTerminal?: string;
   airline?: string;
   seatingClass?: string;
-  startTimeList?: ['2023-05-12T23:15:00'];
-  endTimeList?: ['2023-05-13T01:20:00'];
+  startTimeList?: ["2023-05-12T23:15:00"];
+  endTimeList?: ["2023-05-13T01:20:00"];
   layoverDurationList?: string[];
   stops?: number;
   cheapestFare?: number;
@@ -80,6 +80,7 @@ export interface Flight {
   }[];
   cabinBaggage: string[];
   checkinBaggage: string[];
+  refundable: boolean;
 }
 
 export interface FlightState {
@@ -97,7 +98,7 @@ export const initialState: FlightState = {
 };
 
 export const flightsSlice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
   reducers: {
     updateFlights: (state, action: PayloadAction<any>) => {
@@ -112,12 +113,12 @@ export const flightsSlice = createSlice({
     updateInternationalFlights: (state, action: PayloadAction<any>) => {
       state.internationalFlight = action.payload;
     },
-    resetFlights:(state)=>{
-      state.flights={};
-      state.departFlight={} as Flight;
-      state.returnFlight= {} as Flight;
-      state.internationalFlight= null;
-    }
+    resetFlights: (state) => {
+      state.flights = {};
+      state.departFlight = {} as Flight;
+      state.returnFlight = {} as Flight;
+      state.internationalFlight = null;
+    },
   },
 });
 
@@ -127,7 +128,7 @@ export const {
   updateReturnFlights,
   updateDepartFlights,
   updateInternationalFlights,
-  resetFlights
+  resetFlights,
 } = flightsSlice.actions;
 
 export default flightsSlice.reducer;

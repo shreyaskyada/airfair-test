@@ -86,7 +86,7 @@ const SelectWithSlider: FC<SelectWithSliderProps> = ({
                 min={min}
                 max={max}
                 value={value}
-                onChange={(t: [number, number]) => setValue(t)}
+                onChange={(t:any) => setValue(t)}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Text>₹{min}</Text>

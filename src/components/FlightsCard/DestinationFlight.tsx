@@ -82,7 +82,13 @@ const DestinationFlight = (props: any) => {
             companyImg: 'string',
             price: flight.cheapestFare.toString(),
             totalTime: flight.duration,
-            stops: flight.stops,
+            stops:
+            flight.transitFlight && flight.stops
+              ? flight.transitFlight.map((flight_: any) => {
+                  if (flight_.viaCity !== flight.toCity)
+                    return flight_.viaCity;
+                })
+              : [],
             schedule: {
               departure: flight.depTime,
               arrival: flight.arrTime,

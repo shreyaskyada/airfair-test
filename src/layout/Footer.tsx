@@ -114,8 +114,9 @@ const Footer = () => {
         <Divider style={{ background: 'white' }} />
         <Row gutter={[0, 6]}>
           {popularFlightsData.map((flights) =>
-            flights.destinationFlights.map((flight) => (
+            flights.destinationFlights.map((flight, index) => (
               <Col
+                key={index}
                 xs={24}
                 sm={12}
                 md={8}

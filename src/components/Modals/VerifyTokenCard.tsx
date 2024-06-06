@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react"
-import { Button, Card, Form, Input, InputNumber, Modal, Typography } from "antd"
-import { loginBanner } from "../../assets/images"
+import { useEffect, useState } from "react"
+import { Button, Form, Input, Modal, Typography } from "antd"
 import { verifyToken } from "../../services/auth"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import { toggleModal, uploadIsLoading } from "../../redux/slices/app"
 import { notification } from "../Notification/customNotification"
 import { sendOTPConfig } from "../../services/api/urlConstants"
 import backendService from "../../services/api"
+import { loginBanner } from "../../assets/images"
 
 const { Text, Title } = Typography
 
@@ -91,7 +91,7 @@ const VerifyTokenCard = () => {
             flexDirection: "column"
           }}
         >
-          <img src={loginBanner} alt="Login banner" />
+          <img src={loginBanner} alt="Login banner" loading="lazy" />
           <Title level={3} style={{ font: "Robotto" }}>
             Verify OTP
           </Title>

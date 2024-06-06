@@ -1,7 +1,6 @@
 import {
   updateStopsFilter,
   updateAirlinesFilter,
-  updateProvidersFilter,
   updateTimeRangeFilter,
   updatePriceRangeFilter,
   updateReturnAirlinesFilter,
@@ -29,7 +28,7 @@ const Filters = () => {
   const { destinationFlights } = useAppSelector(
     (state) => state.destinationFlight
   );
-  const { airlines, providers, returnAirlines, timeRange, stops, priceRange } =
+  const { airlines, returnAirlines, timeRange, stops, priceRange } =
     useAppSelector((state) => state.filtersSlice);
 
   const {

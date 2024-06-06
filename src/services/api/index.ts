@@ -9,9 +9,7 @@ import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
 import { store } from "../../redux/store";
 import { uploadIsLoading } from "../../redux/slices/app";
 
-const backendService: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_ENDPOINT,
-});
+const backendService: AxiosInstance = axios.create({});
 
 const responseSuccessInterceptor = (response: AxiosResponse) =>
   Promise.resolve(response.data);

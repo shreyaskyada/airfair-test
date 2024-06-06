@@ -1,0 +1,8 @@
+.flight-details-error-alert {
+  background: #fff2f0;
+  border-color: #ffccc7;
+}
+
+.flight-details-error-alert svg {
+  fill: red !important;
+}

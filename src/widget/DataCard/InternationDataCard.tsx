@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { useNavigate } from 'react-router';
 import { uniq } from 'lodash';
 import { Airlines_Images } from '../../data/popularAirlines';
 import { airlineMapping } from '../../services/airports';
-import { Col, Modal, Row, Tag } from 'antd';
+import { Col, Modal, Row } from 'antd';
 import { airplaneIcon } from '../../assets/images';
 import SendEmailCard from '../../components/Modals/SendEmailCard';
 import { ISearchFlights } from '../../redux/slices/searchFlights';
@@ -26,10 +26,9 @@ const InternationDataCard = (props: any) => {
     seatingClass,
   } = props;
   const dispatch = useAppDispatch();
-  const [details, setDetails] = useState(false);
+  const [details] = useState(false);
   const [flightNames, setFlightNames] = useState<string[]>([]);
   const [flightImage, setFlightImage] = useState<any>(null);
-  const ref = useRef(null);
   const [showModal, setShowModal] = useState(false);
 
   const navigate = useNavigate();
@@ -59,17 +58,17 @@ const InternationDataCard = (props: any) => {
     }
   }, [flight]);
 
-  const getLayoverDetails = (durationArr: string[], cities: any) => {
-    if (durationArr?.length) {
-      const time = durationArr[0]
-        .substring(2)
-        .split('H')
-        .join('H ')
-        .toLocaleLowerCase();
-      return `${time} in ${cities[0]?.viaCity}`;
-    }
-    return '';
-  };
+  // const getLayoverDetails = (durationArr: string[], cities: any) => {
+  //   if (durationArr?.length) {
+  //     const time = durationArr[0]
+  //       .substring(2)
+  //       .split('H')
+  //       .join('H ')
+  //       .toLocaleLowerCase();
+  //     return `${time} in ${cities[0]?.viaCity}`;
+  //   }
+  //   return '';
+  // };
 
   return (
     <div className='roundTripDetailCard' style={{ height: 'auto' }}>
@@ -139,7 +138,7 @@ const InternationDataCard = (props: any) => {
                         justifyContent: 'center',
                       }}
                     >
-                      {getStopsLabel(outboundFlight.stops)}
+                      {getStopsLabel(outboundFlight.stops ? outboundFlight.transitFlight.map((flight: any) => flight.viaCity) : [])}
                     </p>
                     <div className='cityDivider'>
                       <span
@@ -233,7 +232,8 @@ const InternationDataCard = (props: any) => {
                         justifyContent: 'center',
                       }}
                     >
-                      {getStopsLabel(inboundFlight.stops)}
+                      {getStopsLabel(inboundFlight.stops ? inboundFlight.transitFlight.map((flight: any) => flight.viaCity) : [])}
+                      {/* {getStopsLabel(inboundFlight.stops)} */}
                     </p>
                     <div className='cityDivider'>
                       <span
