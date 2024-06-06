@@ -1,14 +1,14 @@
-import DataCard from '../../widget/DataCard';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { useEffect } from 'react';
+import DataCard from "../../widget/DataCard";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { useEffect } from "react";
 import {
   filterAirlines,
   filterPrices,
   filterProviders,
   filterStops,
   filterTimeRange,
-} from '../../data/utils';
-import { updateFilteredOriginDataLength } from '../../redux/slices/filters';
+} from "../../data/utils";
+import { updateFilteredOriginDataLength } from "../../redux/slices/filters";
 
 const OriginFlight = (props: any) => {
   const dispatch = useAppDispatch();
@@ -50,7 +50,7 @@ const OriginFlight = (props: any) => {
     onSelectedFlightChange(
       {
         target: {
-          value: 'depart-0',
+          value: "depart-0",
         },
       },
       type,
@@ -79,11 +79,18 @@ const OriginFlight = (props: any) => {
             connectivity: flight.journeyType,
             agent: flight.cheapestProvider.providerCode,
             type: flight.cheapestProvider.providerRank.toString(),
-            company: flight.flightCode || 'Dummy provider',
-            companyImg: 'string',
+            company: flight.flightCode || "Dummy provider",
+            companyImg: "string",
             price: flight.cheapestFare.toString(),
             totalTime: flight.duration,
-            stops: flight.stops,
+
+            stops:
+              flight.transitFlight && flight.stops
+                ? flight.transitFlight.map((flight_: any) => {
+                    if (flight_.viaCity !== flight.toCity)
+                      return flight_.viaCity;
+                  })
+                : [],
             schedule: {
               departure: flight.depTime,
               arrival: flight.arrTime,

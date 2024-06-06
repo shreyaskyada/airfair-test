@@ -187,14 +187,14 @@ const FlightsListingPage = () => {
 
       {flights && flights?.returnJourneyCompareResponse?.length > 0 ? (
         <div className="flightListContainer bigScreen">
-          <div>
+          <div className="flightListCardContainer">
             <OriginFlight
               type="depart"
               selectedKey={selectedFlight["depart"]}
               onSelectedFlightChange={onSelectedFlightChange}
             />
           </div>
-          <div>
+          <div className="flightListCardContainer">
             <DestinationFlight
               type="return"
               selectedKey={selectedFlight["return"]}

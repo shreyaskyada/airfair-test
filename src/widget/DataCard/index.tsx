@@ -35,7 +35,7 @@ interface Props {
     companyImg: string;
     price: string;
     totalTime: string;
-    stops: number;
+    stops: string[];
     schedule: {
       departure: string;
       arrival: string;
@@ -149,7 +149,11 @@ const DataCard = (props: Props) => {
                 {/* <p className="flightTime"> {flight.totalTime}</p> */}
               </div>
 
-              <div className='flightTimeDetail' style={{ margin: '0' }}>
+              <div className='flightTimeDetail1' style={{ margin: '0' }}>
+                <p style={{ textAlign: 'center' }}>
+                    {getStopsLabel(flight.stops)}
+                  </p>
+                <div className='flightTimeDetail'>
                 <div className='flightTime'>
                   <h3>{flight.schedule.departure}</h3>
                 </div>
@@ -159,9 +163,6 @@ const DataCard = (props: Props) => {
                     flex: '1',
                   }}
                 >
-                  <p style={{ textAlign: 'center' }}>
-                    {getStopsLabel(flight.stops)}
-                  </p>
                   <div style={{ margin: '12px 0' }} className='cityDivider'>
                     <span
                       className='circle circle1'
@@ -189,6 +190,7 @@ const DataCard = (props: Props) => {
                 <div className='flightTime'>
                   <h3>{flight.schedule.arrival}</h3>
                 </div>
+                </div>
               </div>
 
               {/* <p className="flightScheduled">
@@ -199,7 +201,7 @@ const DataCard = (props: Props) => {
                 className='flightCity'
                 style={{
                   fontWeight: 'bold',
-                  marginTop: '-19px',
+                  marginTop: '-10px',
                 }}
               >
                 <p>{`${flight.route.fromCode}, ${flight.route.from}`}</p>

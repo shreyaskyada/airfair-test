@@ -138,7 +138,7 @@ const InternationDataCard = (props: any) => {
                         justifyContent: 'center',
                       }}
                     >
-                      {getStopsLabel(outboundFlight.stops)}
+                      {getStopsLabel(outboundFlight.stops ? outboundFlight.transitFlight.map((flight: any) => flight.viaCity) : [])}
                     </p>
                     <div className='cityDivider'>
                       <span
@@ -232,7 +232,8 @@ const InternationDataCard = (props: any) => {
                         justifyContent: 'center',
                       }}
                     >
-                      {getStopsLabel(inboundFlight.stops)}
+                      {getStopsLabel(inboundFlight.stops ? inboundFlight.transitFlight.map((flight: any) => flight.viaCity) : [])}
+                      {/* {getStopsLabel(inboundFlight.stops)} */}
                     </p>
                     <div className='cityDivider'>
                       <span
