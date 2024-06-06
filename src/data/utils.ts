@@ -165,8 +165,9 @@ export const capitalizeFirstLetter = (str: string) => {
 
 export const getStopsLabel = (s: string[]) => {
   if (s.length) {
-    
-    return s.join(", ");
+    let label = s.join(", ");
+    label = label.replace(/, $/, "");
+    return label;
   } else {
     return "non-stop";
   }
